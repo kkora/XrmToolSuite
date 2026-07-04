@@ -1,4 +1,4 @@
-﻿namespace XrmToolSuite.AttributeAuditor
+namespace XrmToolSuite.AttributeAuditor
 {
     partial class AttributeAuditorControl
     {
@@ -15,13 +15,22 @@
         private void InitializeComponent()
         {
             this.toolStrip = new System.Windows.Forms.ToolStrip();
-            this.tsbClose = new System.Windows.Forms.ToolStripButton();
+            this.tsbRun = new System.Windows.Forms.ToolStripButton();
+            this.tsbCustomOnly = new System.Windows.Forms.ToolStripButton();
+            this.tsbCandidatesOnly = new System.Windows.Forms.ToolStripButton();
             this.tssSeparator1 = new System.Windows.Forms.ToolStripSeparator();
-            this.tsbLoadSample = new System.Windows.Forms.ToolStripButton();
+            this.tsbExportCsv = new System.Windows.Forms.ToolStripButton();
+            this.tsbExportHtml = new System.Windows.Forms.ToolStripButton();
+            this.tssSeparator2 = new System.Windows.Forms.ToolStripSeparator();
+            this.tsbClose = new System.Windows.Forms.ToolStripButton();
             this.lvResults = new System.Windows.Forms.ListView();
-            this.colName = new System.Windows.Forms.ColumnHeader();
-            this.colCreatedOn = new System.Windows.Forms.ColumnHeader();
-            this.colId = new System.Windows.Forms.ColumnHeader();
+            this.colTable = new System.Windows.Forms.ColumnHeader();
+            this.colColumn = new System.Windows.Forms.ColumnHeader();
+            this.colDisplay = new System.Windows.Forms.ColumnHeader();
+            this.colType = new System.Windows.Forms.ColumnHeader();
+            this.colManaged = new System.Windows.Forms.ColumnHeader();
+            this.colUsed = new System.Windows.Forms.ColumnHeader();
+            this.colUsage = new System.Windows.Forms.ColumnHeader();
             this.toolStrip.SuspendLayout();
             this.SuspendLayout();
             //
@@ -29,58 +38,113 @@
             //
             this.toolStrip.ImageScalingSize = new System.Drawing.Size(24, 24);
             this.toolStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-                this.tsbClose,
+                this.tsbRun,
+                this.tsbCustomOnly,
+                this.tsbCandidatesOnly,
                 this.tssSeparator1,
-                this.tsbLoadSample});
+                this.tsbExportCsv,
+                this.tsbExportHtml,
+                this.tssSeparator2,
+                this.tsbClose});
             this.toolStrip.Location = new System.Drawing.Point(0, 0);
             this.toolStrip.Name = "toolStrip";
-            this.toolStrip.Size = new System.Drawing.Size(800, 25);
+            this.toolStrip.Size = new System.Drawing.Size(900, 25);
             this.toolStrip.TabIndex = 0;
             //
-            // tsbClose
+            // tsbRun
             //
-            this.tsbClose.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-            this.tsbClose.Name = "tsbClose";
-            this.tsbClose.Size = new System.Drawing.Size(86, 22);
-            this.tsbClose.Text = "Close this tool";
-            this.tsbClose.Click += new System.EventHandler(this.tsbClose_Click);
+            this.tsbRun.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.tsbRun.Name = "tsbRun";
+            this.tsbRun.Text = "Run audit";
+            this.tsbRun.ToolTipText = "Audit custom columns and detect usage across forms, views, processes and field security";
+            this.tsbRun.Click += new System.EventHandler(this.tsbRun_Click);
             //
-            // tsbLoadSample
+            // tsbCustomOnly
             //
-            this.tsbLoadSample.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-            this.tsbLoadSample.Name = "tsbLoadSample";
-            this.tsbLoadSample.Size = new System.Drawing.Size(120, 22);
-            this.tsbLoadSample.Text = "Load sample data";
-            this.tsbLoadSample.Click += new System.EventHandler(this.tsbLoadSample_Click);
+            this.tsbCustomOnly.CheckOnClick = true;
+            this.tsbCustomOnly.Checked = true;
+            this.tsbCustomOnly.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.tsbCustomOnly.Name = "tsbCustomOnly";
+            this.tsbCustomOnly.Text = "Custom tables only";
+            this.tsbCustomOnly.ToolTipText = "Limit the scan to custom tables (custom columns on system tables are excluded)";
+            //
+            // tsbCandidatesOnly
+            //
+            this.tsbCandidatesOnly.CheckOnClick = true;
+            this.tsbCandidatesOnly.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.tsbCandidatesOnly.Name = "tsbCandidatesOnly";
+            this.tsbCandidatesOnly.Text = "Candidates only";
+            this.tsbCandidatesOnly.ToolTipText = "Show only unused custom columns (retirement candidates)";
+            this.tsbCandidatesOnly.CheckedChanged += new System.EventHandler(this.tsbCandidatesOnly_CheckedChanged);
             //
             // tssSeparator1
             //
             this.tssSeparator1.Name = "tssSeparator1";
-            this.tssSeparator1.Size = new System.Drawing.Size(6, 25);
+            //
+            // tsbExportCsv
+            //
+            this.tsbExportCsv.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.tsbExportCsv.Enabled = false;
+            this.tsbExportCsv.Name = "tsbExportCsv";
+            this.tsbExportCsv.Text = "Export CSV";
+            this.tsbExportCsv.Click += new System.EventHandler(this.tsbExportCsv_Click);
+            //
+            // tsbExportHtml
+            //
+            this.tsbExportHtml.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.tsbExportHtml.Enabled = false;
+            this.tsbExportHtml.Name = "tsbExportHtml";
+            this.tsbExportHtml.Text = "Export report (HTML)";
+            this.tsbExportHtml.Click += new System.EventHandler(this.tsbExportHtml_Click);
+            //
+            // tssSeparator2
+            //
+            this.tssSeparator2.Name = "tssSeparator2";
+            //
+            // tsbClose
+            //
+            this.tsbClose.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
+            this.tsbClose.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.tsbClose.Name = "tsbClose";
+            this.tsbClose.Text = "Close";
+            this.tsbClose.Click += new System.EventHandler(this.tsbClose_Click);
             //
             // lvResults
             //
             this.lvResults.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
-                this.colName,
-                this.colCreatedOn,
-                this.colId});
+                this.colTable,
+                this.colColumn,
+                this.colDisplay,
+                this.colType,
+                this.colManaged,
+                this.colUsed,
+                this.colUsage});
             this.lvResults.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lvResults.FullRowSelect = true;
+            this.lvResults.GridLines = true;
             this.lvResults.Location = new System.Drawing.Point(0, 25);
             this.lvResults.Name = "lvResults";
-            this.lvResults.Size = new System.Drawing.Size(800, 575);
+            this.lvResults.Size = new System.Drawing.Size(900, 575);
             this.lvResults.TabIndex = 1;
             this.lvResults.UseCompatibleStateImageBehavior = false;
             this.lvResults.View = System.Windows.Forms.View.Details;
             //
             // columns
             //
-            this.colName.Text = "Name";
-            this.colName.Width = 300;
-            this.colCreatedOn.Text = "Created On";
-            this.colCreatedOn.Width = 150;
-            this.colId.Text = "Id";
-            this.colId.Width = 260;
+            this.colTable.Text = "Table";
+            this.colTable.Width = 160;
+            this.colColumn.Text = "Column";
+            this.colColumn.Width = 180;
+            this.colDisplay.Text = "Display name";
+            this.colDisplay.Width = 180;
+            this.colType.Text = "Type";
+            this.colType.Width = 90;
+            this.colManaged.Text = "Managed";
+            this.colManaged.Width = 70;
+            this.colUsed.Text = "Used";
+            this.colUsed.Width = 50;
+            this.colUsage.Text = "Usage evidence";
+            this.colUsage.Width = 320;
             //
             // AttributeAuditorControl
             //
@@ -89,7 +153,7 @@
             this.Controls.Add(this.lvResults);
             this.Controls.Add(this.toolStrip);
             this.Name = "AttributeAuditorControl";
-            this.Size = new System.Drawing.Size(800, 600);
+            this.Size = new System.Drawing.Size(900, 600);
             this.Load += new System.EventHandler(this.AttributeAuditorControl_Load);
             this.toolStrip.ResumeLayout(false);
             this.toolStrip.PerformLayout();
@@ -100,12 +164,21 @@
         #endregion
 
         private System.Windows.Forms.ToolStrip toolStrip;
-        private System.Windows.Forms.ToolStripButton tsbClose;
+        private System.Windows.Forms.ToolStripButton tsbRun;
+        private System.Windows.Forms.ToolStripButton tsbCustomOnly;
+        private System.Windows.Forms.ToolStripButton tsbCandidatesOnly;
         private System.Windows.Forms.ToolStripSeparator tssSeparator1;
-        private System.Windows.Forms.ToolStripButton tsbLoadSample;
+        private System.Windows.Forms.ToolStripButton tsbExportCsv;
+        private System.Windows.Forms.ToolStripButton tsbExportHtml;
+        private System.Windows.Forms.ToolStripSeparator tssSeparator2;
+        private System.Windows.Forms.ToolStripButton tsbClose;
         private System.Windows.Forms.ListView lvResults;
-        private System.Windows.Forms.ColumnHeader colName;
-        private System.Windows.Forms.ColumnHeader colCreatedOn;
-        private System.Windows.Forms.ColumnHeader colId;
+        private System.Windows.Forms.ColumnHeader colTable;
+        private System.Windows.Forms.ColumnHeader colColumn;
+        private System.Windows.Forms.ColumnHeader colDisplay;
+        private System.Windows.Forms.ColumnHeader colType;
+        private System.Windows.Forms.ColumnHeader colManaged;
+        private System.Windows.Forms.ColumnHeader colUsed;
+        private System.Windows.Forms.ColumnHeader colUsage;
     }
 }

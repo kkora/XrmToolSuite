@@ -6,4 +6,10 @@
     <AssemblyName>XrmToolSuite.AttributeAuditor</AssemblyName>
     <Description>Audits unused attributes across entities</Description>
   </PropertyGroup>
+
+  <ItemGroup>
+    <!-- Shared, BCL-only HTML dashboard exporter (ReportModel comes from the Shared\Core glob).
+         Only HTML + CSV are offered, so the ClosedXML/PdfSharp chain is deliberately NOT referenced. -->
+    <Compile Include="..\..\Shared\Reporting\HtmlDashboardBuilder.cs" LinkBase="Shared\Reporting" />
+  </ItemGroup>
 </Project>

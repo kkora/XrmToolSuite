@@ -18,7 +18,7 @@ src/
     Directory.Build.props         # net48 + WinForms + XrmToolBoxPackage + shared-source glob
     XrmToolSuite.TemplateTool/     # the template every new tool is cloned from
     XrmToolSuite.DeploymentRiskAnalyzer/  # pre-deployment risk analysis tool (see its own README)
-    XrmToolSuite.AttributeAuditor/ # scaffolded tool (audit unused attributes) — WIP
+    XrmToolSuite.AttributeAuditor/ # audit unused custom columns (usage detection + CSV/HTML export)
 scripts/
   New-Tool.ps1                   # stamp out a new tool project
 ```
@@ -68,7 +68,7 @@ Pack with: `nuget pack src/Tools/XrmToolSuite.MyTool/XrmToolSuite.MyTool.nuspec`
 | **Solution Complexity Score** | Inventories a solution and scores complexity + maintainability, with upgrade/migration/testing effort and annual support-cost estimates and an executive dashboard |
 | **AI Solution Reviewer** | AI-assisted architecture review (recommendations, modernization, prioritized backlog, sprint plan) over collected solution facts, with an offline deterministic fallback; exports Word/PDF/HTML/Markdown/JSON |
 | **Solution Knowledge Graph** | Interactive dependency graph with search, dependency tracing, deletion-impact analysis, and circular-dependency detection; exports interactive HTML, GraphML, SVG, and PNG |
-| Attribute Auditor | Audit unused attributes across entities — scaffolded from the template; logic not yet implemented (WIP) |
+| **Attribute Auditor** | Finds unused custom columns by detecting usage across forms, views, processes, and field security; classifies retirement candidates and exports CSV + an HTML dashboard (chart/data-population signals and guarded cleanup planned) |
 | Template Tool | Clone source for new tools (not published) |
 
 All five shipping tools follow the suite conventions (`XrmToolSuite.<Tool>` namespace, `BaseToolControl`, shared `RetrieveAll` paging, `Load/SaveSettings`). The scoring/report family shares one engine compiled in from **`src/Shared/`**: `Core/Analysis` (findings, `ScoreCalculator`, `ReportModel`), `Reporting` (JSON/Markdown/HTML/Excel/PDF/Word exporters), and `Summarization` (offline + AI executive summaries). Tools that export to Excel/PDF/Word ship the ClosedXML and PdfSharp/MigraDoc-GDI dependency chains in their nupkg (the Word exporter reuses the OpenXML assembly from the ClosedXML chain) — see any of their csproj/nuspec files for the pattern to follow when a tool needs third-party libraries. The Solution Knowledge Graph ships only its own DLL (its GraphML/SVG/HTML output is pure string; PNG uses the net48 System.Drawing GAC assembly).

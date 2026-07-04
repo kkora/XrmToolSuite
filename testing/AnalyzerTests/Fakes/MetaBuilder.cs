@@ -37,7 +37,8 @@ namespace XrmToolSuite.AnalyzerTests.Fakes
         }
 
         /// <summary>A simple string attribute (used by the custom-column / secured-column scans).</summary>
-        public static AttributeMetadata Attribute(string schemaName, bool isCustom = true, bool isSecured = false)
+        public static AttributeMetadata Attribute(string schemaName, bool isCustom = true, bool isSecured = false,
+            bool isManaged = false, string displayName = null)
         {
             var a = new StringAttributeMetadata();
             Set(a, "LogicalName", schemaName.ToLowerInvariant());
@@ -45,6 +46,8 @@ namespace XrmToolSuite.AnalyzerTests.Fakes
             Set(a, "AttributeType", (AttributeTypeCode?)AttributeTypeCode.String);
             Set(a, "IsCustomAttribute", (bool?)isCustom);
             Set(a, "IsSecured", (bool?)isSecured);
+            Set(a, "IsManaged", (bool?)isManaged);
+            if (displayName != null) Set(a, "DisplayName", MakeLabel(displayName));
             return a;
         }
 

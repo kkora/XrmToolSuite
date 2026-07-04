@@ -51,6 +51,12 @@
     <!-- AI Solution Reviewer: SDK-free report projection (collectors + Word export are manual-tested). -->
     <Compile Include="..\..\src\Tools\XrmToolSuite.AiSolutionReviewer\Reporting\ReviewReport.cs" />
 
+    <!-- Attribute Auditor: SDK-free audit engine (models, usage scanners), report projection + CSV. -->
+    <Compile Include="..\..\src\Tools\XrmToolSuite.AttributeAuditor\Audit\AttributeAuditModels.cs" />
+    <Compile Include="..\..\src\Tools\XrmToolSuite.AttributeAuditor\Audit\UsageScanners.cs" />
+    <Compile Include="..\..\src\Tools\XrmToolSuite.AttributeAuditor\Reporting\AttributeAuditReport.cs" />
+    <Compile Include="..\..\src\Tools\XrmToolSuite.AttributeAuditor\Reporting\AuditCsvExporter.cs" />
+
     <!-- Solution Knowledge Graph: SDK-free graph model/algorithms + GraphML/SVG/HTML exporters
          (GraphBuilder needs Dataverse and PngExporter needs System.Drawing — both manual-tested). -->
     <Compile Include="..\..\src\Tools\XrmToolSuite.SolutionKnowledgeGraph\Graph\GraphModel.cs" />
