@@ -57,6 +57,12 @@
     <Compile Include="..\..\src\Tools\XrmToolSuite.SolutionKnowledgeGraph\Graph\GraphBuilder.cs" />
     <Compile Include="..\..\src\Tools\XrmToolSuite.SolutionKnowledgeGraph\Graph\GraphModel.cs" />
 
+    <!-- Attribute Auditor: audit engine + Dataverse collector (UI/exports manual). -->
+    <Compile Include="..\..\src\Tools\XrmToolSuite.AttributeAuditor\Audit\AttributeAuditModels.cs" />
+    <Compile Include="..\..\src\Tools\XrmToolSuite.AttributeAuditor\Audit\UsageScanners.cs" />
+    <Compile Include="..\..\src\Tools\XrmToolSuite.AttributeAuditor\Audit\AttributeAuditContext.cs" />
+    <Compile Include="..\..\src\Tools\XrmToolSuite.AttributeAuditor\Audit\AttributeUsageCollector.cs" />
+
     <!-- Technical Debt Analyzer: context + all analyzers. -->
     <Compile Include="..\..\src\Tools\XrmToolSuite.TechnicalDebtAnalyzer\Analysis\TechDebtContext.cs" />
     <Compile Include="..\..\src\Tools\XrmToolSuite.TechnicalDebtAnalyzer\Analysis\GovernanceAnalyzers.cs" />

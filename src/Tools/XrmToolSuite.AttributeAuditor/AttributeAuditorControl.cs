@@ -1,24 +1,28 @@
-﻿using System;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Windows.Forms;
 using McTools.Xrm.Connection;
 using Microsoft.Xrm.Sdk;
-using Microsoft.Xrm.Sdk.Query;
 using XrmToolBox.Extensibility;
 using XrmToolBox.Extensibility.Interfaces;
+using XrmToolSuite.AttributeAuditor.Audit;
+using XrmToolSuite.AttributeAuditor.Reporting;
 using XrmToolSuite.Core;
-// McTools.Xrm.Connection also defines a MetadataCache; the suite uses its own (CS0104).
+using XrmToolSuite.Core.Reporting;
 using MetadataCache = XrmToolSuite.Core.MetadataCache;
 
 namespace XrmToolSuite.AttributeAuditor
 {
     public partial class AttributeAuditorControl : BaseToolControl, IGitHubPlugin, IHelpPlugin
     {
-        private ToolSettings _settings;
+        private AuditSettings _settings;
+        private AuditResult _lastResult;
+        private string _envName = "environment";
 
-        // Update these for your repo â€” powers "Report a bug" / help links in XrmToolBox
         public string RepositoryName => "XrmToolSuite";
-        public string UserName => "your-github-username";
-        public string HelpUrl => "https://github.com/your-github-username/XrmToolSuite";
+        public string UserName => "kkora";
+        public string HelpUrl => "https://github.com/kkora/XrmToolSuite";
 
         public AttributeAuditorControl()
         {
@@ -27,67 +31,126 @@ namespace XrmToolSuite.AttributeAuditor
 
         private void AttributeAuditorControl_Load(object sender, EventArgs e)
         {
-            _settings = LoadSettings<ToolSettings>();
+            _settings = LoadSettings<AuditSettings>();
+            tsbCustomOnly.Checked = _settings.CustomEntitiesOnly;
+            tsbCandidatesOnly.Checked = _settings.CandidatesOnly;
             LogInfo("Attribute Auditor loaded");
         }
 
         public override void ClosingPlugin(PluginCloseInfo info)
         {
-            SaveSettings(_settings);
+            if (_settings != null)
+            {
+                _settings.CustomEntitiesOnly = tsbCustomOnly.Checked;
+                _settings.CandidatesOnly = tsbCandidatesOnly.Checked;
+                SaveSettings(_settings);
+            }
             base.ClosingPlugin(info);
         }
 
         public override void UpdateConnection(
-            IOrganizationService newService,
-            ConnectionDetail detail,
-            string actionName,
-            object parameter)
+            IOrganizationService newService, ConnectionDetail detail, string actionName, object parameter)
         {
             base.UpdateConnection(newService, detail, actionName, parameter);
             MetadataCache.Clear(); // metadata may differ between environments
-            SetStatusMessage($"Connected to {detail?.ConnectionName}");
+            _envName = detail?.ConnectionName ?? "environment";
+            SetStatusMessage($"Connected to {_envName}");
         }
 
         private void tsbClose_Click(object sender, EventArgs e) => CloseTool();
 
-        // ExecuteMethod ensures a connection exists (prompts to connect if not)
-        private void tsbLoadSample_Click(object sender, EventArgs e) => ExecuteMethod(LoadSampleData);
+        // ExecuteMethod ensures a connection exists (prompts to connect if not).
+        private void tsbRun_Click(object sender, EventArgs e) => ExecuteMethod(RunAudit);
 
-        private void LoadSampleData()
+        private void RunAudit()
         {
+            bool customOnly = tsbCustomOnly.Checked;
             RunAsync(
-                "Retrieving accounts...",
+                "Auditing columns…",
                 worker =>
                 {
-                    var query = new QueryExpression("account")
-                    {
-                        ColumnSet = new ColumnSet("name", "createdon"),
-                        TopCount = 100
-                    };
-                    return Service.RetrieveMultiple(query).Entities;
+                    var ctx = new AttributeAuditContext(Service, _envName);
+                    return AttributeUsageCollector.Collect(ctx, customOnly,
+                        msg => worker.ReportProgress(0, msg));
                 },
-                results =>
+                result =>
                 {
-                    lvResults.BeginUpdate();
-                    lvResults.Items.Clear();
-                    foreach (var entity in results)
-                    {
-                        lvResults.Items.Add(new ListViewItem(new[]
-                        {
-                            entity.GetAttributeValue<string>("name") ?? "(no name)",
-                            entity.GetAttributeValue<DateTime?>("createdon")?.ToLocalTime().ToString("g") ?? "",
-                            entity.Id.ToString()
-                        }));
-                    }
-                    lvResults.EndUpdate();
-                    SetStatusMessage($"Retrieved {results.Count} account(s)");
+                    _lastResult = result;
+                    PopulateGrid();
+                    bool any = result.TotalColumns > 0;
+                    tsbExportCsv.Enabled = any;
+                    tsbExportHtml.Enabled = any;
+                    SetStatusMessage(
+                        $"{result.TotalColumns} custom column(s): {result.UsedColumns} used, {result.CandidateColumns} retirement candidate(s)");
                 });
+        }
+
+        private void tsbCandidatesOnly_CheckedChanged(object sender, EventArgs e)
+        {
+            if (_lastResult != null) PopulateGrid();
+        }
+
+        private void PopulateGrid()
+        {
+            IEnumerable<ColumnAudit> rows = _lastResult.Columns;
+            if (tsbCandidatesOnly.Checked) rows = rows.Where(c => c.IsRetirementCandidate);
+
+            lvResults.BeginUpdate();
+            lvResults.Items.Clear();
+            foreach (var c in rows.OrderBy(x => x.Table).ThenBy(x => x.LogicalName))
+            {
+                var item = new ListViewItem(new[]
+                {
+                    c.Table,
+                    c.LogicalName,
+                    c.DisplayName ?? "",
+                    c.AttributeType ?? "",
+                    c.IsManaged ? "yes" : "no",
+                    c.IsUsed ? "yes" : "no",
+                    c.UsageSummary()
+                });
+                if (c.IsRetirementCandidate)
+                    item.ForeColor = System.Drawing.Color.Firebrick; // highlight candidates
+                lvResults.Items.Add(item);
+            }
+            lvResults.EndUpdate();
+        }
+
+        private void tsbExportCsv_Click(object sender, EventArgs e)
+        {
+            if (_lastResult == null) return;
+            using (var dlg = new SaveFileDialog { Filter = "CSV file (*.csv)|*.csv", FileName = "attribute-audit.csv" })
+            {
+                if (dlg.ShowDialog(this) != DialogResult.OK) return;
+                try
+                {
+                    AuditCsvExporter.Export(_lastResult, dlg.FileName);
+                    SetStatusMessage($"Exported {_lastResult.TotalColumns} row(s) to CSV");
+                }
+                catch (Exception ex) { ShowError(ex, "CSV export failed"); }
+            }
+        }
+
+        private void tsbExportHtml_Click(object sender, EventArgs e)
+        {
+            if (_lastResult == null) return;
+            using (var dlg = new SaveFileDialog { Filter = "HTML report (*.html)|*.html", FileName = "attribute-audit.html" })
+            {
+                if (dlg.ShowDialog(this) != DialogResult.OK) return;
+                try
+                {
+                    HtmlDashboardBuilder.Export(AttributeAuditReport.ToReportModel(_lastResult), dlg.FileName);
+                    SetStatusMessage("Exported HTML report");
+                }
+                catch (Exception ex) { ShowError(ex, "HTML export failed"); }
+            }
         }
     }
 
-    /// <summary>Persisted automatically via SettingsManager (see Load/ClosingPlugin).</summary>
-    public class ToolSettings
+    /// <summary>Persisted automatically via SettingsManager (see Load/ClosingPlugin). No credentials.</summary>
+    public class AuditSettings
     {
-        public string LastOption { get; set; }
+        public bool CustomEntitiesOnly { get; set; } = true;
+        public bool CandidatesOnly { get; set; }
     }
 }
