@@ -64,10 +64,14 @@ Pack with: `nuget pack src/Tools/XrmToolSuite.MyTool/XrmToolSuite.MyTool.nuspec`
 | Tool | Purpose |
 |---|---|
 | **Deployment Risk Analyzer** | Analyzes a solution before deployment: dependencies, env vars/connection refs, flows/plugins, security coverage, schema conflicts vs a target env, Power Pages readiness — risk-scored report exportable as a native PDF, an HTML dashboard, Excel, CI-JSON, or Markdown |
+| **Technical Debt Analyzer** | Scans a whole environment for a 0–100 technical-debt score with prioritized cleanup findings (unused metadata, duplicates, deprecated APIs, orphaned/dead components, performance, naming, security); exports PDF/HTML/Excel/JSON/Markdown |
+| **Solution Complexity Score** | Inventories a solution and scores complexity + maintainability, with upgrade/migration/testing effort and annual support-cost estimates and an executive dashboard |
+| **AI Solution Reviewer** | AI-assisted architecture review (recommendations, modernization, prioritized backlog, sprint plan) over collected solution facts, with an offline deterministic fallback; exports Word/PDF/HTML/Markdown/JSON |
+| **Solution Knowledge Graph** | Interactive dependency graph with search, dependency tracing, deletion-impact analysis, and circular-dependency detection; exports interactive HTML, GraphML, SVG, and PNG |
 | Attribute Auditor | Audit unused attributes across entities — scaffolded from the template; logic not yet implemented (WIP) |
 | Template Tool | Clone source for new tools (not published) |
 
-Deployment Risk Analyzer fully follows suite conventions (`XrmToolSuite.DeploymentRiskAnalyzer` namespace, `BaseToolControl`, shared `RetrieveAll` paging, `Load/SaveSettings`). Its one specialty: it ships two extra dependency chains (the ClosedXML chain for Excel export and the PdfSharp/MigraDoc GDI chain for native PDF export) in its nupkg — see its csproj and nuspec for the pattern to follow when a tool needs third-party libraries.
+All five shipping tools follow the suite conventions (`XrmToolSuite.<Tool>` namespace, `BaseToolControl`, shared `RetrieveAll` paging, `Load/SaveSettings`). The scoring/report family shares one engine compiled in from **`src/Shared/`**: `Core/Analysis` (findings, `ScoreCalculator`, `ReportModel`), `Reporting` (JSON/Markdown/HTML/Excel/PDF/Word exporters), and `Summarization` (offline + AI executive summaries). Tools that export to Excel/PDF/Word ship the ClosedXML and PdfSharp/MigraDoc-GDI dependency chains in their nupkg (the Word exporter reuses the OpenXML assembly from the ClosedXML chain) — see any of their csproj/nuspec files for the pattern to follow when a tool needs third-party libraries. The Solution Knowledge Graph ships only its own DLL (its GraphML/SVG/HTML output is pure string; PNG uses the net48 System.Drawing GAC assembly).
 
 ## Backlog & user stories
 
