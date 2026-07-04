@@ -14,6 +14,24 @@ Executed via `dotnet test testing/UnitTests/UnitTests.csproj`. Source: `testing/
 | TC-TD-SCORE-04 | Accrual bands High + caps | 4×High / 10×Critical | band High; score capped at 100 | Automated | Pass |
 | TC-TD-DASH-05 | Dashboard metrics | mixed findings | Metrics carry Total findings + per-category counts | Automated | Pass |
 
+## Automated — analyzers against a fake connection (US-TD-1, US-TD-2)
+
+Executed via `dotnet test testing/CollectorTests/CollectorTests.csproj`. Sources: `testing/CollectorTests/TechDebtAnalyzerTests.cs` (row-driven) and `TechDebtMetadataTests.cs` (metadata-driven, seeded via `MetaBuilder`), over a fake `IOrganizationService`.
+
+| ID | Case | Input | Expected | Type | Status |
+|---|---|---|---|---|---|
+| TC-TD-COL-01 | Plugin on RetrieveMultiple | active step, message RetrieveMultiple | High "Plugin on RetrieveMultiple" | Automated | Pass |
+| TC-TD-COL-02 | Sync Update, no filtering | active step mode 0, message Update, blank filtering | Medium "Synchronous Update plugin without filtering attributes" | Automated | Pass |
+| TC-TD-COL-03 | Dead plugin registration | disabled step + step-less type + step-less assembly | Low disabled step, Low step-less type, Medium step-less assembly | Automated | Pass |
+| TC-TD-COL-04 | Draft process | workflow type 1 statecode 0 (+ an active one) | Low "Draft process never activated" (draft only) | Automated | Pass |
+| TC-TD-COL-05 | Deprecated API | JScript web resource with `Xrm.Page` | Medium "Deprecated API: Xrm.Page" | Automated | Pass |
+| TC-TD-COL-06 | Duplicate web resources | two share a display name | Low "Duplicate web-resource display name" | Automated | Pass |
+| TC-TD-COL-07 | Copied security role | role "Copy of …" | Low "Ad-hoc copied security role" | Automated | Pass |
+| TC-TD-COL-08 | Empty custom table | custom table, row count 0 (aggregate FetchXML) | Medium "Custom table has no data" | Automated | Pass |
+| TC-TD-COL-09 | Very wide table | custom table with 200 custom columns | Low "Very wide custom table" | Automated | Pass |
+| TC-TD-COL-10 | Default prefix / no description | custom table "new_widget", no description, column "new_field" | Low table prefix + Info no-description + Low column prefix | Automated | Pass |
+| TC-TD-COL-11 | Secured columns | custom table with 2 secured columns | Info "Field-level security in use" | Automated | Pass |
+
 ## Manual — analyzers, UI, exports, summary (US-TD-1, US-TD-5..7)
 
 Executed in XrmToolBox against a live org; capture a screenshot per case into `screenshots/` (e.g. `TC-TD-M-04-html.png`).

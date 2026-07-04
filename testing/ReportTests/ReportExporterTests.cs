@@ -3,15 +3,20 @@ using System.IO;
 using System.Text;
 using Newtonsoft.Json.Linq;
 using Xunit;
-using XrmToolSuite.DeploymentRiskAnalyzer.Models;
-using XrmToolSuite.DeploymentRiskAnalyzer.Reporting;
+using XrmToolSuite.DeploymentRiskAnalyzer.Models;      // AnalysisResult, RiskFinding, AnalyzerCategory, Severity, OverallRisk
+using XrmToolSuite.DeploymentRiskAnalyzer.Reporting;   // DeploymentReportModel (projection onto the shared model)
+using XrmToolSuite.Core.Reporting;                     // the shared exporters under test
+using ReportModel = XrmToolSuite.Core.Analysis.ReportModel;
+using ScoreBand = XrmToolSuite.Core.Analysis.ScoreBand;
 
 namespace XrmToolSuite.ReportTests
 {
     /// <summary>
-    /// Executable tests for the report exporters. The PDF path renders through MigraDoc/PdfSharp
-    /// (GDI) and is asserted to be a real PDF; the others are checked for a well-formed payload.
-    /// Traces to US-DG-9 (exportable reports).
+    /// Executable tests for the shared report exporters (XrmToolSuite.Core.Reporting). Each exporter
+    /// consumes the suite-shared <see cref="ReportModel"/>; here we drive them through the deployment
+    /// tool's <see cref="DeploymentReportModel"/> projection so the real adapter is exercised too.
+    /// The PDF path renders through MigraDoc/PdfSharp (GDI) and is asserted to be a real PDF; the
+    /// others are checked for a well-formed payload. Traces to US-DG-9 (exportable reports).
     /// </summary>
     public class ReportExporterTests : IDisposable
     {
@@ -28,7 +33,8 @@ namespace XrmToolSuite.ReportTests
             try { Directory.Delete(_dir, true); } catch { /* best-effort cleanup */ }
         }
 
-        private static AnalysisResult Sample()
+        /// <summary>A representative deployment result (managed, High risk, mixed findings).</summary>
+        private static AnalysisResult SampleResult()
         {
             var r = new AnalysisResult
             {
@@ -58,6 +64,9 @@ namespace XrmToolSuite.ReportTests
             return r;
         }
 
+        /// <summary>The same result projected onto the shared model the exporters consume.</summary>
+        private static ReportModel Sample() => DeploymentReportModel.ToReportModel(SampleResult());
+
         private string Path_(string name) => Path.Combine(_dir, name);
 
         // TC-DG-RPT-01: the PDF exporter renders a valid, non-trivial PDF (MigraDoc/PdfSharp GDI).
@@ -72,16 +81,17 @@ namespace XrmToolSuite.ReportTests
             Assert.Equal("%PDF-", Encoding.ASCII.GetString(bytes, 0, 5));
         }
 
-        // TC-DG-RPT-02: the HTML exporter writes a standalone HTML document containing the findings.
+        // TC-DG-RPT-02: the HTML dashboard writes a standalone document containing the findings.
         [Fact]
         public void Html_WritesDocumentWithFindings()
         {
             var path = Path_("report.html");
-            HtmlReportExporter.Export(Sample(), path);
+            HtmlDashboardBuilder.Export(Sample(), path);
 
             var html = File.ReadAllText(path);
-            Assert.Contains("<html", html, StringComparison.OrdinalIgnoreCase);
-            Assert.Contains("Duplicate SDK step registration", html);
+            Assert.Contains("<style>", html);                          // self-contained document (inline CSS)
+            Assert.Contains("Deployment Risk Report", html);           // report title from the projection
+            Assert.Contains("Duplicate SDK step registration", html);  // a finding title is rendered
         }
 
         // TC-DG-RPT-03: the JSON exporter emits parseable CI output with the score and pass flag.
@@ -89,15 +99,15 @@ namespace XrmToolSuite.ReportTests
         public void Json_EmitsParseableCiPayload()
         {
             var path = Path_("report.json");
-            JsonReportExporter.Export(Sample(), path, OverallRisk.High);
+            JsonReportExporter.Export(Sample(), path, ScoreBand.High);
 
             var json = JObject.Parse(File.ReadAllText(path));
             Assert.Equal(61, (int)json["score"]);
-            Assert.False((bool)json["ci"]["pass"]);           // High risk fails the High gate
+            Assert.False((bool)json["ci"]["pass"]);           // High band fails the High gate
             Assert.Equal(1, (int)json["ci"]["suggestedExitCode"]);
         }
 
-        // TC-DG-RPT-04: the Markdown checklist ends with rollback guidance.
+        // TC-DG-RPT-04: the Markdown checklist includes the guidance section with rollback steps.
         [Fact]
         public void Markdown_IncludesRollbackGuidance()
         {
@@ -106,29 +116,31 @@ namespace XrmToolSuite.ReportTests
 
             var md = File.ReadAllText(path);
             Assert.Contains("Fix Checklist", md);
-            Assert.Contains("Rollback guidance", md);
+            Assert.Contains("## Guidance", md);
+            Assert.Contains("rollback", md, StringComparison.OrdinalIgnoreCase);
         }
 
         // TC-DG-RPT-06: an executive summary, when present, is embedded in PDF/HTML/JSON exports.
         [Fact]
         public void Summary_EmbeddedInExports()
         {
-            var r = Sample();
-            r.AiSummary = "GO WITH CAUTION — one critical deletion to review.\nMitigate before deploying.";
+            var result = SampleResult();
+            result.AiSummary = "GO WITH CAUTION — one critical deletion to review.\nMitigate before deploying.";
+            var model = DeploymentReportModel.ToReportModel(result);
 
             var pdf = Path_("s.pdf");
-            PdfReportExporter.Export(r, pdf);
+            PdfReportExporter.Export(model, pdf);
             Assert.Equal("%PDF-", Encoding.ASCII.GetString(File.ReadAllBytes(pdf), 0, 5)); // renders with the summary block
 
             var html = Path_("s.html");
-            HtmlReportExporter.Export(r, html);
+            HtmlDashboardBuilder.Export(model, html);
             var htmlText = File.ReadAllText(html);
-            Assert.Contains("Executive summary", htmlText);
+            Assert.Contains("Executive Summary", htmlText);
             Assert.Contains("GO WITH CAUTION", htmlText);
 
             var jsonPath = Path_("s.json");
-            JsonReportExporter.Export(r, jsonPath, OverallRisk.High);
-            Assert.Equal(r.AiSummary, (string)JObject.Parse(File.ReadAllText(jsonPath))["aiSummary"]);
+            JsonReportExporter.Export(model, jsonPath, ScoreBand.High);
+            Assert.Equal(result.AiSummary, (string)JObject.Parse(File.ReadAllText(jsonPath))["aiSummary"]);
         }
 
         // TC-DG-RPT-05: the Excel exporter writes a valid .xlsx (ZIP/OOXML) file.

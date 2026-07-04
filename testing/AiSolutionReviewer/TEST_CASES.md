@@ -13,6 +13,22 @@ Executed via `dotnet test testing/UnitTests/UnitTests.csproj`. Source: `testing/
 | TC-AR-REPORT-03 | Per-area metrics | 2 Plugins + 1 ALM | Observations 3, Plugins 2 | Automated | Pass |
 | TC-AR-REPORT-04 | AI prompt sections | — | prompt covers backlog, sprint plan, architecture recommendations | Automated | Pass |
 
+## Automated — review collectors against a fake connection (US-AR-1)
+
+Executed via `dotnet test testing/CollectorTests/CollectorTests.csproj`. Source: `testing/CollectorTests/ReviewCollectorTests.cs` (the four `ReviewCollectors` over a fake `IOrganizationService`).
+
+| ID | Case | Input | Expected | Type | Status |
+|---|---|---|---|---|---|
+| TC-AR-COL-01 | Sync step, no filtering | sdkmessageprocessingstep mode 0, no filteringattributes | Medium "Synchronous step without filtering attributes" | Automated | Pass |
+| TC-AR-COL-02 | Async / filtered step | async step + sync-with-filtering step | no sync finding | Automated | Pass |
+| TC-AR-COL-03 | Heavy plugin footprint | 20 steps | Low "Heavy plugin footprint" | Automated | Pass |
+| TC-AR-COL-04 | No plugin steps | none seeded | Info "No plugin steps in solution" | Automated | Pass |
+| TC-AR-COL-05 | Deprecated client API | JScript web resource with `Xrm.Page`; non-JScript ignored | Medium "Deprecated client API in use" (one finding) | Automated | Pass |
+| TC-AR-COL-06 | Heavy scripting | 15 clean JScript web resources | Low "Heavy client-side scripting"; no deprecated finding | Automated | Pass |
+| TC-AR-COL-07 | Classic workflows / sprawl | 25 classic workflows | Medium "Legacy classic workflows" + Low "Automation sprawl" | Automated | Pass |
+| TC-AR-COL-08 | Unmanaged + version | solution ismanaged=false | Medium "Unmanaged solution" + Info "Version" | Automated | Pass |
+| TC-AR-COL-09 | Default publisher prefix | uniquename "new_widgets" | Low "Default publisher prefix" | Automated | Pass |
+
 ## Manual — collectors, AI/offline review, export, UI (US-AR-1, US-AR-3, US-AR-4)
 
 Executed in XrmToolBox against a live org; screenshot per case into `screenshots/`.

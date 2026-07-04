@@ -1,0 +1,67 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!--
+    Executable, headless tests for the OTHER suite tools' Dataverse data-collection layers
+    (Solution Complexity Score, AI Solution Reviewer, Solution Knowledge Graph, Technical Debt
+    Analyzer). Sibling to testing/AnalyzerTests, which covers the Deployment Risk Analyzer's
+    analyzers with the same technique.
+
+    Like AnalyzerTests, each tool's collector/analyzer classes are UI-free (they depend only on
+    IOrganizationService), so they run against the shared in-memory FakeOrganizationService with no
+    live org. This project compiles the specific UI-free source files under test directly (the same
+    source-inclusion pattern the tools use for the shared core) rather than referencing the WinForms
+    tool projects, and links the one shared fake from AnalyzerTests so there is a single test double.
+
+    Targets net48 to match the Dataverse SDK. Deliberately NOT part of XrmToolSuite.sln.
+
+    Run:  dotnet test testing/CollectorTests/CollectorTests.csproj
+  -->
+
+  <PropertyGroup>
+    <TargetFramework>net48</TargetFramework>
+    <LangVersion>latest</LangVersion>
+    <Nullable>disable</Nullable>
+    <IsPackable>false</IsPackable>
+    <IsTestProject>true</IsTestProject>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.11.1" />
+    <PackageReference Include="xunit" Version="2.9.2" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="2.8.2" />
+    <!-- Dataverse SDK types the collectors compile against. Test-only: never shipped. -->
+    <PackageReference Include="Microsoft.CrmSdk.CoreAssemblies" Version="9.0.2.51" />
+    <!-- Unify System.Text.Json: the test SDK and CrmSdk pull 6.0.0.7 vs 6.0.0.8, else MSB3277. -->
+    <PackageReference Include="System.Text.Json" Version="6.0.10" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- Shared, UI-free sources the collectors compile against. -->
+    <Compile Include="..\..\src\Shared\Core\QueryExtensions.cs" />
+    <Compile Include="..\..\src\Shared\Core\Analysis\*.cs" />
+
+    <!-- The one shared in-memory IOrganizationService (defined in AnalyzerTests). -->
+    <Compile Include="..\AnalyzerTests\Fakes\FakeOrganizationService.cs" LinkBase="Fakes" />
+
+    <!-- Solution Complexity Score: collector + its counts model. -->
+    <Compile Include="..\..\src\Tools\XrmToolSuite.SolutionComplexityScore\Analysis\ComplexityContext.cs" />
+    <Compile Include="..\..\src\Tools\XrmToolSuite.SolutionComplexityScore\Analysis\ComplexityCollector.cs" />
+    <Compile Include="..\..\src\Tools\XrmToolSuite.SolutionComplexityScore\Analysis\ComponentCounts.cs" />
+
+    <!-- AI Solution Reviewer: Dataverse collectors (AI/HTTP path stays manual). -->
+    <Compile Include="..\..\src\Tools\XrmToolSuite.AiSolutionReviewer\Analysis\ReviewContext.cs" />
+    <Compile Include="..\..\src\Tools\XrmToolSuite.AiSolutionReviewer\Analysis\ReviewCollectors.cs" />
+
+    <!-- Solution Knowledge Graph: the Dataverse graph builder + its model (PNG/exporters stay manual). -->
+    <Compile Include="..\..\src\Tools\XrmToolSuite.SolutionKnowledgeGraph\Graph\GraphBuilder.cs" />
+    <Compile Include="..\..\src\Tools\XrmToolSuite.SolutionKnowledgeGraph\Graph\GraphModel.cs" />
+
+    <!-- Technical Debt Analyzer: context + all analyzers. -->
+    <Compile Include="..\..\src\Tools\XrmToolSuite.TechnicalDebtAnalyzer\Analysis\TechDebtContext.cs" />
+    <Compile Include="..\..\src\Tools\XrmToolSuite.TechnicalDebtAnalyzer\Analysis\GovernanceAnalyzers.cs" />
+    <Compile Include="..\..\src\Tools\XrmToolSuite.TechnicalDebtAnalyzer\Analysis\ProcessPluginAnalyzers.cs" />
+    <Compile Include="..\..\src\Tools\XrmToolSuite.TechnicalDebtAnalyzer\Analysis\UnusedMetadataAnalyzer.cs" />
+    <Compile Include="..\..\src\Tools\XrmToolSuite.TechnicalDebtAnalyzer\Analysis\WebResourceAnalyzers.cs" />
+  </ItemGroup>
+
+</Project>

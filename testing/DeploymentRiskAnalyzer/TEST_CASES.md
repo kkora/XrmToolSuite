@@ -93,9 +93,9 @@ UI-free and liftable into a console/CI wrapper. Paths that need constructed `Ent
 | TC-DG-HTML-07 | HTML exec summary | result with `AiSummary` | "Executive Summary" heading + summary text present | Automated | Pass |
 | TC-DG-HTML-08 | HTML clear state | no findings, Low risk | Shows `LOW RISK` + "Clear for deployment" (not blank) | Automated | Pass |
 | TC-DG-RPT-03 | JSON CI payload | export result to JSON at High gate | `score`, `ci.pass=false`, `suggestedExitCode=1` | Automated | Pass |
-| TC-DG-RPT-04 | Markdown checklist | export result to Markdown | Contains "Fix Checklist" + "Rollback guidance" | Automated | Pass |
+| TC-DG-RPT-04 | Markdown checklist | export result to Markdown | Contains "Fix Checklist" + a "## Guidance" section with rollback steps | Automated | Pass |
 | TC-DG-RPT-05 | Excel package | export result to XLSX | Valid ZIP/OOXML (`PK` header) > 1 KB | Automated | Pass |
-| TC-DG-RPT-06 | Summary embedded in exports | result with `AiSummary` → PDF/HTML/JSON | PDF renders; HTML has "Executive summary"; JSON `aiSummary` set | Automated | Pass |
+| TC-DG-RPT-06 | Summary embedded in exports | result with `AiSummary` → PDF/HTML/JSON | PDF renders; HTML has "Executive Summary"; JSON `aiSummary` set | Automated | Pass |
 
 ## Automated - Deployment summary (US-DG-8)
 
