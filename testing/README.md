@@ -81,6 +81,49 @@ These are XrmToolBox WinForms plugins that call Dataverse. Two tiers of tests:
   as numbered cases with steps/expected results; evidence is captured as screenshots under the tool's
   `screenshots/` folder. They cannot be executed in a headless environment.
 
+## Running the manual cases (GUI + screenshots)
+
+The manual cases are the `TC-*-M-*` rows in each `TEST_CASES.md`. They need Windows + XrmToolBox + a
+Dataverse sandbox (System Customizer or higher). The AI Solution Reviewer's AI path also needs an
+Anthropic/OpenAI/Google API key (used session-only; never persisted).
+
+1. **Build + deploy every tool into XrmToolBox.** This copies each tool DLL — and, for the tools that
+   ship them, the ClosedXML/PDF/Word dependency chain — into `%AppData%\MscrmTools\XrmToolBox\Plugins`
+   (the Plugins root, where XrmToolBox resolves them at scan time):
+
+   ```powershell
+   dotnet build XrmToolSuite.sln -c Release -p:DeployToXTB=true
+   ```
+
+   If the DLLs were flagged as downloaded, unblock them once:
+
+   ```powershell
+   Get-ChildItem "$env:AppData\MscrmTools\XrmToolBox\Plugins\XrmToolSuite.*.dll" | Unblock-File
+   ```
+
+2. **Launch XrmToolBox** (restart it if it was already open, so it re-scans plugins) and **connect** to
+   your sandbox. Each tool appears in the Tools list by its display name.
+
+3. **Walk each tool's manual cases in order.** Open `testing/<Tool>/TEST_CASES.md` next to XrmToolBox and
+   follow the "Steps" column for every `TC-*-M-*` row.
+
+4. **Capture one screenshot per case** (Win+Shift+S), saved into that tool's `screenshots/` folder named
+   by the case ID, e.g.:
+
+   ```
+   testing/TechnicalDebtAnalyzer/screenshots/TC-TD-M-04-deprecated.png
+   testing/SolutionComplexityScore/screenshots/TC-SC-M-04-html.png
+   testing/AiSolutionReviewer/screenshots/TC-AR-M-03-review.png
+   testing/SolutionKnowledgeGraph/screenshots/TC-KG-M-04-interactive.png
+   ```
+
+   Tip: for the score/report tools, running the analysis then **Export → HTML** gives one screenshot that
+   evidences the gauge, metrics, and findings together.
+
+5. **Record results.** Flip each executed row's Status in `TEST_CASES.md` from `Pending` to `Pass`/`Fail`,
+   and update the manual rollup + verdict in `TEST_SUMMARY.md`. Log any failure as a defect in the summary
+   rather than marking it `Pass`.
+
 ## Index
 
 | Tool | Plan | Cases | Summary | Automated status |
