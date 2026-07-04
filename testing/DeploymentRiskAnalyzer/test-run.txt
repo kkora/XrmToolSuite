@@ -1,0 +1,20 @@
+  Passed XrmToolSuite.UnitTests.RiskScoreCalculatorTests.ManyCriticals_ScoreCappedAt100 [14 ms]
+  Passed XrmToolSuite.UnitTests.RiskScoreCalculatorTests.OnlyInfo_ScoreZero_Low [3 ms]
+  Passed XrmToolSuite.UnitTests.RiskScoreCalculatorTests.ScoreJustBelowHighThreshold_Medium [< 1 ms]
+  Passed XrmToolSuite.UnitTests.RiskScoreCalculatorTests.SeveritySummary_CountsBySeverity [2 ms]
+  Passed XrmToolSuite.UnitTests.RiskScoreCalculatorTests.SingleFinding_UsesConfiguredWeight(severity: High, expected: 12) [< 1 ms]
+  Passed XrmToolSuite.UnitTests.RiskScoreCalculatorTests.SingleFinding_UsesConfiguredWeight(severity: Medium, expected: 5) [< 1 ms]
+  Passed XrmToolSuite.UnitTests.RiskScoreCalculatorTests.SingleFinding_UsesConfiguredWeight(severity: Low, expected: 2) [< 1 ms]
+  Passed XrmToolSuite.UnitTests.RiskScoreCalculatorTests.SingleFinding_UsesConfiguredWeight(severity: Info, expected: 0) [< 1 ms]
+  Passed XrmToolSuite.UnitTests.RiskScoreCalculatorTests.SingleFinding_UsesConfiguredWeight(severity: Critical, expected: 25) [< 1 ms]
+  Passed XrmToolSuite.UnitTests.RiskScoreCalculatorTests.ScoreBelowMediumThreshold_Low [< 1 ms]
+  Passed XrmToolSuite.UnitTests.RiskScoreCalculatorTests.CriticalPlusNothing_LowScoreButHigh_IsImpossibleToDowngrade [< 1 ms]
+  Passed XrmToolSuite.UnitTests.RiskScoreCalculatorTests.SingleCritical_ForcesHigh_EvenWhenScoreWouldBeMedium [< 1 ms]
+  Passed XrmToolSuite.UnitTests.RiskScoreCalculatorTests.MultipleFindings_WeightsSum [< 1 ms]
+  Passed XrmToolSuite.UnitTests.RiskScoreCalculatorTests.Explain_ReportsCountsScoreAndRisk [28 ms]
+  Passed XrmToolSuite.UnitTests.RiskScoreCalculatorTests.ScoreAtMediumThreshold_Medium [< 1 ms]
+  Passed XrmToolSuite.UnitTests.RiskScoreCalculatorTests.ScoreAtHighThreshold_High [< 1 ms]
+  Passed XrmToolSuite.UnitTests.RiskScoreCalculatorTests.NoFindings_ScoreZero_Low [< 1 ms]
+Total tests: 17
+     Passed: 17
+ Total time: 0.9572 Seconds

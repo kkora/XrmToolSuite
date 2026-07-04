@@ -1,0 +1,40 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!--
+    Executable unit tests for DeploymentRiskAnalyzer's report exporters (PDF/HTML/JSON/Markdown/Excel).
+
+    Like testing/AnalyzerTests, this compiles the specific UI-free source files under test directly
+    (Reporting/ReportExporters.cs + Models/RiskModels.cs) rather than referencing the WinForms tool
+    project, and pulls the same export dependencies the tool ships (ClosedXML, PdfSharp/MigraDoc-GDI,
+    Newtonsoft). It targets net48 to match those libraries. These deps are kept OUT of AnalyzerTests
+    so that project stays lean.
+
+    Deliberately NOT part of XrmToolSuite.sln.
+
+    Run:  dotnet test testing/ReportTests/ReportTests.csproj
+  -->
+
+  <PropertyGroup>
+    <TargetFramework>net48</TargetFramework>
+    <LangVersion>latest</LangVersion>
+    <Nullable>disable</Nullable>
+    <IsPackable>false</IsPackable>
+    <IsTestProject>true</IsTestProject>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.11.1" />
+    <PackageReference Include="xunit" Version="2.9.2" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="2.8.2" />
+    <!-- Export dependencies the tool ships; test-only, never packaged from here. -->
+    <PackageReference Include="ClosedXML" Version="0.102.3" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+    <PackageReference Include="PDFsharp-MigraDoc-GDI" Version="1.50.5147" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Include="..\..\src\Tools\XrmToolSuite.DeploymentRiskAnalyzer\Models\RiskModels.cs" />
+    <Compile Include="..\..\src\Tools\XrmToolSuite.DeploymentRiskAnalyzer\Reporting\ReportExporters.cs" />
+  </ItemGroup>
+
+</Project>

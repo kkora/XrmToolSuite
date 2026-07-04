@@ -1,0 +1,44 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!--
+    Executable unit tests for the suite's SDK-free logic.
+
+    Deliberately NOT part of XrmToolSuite.sln: the tools target net48 + WinForms, this
+    runs on net8.0 so it executes with the plain .NET SDK (no net48 pack, no Dataverse
+    SDK, no WinForms). It compiles the specific source files under test directly - the
+    same source-inclusion pattern the tools use for the shared core - so there is no
+    project reference to a WinForms/net48 assembly.
+
+    Run:  dotnet test testing/UnitTests/UnitTests.csproj
+  -->
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <LangVersion>latest</LangVersion>
+    <Nullable>disable</Nullable>
+    <IsPackable>false</IsPackable>
+    <IsTestProject>true</IsTestProject>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.11.1" />
+    <PackageReference Include="xunit" Version="2.9.2" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="2.8.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- SDK-free logic under test, compiled in directly (no Dataverse/WinForms dependency). -->
+    <Compile Include="..\..\src\Tools\XrmToolSuite.DeploymentRiskAnalyzer\Models\RiskModels.cs" />
+    <Compile Include="..\..\src\Tools\XrmToolSuite.DeploymentRiskAnalyzer\Scoring\RiskScoreCalculator.cs" />
+    <!-- HTML dashboard report: SDK-free string builder (no ClosedXML/MigraDoc), so it tests here. -->
+    <Compile Include="..\..\src\Tools\XrmToolSuite.DeploymentRiskAnalyzer\Reporting\HtmlDashboardReport.cs" />
+    <!-- Summarization: SDK-free pieces only (AiSummaryGenerator needs HttpClient/Newtonsoft and is manual-tested). -->
+    <Compile Include="..\..\src\Tools\XrmToolSuite.DeploymentRiskAnalyzer\Summarization\AiProviders.cs" />
+    <Compile Include="..\..\src\Tools\XrmToolSuite.DeploymentRiskAnalyzer\Summarization\SummaryOptions.cs" />
+    <Compile Include="..\..\src\Tools\XrmToolSuite.DeploymentRiskAnalyzer\Summarization\SummaryPayloadBuilder.cs" />
+    <Compile Include="..\..\src\Tools\XrmToolSuite.DeploymentRiskAnalyzer\Summarization\ISummaryGenerator.cs" />
+    <Compile Include="..\..\src\Tools\XrmToolSuite.DeploymentRiskAnalyzer\Summarization\TemplatedSummaryGenerator.cs" />
+    <Compile Include="..\..\src\Tools\XrmToolSuite.DeploymentRiskAnalyzer\Summarization\SummaryFormatting.cs" />
+  </ItemGroup>
+
+</Project>

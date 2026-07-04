@@ -1,0 +1,9 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <!-- TargetFramework, WinForms, XrmToolBoxPackage reference, and the shared core
+       all come from src/Tools/Directory.Build.props. Keep tool csproj files minimal. -->
+  <PropertyGroup>
+    <RootNamespace>XrmToolSuite.AttributeAuditor</RootNamespace>
+    <AssemblyName>XrmToolSuite.AttributeAuditor</AssemblyName>
+    <Description>Audits unused attributes across entities</Description>
+  </PropertyGroup>
+</Project>

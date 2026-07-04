@@ -1,0 +1,31 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package>
+  <metadata>
+    <!-- Tool Library rules (xrmtoolbox.com/documentation/for-developers):
+         1) version MUST equal the assembly version of your DLL
+         2) tags MUST start with "XrmToolBox" plus extra words
+         3) dependency MUST be on "XrmToolBox" (NOT XrmToolBoxPackage)
+         4) DLL goes under a "Plugins" folder
+         5) iconUrl is required and must be your own icon -->
+    <id>XrmToolSuite.AttributeAuditor</id>
+    <version>1.2026.7.1</version>
+    <title>Attribute Auditor for XrmToolBox</title>
+    <authors>Kanchan Kora</authors>
+    <owners>Kanchan Kora</owners>
+    <projectUrl>https://github.com/kkora/XrmToolSuite</projectUrl>
+    <iconUrl>https://raw.githubusercontent.com/kkora/XrmToolSuite/main/icon.png</iconUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <license type="expression">MIT</license>
+    <description>Audits unused attributes across entities</description>
+    <summary>Audits unused attributes across entities</summary>
+    <releaseNotes>1.2026.7.1: Initial release.</releaseNotes>
+    <tags>XrmToolBox Dataverse Dynamics365 PowerPlatform</tags>
+    <dependencies>
+      <dependency id="XrmToolBox" version="1.2025.10.74" />
+    </dependencies>
+  </metadata>
+  <files>
+    <!-- Ship ONLY your DLL; XrmToolBox already contains the SDK and shared libs -->
+    <file src="bin\Release\net48\XrmToolSuite.AttributeAuditor.dll" target="lib\net48\Plugins" />
+  </files>
+</package>

@@ -1,0 +1,26 @@
+namespace XrmToolSuite.Core
+{
+    /// <summary>
+    /// Default tool-tile icons (base64 PNG) shared across the suite.
+    ///
+    /// XrmToolBox's <c>IPluginMetadata</c> marks <c>SmallImageBase64</c> and
+    /// <c>BigImageBase64</c> as REQUIRED (no default value). MEF silently drops any
+    /// plugin export whose metadata is missing a required key, so a plugin that omits
+    /// these never appears in the Tools list — with no error and no "Tools not loaded"
+    /// entry. Every plugin MUST therefore supply both keys; these constants are the
+    /// default. A tool may substitute its own base64 icon, but must never omit the keys.
+    ///
+    /// Values are compile-time constants so they can be used directly in
+    /// <c>[ExportMetadata("SmallImageBase64", PluginIcons.Small)]</c> attributes.
+    /// </summary>
+    public static class PluginIcons
+    {
+        /// <summary>32x32 PNG (base64) — the small tool-list tile icon.</summary>
+        public const string Small =
+            "iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAKkSURBVFhH1Vc9aBRBFL7S0tLS0tLSMthoI9iZRhCrNELsUlhELFIoBCwiIiI2ahFIISaIRo1wWBjYoCYqEk4ierc7JzN7BCzX982+9WZ3nrt77uXAB19x936+NzPvzZtt/XeitT6stZrSOprVsZoHjAnn0v+6R9lsvJKSRrPGqDcmVkkpTPQRSe3vh0fYvZkwcVckK4NRv+wOUfIcajSBo4mjl2LwUUA7MhioYxy2nuAs4SgGJKxv309uv76Uw+q7paSvf4j2tBBaj5ri8OWSrlx1/CApdrtbyZXHJ0UEneeiT4pIV+5EknQOVW37+70NkRxof14WfRx0SmvCFpzs+AcNE0jMQN1jurygbepUe+MECFqHx5l2KHHcX5CMi9j51hbJgboJmLi/wrRDIUXgG8q4277skd98cTH5rr6I9h7ojkC9MTW3XcFoL9yx250B1e/qXR3gtmCVL6B17yzT0+pNNO0qn364460QWN5csETX1s54uvknpyzxq08PPB3w6O3VXAI4cqZHAuGcq8TFIgW5/uycXZGkA1ADZb4uR64b6Meiq5xIAnTfML3tgFuucuIJ2JnuKCeRQByrh0yPLggvuEoUmxRkaWPGtpqkAzALVoIbog6+LgeOnelxBL0TrjL8+dVWMyZcBnRG1ue4jFwdsLm7anXokjLfDFg006cyyqMj22oXIJFs/wbvxYS2kAyL+Pdx7ICedkw7FAwI0biAqiKUfIrI3YKuFNtRwhgSCJjOlzojuVECNIRQ8Ewni+0IMhQDEBqNY9ObYZpyscOpJAnpsllcP186jnHZcfh6glcsHpJSsJGAhdRdeVHwTqArc00MXA9B5ZnXERrXp2kl1Z9lGfB5VrzpxiHoEjs37PjG890BXWT2g/WgPlAPRlqt3514c91CEKKSAAAAAElFTkSuQmCC";
+
+        /// <summary>120x120 PNG (base64) — the large tool-tile icon.</summary>
+        public const string Big =
+            "iVBORw0KGgoAAAANSUhEUgAAAHgAAAB4CAYAAAA5ZDbSAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAhqSURBVHhe7Z0/qBxFHMdTWlpaprS0tAw22ghiYxohWL1G0M4iRcQihYFAioiIBEGMReAhwYSg8Rnh8QIJXPBP4r/wJGLeu9snu/sIvPKc7+ycHJvf3c7O/935feFT3d3M7nxv/u5vZo+xWCwWi8VisVgrVZbTF6pq+kpZF2fq+uCjqp5tSarZg6ou5iTyM/W9w+ISfluW+6/V9f6LKllWDM3nu8/ACGHKeWHU5CnjXCH+APLPUs1OPnkyfU5lz/Khstw7jhpWVcUOaUYYJvhTobVQl8WyEWpNVe1vRDaVRtTupknfO64ul6Ur1JC6Li6TBZsi4g+ILkNdPmuVyrI4UdUHm2QhDoMJG00Io9ZmNEsW2hCZYESvbi9flWX5LKYnRAGNAtHNXM+2jxb97ClRa0uqYEZFVRxhMIapnbr1cQv/6CRHxb6Rc+qRL6DIxYkcau0qUJvL2TuqOMYjNE9q1Ym+8ew42MT4QxXPsJVtk9zN7uBXxA4Pi+dxI60bY/5HdFdDnU7JpzuB+9v7f2/Pb/7y2fzajxeNuPHzJ/OfHt2aH5SPyfS9IPvl6SlVbMMQ/pW4cPKGPDDZ/XZ+9sbr89NXX3LCma9flmZTefliMIMvaS5xA76AuZRJLkCtpvL0RjV9TxVjmpJLjgFrLvjwmzdIc1yAmvxP8QeZry+Sba6bAVXYPheFTxnjErQQVN7eQAVJbeAlp0IRRssYEFGmuGT7tytk3l4RJiez6iUXMSLNc0drMKiKvSTChGKuUI3aYMlsSxVzHDVry9SFhWH8BotBV12cUcUdVk2/G/fBQQ4GA0S6qGIPp1j97jK5GBy8P5aRjtSFBCYbgwWIz1bF71cylDWRZ7o5GQyCTJ1SiqHKzWDBRNngR01YK5lxFDI02O9DCZGBv31ABuRoMAZcXgL4Ys95KbI0WOClFiPGl8osJrka7LwWN9EZREaRydZggdNanOp+oZwNdlaLm3kvkUECIAaLMsUlyRoMXDw3RhgJmXgCTP/9izTFJWglqLxTAFtslU3mEgklNTVqc/7mm6QxLkDIDv5EVL5JUBVHVs20imumE08ENNMwgjLIlu9//YLMMyWsYrjq+uAslWhqwGSXNRkhuEn3vUtg+qrs6i+RQNLNcxsE4aHPtOHR9D6ZdrKYNtNyczaVIJMcRgEBaNupxJj0QFeqbNOXq8eCVDOoy++P75BprgO/odLSAX05leY6Hu7dI9PSxdE+qP6PEcWPjOOcESzuctDz6fa7siCpvAA+w3eo35qAa0fhU3kBTJ2+vPM++VsTsDvDdlDXa7+xTf979+E18iZs+eD6q+QACObiM+o3tuBe2vmhxvnaLnP13oWn8tOmz6pWc6wRkUgH+Ge73OXXBrW0nefHP7xNftcFuJf2Qsfm5Bz5XVesa6nWUu1vKPu6ZTrAQrNGXbQrsKCx3GeFWKps98sXvnuL/J4rsL95OT9tDovzyr5umS5wYE8tddEuWW6mYzxsoL7jEvMtqwebyr5umZ4TiYujLtolywb7bjHAYAyuZg+Ufd0SPzBawWKD7bHZdK7s65b4stEUiQ22x8Zg7SVLRAtQCXTBBttjY7D2uZjUj3Vgg+1hg9nglWg9dFDHMZAJdMEG28MGs8Er0TIYIzHqxzqwwfZ4NxiifqwDG2yPjcGIoVMWrpfp/l822B67Gqw/iuaFDsWwDNZ8Jox1TSqBLthge2wMVvZ1y3QvEhtsj7HBVbGn7OuW6eFmbLA9pgb3io82PUXHV7jOMssRFjEOI/UZsQJMz6nudQoP4nuoRLpA7aIu2hWIhWrn6bvA28cJf377NPk9V5iebttrv7DNltErd8+SF+6C239+9VR+aEKp77oA99LODzFTvvZCIb6snZ8uvd+ZaDoXRsyUy5BSgAJdF6uEz1wXOu5hVcwyapnrlgMBhTaHj2vPgRey3dWPAHTUOAwabEBhLg+sVoHv4LtUGn3AOEInsnGxDwp9JpWOLmiBTALuW+wq2/SFNp1IiEmRw+KSsk1fQ9gbzDQY7xEWP+aXWg0A49fkpXQu5TowGEJ/5mKXAwLbMXq2GfAExvz8StP5cEiw8OHjnA7sd3Iw+PGPzbuW5MN/wwjLUPhceMAfZ9VUKRV6T4/awhIYlXAKoPApY1xiskc5HA5e2mG60zAEKHzKFJdQq2fJ0GdH4TqJxJIcTcd4mpQMFd5a6ugl06kuemRtcJ/tol1KdbCVrcGi9jp/C0uKtThbg13W3oVSrMVZGuyj9i6UyvuSFmRpsI/auyyRSTLHG2ZnsGhBnY2cVyml4/1zM9jqZNk+SmV1KyuDq2JHFb9/yZitBAZcORmMllMVfxil8B6lXAyO9g5hjOioCwpFHgZHfAu4mhtHe4/w6A0W3aC3Oa+umhMB4rxuduwGGx307UMy8qMqjqiL9MmoDbaJ1PAh0wNMbUD8MmWKS6gjhb3je7XKVPjXkRfsEV9nRS8wPt7XFJMY55AKPbJGNCVljAuo86l9gi2gGLiqokxXoVe6XO+FAhdvbQQNnR2MuQthck7diC8Q4rq858eG4HFYolkelLkLxRh4DY5UB1S6kkuaEaZQgyC1qZCp5EY2w5N7Rol8rpvIIoYryWXNgex18stsK/ryo0/JfjnTJjvaU6HQwvo1pgVUIYySqtjBDhF1+/lIrWEnvbnNjlnpbHvJUIW+Wb6naWTNNhZ7vAfIDUkyDAjLnEM3Wgwkrbd0jln41zerYHGeMRvDxvaTNFqMuBMfjE2wpWfU054QQgHKvVFpLJbsYsygfbo6q59kX13NTqpFE//7lsUoX7QilzEa5iY4glDoWO+W/bY0fbZlPlCbbcFMmZb4E3EtTVyN+cWJ9XCtZLFYLBaL5VrHjv0Ha9QRVzygYUAAAAAASUVORK5CYII=";
+    }
+}

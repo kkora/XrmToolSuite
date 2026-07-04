@@ -1,0 +1,17 @@
+bin/
+obj/
+.vs/
+.claude/
+.github/
+
+
+*.user
+packages/
+artifacts/
+
+# NuGet packaging output (produced by `nuget pack`)
+*.nupkg
+
+# Local diagnostic screenshots (e.g. captured XrmToolBox window)
+xrmtoolbox_state.png
+prompt/

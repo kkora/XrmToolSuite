@@ -1,0 +1,33 @@
+<Project>
+  <!-- Chain up to the root Directory.Build.props -->
+  <Import Project="$([MSBuild]::GetPathOfFileAbove('Directory.Build.props', '$(MSBuildThisFileDirectory)..'))" />
+
+  <PropertyGroup>
+    <TargetFramework>net48</TargetFramework>
+    <UseWindowsForms>true</UseWindowsForms>
+    <AppendTargetFrameworkToOutputPath>true</AppendTargetFrameworkToOutputPath>
+    <!-- XrmToolBox ships all its own dependencies; keep tool output lean -->
+    <CopyLocalLockFileAssemblies>false</CopyLocalLockFileAssemblies>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- Every tool project automatically compiles the shared core (source-level sharing:
+         no extra DLL to ship, no assembly version conflicts inside XrmToolBox). -->
+    <Compile Include="$(MSBuildThisFileDirectory)..\Shared\Core\**\*.cs" LinkBase="Shared" />
+    <PackageReference Include="XrmToolBoxPackage" Version="1.2025.10.74" />
+    <!-- XrmToolBoxPackage 1.2025.10.74 declares a dependency on MscrmTools.Xrm.Connection
+         1.2025.7.63, but the XrmToolBox.Extensibility.dll it ships is compiled against
+         1.2025.9.64. Pin the higher version so the primary reference matches and MSBuild
+         stops emitting MSB3277 conflict warnings for McTools.Xrm.Connection[.WinForms].
+         XrmToolBox provides this assembly at runtime, so exclude the runtime asset (never shipped). -->
+    <PackageReference Include="MscrmTools.Xrm.Connection" Version="1.2025.9.64" ExcludeAssets="runtime" />
+    <!-- Required for MEF [Export] attributes in SDK-style net48 projects -->
+    <Reference Include="System.ComponentModel.Composition" />
+  </ItemGroup>
+
+  <!-- Optional: auto-deploy to your local XrmToolBox plugins folder for F5 debugging.
+       Enable with: dotnet build -p:DeployToXTB=true -->
+  <Target Name="DeployToXrmToolBox" AfterTargets="Build" Condition="'$(DeployToXTB)' == 'true'">
+    <Copy SourceFiles="$(TargetPath)" DestinationFolder="$(AppData)\MscrmTools\XrmToolBox\Plugins" />
+  </Target>
+</Project>

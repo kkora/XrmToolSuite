@@ -1,0 +1,54 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!--
+    Executable unit tests for DeploymentRiskAnalyzer's analyzers.
+
+    Unlike testing/UnitTests (net8, SDK-free pure logic), the analyzers depend on the Dataverse
+    SDK (IOrganizationService, metadata types), so this project references Microsoft.Xrm.Sdk and
+    targets net48 to match the tools. It does NOT reference the WinForms tool project: it compiles
+    the specific UI-free source files under test directly (the same source-inclusion pattern the
+    tools use for the shared core). That both keeps the test lean and proves the property CLAUDE.md
+    requires of analyzers - that they stay liftable into a console/CI wrapper with no UI dependency.
+
+    Deliberately NOT part of XrmToolSuite.sln.
+
+    Run:  dotnet test testing/AnalyzerTests/AnalyzerTests.csproj
+  -->
+
+  <PropertyGroup>
+    <TargetFramework>net48</TargetFramework>
+    <LangVersion>latest</LangVersion>
+    <Nullable>disable</Nullable>
+    <IsPackable>false</IsPackable>
+    <IsTestProject>true</IsTestProject>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.11.1" />
+    <PackageReference Include="xunit" Version="2.9.2" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="2.8.2" />
+    <!-- Dataverse SDK types the analyzers compile against. Test-only: never shipped. -->
+    <PackageReference Include="Microsoft.CrmSdk.CoreAssemblies" Version="9.0.2.51" />
+    <!-- Unify System.Text.Json: the test SDK and CrmSdk pull 6.0.0.7 vs 6.0.0.8, else MSB3277. -->
+    <PackageReference Include="System.Text.Json" Version="6.0.10" />
+    <!-- FlowPluginAnalyzer parses flow clientdata with Newtonsoft (matches the tool's reference). -->
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- UI-free source under test, compiled in directly (no WinForms/XrmToolBox reference). -->
+    <Compile Include="..\..\src\Shared\Core\QueryExtensions.cs" />
+    <Compile Include="..\..\src\Tools\XrmToolSuite.DeploymentRiskAnalyzer\Models\RiskModels.cs" />
+    <Compile Include="..\..\src\Tools\XrmToolSuite.DeploymentRiskAnalyzer\Analyzers\AnalyzerContext.cs" />
+    <Compile Include="..\..\src\Tools\XrmToolSuite.DeploymentRiskAnalyzer\Analyzers\EnvironmentVariableAnalyzer.cs" />
+    <Compile Include="..\..\src\Tools\XrmToolSuite.DeploymentRiskAnalyzer\Analyzers\SchemaConflictAnalyzer.cs" />
+    <Compile Include="..\..\src\Tools\XrmToolSuite.DeploymentRiskAnalyzer\Analyzers\DeletedComponentAnalyzer.cs" />
+    <Compile Include="..\..\src\Tools\XrmToolSuite.DeploymentRiskAnalyzer\Analyzers\FlowPluginAnalyzer.cs" />
+    <Compile Include="..\..\src\Tools\XrmToolSuite.DeploymentRiskAnalyzer\Analyzers\WebResourceReferences.cs" />
+    <Compile Include="..\..\src\Tools\XrmToolSuite.DeploymentRiskAnalyzer\Analyzers\FormAnalyzer.cs" />
+    <Compile Include="..\..\src\Tools\XrmToolSuite.DeploymentRiskAnalyzer\Analyzers\RibbonAnalyzer.cs" />
+    <Compile Include="..\..\src\Tools\XrmToolSuite.DeploymentRiskAnalyzer\Analyzers\PowerPagesAnalyzer.cs" />
+    <Compile Include="..\..\src\Tools\XrmToolSuite.DeploymentRiskAnalyzer\Analyzers\DependencyAnalyzer.cs" />
+  </ItemGroup>
+
+</Project>
