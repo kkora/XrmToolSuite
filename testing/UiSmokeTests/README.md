@@ -64,12 +64,16 @@ To make it runnable you need a Windows machine that keeps an **interactive, unlo
    default runner labels (`self-hosted`, `Windows`) satisfy `runs-on: [self-hosted, windows]`.
 2. **Keep the session unlocked** — enable autologon and disable the lock screen / screen saver (a small
    "keep-awake" utility helps). UI Automation cannot drive a locked session.
-3. **Install XrmToolBox** on that machine and point the test at it, either:
-   - set a **repo variable** `XTB_EXE` (Settings → Secrets and variables → Actions → Variables) to the full
-     `XrmToolBox.exe` path, **or**
-   - pass `xtb_exe` when dispatching the workflow, **or**
-   - rely on the workflow's default (`C:\devtools\XrmToolbox\XrmToolBox.exe`).
-   The build+deploy step handles getting the tool DLLs into the Plugins folder.
+3. **XrmToolBox itself needs nothing pre-installed** — the workflow **downloads the official XrmToolBox
+   release that matches the version the tools build against** (the `XrmToolBoxPackage` version in
+   `src/Tools/Directory.Build.props`) from GitHub, so the runner stays self-contained. To use a preinstalled
+   copy instead (e.g. to skip the download), set a **repo variable** `XTB_EXE` (Settings → Secrets and
+   variables → Actions → Variables) to the full `XrmToolBox.exe` path, or pass `xtb_exe` on dispatch. The
+   build+deploy step puts the tool DLLs into the Plugins folder either way.
+
+   > First-run note: a freshly downloaded XrmToolBox may show a one-time "what's new" dialog on top of the
+   > main window, which can trip the automation. If the CI run is flaky on first use, pre-seed the runner's
+   > `%AppData%\MscrmTools\XrmToolBox` (or run XrmToolBox once manually there) so subsequent runs skip it.
 
 Keep it **advisory** — do NOT add `ui-smoke` to `main`'s required checks. UI tests are inherently flakier
 than the headless tiers, and a single smoke test ("do the tools load") is the right scope, not full UI

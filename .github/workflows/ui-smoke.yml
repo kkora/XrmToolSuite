@@ -37,13 +37,27 @@ jobs:
         run: Get-ChildItem "$env:APPDATA\MscrmTools\XrmToolBox\Plugins\XrmToolSuite.*.dll" | Unblock-File
 
       # Launches XrmToolBox via FlaUI and asserts all suite tools appear in the Tools list (no org needed).
-      # Set the repo variable XTB_EXE (Settings -> Secrets and variables -> Actions -> Variables) or pass
-      # xtb_exe on dispatch; otherwise falls back to the conventional dev-box path.
+      # By default this DOWNLOADS the official XrmToolBox release that matches the version the tools build
+      # against (XrmToolBoxPackage in src/Tools/Directory.Build.props), so the job is self-contained and does
+      # not depend on any preinstalled/local copy. To use a preinstalled XrmToolBox instead, set the repo
+      # variable XTB_EXE (Settings -> Secrets and variables -> Actions -> Variables) or pass xtb_exe on dispatch.
       - name: Run UI smoke test
         shell: pwsh
         env:
-          XTB_EXE: ${{ github.event.inputs.xtb_exe != '' && github.event.inputs.xtb_exe || vars.XTB_EXE }}
+          XTB_OVERRIDE: ${{ github.event.inputs.xtb_exe != '' && github.event.inputs.xtb_exe || vars.XTB_EXE }}
         run: |
-          if (-not $env:XTB_EXE) { $env:XTB_EXE = 'C:\devtools\XrmToolbox\XrmToolBox.exe' }
-          Write-Host "XTB_EXE=$env:XTB_EXE"
+          $exe = $env:XTB_OVERRIDE
+          if (-not $exe) {
+            $ver = (Select-Xml -Path src/Tools/Directory.Build.props -XPath "//PackageReference[@Include='XrmToolBoxPackage']").Node.Version
+            Write-Host "Downloading official XrmToolBox v$ver (matches XrmToolBoxPackage)…"
+            $dir = Join-Path $env:RUNNER_TEMP "xtb"
+            New-Item -ItemType Directory -Force $dir | Out-Null
+            $zip = Join-Path $dir "XrmToolbox.zip"
+            Invoke-WebRequest "https://github.com/MscrmTools/XrmToolBox/releases/download/v$ver/XrmToolbox.zip" -OutFile $zip -UseBasicParsing
+            Expand-Archive -Path $zip -DestinationPath $dir -Force
+            $exe = (Get-ChildItem $dir -Recurse -Filter XrmToolBox.exe | Select-Object -First 1).FullName
+          }
+          if (-not $exe) { throw "Could not resolve XrmToolBox.exe (download failed and no XTB_EXE override set)." }
+          Write-Host "XTB_EXE=$exe"
+          $env:XTB_EXE = $exe
           dotnet test testing/UiSmokeTests/UiSmokeTests.csproj -c Release --nologo
