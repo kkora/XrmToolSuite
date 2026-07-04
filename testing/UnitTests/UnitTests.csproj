@@ -28,17 +28,42 @@
 
   <ItemGroup>
     <!-- SDK-free logic under test, compiled in directly (no Dataverse/WinForms dependency). -->
+
+    <!-- Shared analysis engine (BCL-only): Finding, Severity, ScoreCalculator, ReportModel, etc. -->
+    <Compile Include="..\..\src\Shared\Core\Analysis\*.cs" />
+
+    <!-- Deployment Risk Analyzer domain + scoring facade + the ReportModel adapter (all SDK-free). -->
     <Compile Include="..\..\src\Tools\XrmToolSuite.DeploymentRiskAnalyzer\Models\RiskModels.cs" />
     <Compile Include="..\..\src\Tools\XrmToolSuite.DeploymentRiskAnalyzer\Scoring\RiskScoreCalculator.cs" />
-    <!-- HTML dashboard report: SDK-free string builder (no ClosedXML/MigraDoc), so it tests here. -->
-    <Compile Include="..\..\src\Tools\XrmToolSuite.DeploymentRiskAnalyzer\Reporting\HtmlDashboardReport.cs" />
-    <!-- Summarization: SDK-free pieces only (AiSummaryGenerator needs HttpClient/Newtonsoft and is manual-tested). -->
-    <Compile Include="..\..\src\Tools\XrmToolSuite.DeploymentRiskAnalyzer\Summarization\AiProviders.cs" />
-    <Compile Include="..\..\src\Tools\XrmToolSuite.DeploymentRiskAnalyzer\Summarization\SummaryOptions.cs" />
-    <Compile Include="..\..\src\Tools\XrmToolSuite.DeploymentRiskAnalyzer\Summarization\SummaryPayloadBuilder.cs" />
-    <Compile Include="..\..\src\Tools\XrmToolSuite.DeploymentRiskAnalyzer\Summarization\ISummaryGenerator.cs" />
-    <Compile Include="..\..\src\Tools\XrmToolSuite.DeploymentRiskAnalyzer\Summarization\TemplatedSummaryGenerator.cs" />
-    <Compile Include="..\..\src\Tools\XrmToolSuite.DeploymentRiskAnalyzer\Summarization\SummaryFormatting.cs" />
+    <Compile Include="..\..\src\Tools\XrmToolSuite.DeploymentRiskAnalyzer\Reporting\DeploymentReportModel.cs" />
+
+    <!-- Shared HTML dashboard builder: SDK-free string builder (no ClosedXML/MigraDoc), so it tests here. -->
+    <Compile Include="..\..\src\Shared\Reporting\HtmlDashboardBuilder.cs" />
+
+    <!-- Technical Debt Analyzer: SDK-free scoring/report projection (no Dataverse/ClosedXML/MigraDoc). -->
+    <Compile Include="..\..\src\Tools\XrmToolSuite.TechnicalDebtAnalyzer\Reporting\TechDebtReport.cs" />
+
+    <!-- Solution Complexity Score: SDK-free metric/effort model + report projection. -->
+    <Compile Include="..\..\src\Tools\XrmToolSuite.SolutionComplexityScore\Analysis\ComponentCounts.cs" />
+    <Compile Include="..\..\src\Tools\XrmToolSuite.SolutionComplexityScore\Analysis\ComplexityMetrics.cs" />
+    <Compile Include="..\..\src\Tools\XrmToolSuite.SolutionComplexityScore\Reporting\ComplexityReport.cs" />
+
+    <!-- AI Solution Reviewer: SDK-free report projection (collectors + Word export are manual-tested). -->
+    <Compile Include="..\..\src\Tools\XrmToolSuite.AiSolutionReviewer\Reporting\ReviewReport.cs" />
+
+    <!-- Solution Knowledge Graph: SDK-free graph model/algorithms + GraphML/SVG/HTML exporters
+         (GraphBuilder needs Dataverse and PngExporter needs System.Drawing — both manual-tested). -->
+    <Compile Include="..\..\src\Tools\XrmToolSuite.SolutionKnowledgeGraph\Graph\GraphModel.cs" />
+    <Compile Include="..\..\src\Tools\XrmToolSuite.SolutionKnowledgeGraph\Graph\GraphExporters.cs" />
+    <Compile Include="..\..\src\Tools\XrmToolSuite.SolutionKnowledgeGraph\Graph\HtmlGraphBuilder.cs" />
+
+    <!-- Shared summarization: SDK-free pieces only (AiSummaryGenerator needs HttpClient/Newtonsoft and is manual-tested). -->
+    <Compile Include="..\..\src\Shared\Summarization\AiProviders.cs" />
+    <Compile Include="..\..\src\Shared\Summarization\SummaryOptions.cs" />
+    <Compile Include="..\..\src\Shared\Summarization\SummaryPayloadBuilder.cs" />
+    <Compile Include="..\..\src\Shared\Summarization\ISummaryGenerator.cs" />
+    <Compile Include="..\..\src\Shared\Summarization\TemplatedSummaryGenerator.cs" />
+    <Compile Include="..\..\src\Shared\Summarization\SummaryFormatting.cs" />
   </ItemGroup>
 
 </Project>

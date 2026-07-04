@@ -86,4 +86,8 @@ These are XrmToolBox WinForms plugins that call Dataverse. Two tiers of tests:
 | Tool | Plan | Cases | Summary | Automated status |
 |---|---|---|---|---|
 | Deployment Risk Analyzer | [plan](DeploymentRiskAnalyzer/TEST_PLAN.md) | [cases](DeploymentRiskAnalyzer/TEST_CASES.md) | [summary](DeploymentRiskAnalyzer/TEST_SUMMARY.md) | 46/46 passed (17 scoring + 29 analyzer) |
+| Technical Debt Analyzer | [plan](TechnicalDebtAnalyzer/TEST_PLAN.md) | [cases](TechnicalDebtAnalyzer/TEST_CASES.md) | [summary](TechnicalDebtAnalyzer/TEST_SUMMARY.md) | 5/5 passed (debt scoring + metrics); analyzers/UI manual |
+| Solution Complexity Score | [plan](SolutionComplexityScore/TEST_PLAN.md) | [cases](SolutionComplexityScore/TEST_CASES.md) | [summary](SolutionComplexityScore/TEST_SUMMARY.md) | 6/6 passed (metric/effort model + report); collector/UI manual |
+| AI Solution Reviewer | [plan](AiSolutionReviewer/TEST_PLAN.md) | [cases](AiSolutionReviewer/TEST_CASES.md) | [summary](AiSolutionReviewer/TEST_SUMMARY.md) | 4/4 passed (report/concern score); collectors/AI/Word manual |
+| Solution Knowledge Graph | [plan](SolutionKnowledgeGraph/TEST_PLAN.md) | [cases](SolutionKnowledgeGraph/TEST_CASES.md) | [summary](SolutionKnowledgeGraph/TEST_SUMMARY.md) | 9/9 passed (model/algorithms/GraphML/SVG/HTML); builder/PNG/UI manual |
 | Attribute Auditor | [plan](AttributeAuditor/TEST_PLAN.md) | [cases](AttributeAuditor/TEST_CASES.md) | [summary](AttributeAuditor/TEST_SUMMARY.md) | n/a (WIP - no logic yet) |

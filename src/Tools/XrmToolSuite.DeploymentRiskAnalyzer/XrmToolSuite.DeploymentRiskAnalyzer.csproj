@@ -10,7 +10,15 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <!-- AI summary calls the Anthropic API over HttpClient (net48 BCL assembly; not shipped) -->
+    <!-- Suite-shared reporters (JSON/Markdown/HTML/Excel/PDF) and AI/offline summarization, compiled
+         in as source. Opt-in (unlike Shared\Core which every tool globs) because they carry the
+         Newtonsoft/ClosedXML/MigraDoc/HttpClient dependencies wired below. -->
+    <Compile Include="..\..\Shared\Reporting\**\*.cs" LinkBase="Shared\Reporting" />
+    <Compile Include="..\..\Shared\Summarization\**\*.cs" LinkBase="Shared\Summarization" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- AI summary calls the AI provider APIs over HttpClient (net48 BCL assembly; not shipped) -->
     <Reference Include="System.Net.Http" />
     <!-- Newtonsoft is compiled against but NOT shipped (XrmToolBox provides it) -->
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />

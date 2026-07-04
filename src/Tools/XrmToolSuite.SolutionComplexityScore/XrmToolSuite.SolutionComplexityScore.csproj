@@ -1,0 +1,32 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <!-- TargetFramework, WinForms, XrmToolBoxPackage reference, and the shared core
+       all come from src/Tools/Directory.Build.props. Keep tool csproj files minimal. -->
+  <PropertyGroup>
+    <RootNamespace>XrmToolSuite.SolutionComplexityScore</RootNamespace>
+    <AssemblyName>XrmToolSuite.SolutionComplexityScore</AssemblyName>
+    <description>Measures overall solution complexity, maintainability, and upgrade/migration/testing effort with an executive dashboard.</description>
+    <!-- Ships ClosedXML + PdfSharp/MigraDoc with its nupkg, so deps must land in the output. -->
+    <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- Suite-shared reporters and AI/offline summarization, compiled in as source (opt-in). -->
+    <Compile Include="..\..\Shared\Reporting\**\*.cs" LinkBase="Shared\Reporting" />
+    <Compile Include="..\..\Shared\Summarization\**\*.cs" LinkBase="Shared\Summarization" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="System.Net.Http" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+    <PackageReference Include="ClosedXML" Version="0.102.3" />
+    <PackageReference Include="PDFsharp-MigraDoc-GDI" Version="1.50.5147" />
+  </ItemGroup>
+
+  <!-- Extends the suite's DeployToXTB with the Excel + PDF dependency chain (Plugins ROOT). -->
+  <Target Name="DeployComplexityDependencies" AfterTargets="DeployToXrmToolBox" Condition="'$(DeployToXTB)' == 'true'">
+    <ItemGroup>
+      <ComplexityDeps Include="$(TargetDir)ClosedXML.dll;$(TargetDir)DocumentFormat.OpenXml.dll;$(TargetDir)ExcelNumberFormat.dll;$(TargetDir)SixLabors.Fonts.dll;$(TargetDir)XLParser.dll;$(TargetDir)Irony.dll;$(TargetDir)System.IO.Packaging.dll;$(TargetDir)System.Numerics.Vectors.dll;$(TargetDir)System.Runtime.CompilerServices.Unsafe.dll;$(TargetDir)System.Buffers.dll;$(TargetDir)System.Memory.dll;$(TargetDir)System.Threading.Tasks.Extensions.dll;$(TargetDir)PdfSharp-gdi.dll;$(TargetDir)PdfSharp.Charting-gdi.dll;$(TargetDir)MigraDoc.DocumentObjectModel-gdi.dll;$(TargetDir)MigraDoc.Rendering-gdi.dll;$(TargetDir)MigraDoc.RtfRendering-gdi.dll" />
+    </ItemGroup>
+    <Copy SourceFiles="@(ComplexityDeps)" DestinationFolder="$(AppData)\MscrmTools\XrmToolBox\Plugins" SkipUnchangedFiles="true" Condition="Exists('%(ComplexityDeps.Identity)')" />
+  </Target>
+</Project>
