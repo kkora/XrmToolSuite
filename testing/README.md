@@ -11,10 +11,14 @@ testing/
   UnitTests/                    # executable xUnit project (net8.0) for SDK-free logic
     UnitTests.csproj
     *Tests.cs
-  AnalyzerTests/                # executable xUnit project (net48) for UI-free analyzer logic
+  AnalyzerTests/                # executable xUnit project (net48) for the Deployment Risk analyzers
     AnalyzerTests.csproj        # uses the Dataverse SDK + an in-memory fake IOrganizationService
-    Fakes/FakeOrganizationService.cs
+    Fakes/FakeOrganizationService.cs   # the shared fake (also linked by CollectorTests)
     *Tests.cs
+  CollectorTests/               # executable xUnit project (net48) for the OTHER tools' collectors
+    CollectorTests.csproj       # Complexity / AI Reviewer / Knowledge Graph / Technical Debt collectors
+    MetaBuilder.cs              # reflection EntityMetadata fixtures for metadata-driven branches
+    *Tests.cs                   # links the shared fake from AnalyzerTests
   ReportTests/                  # executable xUnit project (net48) for the shared report exporters
     ReportTests.csproj          # compiles src/Shared/Reporting/*.cs with ClosedXML + PdfSharp/MigraDoc
   _templates/                   # tokenized skeletons stamped into testing/<Tool>/ by New-Tool.ps1
@@ -66,6 +70,18 @@ These are XrmToolBox WinForms plugins that call Dataverse. Two tiers of tests:
 
   Metadata-level branches that need constructed `EntityMetadata` (attribute type/length, option sets,
   relationships) stay in the manual suite.
+
+- **Automated - other tools' collectors against a fake connection (`CollectorTests/`, net48):** the same
+  technique applied to the remaining tools' data-collection layers — Solution Complexity Score's
+  `ComplexityCollector`, the AI Solution Reviewer's `ReviewCollectors`, the Solution Knowledge Graph's
+  `GraphBuilder`, and the Technical Debt Analyzer's analyzers. All are UI-free (`IOrganizationService`
+  only) and run against the shared `FakeOrganizationService` (linked from `AnalyzerTests`). Metadata-driven
+  Technical Debt branches (row counts, wide tables, publisher prefixes, secured columns) are seeded with a
+  reflection `EntityMetadata` builder (`MetaBuilder.cs`); the AI tool's summarization/HTTP path stays manual.
+
+  ```powershell
+  dotnet test testing/CollectorTests/CollectorTests.csproj
+  ```
 
 - **Automated - report exporters (`ReportTests/`, net48):** compiles the shared exporters under
   `src/Shared/Reporting/` directly (driven through the `DeploymentReportModel` projection) with the
@@ -130,8 +146,8 @@ Anthropic/OpenAI/Google API key (used session-only; never persisted).
 | Tool | Plan | Cases | Summary | Automated status |
 |---|---|---|---|---|
 | Deployment Risk Analyzer | [plan](DeploymentRiskAnalyzer/TEST_PLAN.md) | [cases](DeploymentRiskAnalyzer/TEST_CASES.md) | [summary](DeploymentRiskAnalyzer/TEST_SUMMARY.md) | 79/79 passed (24 scoring + 49 analyzer + 6 report) |
-| Technical Debt Analyzer | [plan](TechnicalDebtAnalyzer/TEST_PLAN.md) | [cases](TechnicalDebtAnalyzer/TEST_CASES.md) | [summary](TechnicalDebtAnalyzer/TEST_SUMMARY.md) | 5/5 passed (debt scoring + metrics); analyzers/UI manual |
-| Solution Complexity Score | [plan](SolutionComplexityScore/TEST_PLAN.md) | [cases](SolutionComplexityScore/TEST_CASES.md) | [summary](SolutionComplexityScore/TEST_SUMMARY.md) | 6/6 passed (metric/effort model + report); collector/UI manual |
-| AI Solution Reviewer | [plan](AiSolutionReviewer/TEST_PLAN.md) | [cases](AiSolutionReviewer/TEST_CASES.md) | [summary](AiSolutionReviewer/TEST_SUMMARY.md) | 4/4 passed (report/concern score); collectors/AI/Word manual |
-| Solution Knowledge Graph | [plan](SolutionKnowledgeGraph/TEST_PLAN.md) | [cases](SolutionKnowledgeGraph/TEST_CASES.md) | [summary](SolutionKnowledgeGraph/TEST_SUMMARY.md) | 9/9 passed (model/algorithms/GraphML/SVG/HTML); builder/PNG/UI manual |
+| Technical Debt Analyzer | [plan](TechnicalDebtAnalyzer/TEST_PLAN.md) | [cases](TechnicalDebtAnalyzer/TEST_CASES.md) | [summary](TechnicalDebtAnalyzer/TEST_SUMMARY.md) | 16/16 passed (5 scoring/metrics + 11 analyzer); UI/export manual |
+| Solution Complexity Score | [plan](SolutionComplexityScore/TEST_PLAN.md) | [cases](SolutionComplexityScore/TEST_CASES.md) | [summary](SolutionComplexityScore/TEST_SUMMARY.md) | 14/14 passed (6 metric/effort model + 8 collector); UI manual |
+| AI Solution Reviewer | [plan](AiSolutionReviewer/TEST_PLAN.md) | [cases](AiSolutionReviewer/TEST_CASES.md) | [summary](AiSolutionReviewer/TEST_SUMMARY.md) | 13/13 passed (4 report/concern score + 9 collectors); AI/Word/UI manual |
+| Solution Knowledge Graph | [plan](SolutionKnowledgeGraph/TEST_PLAN.md) | [cases](SolutionKnowledgeGraph/TEST_CASES.md) | [summary](SolutionKnowledgeGraph/TEST_SUMMARY.md) | 18/18 passed (9 model/exporters + 9 builder); PNG/UI manual |
 | Attribute Auditor | [plan](AttributeAuditor/TEST_PLAN.md) | [cases](AttributeAuditor/TEST_CASES.md) | [summary](AttributeAuditor/TEST_SUMMARY.md) | n/a (WIP - no logic yet) |
