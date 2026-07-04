@@ -1,5 +1,7 @@
 using System;
 using System.ComponentModel;
+using System.Diagnostics;
+using System.Drawing;
 using System.ServiceModel;
 using System.Windows.Forms;
 using Microsoft.Xrm.Sdk;
@@ -17,6 +19,98 @@ namespace XrmToolSuite.Core
     public abstract class BaseToolControl : PluginControlBase, IStatusBarMessenger
     {
         public event EventHandler<StatusBarMessageEventArgs> SendMessageToStatusBar;
+
+        #region Help &amp; support
+
+        // Suite-wide Help &amp; Support links. Every tool's Help button opens the same dialog so the
+        // whole suite is consistent (see the Deployment Risk Analyzer for the original visual design).
+        protected const string SuiteDocsUrl = "https://github.com/kkora/XrmToolSuite#readme";
+        protected const string SuiteIssuesUrl = "https://github.com/kkora/XrmToolSuite/issues/new";
+        protected const string SuiteSupportUrl = "https://www.buymeacoffee.com/kkora";
+
+        /// <summary>
+        /// Builds the standard right-aligned "Help" toolbar button that opens <see cref="ShowHelpDialog"/>.
+        /// Every tool MUST place one on its toolbar (a non-negotiable suite convention): just add the
+        /// returned button to the tool's <see cref="ToolStrip"/>.
+        /// </summary>
+        protected ToolStripButton CreateHelpButton(string toolName = null)
+        {
+            var btn = new ToolStripButton("Help")
+            {
+                DisplayStyle = ToolStripItemDisplayStyle.Text,
+                Alignment = ToolStripItemAlignment.Right,
+                ToolTipText = "Documentation, report an issue, and support the plugin"
+            };
+            btn.Click += (s, e) => ShowHelpDialog(toolName);
+            return btn;
+        }
+
+        /// <summary>
+        /// Shows the shared Help &amp; Support dialog: documentation, a "report an issue" (GitHub) link,
+        /// and a support link. Links open in the default browser via <see cref="Process.Start(string)"/>.
+        /// </summary>
+        protected void ShowHelpDialog(string toolName = null)
+        {
+            var title = string.IsNullOrEmpty(toolName) ? "Help & Support" : $"{toolName} — Help & Support";
+
+            using (var dlg = new Form
+            {
+                Text = title,
+                FormBorderStyle = FormBorderStyle.FixedDialog,
+                StartPosition = FormStartPosition.CenterParent,
+                MinimizeBox = false,
+                MaximizeBox = false,
+                ClientSize = new Size(460, 210),
+                ShowInTaskbar = false
+            })
+            {
+                var layout = new TableLayoutPanel
+                {
+                    Dock = DockStyle.Fill,
+                    Padding = new Padding(16),
+                    ColumnCount = 1,
+                    RowCount = 4
+                };
+
+                layout.Controls.Add(HelpLink("📖  Documentation",
+                    "Read the suite documentation and per-tool guides.", SuiteDocsUrl));
+                layout.Controls.Add(HelpLink("🐞  Report an issue",
+                    "Found a bug or have a request? Open a GitHub issue.", SuiteIssuesUrl));
+                layout.Controls.Add(HelpLink("☕  Support the project",
+                    "If these tools save you time, consider buying a coffee.", SuiteSupportUrl));
+
+                var close = new Button { Text = "Close", DialogResult = DialogResult.OK, Anchor = AnchorStyles.Right, AutoSize = true };
+                layout.Controls.Add(close);
+                dlg.AcceptButton = close;
+
+                dlg.Controls.Add(layout);
+                dlg.ShowDialog(this);
+            }
+        }
+
+        private static LinkLabel HelpLink(string title, string description, string url)
+        {
+            var link = new LinkLabel
+            {
+                Text = $"{title}\r\n{description}",
+                AutoSize = false,
+                Height = 46,
+                Dock = DockStyle.Top,
+                LinkArea = new LinkArea(0, title.Length)
+            };
+            link.LinkClicked += (s, e) => OpenUrl(url);
+            return link;
+        }
+
+        /// <summary>Opens a URL in the default browser; swallows shell failures so the tool never crashes.
+        /// Private (not protected) so it never collides with a tool's own URL-opening helper.</summary>
+        private static void OpenUrl(string url)
+        {
+            try { Process.Start(url); }
+            catch { /* no browser / blocked shell — nothing actionable for the user here */ }
+        }
+
+        #endregion
 
         #region Status bar
 

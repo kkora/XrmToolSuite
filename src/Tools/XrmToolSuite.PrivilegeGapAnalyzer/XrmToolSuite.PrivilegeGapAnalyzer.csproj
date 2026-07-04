@@ -1,9 +1,27 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
-  <!-- TargetFramework, WinForms, XrmToolBoxPackage reference, and the shared core
-       all come from src/Tools/Directory.Build.props. Keep tool csproj files minimal. -->
+<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <RootNamespace>XrmToolSuite.PrivilegeGapAnalyzer</RootNamespace>
     <AssemblyName>XrmToolSuite.PrivilegeGapAnalyzer</AssemblyName>
-    <description>Diagnoses missing Dataverse privileges (why a user/team/role cannot perform an operation) and recommends role changes.</description>
+    <description>Diagnoses missing Dataverse privileges (why a user/team/role cannot perform an operation) and recommends role changes. Exports Excel, PDF, JSON, CSV, HTML.</description>
+    <!-- Ships the ClosedXML (Excel) + PdfSharp/MigraDoc-GDI (native PDF) chains with its nupkg. -->
+    <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
   </PropertyGroup>
+
+  <ItemGroup>
+    <!-- Suite-shared reporters (JSON/Markdown/HTML/Excel/PDF/Word), compiled in as source. -->
+    <Compile Include="..\..\Shared\Reporting\**\*.cs" LinkBase="Shared\Reporting" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+    <PackageReference Include="ClosedXML" Version="0.102.3" />
+    <PackageReference Include="PDFsharp-MigraDoc-GDI" Version="1.50.5147" />
+  </ItemGroup>
+
+  <Target Name="DeployGuardDependencies" AfterTargets="DeployToXrmToolBox" Condition="'$(DeployToXTB)' == 'true'">
+    <ItemGroup>
+      <GuardDeps Include="$(TargetDir)ClosedXML.dll;$(TargetDir)DocumentFormat.OpenXml.dll;$(TargetDir)ExcelNumberFormat.dll;$(TargetDir)SixLabors.Fonts.dll;$(TargetDir)XLParser.dll;$(TargetDir)Irony.dll;$(TargetDir)System.IO.Packaging.dll;$(TargetDir)System.Numerics.Vectors.dll;$(TargetDir)System.Runtime.CompilerServices.Unsafe.dll;$(TargetDir)System.Buffers.dll;$(TargetDir)System.Memory.dll;$(TargetDir)System.Threading.Tasks.Extensions.dll;$(TargetDir)PdfSharp-gdi.dll;$(TargetDir)PdfSharp.Charting-gdi.dll;$(TargetDir)MigraDoc.DocumentObjectModel-gdi.dll;$(TargetDir)MigraDoc.Rendering-gdi.dll;$(TargetDir)MigraDoc.RtfRendering-gdi.dll" />
+    </ItemGroup>
+    <Copy SourceFiles="@(GuardDeps)" DestinationFolder="$(AppData)\MscrmTools\XrmToolBox\Plugins" SkipUnchangedFiles="true" Condition="Exists('%(GuardDeps.Identity)')" />
+  </Target>
 </Project>
