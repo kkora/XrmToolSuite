@@ -39,12 +39,12 @@ Get-ChildItem $dst -Recurse -File | ForEach-Object {
     Set-Content $_.FullName $content -NoNewline -Encoding UTF8
 }
 
-# Generate this tool's user-story backlog from the shared template in docs/user-stories.
-$usDir = Join-Path $root 'docs/user-stories'
-$usTemplate = Join-Path $usDir '_TEMPLATE.md'
+# Generate this tool's user-story backlog from the shared template in docs/ (file it under docs/backlog/<category>/ afterwards).
+$usTemplate = Join-Path $root 'docs/_TEMPLATE.md'
+$usOutDir = Join-Path $root 'docs/backlog'
 if (Test-Path $usTemplate) {
     $us = (Get-Content $usTemplate -Raw) -replace 'Template Tool', $DisplayName -replace 'TemplateTool', $Name
-    Set-Content (Join-Path $usDir "$Name.md") $us -NoNewline -Encoding UTF8
+    Set-Content (Join-Path $usOutDir "$Name.md") $us -NoNewline -Encoding UTF8
 }
 
 # Scaffold this tool's testing folder (plan / cases / summary + screenshots) from testing/_templates.
@@ -72,6 +72,6 @@ Write-Host "Next steps:"
 Write-Host "  1. Open the solution and rename UI/logic in ${Name}Control.cs"
 Write-Host "  2. Update RepositoryName/UserName/HelpUrl in the control"
 Write-Host "  3. Review the generated DEPLOYMENT.md (single-DLL build/install guide for this tool)"
-Write-Host "  4. Fill in docs/user-stories/$Name.md (Epic / Features / User Stories)"
+Write-Host "  4. Fill in docs/backlog/$Name.md (Epic / Features / User Stories); move it under the right docs/backlog/<category>/ folder"
 Write-Host "  5. Fill in testing/$Name/ (TEST_PLAN / TEST_CASES / TEST_SUMMARY); add xUnit cases to testing/UnitTests"
 Write-Host "  6. Build with: dotnet build -p:DeployToXTB=true  (auto-copies to XrmToolBox Plugins folder)"
