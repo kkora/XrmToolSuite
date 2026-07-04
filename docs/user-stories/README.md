@@ -14,7 +14,7 @@ Epic** for the shared foundation (both below), and one **file per tool** for its
 | [SolutionComplexityScore.md](SolutionComplexityScore.md) | Solution Complexity Score | Shipped (manual tests pending live org) |
 | [AiSolutionReviewer.md](AiSolutionReviewer.md) | AI Solution Reviewer | Shipped (manual tests pending live org) |
 | [SolutionKnowledgeGraph.md](SolutionKnowledgeGraph.md) | Solution Knowledge Graph | Shipped (manual tests pending live org) |
-| [AttributeAuditor.md](AttributeAuditor.md) | Attribute Auditor | WIP (planned) |
+| [AttributeAuditor.md](AttributeAuditor.md) | Attribute Auditor | v1 built (usage detection + classification + CSV/HTML; cleanup planned) |
 | [_TEMPLATE.md](_TEMPLATE.md) | Starter stamped into every new tool by `New-Tool.ps1` | Template |
 
 ## Hierarchy & conventions

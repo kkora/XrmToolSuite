@@ -4,18 +4,20 @@ Traces to [`docs/user-stories/AttributeAuditor.md`](../../docs/user-stories/Attr
 
 ## Scope
 
-> **Tool status: WIP.** Only the scaffold exists (loads sample accounts); the audit logic is not yet
-> implemented. These cases are the acceptance tests for the planned features and are all `Pending`
-> until the corresponding user stories are built.
+> **Tool status: v1 built.** The audit engine ships (usage detection across forms, views, processes,
+> and field security; retirement-candidate classification; CSV + HTML export). Deferred features
+> (chart/dashboard & data-population signals, table/solution scoping, JSON/Excel export, guarded cleanup)
+> remain `[Planned]` and their cases stay `Pending`.
 
-Planned coverage: scope selection, usage-signal detection, classification, export, and guarded cleanup.
+In scope now: usage-signal detection, classification, report projection, CSV export, and the run/filter/export UI.
 
 ## Approach
 
-| Tier | What | How | When |
+| Tier | What | How | Status |
 |---|---|---|---|
-| Automated | Pure helpers once they exist (e.g. usage-signal aggregation, "unused" classification) | xUnit in `testing/UnitTests/` on SDK-free logic | When FEAT-AA-2/3 land |
-| Manual | Scope UI, running an audit, results grid, export, guarded delete | GUI cases with a live Dataverse env | When features land |
+| Automated (SDK-free) | Usage scanners, retirement-candidate classification, report projection, CSV | xUnit in `testing/UnitTests/` (`AttributeAuditTests.cs`) | 13 passing |
+| Automated (fake conn) | The `AttributeUsageCollector` over a fake `IOrganizationService` | xUnit in `testing/CollectorTests/` (`AttributeAuditCollectorTests.cs`) | 8 passing |
+| Manual | Run/scope/filter UI, results grid, CSV + HTML export, settings persistence | GUI cases with a live Dataverse env | Pending |
 
 ## Environments
 
