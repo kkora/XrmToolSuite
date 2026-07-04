@@ -45,6 +45,7 @@ jobs:
         shell: pwsh
         env:
           XTB_OVERRIDE: ${{ github.event.inputs.xtb_exe != '' && github.event.inputs.xtb_exe || vars.XTB_EXE }}
+          UISMOKE_SCREENSHOT_DIR: ${{ runner.temp }}\ui-smoke-shots
         run: |
           $exe = $env:XTB_OVERRIDE
           if (-not $exe) {
@@ -61,3 +62,12 @@ jobs:
           Write-Host "XTB_EXE=$exe"
           $env:XTB_EXE = $exe
           dotnet test testing/UiSmokeTests/UiSmokeTests.csproj -c Release --nologo
+
+      # Attach the captured screenshot (taken on pass AND fail) so a missing-tool run is diagnosable in CI.
+      - name: Upload UI screenshot
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ui-smoke-screenshots
+          path: ${{ runner.temp }}\ui-smoke-shots\*.png
+          if-no-files-found: warn

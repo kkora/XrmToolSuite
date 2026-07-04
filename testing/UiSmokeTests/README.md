@@ -44,10 +44,18 @@ for interactive UI automation (below). It is also deliberately **not** part of `
 3. **Run it** (from a normal, interactive PowerShell — not over a locked RDP session):
 
    ```powershell
+   $env:XTB_EXE = "C:\path\to\XrmToolBox.exe"          # your local install
+   $env:UISMOKE_SCREENSHOT_DIR = "$PWD\testing\UiSmokeTests\screenshots"   # optional; where the PNG lands
    dotnet test testing/UiSmokeTests/UiSmokeTests.csproj
    ```
 
    Leave the desktop alone while it runs; UI Automation drives the real mouse/keyboard focus.
+
+   **Screenshot evidence.** The test always captures a PNG of the XrmToolBox window (pass *or* fail) — it
+   brings the window to the foreground first, then grabs it. It saves to `UISMOKE_SCREENSHOT_DIR` if set,
+   otherwise `%TEMP%\xtb-ui-smoke`, and prints the full path (`[ui-smoke] Screenshot saved: …`). Files are
+   named `xrmtoolbox-tools_<found>of<total>_<timestamp>.png`, so a failure screenshot shows exactly which
+   tools were missing from the list. The images are regenerated each run and are git-ignored.
 
 ## Setting it up on a self-hosted CI runner
 

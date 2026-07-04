@@ -6,6 +6,7 @@ using System.Linq;
 using System.Threading;
 using FlaUI.Core;
 using FlaUI.Core.AutomationElements;
+using FlaUI.Core.Capturing;
 using FlaUI.UIA3;
 using Xunit;
 using Xunit.Abstractions;
@@ -56,14 +57,22 @@ namespace XrmToolSuite.UiSmokeTests
 
             // The Tools list renders shortly after the plugin scan; poll until all names resolve (or time out).
             var found = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
-            var deadline = DateTime.UtcNow.AddSeconds(45);
-            while (DateTime.UtcNow < deadline && found.Count < ExpectedTools.Length)
+            try
             {
-                var names = VisibleNames(window);
-                foreach (var tool in ExpectedTools)
-                    if (names.Any(n => n.IndexOf(tool, StringComparison.OrdinalIgnoreCase) >= 0))
-                        found.Add(tool);
-                if (found.Count < ExpectedTools.Length) Thread.Sleep(1000);
+                var deadline = DateTime.UtcNow.AddSeconds(45);
+                while (DateTime.UtcNow < deadline && found.Count < ExpectedTools.Length)
+                {
+                    var names = VisibleNames(window);
+                    foreach (var tool in ExpectedTools)
+                        if (names.Any(n => n.IndexOf(tool, StringComparison.OrdinalIgnoreCase) >= 0))
+                            found.Add(tool);
+                    if (found.Count < ExpectedTools.Length) Thread.Sleep(1000);
+                }
+            }
+            finally
+            {
+                // Always capture evidence — pass or fail — into the screenshots folder.
+                CaptureScreenshot(window, found.Count);
             }
 
             var missing = ExpectedTools.Where(t => !found.Contains(t)).ToList();
@@ -72,6 +81,43 @@ namespace XrmToolSuite.UiSmokeTests
                 "Suite tools missing from the XrmToolBox Tools list (plugin failed to load): " + string.Join(", ", missing) +
                 ". Verify the DLLs (and any dependencies) are deployed to the Plugins root and all required " +
                 "ExportMetadata keys are present.");
+        }
+
+        /// <summary>
+        /// Save a PNG of the XrmToolBox window as evidence. Directory: env UISMOKE_SCREENSHOT_DIR if set,
+        /// else &lt;temp&gt;\xtb-ui-smoke. Falls back to a full-screen grab if the window capture fails, and
+        /// never throws (evidence capture must not fail the test).
+        /// </summary>
+        private void CaptureScreenshot(AutomationElement window, int foundCount)
+        {
+            try
+            {
+                // Bring XrmToolBox to the foreground first — Capture.Element grabs the SCREEN region at the
+                // window's rectangle, so an occluded window would otherwise photograph whatever is on top.
+                try { window.SetForeground(); } catch { }
+                try { window.Focus(); } catch { }
+                Thread.Sleep(800);
+
+                var dir = ScreenshotDir();
+                var stamp = DateTime.Now.ToString("yyyyMMdd-HHmmss");
+                var path = Path.Combine(dir, $"xrmtoolbox-tools_{foundCount}of{ExpectedTools.Length}_{stamp}.png");
+                try { Capture.Element(window).ToFile(path); }
+                catch { Capture.Screen().ToFile(path); } // window capture can fail if minimized/occluded
+                _output.WriteLine($"Screenshot saved: {path}");
+                Console.WriteLine($"[ui-smoke] Screenshot saved: {path}");
+            }
+            catch (Exception ex)
+            {
+                _output.WriteLine("Screenshot capture failed (non-fatal): " + ex.Message);
+            }
+        }
+
+        private static string ScreenshotDir()
+        {
+            var dir = Environment.GetEnvironmentVariable("UISMOKE_SCREENSHOT_DIR");
+            if (string.IsNullOrWhiteSpace(dir)) dir = Path.Combine(Path.GetTempPath(), "xtb-ui-smoke");
+            Directory.CreateDirectory(dir);
+            return dir;
         }
 
         /// <summary>Wait for a live XrmToolBox process, preferring one that already has a main window.</summary>
