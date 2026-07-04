@@ -16,8 +16,8 @@
     <iconUrl>https://raw.githubusercontent.com/kkora/XrmToolSuite/main/icon.png</iconUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <license type="expression">MIT</license>
-    <description>Generates a complete inventory of Dataverse environment assets (tables, columns, forms, views, roles, plugins, flows, web resources, environment variables, connection references) with export.</description>
-    <summary>Generates a complete inventory of Dataverse environment assets (tables, columns, forms, views, roles, plugins, flows, web resources, environment variables, connection references) with export.</summary>
+    <description>Inventories a Dataverse environment (solutions, tables, security roles, users/teams/business units, plugins, workflows, web resources, custom APIs, environment variables and connection references) into one searchable, filterable catalog with Excel/CSV/JSON/Markdown/HTML/Word/PDF export. Read-only; never reads or exports secret values.</description>
+    <summary>Read-only, searchable inventory of a Dataverse environment across solutions, metadata, security, automation, web/dev and configuration, with Excel/CSV/JSON/Markdown/HTML/Word/PDF export.</summary>
     <releaseNotes>1.2026.7.1: Initial release.</releaseNotes>
     <tags>XrmToolBox Dataverse Dynamics365 PowerPlatform</tags>
     <dependencies>
@@ -25,7 +25,32 @@
     </dependencies>
   </metadata>
   <files>
-    <!-- Ship ONLY your DLL; XrmToolBox already contains the SDK and shared libs -->
     <file src="bin\Release\net48\XrmToolSuite.EnvironmentInventory.dll" target="lib\net48\Plugins" />
+    <!-- Excel/Word-export chain in the Plugins ROOT next to the tool DLL. XrmToolBox's plugin
+         analysis must resolve the tool's ClosedXML reference at scan time (before the tool's
+         AssemblyResolve handler exists), so these must NOT be hidden in a subfolder or the tool
+         is silently dropped from the Tools list. The Word exporter reuses DocumentFormat.OpenXml
+         from this chain. Current XrmToolBox binding redirects reconcile SixLabors.Fonts' facade
+         version mismatch; the handler is a scoped runtime fallback. -->
+    <file src="bin\Release\net48\ClosedXML.dll" target="lib\net48\Plugins" />
+    <file src="bin\Release\net48\DocumentFormat.OpenXml.dll" target="lib\net48\Plugins" />
+    <file src="bin\Release\net48\ExcelNumberFormat.dll" target="lib\net48\Plugins" />
+    <file src="bin\Release\net48\XLParser.dll" target="lib\net48\Plugins" />
+    <file src="bin\Release\net48\Irony.dll" target="lib\net48\Plugins" />
+    <file src="bin\Release\net48\SixLabors.Fonts.dll" target="lib\net48\Plugins" />
+    <file src="bin\Release\net48\System.IO.Packaging.dll" target="lib\net48\Plugins" />
+    <file src="bin\Release\net48\System.Numerics.Vectors.dll" target="lib\net48\Plugins" />
+    <file src="bin\Release\net48\System.Runtime.CompilerServices.Unsafe.dll" target="lib\net48\Plugins" />
+    <file src="bin\Release\net48\System.Buffers.dll" target="lib\net48\Plugins" />
+    <file src="bin\Release\net48\System.Memory.dll" target="lib\net48\Plugins" />
+    <file src="bin\Release\net48\System.Threading.Tasks.Extensions.dll" target="lib\net48\Plugins" />
+    <!-- Native-PDF chain (PdfSharp/MigraDoc, GDI build — assemblies carry a -gdi suffix).
+         Pure-managed; ships in the Plugins ROOT next to the tool DLL for the same scan-time
+         resolution reason as the Excel chain above. -->
+    <file src="bin\Release\net48\PdfSharp-gdi.dll" target="lib\net48\Plugins" />
+    <file src="bin\Release\net48\PdfSharp.Charting-gdi.dll" target="lib\net48\Plugins" />
+    <file src="bin\Release\net48\MigraDoc.DocumentObjectModel-gdi.dll" target="lib\net48\Plugins" />
+    <file src="bin\Release\net48\MigraDoc.Rendering-gdi.dll" target="lib\net48\Plugins" />
+    <file src="bin\Release\net48\MigraDoc.RtfRendering-gdi.dll" target="lib\net48\Plugins" />
   </files>
 </package>

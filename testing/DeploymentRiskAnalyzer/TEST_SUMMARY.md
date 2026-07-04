@@ -98,3 +98,9 @@ eight analyzers (environment variables, schema version/managed-state, flows & pl
 components, forms, ribbons, Power Pages, dependencies), **and** all report exporters
 (PDF/HTML/JSON/Markdown/Excel + summary embedding) are **verified and green** (80 automated cases). Full sign-off is pending the manual GUI/Dataverse cases (connections, metadata-level
 comparisons, the GUI export flow), which must be run in a Windows + XrmToolBox environment against a real org.
+
+## Live UI smoke test (XrmToolBox)
+
+- **Command:** `dotnet test testing/UiSmokeTests/UiSmokeTests.csproj` with `XTB_EXE` set, on 2026-07-04.
+- **Result:** PASS — real XrmToolBox v1.2025.10.74 (FlaUI) confirms **Deployment Risk Analyzer** loads and appears in the Tools list.
+- **Evidence:** `screenshots/xrmtoolbox-tools-list.png` — the Tools tab filtered to **Deployment Risk Analyzer** v1.2026.7.1 (Kanchan Kora).

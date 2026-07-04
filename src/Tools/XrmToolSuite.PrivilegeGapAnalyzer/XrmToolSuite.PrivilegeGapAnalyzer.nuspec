@@ -16,8 +16,8 @@
     <iconUrl>https://raw.githubusercontent.com/kkora/XrmToolSuite/main/icon.png</iconUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <license type="expression">MIT</license>
-    <description>Diagnoses missing Dataverse privileges (why a user/team/role cannot perform an operation) and recommends role changes.</description>
-    <summary>Diagnoses missing Dataverse privileges (why a user/team/role cannot perform an operation) and recommends role changes.</summary>
+    <description>Diagnoses missing Dataverse privileges (why a user/team/role cannot perform an operation) and recommends role changes. Exports the diagnosis to Excel, native PDF, JSON, CSV, and an HTML report.</description>
+    <summary>Diagnoses missing Dataverse privileges (why a user/team/role cannot perform an operation) and recommends role changes. Exports Excel, PDF, JSON, CSV, HTML.</summary>
     <releaseNotes>1.2026.7.1: Initial release.</releaseNotes>
     <tags>XrmToolBox Dataverse Dynamics365 PowerPlatform</tags>
     <dependencies>
@@ -25,7 +25,31 @@
     </dependencies>
   </metadata>
   <files>
-    <!-- Ship ONLY your DLL; XrmToolBox already contains the SDK and shared libs -->
     <file src="bin\Release\net48\XrmToolSuite.PrivilegeGapAnalyzer.dll" target="lib\net48\Plugins" />
+    <!-- Excel-export chain in the Plugins ROOT next to the tool DLL. XrmToolBox's plugin
+         analysis must resolve the tool's ClosedXML reference at scan time (before the tool's
+         AssemblyResolve handler exists), so these must NOT be hidden in a subfolder or the tool
+         is silently dropped from the Tools list. Current XrmToolBox binding redirects reconcile
+         SixLabors.Fonts' facade version mismatch; the handler is a scoped runtime fallback. -->
+    <file src="bin\Release\net48\ClosedXML.dll" target="lib\net48\Plugins" />
+    <file src="bin\Release\net48\DocumentFormat.OpenXml.dll" target="lib\net48\Plugins" />
+    <file src="bin\Release\net48\ExcelNumberFormat.dll" target="lib\net48\Plugins" />
+    <file src="bin\Release\net48\XLParser.dll" target="lib\net48\Plugins" />
+    <file src="bin\Release\net48\Irony.dll" target="lib\net48\Plugins" />
+    <file src="bin\Release\net48\SixLabors.Fonts.dll" target="lib\net48\Plugins" />
+    <file src="bin\Release\net48\System.IO.Packaging.dll" target="lib\net48\Plugins" />
+    <file src="bin\Release\net48\System.Numerics.Vectors.dll" target="lib\net48\Plugins" />
+    <file src="bin\Release\net48\System.Runtime.CompilerServices.Unsafe.dll" target="lib\net48\Plugins" />
+    <file src="bin\Release\net48\System.Buffers.dll" target="lib\net48\Plugins" />
+    <file src="bin\Release\net48\System.Memory.dll" target="lib\net48\Plugins" />
+    <file src="bin\Release\net48\System.Threading.Tasks.Extensions.dll" target="lib\net48\Plugins" />
+    <!-- Native-PDF chain (PdfSharp/MigraDoc, GDI build — assemblies carry a -gdi suffix).
+         Pure-managed; ships in the Plugins ROOT next to the tool DLL for the same scan-time
+         resolution reason as the Excel chain above. -->
+    <file src="bin\Release\net48\PdfSharp-gdi.dll" target="lib\net48\Plugins" />
+    <file src="bin\Release\net48\PdfSharp.Charting-gdi.dll" target="lib\net48\Plugins" />
+    <file src="bin\Release\net48\MigraDoc.DocumentObjectModel-gdi.dll" target="lib\net48\Plugins" />
+    <file src="bin\Release\net48\MigraDoc.Rendering-gdi.dll" target="lib\net48\Plugins" />
+    <file src="bin\Release\net48\MigraDoc.RtfRendering-gdi.dll" target="lib\net48\Plugins" />
   </files>
 </package>

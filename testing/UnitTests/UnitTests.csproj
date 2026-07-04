@@ -70,6 +70,18 @@
     <Compile Include="..\..\src\Shared\Summarization\ISummaryGenerator.cs" />
     <Compile Include="..\..\src\Shared\Summarization\TemplatedSummaryGenerator.cs" />
     <Compile Include="..\..\src\Shared\Summarization\SummaryFormatting.cs" />
+
+    <!-- FetchXML Performance Analyzer: SDK-free parser + rule engine (System.Xml.Linq only). -->
+    <Compile Include="..\..\src\Shared\Core\FetchXml\*.cs" />
+
+    <!-- Environment Inventory: SDK-free normalization model, exporters + report projection. -->
+    <Compile Include="..\..\src\Tools\XrmToolSuite.EnvironmentInventory\Inventory\InventoryModels.cs" />
+    <Compile Include="..\..\src\Tools\XrmToolSuite.EnvironmentInventory\Inventory\InventoryExporter.cs" />
+    <Compile Include="..\..\src\Tools\XrmToolSuite.EnvironmentInventory\Inventory\InventorySummary.cs" />
+
+    <!-- Privilege Gap Analyzer: SDK-free effective-privilege engine (no Dataverse/WinForms). -->
+    <Compile Include="..\..\src\Tools\XrmToolSuite.PrivilegeGapAnalyzer\Privileges\PrivilegeModels.cs" />
+    <Compile Include="..\..\src\Tools\XrmToolSuite.PrivilegeGapAnalyzer\Privileges\PrivilegeEngine.cs" />
   </ItemGroup>
 
 </Project>
