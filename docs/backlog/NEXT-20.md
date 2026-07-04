@@ -15,8 +15,17 @@ Legend: **H** High · **M** Medium · Pack# = matching idea in `prompt/2.XrmTool
 | 2 | Environment Inventory | [ADMIN7](04-Dataverse-Administration/ADMIN7.EnvironmentInventory.md) | H | — | The normalized metadata model that feeds ERD / Docs / Reporting / Drift tools. |
 | 3 | Privilege Gap Analyzer | [SEC1](02-Security-Governance/SEC1.PrivilegeGapAnalyzer.md) | H | #2 | Ships the effective-privilege engine reused by #17 Team Explorer, Matrix, Heatmap. |
 
-> **Status:** scaffolded via `New-Tool.ps1` (projects under `src/Tools/`, testing skeleton under
-> `testing/<Tool>/`, added to `XrmToolSuite.sln`). Detailed user stories remain in the backlog files above.
+> **Status:** ✅ **implemented.** All three tools are built (Release, 0 warnings) with UI-free engines,
+> WinForms hosts, SDK-free unit tests (10 FetchXML + 16 Environment Inventory + 10 Privilege Gap, all
+> passing in `testing/UnitTests`), active user stories under `docs/user-stories/`, and testing artifacts
+> under `testing/<Tool>/`. The shared FetchXML parser/rule engine lives in `src/Shared/Core/FetchXml/`;
+> the Environment Inventory normalization model and the Privilege Gap effective-privilege engine are
+> UI-free and console/CI-liftable. Full export is implemented per the backlog: **Excel + PDF** (and
+> **Word** for Environment Inventory) via the shared `ReportModel` exporters, plus JSON/HTML/Markdown/CSV —
+> each tool ships the ClosedXML + PdfSharp/MigraDoc-GDI dependency chains the same way the Deployment Risk
+> Analyzer does (the pattern is now documented in CLAUDE.md as reusable, not a one-off). Live-connection and
+> WinForms GUI cases (including the Office/PDF export dialogs) remain pending a Windows + XrmToolBox session
+> (documented, not claimed as passed).
 
 ## Phase B — flagship standalone tools (high value, mostly static, cover the best pack ideas)
 
