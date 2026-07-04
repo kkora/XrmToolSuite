@@ -51,18 +51,29 @@ for interactive UI automation (below). It is also deliberately **not** part of `
 
 ## Setting it up on a self-hosted CI runner
 
-To gate it in CI you need a Windows machine that keeps an interactive session alive:
+The workflow already exists: **[`.github/workflows/ui-smoke.yml`](../../.github/workflows/ui-smoke.yml)**
+(`ui-smoke` job, `runs-on: [self-hosted, windows]`). It builds + deploys the tools, then runs this test.
+It is **manual only** (`workflow_dispatch`) — an interactive GUI test should not fire on every push. Trigger
+it from the Actions tab (or `gh workflow run "UI smoke (self-hosted)"`).
 
-- A **self-hosted GitHub Actions runner** installed as a **per-user process (not a service)**, or a service
-  configured for an autologon desktop.
-- **Autologon** enabled and the screen kept **unlocked** (e.g. disable the lock screen / screen saver; some
-  teams use a small "keep-awake" utility). UI Automation fails against a locked session.
-- XrmToolBox installed and the tools deployed on that machine (step 1 above), and `XTB_EXE` set as a runner
-  environment variable.
-- A separate workflow job (`runs-on: [self-hosted, windows]`) that runs `dotnet test testing/UiSmokeTests`.
+To make it runnable you need a Windows machine that keeps an **interactive, unlocked** session alive:
 
-Keep it **advisory** at first (not a required check) — UI tests are inherently flakier than the headless
-tiers, and a single dedicated smoke test ("do the tools load") is the right scope, not full UI coverage.
+1. **Register a self-hosted runner** on the repo (Settings → Actions → Runners → New self-hosted runner).
+   Install it as a **per-user process you start from a logged-in desktop** (`.\run.cmd`) — **not** as a
+   Windows service. A service runs in session 0 (non-interactive) and UI Automation will fail there. The
+   default runner labels (`self-hosted`, `Windows`) satisfy `runs-on: [self-hosted, windows]`.
+2. **Keep the session unlocked** — enable autologon and disable the lock screen / screen saver (a small
+   "keep-awake" utility helps). UI Automation cannot drive a locked session.
+3. **Install XrmToolBox** on that machine and point the test at it, either:
+   - set a **repo variable** `XTB_EXE` (Settings → Secrets and variables → Actions → Variables) to the full
+     `XrmToolBox.exe` path, **or**
+   - pass `xtb_exe` when dispatching the workflow, **or**
+   - rely on the workflow's default (`C:\devtools\XrmToolbox\XrmToolBox.exe`).
+   The build+deploy step handles getting the tool DLLs into the Plugins folder.
+
+Keep it **advisory** — do NOT add `ui-smoke` to `main`'s required checks. UI tests are inherently flakier
+than the headless tiers, and a single smoke test ("do the tools load") is the right scope, not full UI
+coverage. The required gate stays `test` + `test-windows`.
 
 ## Status & caveats
 

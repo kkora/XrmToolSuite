@@ -1,0 +1,49 @@
+name: UI smoke (self-hosted)
+
+# Tier-3 FlaUI UI smoke test — drives the REAL XrmToolBox host and asserts every suite plugin loads.
+# Runs on a self-hosted Windows runner because it needs an interactive, unlocked desktop session
+# (UI Automation cannot drive a headless/service session). See testing/UiSmokeTests/README.md.
+#
+# Manual trigger only: an interactive GUI test should not fire on every push (it takes over the runner's
+# mouse/keyboard focus). Add a `schedule:` or `push:` trigger only if you dedicate an always-on runner.
+on:
+  workflow_dispatch:
+    inputs:
+      xtb_exe:
+        description: "Full path to XrmToolBox.exe (overrides the repo variable / default)"
+        required: false
+        default: ""
+
+jobs:
+  ui-smoke:
+    name: ui-smoke
+    runs-on: [self-hosted, windows]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Setup .NET 8
+        uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: '8.0.x'
+
+      # Build every tool and copy the DLLs into XrmToolBox's Plugins folder so the host loads THIS build.
+      # Requires the .NET Framework 4.8 targeting pack on the runner (the tools are net48/WinForms).
+      - name: Build + deploy tools to XrmToolBox
+        run: dotnet build XrmToolSuite.sln -c Release -p:DeployToXTB=true --nologo
+
+      - name: Unblock deployed plugins
+        shell: pwsh
+        run: Get-ChildItem "$env:APPDATA\MscrmTools\XrmToolBox\Plugins\XrmToolSuite.*.dll" | Unblock-File
+
+      # Launches XrmToolBox via FlaUI and asserts all suite tools appear in the Tools list (no org needed).
+      # Set the repo variable XTB_EXE (Settings -> Secrets and variables -> Actions -> Variables) or pass
+      # xtb_exe on dispatch; otherwise falls back to the conventional dev-box path.
+      - name: Run UI smoke test
+        shell: pwsh
+        env:
+          XTB_EXE: ${{ github.event.inputs.xtb_exe != '' && github.event.inputs.xtb_exe || vars.XTB_EXE }}
+        run: |
+          if (-not $env:XTB_EXE) { $env:XTB_EXE = 'C:\devtools\XrmToolbox\XrmToolBox.exe' }
+          Write-Host "XTB_EXE=$env:XTB_EXE"
+          dotnet test testing/UiSmokeTests/UiSmokeTests.csproj -c Release --nologo
