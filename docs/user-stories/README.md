@@ -10,6 +10,10 @@ Epic** for the shared foundation (both below), and one **file per tool** for its
 |---|---|---|
 | this file | Portfolio Epic + Platform Epic | Living |
 | [DeploymentRiskAnalyzer.md](DeploymentRiskAnalyzer.md) | Deployment Risk Analyzer | Mostly shipped |
+| [TechnicalDebtAnalyzer.md](TechnicalDebtAnalyzer.md) | Technical Debt Analyzer | Shipped (manual tests pending live org) |
+| [SolutionComplexityScore.md](SolutionComplexityScore.md) | Solution Complexity Score | Shipped (manual tests pending live org) |
+| [AiSolutionReviewer.md](AiSolutionReviewer.md) | AI Solution Reviewer | Shipped (manual tests pending live org) |
+| [SolutionKnowledgeGraph.md](SolutionKnowledgeGraph.md) | Solution Knowledge Graph | Shipped (manual tests pending live org) |
 | [AttributeAuditor.md](AttributeAuditor.md) | Attribute Auditor | WIP (planned) |
 | [_TEMPLATE.md](_TEMPLATE.md) | Starter stamped into every new tool by `New-Tool.ps1` | Template |
 
@@ -25,8 +29,9 @@ Each **Epic** contains **Features**; each Feature contains **User Stories** writ
 `As a <persona>, I want <capability>, so that <benefit>`, with **Acceptance Criteria (AC)**.
 
 **ID scheme:** `EPIC-<area>`, `FEAT-<area>-<n>`, `US-<area>-<n>.<m>`.
-Areas: `XTS` (portfolio), `PLAT` (platform), `DG` (Deployment Risk Analyzer), `AA` (Attribute Auditor),
-and a short tag per new tool.
+Areas: `XTS` (portfolio), `PLAT` (platform), `DG` (Deployment Risk Analyzer), `TD` (Technical Debt
+Analyzer), `SC` (Solution Complexity Score), `AR` (AI Solution Reviewer), `KG` (Solution Knowledge
+Graph), `AA` (Attribute Auditor), and a short tag per new tool.
 
 **Status legend:** `[Done]` shipped - `[WIP]` in progress - `[Planned]` not started.
 

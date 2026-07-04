@@ -127,12 +127,17 @@ Analyzers/
   SecurityAnalyzer.cs
   SchemaConflictAnalyzer.cs
   DeletedComponentAnalyzer.cs
+  FormAnalyzer.cs
+  RibbonAnalyzer.cs
   PowerPagesAnalyzer.cs
-Scoring/RiskScoreCalculator.cs  Weighted score → Low/Medium/High banding
-Reporting/
-  HtmlDashboardReport.cs        Self-contained theme-aware HTML dashboard (SDK-free; unit-tested)
-  ReportExporters.cs            Native PDF (MigraDoc/PdfSharp gauge) / Excel / JSON / Markdown checklist
-Models/RiskModels.cs            Finding, severity, result types
+Scoring/RiskScoreCalculator.cs       Deployment-risk facade over the shared ScoreCalculator (weighted score → Low/Medium/High)
+Reporting/DeploymentReportModel.cs   Adapter: AnalysisResult → the shared ReportModel (branding, next steps, verdicts, release-manager AI prompt)
+Models/RiskModels.cs                 Finding, severity, result types
+
+Shared source (compiled in from src/Shared/, reused by every score/report tool in the suite):
+  Core/Analysis/*      Finding, Severity/ScoreBand, IAnalyzer<T>, ScoreCalculator, ReportModel
+  Reporting/*          JSON (+CI block) / Markdown / HTML dashboard / ClosedXML Excel / MigraDoc PDF / OpenXML Word exporters
+  Summarization/*      offline templated + AI (Anthropic/OpenAI/Google) executive-summary generators
 ```
 
 Adding an analyzer = implement `IAnalyzer`, add one line to `_allAnalyzers` in the control.
