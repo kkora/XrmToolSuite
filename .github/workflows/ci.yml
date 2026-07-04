@@ -37,10 +37,15 @@ jobs:
         with:
           dotnet-version: '8.0.x'
 
-      # These suites reference the Dataverse SDK (Microsoft.Xrm.Sdk) and the net48 export
-      # libraries (ClosedXML, PdfSharp/MigraDoc-GDI), so they target net48 and need a
-      # Windows runner (the 4.8 targeting pack ships on windows-latest). They still run
-      # headlessly — no live org (fake IOrganizationService) and no XrmToolBox host.
+      # Windows runs all three suites so a single required check covers every framework:
+      # the net8 SDK-free tests (also validated cross-platform by the ubuntu `test` job)
+      # plus the net48 suites, which reference the Dataverse SDK (Microsoft.Xrm.Sdk) and
+      # the net48 export libraries (ClosedXML, PdfSharp/MigraDoc-GDI) and so need the 4.8
+      # targeting pack that ships on windows-latest. All run headlessly — no live org
+      # (fake IOrganizationService) and no XrmToolBox host.
+      - name: Run SDK-free unit tests
+        run: dotnet test testing/UnitTests/UnitTests.csproj -c Release --nologo
+
       - name: Run analyzer tests (fake IOrganizationService)
         run: dotnet test testing/AnalyzerTests/AnalyzerTests.csproj -c Release --nologo
 
