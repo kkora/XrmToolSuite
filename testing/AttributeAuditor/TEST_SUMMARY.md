@@ -32,3 +32,9 @@ tool builds `Release` with zero warnings. Manual GUI/Dataverse cases (TC-AA-M-01
 org** and must be run before release — no manual case is claimed as passed here. Deferred features
 (chart/dashboard & data-population signals, table/solution scoping, JSON/Excel export, guarded cleanup)
 remain `[Planned]` and are out of this pass.
+
+## Live UI smoke test (XrmToolBox)
+
+- **Command:** `dotnet test testing/UiSmokeTests/UiSmokeTests.csproj` with `XTB_EXE` set, on 2026-07-04.
+- **Result:** PASS — real XrmToolBox v1.2025.10.74 (FlaUI) confirms **Attribute Auditor** loads and appears in the Tools list.
+- **Evidence:** `screenshots/xrmtoolbox-tools-list.png` — the Tools tab filtered to **Attribute Auditor** v1.2026.7.1 (Kanchan Kora).

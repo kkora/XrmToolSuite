@@ -7,7 +7,8 @@ Interactive, opt-in end-to-end smoke tests that drive the **real XrmToolBox host
 
 `AllSuiteTools_AppearInXrmToolBoxToolsList` launches XrmToolBox and checks that every suite tool
 (Deployment Risk Analyzer, Technical Debt Analyzer, Solution Complexity Score, AI Solution Reviewer,
-Solution Knowledge Graph, Attribute Auditor) appears in the Tools list.
+Solution Knowledge Graph, Attribute Auditor, FetchXML Performance Analyzer, Environment Inventory,
+Privilege Gap Analyzer) appears in the Tools list.
 
 That is exactly the failure mode the headless suites **cannot** see and that CLAUDE.md warns about: a
 plugin missing a required `ExportMetadata` key (e.g. `SmallImageBase64`/`BigImageBase64`), or with an
