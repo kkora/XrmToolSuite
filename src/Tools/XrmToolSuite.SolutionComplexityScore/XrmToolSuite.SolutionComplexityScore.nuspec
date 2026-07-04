@@ -1,0 +1,49 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package>
+  <metadata>
+    <!-- Tool Library rules (xrmtoolbox.com/documentation/for-developers):
+         1) version MUST equal the assembly version of your DLL
+         2) tags MUST start with "XrmToolBox" plus extra words
+         3) dependency MUST be on "XrmToolBox" (NOT XrmToolBoxPackage)
+         4) DLL goes under a "Plugins" folder
+         5) iconUrl is required and must be your own icon -->
+    <id>XrmToolSuite.SolutionComplexityScore</id>
+    <version>1.2026.7.1</version>
+    <title>Solution Complexity Score for XrmToolBox</title>
+    <authors>Kanchan Kora</authors>
+    <owners>Kanchan Kora</owners>
+    <projectUrl>https://github.com/kkora/XrmToolSuite</projectUrl>
+    <iconUrl>https://raw.githubusercontent.com/kkora/XrmToolSuite/main/icon.png</iconUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <license type="expression">MIT</license>
+    <description>Measures overall solution complexity, maintainability, and upgrade/migration/testing effort with an executive dashboard.</description>
+    <summary>Measures overall solution complexity, maintainability, and upgrade/migration/testing effort with an executive dashboard.</summary>
+    <releaseNotes>1.2026.7.1: Initial release.</releaseNotes>
+    <tags>XrmToolBox Dataverse Dynamics365 PowerPlatform Complexity ALM</tags>
+    <dependencies>
+      <dependency id="XrmToolBox" version="1.2025.10.74" />
+    </dependencies>
+  </metadata>
+  <files>
+    <!-- The tool DLL plus the Excel (ClosedXML) and native-PDF (PdfSharp/MigraDoc GDI) chains, all in
+         the Plugins ROOT so XrmToolBox resolves the direct references during plugin analysis. -->
+    <file src="bin\Release\net48\XrmToolSuite.SolutionComplexityScore.dll" target="lib\net48\Plugins" />
+    <file src="bin\Release\net48\ClosedXML.dll" target="lib\net48\Plugins" />
+    <file src="bin\Release\net48\DocumentFormat.OpenXml.dll" target="lib\net48\Plugins" />
+    <file src="bin\Release\net48\ExcelNumberFormat.dll" target="lib\net48\Plugins" />
+    <file src="bin\Release\net48\SixLabors.Fonts.dll" target="lib\net48\Plugins" />
+    <file src="bin\Release\net48\XLParser.dll" target="lib\net48\Plugins" />
+    <file src="bin\Release\net48\Irony.dll" target="lib\net48\Plugins" />
+    <file src="bin\Release\net48\System.IO.Packaging.dll" target="lib\net48\Plugins" />
+    <file src="bin\Release\net48\System.Numerics.Vectors.dll" target="lib\net48\Plugins" />
+    <file src="bin\Release\net48\System.Runtime.CompilerServices.Unsafe.dll" target="lib\net48\Plugins" />
+    <file src="bin\Release\net48\System.Buffers.dll" target="lib\net48\Plugins" />
+    <file src="bin\Release\net48\System.Memory.dll" target="lib\net48\Plugins" />
+    <file src="bin\Release\net48\System.Threading.Tasks.Extensions.dll" target="lib\net48\Plugins" />
+    <file src="bin\Release\net48\PdfSharp-gdi.dll" target="lib\net48\Plugins" />
+    <file src="bin\Release\net48\PdfSharp.Charting-gdi.dll" target="lib\net48\Plugins" />
+    <file src="bin\Release\net48\MigraDoc.DocumentObjectModel-gdi.dll" target="lib\net48\Plugins" />
+    <file src="bin\Release\net48\MigraDoc.Rendering-gdi.dll" target="lib\net48\Plugins" />
+    <file src="bin\Release\net48\MigraDoc.RtfRendering-gdi.dll" target="lib\net48\Plugins" />
+  </files>
+</package>

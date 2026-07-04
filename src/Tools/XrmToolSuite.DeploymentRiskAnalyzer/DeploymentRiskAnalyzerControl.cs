@@ -8,7 +8,9 @@ using XrmToolSuite.DeploymentRiskAnalyzer.Analyzers;
 using XrmToolSuite.DeploymentRiskAnalyzer.Models;
 using XrmToolSuite.DeploymentRiskAnalyzer.Reporting;
 using XrmToolSuite.DeploymentRiskAnalyzer.Scoring;
-using XrmToolSuite.DeploymentRiskAnalyzer.Summarization;
+using XrmToolSuite.Core.Reporting;
+using XrmToolSuite.Core.Summarization;
+using ReportModel = XrmToolSuite.Core.Analysis.ReportModel;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using McTools.Xrm.Connection;
@@ -485,13 +487,14 @@ namespace XrmToolSuite.DeploymentRiskAnalyzer
                 if (dlg.ShowDialog(this) != DialogResult.OK) return;
                 try
                 {
+                    var model = DeploymentReportModel.ToReportModel(_lastResult);
                     switch (kind)
                     {
-                        case "pdf": PdfReportExporter.Export(_lastResult, dlg.FileName); break;
-                        case "html": HtmlReportExporter.Export(_lastResult, dlg.FileName); break;
-                        case "xlsx": ExcelReportExporter.Export(_lastResult, dlg.FileName); break;
-                        case "json": JsonReportExporter.Export(_lastResult, dlg.FileName); break;
-                        default: FixChecklistGenerator.Export(_lastResult, dlg.FileName); break;
+                        case "pdf": PdfReportExporter.Export(model, dlg.FileName); break;
+                        case "html": HtmlDashboardBuilder.Export(model, dlg.FileName); break;
+                        case "xlsx": ExcelReportExporter.Export(model, dlg.FileName); break;
+                        case "json": JsonReportExporter.Export(model, dlg.FileName); break;
+                        default: FixChecklistGenerator.Export(model, dlg.FileName); break;
                     }
                     if (MessageBox.Show(this, "Report exported. Open it now?", "Deployment Risk Analyzer",
                             MessageBoxButtons.YesNo, MessageBoxIcon.Information) == DialogResult.Yes)
@@ -520,12 +523,13 @@ namespace XrmToolSuite.DeploymentRiskAnalyzer
                 return;
             }
 
-            var opts = TryBuildAiOptions(interactive);   // null => produce the offline summary
+            var model = DeploymentReportModel.ToReportModel(_lastResult);
+            var opts = TryBuildAiOptions(interactive, model);   // null => produce the offline summary
             var generator = opts != null ? _aiGenerator : _offlineGenerator;
 
             RunAsync(
                 "Generating deployment summary…",
-                worker => generator.Generate(_lastResult, opts, msg => worker.ReportProgress(0, msg)),
+                worker => generator.Generate(model, opts, msg => worker.ReportProgress(0, msg)),
                 summary =>
                 {
                     summary.Text = SummaryFormatting.ToPlainText(summary.Text);
@@ -544,7 +548,7 @@ namespace XrmToolSuite.DeploymentRiskAnalyzer
         /// template. Interactive mode may prompt for the key and show the consent preview; auto-run
         /// mode never prompts (uses AI only if key + consent are already in place this session).
         /// </summary>
-        private SummaryOptions TryBuildAiOptions(bool interactive)
+        private SummaryOptions TryBuildAiOptions(bool interactive, ReportModel model)
         {
             var provider = AiProviderCatalog.Parse(_settings.AiProvider);
             var key = ResolveKey(provider);
@@ -558,20 +562,27 @@ namespace XrmToolSuite.DeploymentRiskAnalyzer
             }
 
             bool includeComponents = _miAiIncludeComponents.Checked;
-            string model = string.IsNullOrWhiteSpace(_settings.AiModelId)
+            string modelId = string.IsNullOrWhiteSpace(_settings.AiModelId)
                 ? AiProviderCatalog.Get(provider).Mid : _settings.AiModelId;
 
             if (!_aiConsentGiven)
             {
                 if (!interactive) return null;          // auto-run before consent → offline
                 var preview = JsonConvert.SerializeObject(
-                    SummaryPayloadBuilder.Build(_lastResult, includeComponents), Formatting.Indented,
+                    SummaryPayloadBuilder.Build(model, includeComponents), Formatting.Indented,
                     new JsonSerializerSettings { ContractResolver = new CamelCasePropertyNamesContractResolver() });
-                if (!ShowConsentDialog(preview, AiProviderCatalog.Get(provider), model)) return null; // declined → offline
+                if (!ShowConsentDialog(preview, AiProviderCatalog.Get(provider), modelId)) return null; // declined → offline
                 _aiConsentGiven = true;
             }
 
-            return new SummaryOptions { Provider = provider, ApiKey = key, ModelId = model, IncludeComponents = includeComponents };
+            return new SummaryOptions
+            {
+                Provider = provider,
+                ApiKey = key,
+                ModelId = modelId,
+                IncludeComponents = includeComponents,
+                SystemPrompt = DeploymentReportModel.AiSystemPrompt
+            };
         }
 
         /// <summary>Session key first; the ANTHROPIC_API_KEY env var is a convenience only for Anthropic.</summary>
@@ -686,7 +697,7 @@ namespace XrmToolSuite.DeploymentRiskAnalyzer
         }
 
         /// <summary>Read-only summary viewer (formatted) with Copy / Export PDF; indicates AI vs offline source.</summary>
-        private void ShowSummary(DeploymentSummary s)
+        private void ShowSummary(SummaryResult s)
         {
             using (var f = new Form
             {

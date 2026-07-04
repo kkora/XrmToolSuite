@@ -1,52 +1,35 @@
-using System;
 using System.Linq;
 using XrmToolSuite.DeploymentRiskAnalyzer.Models;
+using CoreScore = XrmToolSuite.Core.Analysis.ScoreCalculator;
+using CoreFinding = XrmToolSuite.Core.Analysis.Finding;
+using CoreSeverity = XrmToolSuite.Core.Analysis.Severity;
+using CoreBand = XrmToolSuite.Core.Analysis.ScoreBand;
 
 namespace XrmToolSuite.DeploymentRiskAnalyzer.Scoring
 {
     /// <summary>
-    /// Converts a set of findings into a 0–100 score and a Low/Medium/High banding.
-    /// Weights are intentionally simple and tunable.
+    /// Deployment-risk scoring facade over the suite-shared <see cref="CoreScore"/>. Kept as a thin
+    /// wrapper on <see cref="AnalysisResult"/> so the control and tests keep their existing API while
+    /// the weighting/banding logic lives in exactly one place (the shared core, using its default
+    /// Critical=25 / High=12 / Medium=5 / Low=2 weights, bands at 15/40, any Critical ⇒ High).
     /// </summary>
     public static class RiskScoreCalculator
     {
-        public const int WeightCritical = 25;
-        public const int WeightHigh = 12;
-        public const int WeightMedium = 5;
-        public const int WeightLow = 2;
-
         public const int MediumThreshold = 15;
         public const int HighThreshold = 40;
 
         public static void Apply(AnalysisResult result)
         {
-            int raw = result.Findings.Sum(f => Weight(f.Severity));
-            result.Score = Math.Min(100, raw);
-
-            // Any Critical finding forces High risk regardless of score.
-            if (result.Findings.Any(f => f.Severity == Severity.Critical) || result.Score >= HighThreshold)
-                result.Risk = OverallRisk.High;
-            else if (result.Score >= MediumThreshold)
-                result.Risk = OverallRisk.Medium;
-            else
-                result.Risk = OverallRisk.Low;
-        }
-
-        private static int Weight(Severity s)
-        {
-            switch (s)
-            {
-                case Severity.Critical: return WeightCritical;
-                case Severity.High: return WeightHigh;
-                case Severity.Medium: return WeightMedium;
-                case Severity.Low: return WeightLow;
-                default: return 0;
-            }
+            var mapped = Map(result);
+            result.Score = CoreScore.RiskDefault.Score(mapped);
+            result.Risk = (OverallRisk)(int)CoreScore.RiskDefault.Band(mapped, result.Score);
         }
 
         public static string Explain(AnalysisResult r) =>
-            $"{r.CountBySeverity(Severity.Critical)} critical, {r.CountBySeverity(Severity.High)} high, " +
-            $"{r.CountBySeverity(Severity.Medium)} medium, {r.CountBySeverity(Severity.Low)} low, " +
-            $"{r.CountBySeverity(Severity.Info)} informational → score {r.Score}/100 ({r.Risk} risk).";
+            CoreScore.Explain(Map(r), r.Score, (CoreBand)(int)r.Risk, "risk");
+
+        // Findings only need their severity for scoring; project onto the shared Finding type.
+        private static System.Collections.Generic.IEnumerable<CoreFinding> Map(AnalysisResult r) =>
+            r.Findings.Select(f => new CoreFinding { Severity = (CoreSeverity)(int)f.Severity }).ToList();
     }
 }

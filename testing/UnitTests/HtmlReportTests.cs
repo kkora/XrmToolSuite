@@ -1,16 +1,22 @@
 using Xunit;
 using XrmToolSuite.DeploymentRiskAnalyzer.Models;
 using XrmToolSuite.DeploymentRiskAnalyzer.Reporting;
+using XrmToolSuite.Core.Reporting;
 
 namespace XrmToolSuite.UnitTests
 {
     /// <summary>
-    /// Executable tests for the HTML dashboard report (US-DG-EXPORT-HTML). The exporter is a
-    /// pure, SDK-free string builder, so we assert on the generated markup: escaping, theme
-    /// scaffolding, gauge value, severity tallies, and that findings/recommendations surface.
+    /// Executable tests for the HTML dashboard report (US-DG-EXPORT-HTML). The Deployment Risk
+    /// Analyzer projects its result onto the suite-shared <c>ReportModel</c> (via
+    /// <c>DeploymentReportModel.ToReportModel</c>) which the shared <c>HtmlDashboardBuilder</c>
+    /// renders — a pure, SDK-free string builder, so we assert on the generated markup: escaping,
+    /// theme scaffolding, gauge value, severity tallies, and that findings/recommendations surface.
     /// </summary>
     public class HtmlReportTests
     {
+        private static string BuildHtml(AnalysisResult r) =>
+            HtmlDashboardBuilder.Build(DeploymentReportModel.ToReportModel(r));
+
         private static AnalysisResult Sample()
         {
             var r = new AnalysisResult
@@ -40,7 +46,7 @@ namespace XrmToolSuite.UnitTests
         [Fact]
         public void Build_ProducesSelfContainedDocument()
         {
-            var html = HtmlReportExporter.Build(Sample());
+            var html = BuildHtml(Sample());
             Assert.Contains("<title>", html);
             Assert.Contains("<style>", html);
             Assert.DoesNotContain("http-equiv", html); // no external refs
@@ -51,7 +57,7 @@ namespace XrmToolSuite.UnitTests
         [Fact]
         public void Build_IsThemeAware()
         {
-            var html = HtmlReportExporter.Build(Sample());
+            var html = BuildHtml(Sample());
             Assert.Contains("prefers-color-scheme:dark", html);
             Assert.Contains("[data-theme=\"dark\"]", html);
             Assert.Contains("[data-theme=\"light\"]", html);
@@ -61,26 +67,26 @@ namespace XrmToolSuite.UnitTests
         [Fact]
         public void Build_RendersScoreAndBand()
         {
-            var html = HtmlReportExporter.Build(Sample());
+            var html = BuildHtml(Sample());
             Assert.Contains(">78<", html);            // gauge number
             Assert.Contains("HIGH RISK", html);       // band label
             Assert.Contains("stroke-dasharray=\"78 100\"", html); // arc fill = score
         }
 
-        // TC-DG-HTML-04: severity KPI counts are tallied.
+        // TC-DG-HTML-04: severity KPI counts are tallied and the friendly category name surfaces.
         [Fact]
         public void Build_TalliesSeverityCounts()
         {
-            var html = HtmlReportExporter.Build(Sample());
+            var html = BuildHtml(Sample());
             Assert.Contains("Critical", html);
-            Assert.Contains("Environment Variables", html); // friendly category name
+            Assert.Contains("Environment Variables", html); // friendly category name (from the adapter)
         }
 
         // TC-DG-HTML-05: findings, recommendations and help links surface.
         [Fact]
         public void Build_SurfacesFindingsAndRecommendations()
         {
-            var html = HtmlReportExporter.Build(Sample());
+            var html = BuildHtml(Sample());
             Assert.Contains("Missing plugin assembly", html);
             Assert.Contains("Add the missing plugin assembly", html);
             Assert.Contains("https://learn.microsoft.com/x", html);
@@ -93,7 +99,7 @@ namespace XrmToolSuite.UnitTests
             var r = Sample();
             r.Findings.Add(new RiskFinding(AnalyzerCategory.General, Severity.Medium,
                 "Bad <script> & \"quote\"", "desc", "comp<>", "fix", null));
-            var html = HtmlReportExporter.Build(r);
+            var html = BuildHtml(r);
             Assert.Contains("Bad &lt;script&gt;", html);
             Assert.DoesNotContain("<script>", html);
         }
@@ -104,7 +110,7 @@ namespace XrmToolSuite.UnitTests
         {
             var r = Sample();
             r.AiSummary = "Deployment is high risk. Resolve criticals first.";
-            var html = HtmlReportExporter.Build(r);
+            var html = BuildHtml(r);
             Assert.Contains("Executive Summary", html);
             Assert.Contains("Resolve criticals first", html);
         }
@@ -118,9 +124,9 @@ namespace XrmToolSuite.UnitTests
                 SolutionFriendlyName = "Clean", SolutionVersion = "1.0.0.0",
                 SourceEnvironment = "DEV", Score = 0, Risk = OverallRisk.Low,
             };
-            var html = HtmlReportExporter.Build(r);
+            var html = BuildHtml(r);
             Assert.Contains("LOW RISK", html);
-            Assert.Contains("Clear for deployment", html);
+            Assert.Contains("Nothing flagged", html);
         }
     }
 }

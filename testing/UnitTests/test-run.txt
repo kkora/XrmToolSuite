@@ -1,0 +1,7 @@
+  Determining projects to restore...
+  All projects are up-to-date for restore.
+  UnitTests -> C:\repos\KanDesk\XrmToolSuite\testing\UnitTests\bin\Release\net8.0\UnitTests.dll
+Test run for C:\repos\KanDesk\XrmToolSuite\testing\UnitTests\bin\Release\net8.0\UnitTests.dll (.NETCoreApp,Version=v8.0)
+A total of 1 test files matched the specified pattern.
+
+Passed!  - Failed:     0, Passed:    57, Skipped:     0, Total:    57, Duration: 97 ms - UnitTests.dll (net8.0)
