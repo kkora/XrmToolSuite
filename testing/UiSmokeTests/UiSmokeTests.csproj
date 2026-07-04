@@ -1,0 +1,41 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!--
+    TIER-3 UI SMOKE TESTS (FlaUI) — interactive, opt-in, NOT run in CI.
+
+    Drives the real XrmToolBox WinForms host with UI Automation (FlaUI) to prove the suite's plugins
+    actually load and appear in the Tools list — the "MEF silently dropped my tool" failure mode called
+    out in CLAUDE.md (a missing required metadata key, or an unresolved dependency, removes a tool from
+    the list with no error). This does NOT need a Dataverse connection: XrmToolBox loads and lists
+    plugins at startup, before you connect.
+
+    Why it is separate and not in the `test`/`test-windows` CI jobs:
+      * It needs a real, logged-in Windows DESKTOP session (UI Automation cannot drive a headless agent).
+      * It needs XrmToolBox installed and the suite DLLs deployed to its Plugins folder.
+    Run it deliberately on a dev box or a self-hosted Windows runner — see testing/UiSmokeTests/README.md.
+
+    Deliberately NOT part of XrmToolSuite.sln.
+
+    Run (after deploying the tools — see README):
+      $env:XTB_EXE = "C:\path\to\XrmToolBox.exe"
+      dotnet test testing/UiSmokeTests/UiSmokeTests.csproj
+  -->
+
+  <PropertyGroup>
+    <TargetFramework>net48</TargetFramework>
+    <LangVersion>latest</LangVersion>
+    <Nullable>disable</Nullable>
+    <IsPackable>false</IsPackable>
+    <IsTestProject>true</IsTestProject>
+    <UseWindowsForms>true</UseWindowsForms>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.11.1" />
+    <PackageReference Include="xunit" Version="2.9.2" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="2.8.2" />
+    <!-- UI Automation driver for Windows desktop apps. Test-only; never shipped. -->
+    <PackageReference Include="FlaUI.UIA3" Version="4.0.0" />
+  </ItemGroup>
+
+</Project>
