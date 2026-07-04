@@ -1,13 +1,17 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <!--
-    Executable unit tests for DeploymentRiskAnalyzer's report exporters (PDF/HTML/JSON/Markdown/Excel).
+    Executable unit tests for the suite's shared report exporters (PDF/HTML/JSON/Markdown/Excel).
 
     Like testing/AnalyzerTests, this compiles the specific UI-free source files under test directly
-    (Reporting/ReportExporters.cs + Models/RiskModels.cs) rather than referencing the WinForms tool
-    project, and pulls the same export dependencies the tool ships (ClosedXML, PdfSharp/MigraDoc-GDI,
-    Newtonsoft). It targets net48 to match those libraries. These deps are kept OUT of AnalyzerTests
-    so that project stays lean.
+    rather than referencing the WinForms tool project, and pulls the same export dependencies the
+    tools ship (ClosedXML, PdfSharp/MigraDoc-GDI, Newtonsoft). It targets net48 to match those
+    libraries. These deps are kept OUT of AnalyzerTests so that project stays lean.
+
+    The exporters were generalized into src/Shared/Reporting (namespace XrmToolSuite.Core.Reporting):
+    every exporter consumes the shared ReportModel, and each tool projects its own result onto that
+    model. This suite drives them through the DeploymentRiskAnalyzer's DeploymentReportModel adapter,
+    so it exercises the real projection + every exporter end to end.
 
     Deliberately NOT part of XrmToolSuite.sln.
 
@@ -33,8 +37,19 @@
   </ItemGroup>
 
   <ItemGroup>
+    <!-- Shared analysis model the exporters consume (Finding, Severity, ScoreBand, ReportModel) — BCL-only. -->
+    <Compile Include="..\..\src\Shared\Core\Analysis\*.cs" />
+
+    <!-- The shared exporters under test (namespace XrmToolSuite.Core.Reporting).
+         WordReportExporter is excluded: it needs the OpenXml chain and is manual-tested. -->
+    <Compile Include="..\..\src\Shared\Reporting\HtmlDashboardBuilder.cs" />
+    <Compile Include="..\..\src\Shared\Reporting\ReportExporters.cs" />
+    <Compile Include="..\..\src\Shared\Reporting\PdfReportExporter.cs" />
+    <Compile Include="..\..\src\Shared\Reporting\ExcelReportExporter.cs" />
+
+    <!-- Deployment tool's SDK-free result model + its projection onto the shared ReportModel. -->
     <Compile Include="..\..\src\Tools\XrmToolSuite.DeploymentRiskAnalyzer\Models\RiskModels.cs" />
-    <Compile Include="..\..\src\Tools\XrmToolSuite.DeploymentRiskAnalyzer\Reporting\ReportExporters.cs" />
+    <Compile Include="..\..\src\Tools\XrmToolSuite.DeploymentRiskAnalyzer\Reporting\DeploymentReportModel.cs" />
   </ItemGroup>
 
 </Project>
