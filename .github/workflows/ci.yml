@@ -19,9 +19,30 @@ jobs:
         with:
           dotnet-version: '8.0.x'
 
-      # Only the SDK-free unit tests run in CI: they compile the specific source
-      # files under test directly (no net48/WinForms/Dataverse SDK), so they run
-      # cross-platform on the plain .NET SDK. The net48 tools themselves build on
-      # Windows only and are not part of this job.
+      # The SDK-free unit tests compile the specific source files under test directly
+      # (no net48/WinForms/Dataverse SDK), so they run cross-platform on the plain
+      # .NET SDK. The Dataverse-SDK-dependent suites (net48) run in test-windows below.
       - name: Run SDK-free unit tests
         run: dotnet test testing/UnitTests/UnitTests.csproj -c Release --nologo
+
+  test-windows:
+    name: test-windows
+    runs-on: windows-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Setup .NET 8
+        uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: '8.0.x'
+
+      # These suites reference the Dataverse SDK (Microsoft.Xrm.Sdk) and the net48 export
+      # libraries (ClosedXML, PdfSharp/MigraDoc-GDI), so they target net48 and need a
+      # Windows runner (the 4.8 targeting pack ships on windows-latest). They still run
+      # headlessly — no live org (fake IOrganizationService) and no XrmToolBox host.
+      - name: Run analyzer tests (fake IOrganizationService)
+        run: dotnet test testing/AnalyzerTests/AnalyzerTests.csproj -c Release --nologo
+
+      - name: Run report exporter tests
+        run: dotnet test testing/ReportTests/ReportTests.csproj -c Release --nologo

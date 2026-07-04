@@ -15,8 +15,8 @@ testing/
     AnalyzerTests.csproj        # uses the Dataverse SDK + an in-memory fake IOrganizationService
     Fakes/FakeOrganizationService.cs
     *Tests.cs
-  ReportTests/                  # executable xUnit project (net48) for the report exporters
-    ReportTests.csproj          # compiles ReportExporters.cs with ClosedXML + PdfSharp/MigraDoc
+  ReportTests/                  # executable xUnit project (net48) for the shared report exporters
+    ReportTests.csproj          # compiles src/Shared/Reporting/*.cs with ClosedXML + PdfSharp/MigraDoc
   _templates/                   # tokenized skeletons stamped into testing/<Tool>/ by New-Tool.ps1
     TEST_PLAN.md
     TEST_CASES.md
@@ -67,8 +67,9 @@ These are XrmToolBox WinForms plugins that call Dataverse. Two tiers of tests:
   Metadata-level branches that need constructed `EntityMetadata` (attribute type/length, option sets,
   relationships) stay in the manual suite.
 
-- **Automated - report exporters (`ReportTests/`, net48):** compiles `ReportExporters.cs` directly with
-  the tool's export dependencies (ClosedXML, PdfSharp/MigraDoc-GDI, Newtonsoft) and asserts each exporter
+- **Automated - report exporters (`ReportTests/`, net48):** compiles the shared exporters under
+  `src/Shared/Reporting/` directly (driven through the `DeploymentReportModel` projection) with the
+  tool's export dependencies (ClosedXML, PdfSharp/MigraDoc-GDI, Newtonsoft) and asserts each exporter
   produces a well-formed payload — including that the native PDF renders a valid `%PDF-` document. Kept
   separate from `AnalyzerTests/` so those deps don't bloat the analyzer suite.
 
@@ -128,7 +129,7 @@ Anthropic/OpenAI/Google API key (used session-only; never persisted).
 
 | Tool | Plan | Cases | Summary | Automated status |
 |---|---|---|---|---|
-| Deployment Risk Analyzer | [plan](DeploymentRiskAnalyzer/TEST_PLAN.md) | [cases](DeploymentRiskAnalyzer/TEST_CASES.md) | [summary](DeploymentRiskAnalyzer/TEST_SUMMARY.md) | 46/46 passed (17 scoring + 29 analyzer) |
+| Deployment Risk Analyzer | [plan](DeploymentRiskAnalyzer/TEST_PLAN.md) | [cases](DeploymentRiskAnalyzer/TEST_CASES.md) | [summary](DeploymentRiskAnalyzer/TEST_SUMMARY.md) | 79/79 passed (24 scoring + 49 analyzer + 6 report) |
 | Technical Debt Analyzer | [plan](TechnicalDebtAnalyzer/TEST_PLAN.md) | [cases](TechnicalDebtAnalyzer/TEST_CASES.md) | [summary](TechnicalDebtAnalyzer/TEST_SUMMARY.md) | 5/5 passed (debt scoring + metrics); analyzers/UI manual |
 | Solution Complexity Score | [plan](SolutionComplexityScore/TEST_PLAN.md) | [cases](SolutionComplexityScore/TEST_CASES.md) | [summary](SolutionComplexityScore/TEST_SUMMARY.md) | 6/6 passed (metric/effort model + report); collector/UI manual |
 | AI Solution Reviewer | [plan](AiSolutionReviewer/TEST_PLAN.md) | [cases](AiSolutionReviewer/TEST_CASES.md) | [summary](AiSolutionReviewer/TEST_SUMMARY.md) | 4/4 passed (report/concern score); collectors/AI/Word manual |
