@@ -21,6 +21,8 @@ testing/
     *Tests.cs                   # links the shared fake + MetaBuilder from AnalyzerTests
   ReportTests/                  # executable xUnit project (net48) for the shared report exporters
     ReportTests.csproj          # compiles src/Shared/Reporting/*.cs with ClosedXML + PdfSharp/MigraDoc
+  UiSmokeTests/                 # Tier-3 FlaUI UI smoke tests (net48) — interactive, opt-in, NOT in CI
+    UiSmokeTests.csproj         # drives the real XrmToolBox host; asserts the suite tools load
   _templates/                   # tokenized skeletons stamped into testing/<Tool>/ by New-Tool.ps1
     TEST_PLAN.md
     TEST_CASES.md
@@ -94,6 +96,12 @@ These are XrmToolBox WinForms plugins that call Dataverse. Two tiers of tests:
   ```powershell
   dotnet test testing/ReportTests/ReportTests.csproj
   ```
+
+- **Tier-3 UI smoke (`UiSmokeTests/`, net48, FlaUI — interactive, opt-in, NOT in CI):** drives the real
+  XrmToolBox host with UI Automation and asserts every suite plugin loaded into the Tools list — the
+  "MEF silently dropped my tool" failure mode no headless test can see (needs no Dataverse connection).
+  It requires a logged-in Windows desktop + XrmToolBox with the tools deployed, so it is not wired into
+  `test`/`test-windows`; run it deliberately (see [`UiSmokeTests/README.md`](UiSmokeTests/README.md)).
 
 - **Manual (needs a live Dataverse connection + XrmToolBox host):** anything that drives the UI
   (loading solutions, connecting, exporting reports) or depends on real metadata. These are documented
