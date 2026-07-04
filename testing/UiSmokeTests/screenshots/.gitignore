@@ -1,0 +1,4 @@
+# Screenshots captured by the UI smoke test land here (or in UISMOKE_SCREENSHOT_DIR).
+# They are regenerated each run, so the images themselves are not tracked.
+*.png
+!.gitkeep

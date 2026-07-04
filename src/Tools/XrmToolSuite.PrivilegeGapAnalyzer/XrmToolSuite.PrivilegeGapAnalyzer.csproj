@@ -1,0 +1,9 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <!-- TargetFramework, WinForms, XrmToolBoxPackage reference, and the shared core
+       all come from src/Tools/Directory.Build.props. Keep tool csproj files minimal. -->
+  <PropertyGroup>
+    <RootNamespace>XrmToolSuite.PrivilegeGapAnalyzer</RootNamespace>
+    <AssemblyName>XrmToolSuite.PrivilegeGapAnalyzer</AssemblyName>
+    <description>Diagnoses missing Dataverse privileges (why a user/team/role cannot perform an operation) and recommends role changes.</description>
+  </PropertyGroup>
+</Project>

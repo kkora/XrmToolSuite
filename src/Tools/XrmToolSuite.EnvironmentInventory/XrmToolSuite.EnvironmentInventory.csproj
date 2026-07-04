@@ -1,0 +1,9 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <!-- TargetFramework, WinForms, XrmToolBoxPackage reference, and the shared core
+       all come from src/Tools/Directory.Build.props. Keep tool csproj files minimal. -->
+  <PropertyGroup>
+    <RootNamespace>XrmToolSuite.EnvironmentInventory</RootNamespace>
+    <AssemblyName>XrmToolSuite.EnvironmentInventory</AssemblyName>
+    <description>Generates a complete inventory of Dataverse environment assets (tables, columns, forms, views, roles, plugins, flows, web resources, environment variables, connection references) with export.</description>
+  </PropertyGroup>
+</Project>

@@ -1,0 +1,53 @@
+# Flow Failure Investigator — User Stories (Candidate / Backlog)
+
+> **Status:** Candidate backlog — not started (no code).
+> **Source:** `all` — `prompt/3.XrmToolBox_ALL_PROMPTS.txt`, Section 7 (Power Automate), item 3. Not in pack file.
+> **Suggested tag:** `PA3` · **Suggested project:** `XrmToolSuite.FlowFailureInvestigator`
+> **Overlaps:** Deployment Risk Analyzer (broken connection references / missing environment variables) and PA5 Connection Usage Analyzer overlap on the *static* failure causes. This tool's differentiator is run-level failure investigation — which is exactly where the feasibility caveat below bites.
+> **Value/priority (my read):** Medium (High **only if** run-history access is available) — the run-history dependency is a hard feasibility risk. A static "why would this flow fail" checker is feasible and valuable now; live run-failure triage is not reliably deliverable through the Dataverse SDK.
+
+## Notes
+- **FEASIBILITY CAVEAT (read first):** Cloud-flow **run history, failed-run details, and per-action error messages are NOT available through the Dataverse SDK / `IOrganizationService`.** Run data lives in the Power Automate / Azure Logic Apps runtime, reached via the Flow Management / Power Automate Web APIs (separate auth, not the org connection XrmToolBox provides). The source itself hedges every run feature with "where available"/"where API permissions allow". **Do not promise live failed-run triage from the org connection.** Design so the tool delivers full value from static analysis, and treats run-history as an optional, clearly-gated enhancement (separate auth/endpoint) — degrading to Info when unavailable.
+- Feasible-from-SDK signal: `workflow` state (disabled flows), `connectionreference`/`connection` presence and binding, missing `environmentvariablevalue`, `clientdata` structure (missing error handling / retry / run-after), child-flow references. Some record-level failures surface in Dataverse `asyncoperation` for classic/background jobs — verify scope before relying on it for cloud flows.
+- Classification engine (Authentication, Authorization, Connection, Dataverse metadata, Dataverse data, Timeout, Throttling, Schema mismatch, Missing configuration, Child-flow failure, External API) must accept whatever signal is available (static causes always; run errors only if the run API is wired) and map to a likely root cause + remediation checklist. Keep it UI-free and unit-testable.
+- Reuse DRA's connection-reference / environment-variable / `clientdata` analyzers for the static causes.
+- Read-only; output is a findings/root-cause/remediation view and export. Never expose connection secrets, tokens, or HTTP trigger URLs found in error payloads — redact.
+
+---
+
+## EPIC-PA3 — Investigate why cloud flows fail and how to fix them
+> **As** an **ADM**, **I want** likely root causes and remediation steps for failing flows, **so that** I can fix failures without hopping across Power Automate screens.
+
+**Outcome:** a prioritized list of likely failure causes per flow (static always; run-level where the run API is available), grouped by category, each with a root cause and a remediation checklist, exportable.
+
+---
+
+## FEAT-PA3-1 — Flow inventory and static failure-risk signals `[Planned]`
+- **US-PA3.1.1** `[Planned]` **As** an ADM, **I want** flows listed with status and owner, **so that** I can see disabled flows and who to contact.
+  - **AC:** Flows load via `RetrieveAll` off the UI thread with progress/cancel; disabled flows are highlighted; owner/contact shows per flow.
+- **US-PA3.1.2** `[Planned]` **As** an ADM, **I want** static failure causes detected from metadata (missing/disabled/expired connections where visible, missing environment variables, broken connection references, missing error handling), **so that** I catch likely failures without run data.
+  - **AC:** Each static cause is a finding reusing DRA's analyzers; causes needing an unavailable API degrade to Info, never throw.
+
+## FEAT-PA3-2 — Run-history integration (optional, gated) `[Planned]`
+- **US-PA3.2.1** `[Planned]` **As** an ADM, **I want** the tool to clearly state when run history/failed-run detail is unavailable through the current connection, **so that** I am not misled into thinking a flow is healthy.
+  - **AC:** When no run API is configured, run panels show an explicit "run history not available via Dataverse — configure Power Automate API access" state; nothing is silently blanked.
+- **US-PA3.2.2** `[Planned]` **As** an ADM, **I want** failed-run summaries, failed actions, and error messages shown *where the Power Automate API is available and authorized*, **so that** I can triage real failures.
+  - **AC:** If (and only if) an optional Flow/Power Automate API connection is provided, failed runs/actions/errors load off the UI thread; the dependency and its separate auth are documented; secrets in payloads are redacted.
+
+## FEAT-PA3-3 — Failure classification and grouping `[Planned]`
+- **US-PA3.3.1** `[Planned]` **As** an ADM, **I want** failures/causes classified into the standard categories (auth, connection, Dataverse metadata/data, timeout, throttling, schema mismatch, missing config, child-flow, external API), **so that** I can see patterns.
+  - **AC:** The UI-free classifier assigns a category and severity per cause from whatever signal is present; unit-tested against fixtures.
+- **US-PA3.3.2** `[Planned]` **As** an ADM, **I want** causes grouped by flow, connector, action, error code, and owner, **so that** I can spot systemic issues (e.g., one dead connector breaking many flows).
+  - **AC:** Grouping views aggregate counts; each group links to its underlying flows/findings.
+
+## FEAT-PA3-4 — Root cause, remediation, and export `[Planned]`
+- **US-PA3.4.1** `[Planned]` **As** an ADM, **I want** a likely root cause and a remediation checklist per flow, **so that** I know what to do next.
+  - **AC:** Root-cause and remediation panels populate from the classification; remediation is actionable (e.g., "rebind connection reference X", "add missing environment variable Y").
+- **US-PA3.4.2** `[Planned]` **As** an ADM, **I want** an investigation report exported to Excel/PDF/JSON/HTML, **so that** I can attach it to a ticket or hand it off.
+  - **AC:** Export runs off the UI thread; the report states which sections are static vs. run-derived and flags any run data as "where available"; secrets/URLs are redacted.
+
+## Definition of Done
+- Follows suite conventions (BaseToolControl, RunAsync/RetrieveAll, Load/SaveSettings, progress+cancel).
+- Read-only default; classification/root-cause engine is UI-free and unit-tested; reuses DRA connection-reference/environment-variable analyzers; run-history feasibility caveat honored — no run-level claim is made unless the Power Automate API is configured; secrets and HTTP trigger URLs never exposed.
+- Export formats: Excel, PDF, JSON, HTML.
+- Testing skeleton under testing/FlowFailureInvestigator/ when implementation starts.
