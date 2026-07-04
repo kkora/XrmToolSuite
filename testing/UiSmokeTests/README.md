@@ -66,11 +66,16 @@ tiers, and a single dedicated smoke test ("do the tools load") is the right scop
 
 ## Status & caveats
 
-- **The harness compiles and is ready to run, but has not been executed in this environment** — there is no
-  interactive desktop here. The first real run must confirm one thing: whether XrmToolBox's tool tiles expose
-  their display name to UI Automation. If a tool is present in the app but the test reports it missing, the
-  tile is likely owner-drawn without an accessible `Name`; adjust the matching in
-  `XrmToolBoxSmokeTest.VisibleNames` (e.g. drive the tool-search textbox and assert on the filtered result, or
-  match on AutomationId) — the launch/assert scaffold stays the same.
+- **Executed and green.** Run against a real XrmToolBox (portable install at `C:\devtools\XrmToolbox`) it
+  finds **6/6** suite tools in the Tools list and passes. XrmToolBox's tool tiles **do** expose their display
+  name to UI Automation, so the simple `Name`-match in `XrmToolBoxSmokeTest.VisibleNames` is sufficient — no
+  tool-search / AutomationId workaround was needed.
+- **Self-relaunch handled.** XrmToolBox bootstraps and relaunches itself at startup, abandoning the PID we
+  launched, so the harness attaches to the live `XrmToolBox` process **by name** (`WaitForXtbProcess` →
+  `Application.Attach`) rather than the launched handle. Launching the FlaUI handle directly fails with
+  "process … not running".
+- **Don't use the NuGet-packaged host.** The `XrmToolBox.exe` under
+  `~\.nuget\packages\xrmtoolboxpackage\<ver>\lib\net48\` crashes on standalone launch (exit `0xE0434352`);
+  use a real portable/installed XrmToolBox and point `XTB_EXE` at it.
 - UI automation is timing-sensitive. The test polls for up to ~45s after the window appears to allow the
-  plugin scan to finish before asserting.
+  plugin scan to finish before asserting, and `Dispose` kills any XrmToolBox process it started.

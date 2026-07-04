@@ -42,7 +42,14 @@ namespace XrmToolSuite.UiSmokeTests
         {
             var exe = ResolveXtbExe();
 
-            _app = Application.Launch(exe);
+            // XrmToolBox bootstraps and relaunches itself at startup, abandoning the PID we launched, so
+            // FlaUI's launched handle goes stale. Launch it, then ATTACH to the live XrmToolBox process by
+            // name (preferring one that already has a main window).
+            Application.Launch(exe);
+            var proc = WaitForXtbProcess(TimeSpan.FromSeconds(60))
+                ?? throw new InvalidOperationException("XrmToolBox process did not appear within 60s.");
+            _app = Application.Attach(proc);
+
             var window = _app.GetMainWindow(_automation, TimeSpan.FromSeconds(60))
                 ?? throw new InvalidOperationException("XrmToolBox main window did not appear within 60s.");
             Assert.Contains("XrmToolBox", window.Title ?? "", StringComparison.OrdinalIgnoreCase);
@@ -65,6 +72,22 @@ namespace XrmToolSuite.UiSmokeTests
                 "Suite tools missing from the XrmToolBox Tools list (plugin failed to load): " + string.Join(", ", missing) +
                 ". Verify the DLLs (and any dependencies) are deployed to the Plugins root and all required " +
                 "ExportMetadata keys are present.");
+        }
+
+        /// <summary>Wait for a live XrmToolBox process, preferring one that already has a main window.</summary>
+        private static Process WaitForXtbProcess(TimeSpan timeout)
+        {
+            var deadline = DateTime.UtcNow.Add(timeout);
+            Process any = null;
+            while (DateTime.UtcNow < deadline)
+            {
+                var procs = Process.GetProcessesByName("XrmToolBox").Where(p => { try { return !p.HasExited; } catch { return false; } }).ToList();
+                var withWindow = procs.FirstOrDefault(p => { try { return p.MainWindowHandle != IntPtr.Zero; } catch { return false; } });
+                if (withWindow != null) return withWindow;
+                if (procs.Count > 0) any = procs[0];
+                Thread.Sleep(500);
+            }
+            return any; // may be a windowless process; GetMainWindow will then wait for its handle
         }
 
         /// <summary>Every non-empty AutomationElement name currently in the window (name reads can throw; guarded).</summary>
@@ -111,6 +134,9 @@ namespace XrmToolSuite.UiSmokeTests
             try { if (_app != null && !_app.HasExited) _app.Close(); } catch { /* best effort */ }
             try { _app?.Dispose(); } catch { }
             try { _automation.Dispose(); } catch { }
+            // We launched XrmToolBox, so make sure no window is left behind (it may have relaunched).
+            foreach (var p in Process.GetProcessesByName("XrmToolBox"))
+                try { p.Kill(); } catch { }
         }
     }
 }
