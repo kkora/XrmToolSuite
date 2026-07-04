@@ -2,7 +2,9 @@ bin/
 obj/
 .vs/
 .claude/
-.github/
+# Ignore local .github tooling (e.g. copilot-instructions.md) but keep CI workflows tracked
+.github/*
+!.github/workflows/
 
 
 *.user
