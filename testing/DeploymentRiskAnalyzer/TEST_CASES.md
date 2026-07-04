@@ -27,9 +27,10 @@ Executed via `dotnet test testing/UnitTests/UnitTests.csproj`. Evidence: [`test-
 
 Executed via `dotnet test testing/AnalyzerTests/AnalyzerTests.csproj`. These drive the real analyzer
 classes against an in-memory `FakeOrganizationService` (no live org) - proving the analyzers stay
-UI-free and liftable into a console/CI wrapper. Paths that need constructed `EntityMetadata`
-(schema attribute/relationship comparisons, security role/field metadata) or aliased LEFT-OUTER joins
-(plugin steps, duplicate unmanaged layers, publisher `Retrieve`) remain manual - see TC-DG-M-*.
+UI-free and liftable into a console/CI wrapper. Schema attribute/relationship comparisons that need
+constructed `EntityMetadata` are seeded via a reflection builder (`Fakes/MetaBuilder.cs`) and run here too
+(TC-DG-SC-06..10). Paths needing aliased LEFT-OUTER joins or richer metadata (plugin-step health,
+security role/field metadata, duplicate unmanaged layers, publisher `Retrieve`) remain manual - see TC-DG-M-*.
 
 | ID | Case | Input | Expected | Type | Status |
 |---|---|---|---|---|---|
@@ -47,6 +48,11 @@ UI-free and liftable into a console/CI wrapper. Paths that need constructed `Ent
 | TC-DG-SC-03 | Version incremented | source version > target | Info "managed upgrade will run" | Automated | Pass |
 | TC-DG-SC-04 | Managed/unmanaged mismatch | source managed, target unmanaged | Critical "mismatch" | Automated | Pass |
 | TC-DG-SC-05 | Solution absent from target | target has no such solution | No version/managed finding | Automated | Pass |
+| TC-DG-SC-06 | Attribute type mismatch | source String vs target Integer (same column) | Critical "Attribute type mismatch" | Automated | Pass |
+| TC-DG-SC-07 | String length shrink | source maxlength 100 vs target 200 | High "Column max length reduced" | Automated | Pass |
+| TC-DG-SC-08 | Choice label conflict | value 1 labelled "Alpha" vs "Beta" | Medium "Choice value label conflict" | Automated | Pass |
+| TC-DG-SC-09 | Choice value removed | target has value 2, source does not | High "Choice value removed" | Automated | Pass |
+| TC-DG-SC-10 | Relationship shape collision | same schema name, different referencing entity | High "Relationship schema name collision" | Automated | Pass |
 | TC-DG-FP-01 | Draft cloud flow | modern flow, statecode Draft | Medium "Cloud flow is OFF (draft)" | Automated | Pass |
 | TC-DG-FP-02 | Draft classic process | classic workflow, statecode Draft | Low "Process is in Draft state" | Automated | Pass |
 | TC-DG-FP-03 | Activated flow, known conn ref | active flow, conn ref exists | No finding | Automated | Pass |
