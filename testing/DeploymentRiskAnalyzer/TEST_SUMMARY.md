@@ -27,14 +27,16 @@ Passed!  - Failed: 0, Passed: 24, Skipped: 0, Total: 24
 ### 2. Analyzer logic via fake connection
 
 - **Command:** `dotnet test testing/AnalyzerTests/AnalyzerTests.csproj`
-- **Framework:** xUnit on net48; five real analyzers driven against an in-memory
+- **Framework:** xUnit on net48; the real analyzers driven against an in-memory
   `FakeOrganizationService` (no live org).
-- **Result:** **49 passed, 0 failed, 0 skipped.**
-- **Duration:** ~0.16 s.
+- **Result:** **54 passed, 0 failed, 0 skipped.**
+- **Duration:** ~0.23 s.
 
 Covers the query-driven logic of eight analyzers:
 - TC-DG-EV-01..09 (US-DG-4, environment variables & connection references)
 - TC-DG-SC-01..05 (US-DG-6, solution version / managed-state paths)
+- TC-DG-SC-06..10 (US-DG-6, metadata-level schema conflicts — attribute type mismatch, string-length
+  shrink, choice value label/removal conflicts, relationship schema-name collision; seeded via `MetaBuilder`)
 - TC-DG-FP-01..10 (US-DG-5, cloud-flow draft state & missing connection references;
   duplicate SDK-step registrations & execution-rank conflicts)
 - TC-DG-DC-01..07 (US-DG-2.3, managed-upgrade component deletions)
@@ -44,12 +46,14 @@ Covers the query-driven logic of eight analyzers:
 - TC-DG-RB-01..03 (US-DG-12, ribbon commands referencing missing web resources)
 
 The plugin-step conflict checks (TC-DG-FP-05..10) read only the step's own columns, so they run in
-the automated suite. Paths needing constructed `EntityMetadata` or aliased LEFT-OUTER joins (schema
-attribute/relationship comparisons, plugin-step *health* — missing type/assembly/target table —
-security role/field metadata, publisher `Retrieve`, duplicate layers) remain manual - see TC-DG-M-*.
+the automated suite. Schema attribute/relationship comparisons are now seeded via a reflection
+`EntityMetadata` builder (`Fakes/MetaBuilder.cs`) and run headlessly too (TC-DG-SC-06..10). Remaining
+paths needing aliased LEFT-OUTER joins or richer metadata (plugin-step *health* — missing
+type/assembly/target table — security role/field metadata, publisher `Retrieve`, duplicate layers)
+remain manual - see TC-DG-M-*.
 
 ```
-Passed!  - Failed: 0, Passed: 49, Skipped: 0, Total: 49
+Passed!  - Failed: 0, Passed: 54, Skipped: 0, Total: 54
 ```
 
 ### 3. Report exporters
@@ -81,7 +85,7 @@ The GUI export flow itself (SaveFileDialog → open) stays manual — see TC-DG-
 |---|---|---|---|---|---|
 | Automated - scoring/banding | 13 | 13 | 13 | 0 | 0 |
 | Automated - deployment summary | 7 | 7 | 7 | 0 | 0 |
-| Automated - analyzer logic (fake conn) | 49 | 49 | 49 | 0 | 0 |
+| Automated - analyzer logic (fake conn) | 54 | 54 | 54 | 0 | 0 |
 | Automated - report exporters | 6 | 6 | 6 | 0 | 0 |
 | Manual - connections | 3 | 0 | 0 | 0 | 3 |
 | Manual - analyzers | 7 | 0 | 0 | 0 | 7 |

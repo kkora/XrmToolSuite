@@ -40,8 +40,9 @@
     <Compile Include="..\..\src\Shared\Core\QueryExtensions.cs" />
     <Compile Include="..\..\src\Shared\Core\Analysis\*.cs" />
 
-    <!-- The one shared in-memory IOrganizationService (defined in AnalyzerTests). -->
+    <!-- The shared in-memory IOrganizationService + metadata builder (defined in AnalyzerTests). -->
     <Compile Include="..\AnalyzerTests\Fakes\FakeOrganizationService.cs" LinkBase="Fakes" />
+    <Compile Include="..\AnalyzerTests\Fakes\MetaBuilder.cs" LinkBase="Fakes" />
 
     <!-- Solution Complexity Score: collector + its counts model. -->
     <Compile Include="..\..\src\Tools\XrmToolSuite.SolutionComplexityScore\Analysis\ComplexityContext.cs" />

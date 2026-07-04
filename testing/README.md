@@ -14,11 +14,11 @@ testing/
   AnalyzerTests/                # executable xUnit project (net48) for the Deployment Risk analyzers
     AnalyzerTests.csproj        # uses the Dataverse SDK + an in-memory fake IOrganizationService
     Fakes/FakeOrganizationService.cs   # the shared fake (also linked by CollectorTests)
+    Fakes/MetaBuilder.cs        # shared reflection EntityMetadata fixtures (also linked by CollectorTests)
     *Tests.cs
   CollectorTests/               # executable xUnit project (net48) for the OTHER tools' collectors
     CollectorTests.csproj       # Complexity / AI Reviewer / Knowledge Graph / Technical Debt collectors
-    MetaBuilder.cs              # reflection EntityMetadata fixtures for metadata-driven branches
-    *Tests.cs                   # links the shared fake from AnalyzerTests
+    *Tests.cs                   # links the shared fake + MetaBuilder from AnalyzerTests
   ReportTests/                  # executable xUnit project (net48) for the shared report exporters
     ReportTests.csproj          # compiles src/Shared/Reporting/*.cs with ClosedXML + PdfSharp/MigraDoc
   _templates/                   # tokenized skeletons stamped into testing/<Tool>/ by New-Tool.ps1
@@ -68,8 +68,10 @@ These are XrmToolBox WinForms plugins that call Dataverse. Two tiers of tests:
   dotnet test testing/AnalyzerTests/AnalyzerTests.csproj
   ```
 
-  Metadata-level branches that need constructed `EntityMetadata` (attribute type/length, option sets,
-  relationships) stay in the manual suite.
+  Metadata-level branches that need constructed `EntityMetadata` are also covered here — the schema-conflict
+  comparisons (attribute type mismatch, string-length shrink, choice/option-set conflicts, relationship
+  schema-name collisions) are seeded via a reflection `EntityMetadata` builder (`Fakes/MetaBuilder.cs`, shared
+  with `CollectorTests`).
 
 - **Automated - other tools' collectors against a fake connection (`CollectorTests/`, net48):** the same
   technique applied to the remaining tools' data-collection layers — Solution Complexity Score's
@@ -145,7 +147,7 @@ Anthropic/OpenAI/Google API key (used session-only; never persisted).
 
 | Tool | Plan | Cases | Summary | Automated status |
 |---|---|---|---|---|
-| Deployment Risk Analyzer | [plan](DeploymentRiskAnalyzer/TEST_PLAN.md) | [cases](DeploymentRiskAnalyzer/TEST_CASES.md) | [summary](DeploymentRiskAnalyzer/TEST_SUMMARY.md) | 79/79 passed (24 scoring + 49 analyzer + 6 report) |
+| Deployment Risk Analyzer | [plan](DeploymentRiskAnalyzer/TEST_PLAN.md) | [cases](DeploymentRiskAnalyzer/TEST_CASES.md) | [summary](DeploymentRiskAnalyzer/TEST_SUMMARY.md) | 84/84 passed (24 scoring + 54 analyzer + 6 report) |
 | Technical Debt Analyzer | [plan](TechnicalDebtAnalyzer/TEST_PLAN.md) | [cases](TechnicalDebtAnalyzer/TEST_CASES.md) | [summary](TechnicalDebtAnalyzer/TEST_SUMMARY.md) | 16/16 passed (5 scoring/metrics + 11 analyzer); UI/export manual |
 | Solution Complexity Score | [plan](SolutionComplexityScore/TEST_PLAN.md) | [cases](SolutionComplexityScore/TEST_CASES.md) | [summary](SolutionComplexityScore/TEST_SUMMARY.md) | 14/14 passed (6 metric/effort model + 8 collector); UI manual |
 | AI Solution Reviewer | [plan](AiSolutionReviewer/TEST_PLAN.md) | [cases](AiSolutionReviewer/TEST_CASES.md) | [summary](AiSolutionReviewer/TEST_SUMMARY.md) | 13/13 passed (4 report/concern score + 9 collectors); AI/Word/UI manual |
