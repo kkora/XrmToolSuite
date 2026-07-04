@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Messages;
 using Microsoft.Xrm.Sdk.Metadata;
@@ -9,19 +10,26 @@ using Microsoft.Xrm.Sdk.Query;
 namespace XrmToolSuite.AnalyzerTests.Fakes
 {
     /// <summary>
-    /// In-memory <see cref="IOrganizationService"/> test double for the DeploymentRiskAnalyzer analyzers.
+    /// In-memory <see cref="IOrganizationService"/> test double shared by the suite's headless
+    /// collector/analyzer tests (DeploymentRiskAnalyzer analyzers + the CollectorTests project).
     ///
     /// It is deliberately small: analyzers only ever read (RetrieveMultiple + a couple of metadata
     /// Execute requests), so writes/associates throw. RetrieveMultiple returns the rows staged for the
     /// queried table via <see cref="Seed"/>, applying top-level Equal/In conditions so target-side
     /// lookups (by schemaname / definition id) filter realistically. Link-entity criteria (used by
-    /// AnalyzerContext.QuerySolutionRows, which filters on the LINKED solutioncomponent row) are ignored
-    /// — the seeded rows already represent "rows in this solution".
+    /// the *Context.QuerySolutionRows helpers, which filter on the LINKED solutioncomponent row) are
+    /// ignored — the seeded rows already represent "rows in this solution".
+    ///
+    /// Aggregate count FetchXML (<c>Context.RowCount</c>) is modeled via <see cref="SeedRowCount"/>:
+    /// a seeded table returns a single AliasedValue "c"; an unseeded one falls through to the
+    /// NotSupportedException, which the callers treat as "count unknown" (-1).
     /// </summary>
     public class FakeOrganizationService : IOrganizationService
     {
         private readonly Dictionary<string, List<Entity>> _tables =
             new Dictionary<string, List<Entity>>(StringComparer.OrdinalIgnoreCase);
+        private readonly Dictionary<string, int> _rowCounts =
+            new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase);
 
         private EntityMetadata[] _allEntities = Array.Empty<EntityMetadata>();
         private readonly Dictionary<string, EntityMetadata> _entityDetail =
@@ -63,10 +71,34 @@ namespace XrmToolSuite.AnalyzerTests.Fakes
             return this;
         }
 
+        /// <summary>Row count returned for the table's aggregate count fetch (Context.RowCount).</summary>
+        public FakeOrganizationService SeedRowCount(string logicalName, int count)
+        {
+            _rowCounts[logicalName] = count;
+            return this;
+        }
+
+        private static readonly Regex FetchEntityName =
+            new Regex(@"<entity\s+name='([^']+)'", RegexOptions.Compiled);
+
         public EntityCollection RetrieveMultiple(QueryBase query)
         {
+            // Aggregate count FetchXML (Context.RowCount): return the seeded count as an AliasedValue "c".
+            if (query is FetchExpression fe)
+            {
+                var m = FetchEntityName.Match(fe.Query ?? "");
+                if (m.Success && _rowCounts.TryGetValue(m.Groups[1].Value, out var count))
+                {
+                    var row = new Entity(m.Groups[1].Value);
+                    row["c"] = new AliasedValue(m.Groups[1].Value, "c", count);
+                    return new EntityCollection(new List<Entity> { row }) { MoreRecords = false };
+                }
+                // Unseeded: mirror "cannot determine" — callers catch and treat as -1.
+                throw new NotSupportedException($"FakeOrganizationService has no seeded row count for '{(m.Success ? m.Groups[1].Value : "?")}'.");
+            }
+
             if (!(query is QueryExpression qe))
-                throw new NotSupportedException("FakeOrganizationService only handles QueryExpression.");
+                throw new NotSupportedException("FakeOrganizationService only handles QueryExpression and count FetchExpression.");
 
             var rows = _tables.TryGetValue(qe.EntityName, out var seeded)
                 ? seeded.Where(r => Matches(r, qe.Criteria))

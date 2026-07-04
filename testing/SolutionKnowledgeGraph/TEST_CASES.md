@@ -18,6 +18,22 @@ Executed via `dotnet test testing/UnitTests/UnitTests.csproj`. Source: `testing/
 | TC-KG-EXPORT-08 | SVG | sample graph | a circle per node, self-contained | Automated | Pass |
 | TC-KG-EXPORT-09 | Interactive HTML | sample graph | embeds DATA, node labels, no external hosts/CDN | Automated | Pass |
 
+## Automated — graph builder against a fake connection (US-KG-1)
+
+Executed via `dotnet test testing/CollectorTests/CollectorTests.csproj`. Source: `testing/CollectorTests/GraphBuilderTests.cs` (`GraphBuilder` over a fake `IOrganizationService`).
+
+| ID | Case | Input | Expected | Type | Status |
+|---|---|---|---|---|---|
+| TC-KG-COL-01 | Typed node naming | type 29 component + workflow row | 1 node, Type "Workflow / Flow", Label from row | Automated | Pass |
+| TC-KG-COL-02 | Unmapped type | component type 999 | node Type "Component (999)", fallback label | Automated | Pass |
+| TC-KG-COL-03 | Missing name row | type 60 (Form), no systemform seeded | node created, Type "Form", label "Form …" | Automated | Pass |
+| TC-KG-COL-04 | Edge within solution | A,B components + dependency A→B | 1 edge A→B kind "requires" | Automated | Pass |
+| TC-KG-COL-05 | Required outside solution | dependency A→external | edge added; external auto-created "Unknown" | Automated | Pass |
+| TC-KG-COL-06 | Dependent outside solution | dependency other→A | no edge | Automated | Pass |
+| TC-KG-COL-07 | Empty solution | no components | 0 nodes, 0 edges | Automated | Pass |
+| TC-KG-COL-08 | Empty object id | component objectid Guid.Empty | skipped (0 nodes) | Automated | Pass |
+| TC-KG-COL-09 | Table named from metadata | type 1 component + EntityMetadata | node Type "Table", Label "Account" | Automated | Pass |
+
 ## Manual — builder, PNG, interactive view, UI (US-KG-1, US-KG-4..5)
 
 Executed in XrmToolBox against a live org; screenshot per case into `screenshots/`.

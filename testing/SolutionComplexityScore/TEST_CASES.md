@@ -15,6 +15,21 @@ Executed via `dotnet test testing/UnitTests/UnitTests.csproj`. Source: `testing/
 | TC-SC-REPORT-05 | Report projection | 200 tables | scoreWord "complexity", score 100, band High, effort metrics present | Automated | Pass |
 | TC-SC-REPORT-06 | Hotspots | wide form / plain solution | wide form flagged Medium; else "No structural hotspots" | Automated | Pass |
 
+## Automated — component collector against a fake connection (US-SC-2)
+
+Executed via `dotnet test testing/CollectorTests/CollectorTests.csproj`. Source: `testing/CollectorTests/ComplexityCollectorTests.cs` (`ComplexityCollector` over a fake `IOrganizationService`).
+
+| ID | Case | Input | Expected | Type | Status |
+|---|---|---|---|---|---|
+| TC-SC-COL-01 | Component-type tally | solutioncomponent types 1/1/2/10/92/66 | Tables 2, Columns 1, Relationships 1, PluginSteps 1, Pcfs 1 | Automated | Pass |
+| TC-SC-COL-02 | JScript web resources | webresourcetype 3/3/1 | JavaScriptWebResources 2 | Automated | Pass |
+| TC-SC-COL-03 | Dashboards vs forms | systemform type 0 + type 2 | Dashboards 1, Forms 1 | Automated | Pass |
+| TC-SC-COL-04 | Widest form | forms with 2 vs 5 controls | WidestForm 5, WidestFormName "Wide" | Automated | Pass |
+| TC-SC-COL-05 | Workflow categories | workflow category 2/5/0/3 | BusinessRules 1, Flows 1, Workflows 2 | Automated | Pass |
+| TC-SC-COL-06 | Apps sum | 2 appmodule + 1 canvasapp | Apps 3 | Automated | Pass |
+| TC-SC-COL-07 | Views & charts | 2 savedquery + 1 savedqueryvisualization | Views 2, Charts 1 | Automated | Pass |
+| TC-SC-COL-08 | Null formxml | form with no formxml | Forms 1, WidestForm 0 (no crash) | Automated | Pass |
+
 ## Manual — collector, dashboard, exports, summary (US-SC-1, US-SC-6..7)
 
 Executed in XrmToolBox against a live org; screenshot per case into `screenshots/`.
