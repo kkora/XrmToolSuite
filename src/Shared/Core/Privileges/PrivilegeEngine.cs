@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace XrmToolSuite.PrivilegeGapAnalyzer.Privileges
+namespace XrmToolSuite.Core.Privileges
 {
     /// <summary>
     /// Pure, deterministic effective-privilege engine. Given a principal's granted privileges and a

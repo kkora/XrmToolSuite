@@ -7,6 +7,7 @@ using Microsoft.Xrm.Sdk.Messages;
 using Microsoft.Xrm.Sdk.Metadata;
 using Microsoft.Xrm.Sdk.Query;
 using XrmToolSuite.Core;
+using XrmToolSuite.Core.Privileges; // effective-privilege model/engine (promoted to shared core)
 
 namespace XrmToolSuite.PrivilegeGapAnalyzer.Privileges
 {

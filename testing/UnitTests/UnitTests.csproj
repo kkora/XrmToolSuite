@@ -79,9 +79,27 @@
     <Compile Include="..\..\src\Tools\XrmToolSuite.EnvironmentInventory\Inventory\InventoryExporter.cs" />
     <Compile Include="..\..\src\Tools\XrmToolSuite.EnvironmentInventory\Inventory\InventorySummary.cs" />
 
-    <!-- Privilege Gap Analyzer: SDK-free effective-privilege engine (no Dataverse/WinForms). -->
-    <Compile Include="..\..\src\Tools\XrmToolSuite.PrivilegeGapAnalyzer\Privileges\PrivilegeModels.cs" />
-    <Compile Include="..\..\src\Tools\XrmToolSuite.PrivilegeGapAnalyzer\Privileges\PrivilegeEngine.cs" />
+    <!-- Shared effective-privilege engine (promoted from the Privilege Gap Analyzer to Shared\Core for reuse). -->
+    <Compile Include="..\..\src\Shared\Core\Privileges\PrivilegeModels.cs" />
+    <Compile Include="..\..\src\Shared\Core\Privileges\PrivilegeEngine.cs" />
+
+    <!-- View Performance Analyzer: SDK-free LayoutXML parser + per-view scorer (reuses the FetchXml engine above). -->
+    <Compile Include="..\..\src\Tools\XrmToolSuite.ViewPerformanceAnalyzer\Analysis\LayoutXmlParser.cs" />
+    <Compile Include="..\..\src\Tools\XrmToolSuite.ViewPerformanceAnalyzer\Analysis\ViewModels.cs" />
+    <Compile Include="..\..\src\Tools\XrmToolSuite.ViewPerformanceAnalyzer\Analysis\ViewScorer.cs" />
+
+    <!-- Team Permission Explorer: SDK-free team profile model + risk rules (reuses the Privileges engine above). -->
+    <Compile Include="..\..\src\Tools\XrmToolSuite.TeamPermissionExplorer\Analysis\TeamModels.cs" />
+    <Compile Include="..\..\src\Tools\XrmToolSuite.TeamPermissionExplorer\Analysis\TeamRiskRules.cs" />
+
+    <!-- ERD Generator: SDK-free ERD model + emitters + filter (collector + PNG/PDF exporters are manual-tested). -->
+    <Compile Include="..\..\src\Tools\XrmToolSuite.ErdGenerator\Erd\ErdModel.cs" />
+    <Compile Include="..\..\src\Tools\XrmToolSuite.ErdGenerator\Erd\MermaidErdEmitter.cs" />
+    <Compile Include="..\..\src\Tools\XrmToolSuite.ErdGenerator\Erd\PlantUmlEmitter.cs" />
+    <Compile Include="..\..\src\Tools\XrmToolSuite.ErdGenerator\Erd\ErdJson.cs" />
+    <Compile Include="..\..\src\Tools\XrmToolSuite.ErdGenerator\Erd\ErdSvg.cs" />
+    <Compile Include="..\..\src\Tools\XrmToolSuite.ErdGenerator\Erd\ErdHtml.cs" />
+    <Compile Include="..\..\src\Tools\XrmToolSuite.ErdGenerator\Erd\ErdMarkdown.cs" />
   </ItemGroup>
 
 </Project>
