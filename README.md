@@ -54,10 +54,18 @@ Each tool has a `.nuspec`. Rules enforced by the Tool Library (see xrmtoolbox.co
 - nupkg `version` must equal your DLL's assembly version (both flow from `Version` in the root `Directory.Build.props`)
 - `tags` must start with `XrmToolBox` plus extra words
 - dependency must be on **`XrmToolBox`** (not `XrmToolBoxPackage`)
-- your DLL must sit under a `Plugins` folder in the package; ship only your DLL
+- your DLL must sit under a `Plugins` folder in the package; ship only this suite's files (single DLL for most tools; the tool DLL **plus its 17-DLL ClosedXML/PdfSharp-MigraDoc-GDI chain** for the Excel/PDF/Word export tools)
 - `iconUrl` is required and must be your own icon
 
 Pack with: `nuget pack src/Tools/XrmToolSuite.MyTool/XrmToolSuite.MyTool.nuspec`
+
+**Full publishing flow (package → push to nuget.org → Tool Library), manual and CI:** see
+[`Publishing_Guide_XrmToolBox.md`](Publishing_Guide_XrmToolBox.md). Automated releases run via
+[`.github/workflows/publish.yml`](.github/workflows/publish.yml) — tag `v<version>` (or a manual
+dry run) builds, packs every tool except the template, and pushes via **NuGet Trusted Publishing**
+(OIDC — no API-key secret).
+For **local** install (build → copy DLL → unblock → launch), see
+[`Deployment_Guide_XrmToolBox.md`](Deployment_Guide_XrmToolBox.md).
 
 ## Tools in this suite
 
