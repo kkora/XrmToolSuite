@@ -26,6 +26,11 @@ Epic** for the shared foundation (both below).
 | Technical Debt Analyzer | [backlog/05-Solution-Management/TechnicalDebtAnalyzer.md](backlog/05-Solution-Management/TechnicalDebtAnalyzer.md) | ✅ Done |
 | AI Solution Reviewer | [backlog/09-AI-Assistants/AiSolutionReviewer.md](backlog/09-AI-Assistants/AiSolutionReviewer.md) | ✅ Done |
 
+> These six shipped **before** the tagging convention. Since then all 20 of the ranked
+> [NEXT-20](backlog/NEXT-20.md) tools have also shipped — the suite now has **26 tools total**. The
+> full as-built user-story index (shipped tools + the tagged NEXT-20 tools) lives at
+> [`user-stories/README.md`](user-stories/README.md).
+
 ## Hierarchy & conventions
 
 ```

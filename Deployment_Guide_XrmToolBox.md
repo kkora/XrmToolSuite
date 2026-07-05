@@ -8,13 +8,14 @@ XrmToolBox **locally** (build → copy DLL → unblock → launch).
 
 Throughout this guide, replace `<ToolName>` with the tool you are building. Every tool follows the
 **same** build/copy/unblock/launch flow; the only difference is **how many DLLs you copy**, which
-depends on whether the tool exports to Office/PDF. The suite currently ships **12 tools** in three
-dependency categories:
+depends on whether the tool exports to Office/PDF. The suite has **27 tool projects** (26 shipping +
+the template) in three dependency categories (tool lists below are **representative**, not exhaustive — if
+you build with `-p:DeployToXTB=true` the correct DLLs are copied for you whichever category applies):
 
 | Category | What you copy | Tools (`<ToolName>`) |
 |---|---|---|
-| **Single-DLL** | just `XrmToolSuite.<ToolName>.dll` | `AttributeAuditor`, `SolutionKnowledgeGraph` |
-| **Full export chain** (Excel + native PDF/Word) | the tool DLL **+ the 17-DLL ClosedXML/PdfSharp-MigraDoc-GDI chain** below | `DeploymentRiskAnalyzer`, `TechnicalDebtAnalyzer`, `SolutionComplexityScore`, `AiSolutionReviewer`, `FetchXmlPerformanceAnalyzer`, `EnvironmentInventory`, `PrivilegeGapAnalyzer`, `ViewPerformanceAnalyzer`, `TeamPermissionExplorer` |
+| **Single-DLL** | just `XrmToolSuite.<ToolName>.dll` | `AttributeAuditor`, `SolutionKnowledgeGraph`, `FormPerformanceAnalyzer`, `CustomApiExplorer` |
+| **Full export chain** (Excel + native PDF/Word) | the tool DLL **+ the 17-DLL ClosedXML/PdfSharp-MigraDoc-GDI chain** below | `DeploymentRiskAnalyzer`, `TechnicalDebtAnalyzer`, `SolutionComplexityScore`, `AiSolutionReviewer`, `FetchXmlPerformanceAnalyzer`, `EnvironmentInventory`, `PrivilegeGapAnalyzer`, `ViewPerformanceAnalyzer`, `TeamPermissionExplorer`, `SharingAnalyzer`, `AuditComplianceChecker`, `ManagedSolutionImpactChecker`, `PortalHealthAnalyzer`, `SolutionMergeAssistant`, `FlowDependencyAnalyzer`, `PluginDependencyGraph`, `ComponentUsageExplorer`, `EnvironmentComparisonSuite`, `SolutionDocumentationGenerator`, `DuplicateMetadataFinder` |
 | **PDF-only chain** | the tool DLL **+ the five `-gdi` PdfSharp/MigraDoc DLLs** (no ClosedXML) | `ErdGenerator` |
 
 `TemplateTool` is the scaffold for new tools (not published); build it the same way (single-DLL).

@@ -2,8 +2,13 @@
 
 Per-category home for the suite's tool user stories: **candidate** tools generated from the
 **XrmToolBox Enterprise Prompt Pack** in [`prompt/`](../../prompt/), plus the **6 already-shipped**
-tools' stories filed into their category and marked **Done**. No code was written and nothing is
-committed by this pass.
+tools' stories filed into their category and marked **Done**.
+
+> **Build status (living):** this file is the original planning snapshot (the `✅ Done` marks below are
+> the 6 tools shipped when it was generated). Since then **all 20 tools in [NEXT-20.md](NEXT-20.md) have
+> shipped** — so **26 tools total** are now built. NEXT-20.md is the authoritative build tracker; the
+> as-built user stories live in [`../user-stories/`](../user-stories/README.md). The category tables
+> below still reflect the candidate/priority planning and are not re-marked per build.
 
 ## What this is
 
