@@ -1,6 +1,6 @@
 # Solution Knowledge Graph — User Stories
 
-> **Status:** Implemented. Source spec: [`docs/backlog/05-Solution-Management/SolutionKnowledgeGraph.md`](../backlog/05-Solution-Management/SolutionKnowledgeGraph.md) (same US ids).
+> **Status:** Implemented. Source spec: [`docs/backlog/05-Solution-Management/KG1.SolutionKnowledgeGraph.md`](../backlog/05-Solution-Management/KG1.SolutionKnowledgeGraph.md) (same US ids).
 > **Project:** `src/Tools/XrmToolSuite.SolutionKnowledgeGraph` · **Area tag:** `— (pre-tagging; SOLN track)`
 > **Legend:** `[Implemented]` = built + covered (automated where SDK-free, else manual). `[Implemented*]` = built but only verifiable in a live Windows/XrmToolBox session (GDI/browser runtime) — pending manual sign-off.
 

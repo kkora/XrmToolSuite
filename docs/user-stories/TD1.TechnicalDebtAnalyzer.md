@@ -1,6 +1,6 @@
 # Technical Debt Analyzer — User Stories
 
-> **Status:** Implemented. Source spec: [`docs/backlog/05-Solution-Management/TechnicalDebtAnalyzer.md`](../backlog/05-Solution-Management/TechnicalDebtAnalyzer.md) (same US ids).
+> **Status:** Implemented. Source spec: [`docs/backlog/05-Solution-Management/TD1.TechnicalDebtAnalyzer.md`](../backlog/05-Solution-Management/TD1.TechnicalDebtAnalyzer.md) (same US ids).
 > **Project:** `src/Tools/XrmToolSuite.TechnicalDebtAnalyzer` · **Area tag:** `— (pre-tagging; SOLN track)`
 > **Legend:** `[Implemented]` = built + covered (automated where SDK-free, else manual). `[Implemented*]` = built but only verifiable in a live Windows/XrmToolBox session (GDI/MigraDoc runtime) — pending manual sign-off.
 

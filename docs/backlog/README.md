@@ -33,7 +33,13 @@ tools' stories filed into their category and marked **Done**.
 ## File-naming format
 
 `<TAG><n>.<PascalPluginName>.md` — e.g. `ALM1.SolutionMergeAssistant.md`. `<TAG>` is the category
-code, `<n>` is the plugin's item number within that category's prompt section.
+code, `<n>` is the plugin's item number within that category's prompt section. The **user-story file**
+under `docs/user-stories/` uses the **same** `<TAG><n>.<Name>.md` name.
+
+The six tools that shipped **before** this convention have no numbered candidate slot, so both their
+backlog file and their user-story file use their area tag with `1`: `DG1` (Deployment Risk Analyzer),
+`AA1` (Attribute Auditor), `SC1` (Solution Complexity Score), `KG1` (Solution Knowledge Graph),
+`TD1` (Technical Debt Analyzer), `AR1` (AI Solution Reviewer).
 
 ## Where each prompt was picked from
 
@@ -53,7 +59,7 @@ Value = my read (see each file's header for the reasoning). Legend: **H**igh · 
 ### 01 · ALM & DevOps  (`ALM`, source: all + shipped)
 | File | Tool | Value | Note |
 |---|---|---|---|
-| **DeploymentRiskAnalyzer.md** | Deployment Risk Analyzer | ✅ Done | **shipped**; superset of ALM2/ALM5/ALM6 + MIG2 |
+| **DG1.DeploymentRiskAnalyzer.md** | Deployment Risk Analyzer | ✅ Done | **shipped**; superset of ALM2/ALM5/ALM6 + MIG2 |
 | ALM1.SolutionMergeAssistant.md | Solution Merge Assistant | H | also pack #6 |
 | ALM2.SolutionDependencyValidator.md | Solution Dependency Validator | M | overlaps Deployment Risk Analyzer |
 | ALM3.DeploymentTimelineVisualizer.md | Deployment Timeline Visualizer | M | gated by import-history retention |
@@ -92,7 +98,7 @@ Value = my read (see each file's header for the reasoning). Legend: **H**igh · 
 ### 04 · Dataverse Administration  (`ADMIN`, source: all + shipped)
 | File | Tool | Value | Note |
 |---|---|---|---|
-| **AttributeAuditor.md** | Attribute Auditor | ✅ Done | **shipped**; twin of ADMIN2 / ADMIN3 |
+| **AA1.AttributeAuditor.md** | Attribute Auditor | ✅ Done | **shipped**; twin of ADMIN2 / ADMIN3 |
 | ADMIN1.EnvironmentHealthDashboard.md | Environment Health Dashboard | H | meta-tool; overlaps RPT1 |
 | ADMIN2.MetadataCleanupAdvisor.md | Metadata Cleanup Advisor | M-H | overlaps Attribute Auditor + TDA |
 | ADMIN3.DuplicateMetadataFinder.md | Duplicate Metadata Finder | M | pack #14 |
@@ -106,9 +112,9 @@ Value = my read (see each file's header for the reasoning). Legend: **H**igh · 
 ### 05 · Solution Management  (`SOLN`, source: all + pack + shipped)
 | File | Tool | Value | Note |
 |---|---|---|---|
-| **SolutionComplexityScore.md** | Solution Complexity Score | ✅ Done | **shipped**; twin of SOLN4 |
-| **SolutionKnowledgeGraph.md** | Solution Knowledge Graph | ✅ Done | **shipped**; twin of SOLN2 / PLUGIN1 |
-| **TechnicalDebtAnalyzer.md** | Technical Debt Analyzer | ✅ Done | **shipped**; twin of SOLN6 / RPT4 / AI2 |
+| **SC1.SolutionComplexityScore.md** | Solution Complexity Score | ✅ Done | **shipped**; twin of SOLN4 |
+| **KG1.SolutionKnowledgeGraph.md** | Solution Knowledge Graph | ✅ Done | **shipped**; twin of SOLN2 / PLUGIN1 |
+| **TD1.TechnicalDebtAnalyzer.md** | Technical Debt Analyzer | ✅ Done | **shipped**; twin of SOLN6 / RPT4 / AI2 |
 | SOLN1.ComponentUsageExplorer.md | Component Usage Explorer | H | "where used" before change |
 | SOLN2.DependencyHeatmap.md | Dependency Heatmap | M | build on shipped Knowledge Graph |
 | SOLN3.ComponentOwnershipTracker.md | Component Ownership Tracker | M | local tagging layer |
@@ -152,7 +158,7 @@ Value = my read (see each file's header for the reasoning). Legend: **H**igh · 
 ### 09 · AI Assistants  (`AI`, source: all + shipped)
 | File | Tool | Value | Note |
 |---|---|---|---|
-| **AiSolutionReviewer.md** | AI Solution Reviewer | ✅ Done | **shipped**; the reused AI plumbing behind AI1–AI9 |
+| **AR1.AiSolutionReviewer.md** | AI Solution Reviewer | ✅ Done | **shipped**; the reused AI plumbing behind AI1–AI9 |
 | AI1.AiNamingStandardReviewer.md | AI Naming Standard Reviewer | H | |
 | AI2.AiTechnicalDebtAdvisor.md | AI Technical Debt Advisor | M-H | AI layer on shipped TDA |
 | AI3.AiSecurityReviewer.md | AI Security Reviewer | H | rolls up SEC track |

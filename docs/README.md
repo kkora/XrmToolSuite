@@ -19,12 +19,12 @@ Epic** for the shared foundation (both below).
 
 | Tool | Now at | Status |
 |---|---|---|
-| Deployment Risk Analyzer | [backlog/01-ALM-DevOps/DeploymentRiskAnalyzer.md](backlog/01-ALM-DevOps/DeploymentRiskAnalyzer.md) | ✅ Done |
-| Attribute Auditor | [backlog/04-Dataverse-Administration/AttributeAuditor.md](backlog/04-Dataverse-Administration/AttributeAuditor.md) | ✅ Done |
-| Solution Complexity Score | [backlog/05-Solution-Management/SolutionComplexityScore.md](backlog/05-Solution-Management/SolutionComplexityScore.md) | ✅ Done |
-| Solution Knowledge Graph | [backlog/05-Solution-Management/SolutionKnowledgeGraph.md](backlog/05-Solution-Management/SolutionKnowledgeGraph.md) | ✅ Done |
-| Technical Debt Analyzer | [backlog/05-Solution-Management/TechnicalDebtAnalyzer.md](backlog/05-Solution-Management/TechnicalDebtAnalyzer.md) | ✅ Done |
-| AI Solution Reviewer | [backlog/09-AI-Assistants/AiSolutionReviewer.md](backlog/09-AI-Assistants/AiSolutionReviewer.md) | ✅ Done |
+| Deployment Risk Analyzer | [backlog/01-ALM-DevOps/DG1.DeploymentRiskAnalyzer.md](backlog/01-ALM-DevOps/DG1.DeploymentRiskAnalyzer.md) | ✅ Done |
+| Attribute Auditor | [backlog/04-Dataverse-Administration/AA1.AttributeAuditor.md](backlog/04-Dataverse-Administration/AA1.AttributeAuditor.md) | ✅ Done |
+| Solution Complexity Score | [backlog/05-Solution-Management/SC1.SolutionComplexityScore.md](backlog/05-Solution-Management/SC1.SolutionComplexityScore.md) | ✅ Done |
+| Solution Knowledge Graph | [backlog/05-Solution-Management/KG1.SolutionKnowledgeGraph.md](backlog/05-Solution-Management/KG1.SolutionKnowledgeGraph.md) | ✅ Done |
+| Technical Debt Analyzer | [backlog/05-Solution-Management/TD1.TechnicalDebtAnalyzer.md](backlog/05-Solution-Management/TD1.TechnicalDebtAnalyzer.md) | ✅ Done |
+| AI Solution Reviewer | [backlog/09-AI-Assistants/AR1.AiSolutionReviewer.md](backlog/09-AI-Assistants/AR1.AiSolutionReviewer.md) | ✅ Done |
 
 > These six shipped **before** the tagging convention. Since then all 20 of the ranked
 > [NEXT-20](backlog/NEXT-20.md) tools have also shipped — the suite now has **26 tools total**. The

@@ -1,6 +1,6 @@
 # Attribute Auditor — User Stories
 
-> **Status:** Implemented. Source spec: [`docs/backlog/04-Dataverse-Administration/AttributeAuditor.md`](../backlog/04-Dataverse-Administration/AttributeAuditor.md) (same US ids).
+> **Status:** Implemented. Source spec: [`docs/backlog/04-Dataverse-Administration/AA1.AttributeAuditor.md`](../backlog/04-Dataverse-Administration/AA1.AttributeAuditor.md) (same US ids).
 > **Project:** `src/Tools/XrmToolSuite.AttributeAuditor` · **Area tag:** `AA` — (pre-tagging; ADMIN track)
 > **Legend:** `[Implemented]` = built + covered (automated where SDK-free, else manual). `[Implemented*]` = built but only verifiable in a live Windows/XrmToolBox session (GUI/Dataverse runtime) — pending manual sign-off.
 

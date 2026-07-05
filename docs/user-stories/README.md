@@ -14,12 +14,12 @@ The `TemplateTool.md` scaffold is exempt (it isn't a shipped tool).
 
 | Tag | Tool | User stories | Backlog | Project |
 |---|---|---|---|---|
-| DG1 | Deployment Risk Analyzer | [DG1.DeploymentRiskAnalyzer.md](DG1.DeploymentRiskAnalyzer.md) | [ALM](../backlog/01-ALM-DevOps/DeploymentRiskAnalyzer.md) | `XrmToolSuite.DeploymentRiskAnalyzer` |
-| AA1 | Attribute Auditor | [AA1.AttributeAuditor.md](AA1.AttributeAuditor.md) | [ADMIN](../backlog/04-Dataverse-Administration/AttributeAuditor.md) | `XrmToolSuite.AttributeAuditor` |
-| TD1 | Technical Debt Analyzer | [TD1.TechnicalDebtAnalyzer.md](TD1.TechnicalDebtAnalyzer.md) | [SOLN](../backlog/05-Solution-Management/TechnicalDebtAnalyzer.md) | `XrmToolSuite.TechnicalDebtAnalyzer` |
-| KG1 | Solution Knowledge Graph | [KG1.SolutionKnowledgeGraph.md](KG1.SolutionKnowledgeGraph.md) | [SOLN](../backlog/05-Solution-Management/SolutionKnowledgeGraph.md) | `XrmToolSuite.SolutionKnowledgeGraph` |
-| SC1 | Solution Complexity Score | [SC1.SolutionComplexityScore.md](SC1.SolutionComplexityScore.md) | [SOLN](../backlog/05-Solution-Management/SolutionComplexityScore.md) | `XrmToolSuite.SolutionComplexityScore` |
-| AR1 | AI Solution Reviewer | [AR1.AiSolutionReviewer.md](AR1.AiSolutionReviewer.md) | [AI](../backlog/09-AI-Assistants/AiSolutionReviewer.md) | `XrmToolSuite.AiSolutionReviewer` |
+| DG1 | Deployment Risk Analyzer | [DG1.DeploymentRiskAnalyzer.md](DG1.DeploymentRiskAnalyzer.md) | [ALM](../backlog/01-ALM-DevOps/DG1.DeploymentRiskAnalyzer.md) | `XrmToolSuite.DeploymentRiskAnalyzer` |
+| AA1 | Attribute Auditor | [AA1.AttributeAuditor.md](AA1.AttributeAuditor.md) | [ADMIN](../backlog/04-Dataverse-Administration/AA1.AttributeAuditor.md) | `XrmToolSuite.AttributeAuditor` |
+| TD1 | Technical Debt Analyzer | [TD1.TechnicalDebtAnalyzer.md](TD1.TechnicalDebtAnalyzer.md) | [SOLN](../backlog/05-Solution-Management/TD1.TechnicalDebtAnalyzer.md) | `XrmToolSuite.TechnicalDebtAnalyzer` |
+| KG1 | Solution Knowledge Graph | [KG1.SolutionKnowledgeGraph.md](KG1.SolutionKnowledgeGraph.md) | [SOLN](../backlog/05-Solution-Management/KG1.SolutionKnowledgeGraph.md) | `XrmToolSuite.SolutionKnowledgeGraph` |
+| SC1 | Solution Complexity Score | [SC1.SolutionComplexityScore.md](SC1.SolutionComplexityScore.md) | [SOLN](../backlog/05-Solution-Management/SC1.SolutionComplexityScore.md) | `XrmToolSuite.SolutionComplexityScore` |
+| AR1 | AI Solution Reviewer | [AR1.AiSolutionReviewer.md](AR1.AiSolutionReviewer.md) | [AI](../backlog/09-AI-Assistants/AR1.AiSolutionReviewer.md) | `XrmToolSuite.AiSolutionReviewer` |
 
 ## Backlog build (NEXT-20, tagged)
 

@@ -1,6 +1,6 @@
 # AI Solution Reviewer — User Stories
 
-> **Status:** Implemented. Source spec: [`docs/backlog/09-AI-Assistants/AiSolutionReviewer.md`](../backlog/09-AI-Assistants/AiSolutionReviewer.md) (same US ids).
+> **Status:** Implemented. Source spec: [`docs/backlog/09-AI-Assistants/AR1.AiSolutionReviewer.md`](../backlog/09-AI-Assistants/AR1.AiSolutionReviewer.md) (same US ids).
 > **Project:** `src/Tools/XrmToolSuite.AiSolutionReviewer` · **Area tag:** `— (pre-tagging; AI track)`
 > **Legend:** `[Implemented]` = built + covered (automated where SDK-free, else manual). `[Implemented*]` = built but only verifiable in a live Windows/XrmToolBox session (live AI HTTPS call / GDI-MigraDoc runtime / WinForms host) — pending manual sign-off.
 

@@ -1,6 +1,6 @@
 # Deployment Risk Analyzer — User Stories
 
-> **Status:** Implemented. Source spec: [`docs/backlog/01-ALM-DevOps/DeploymentRiskAnalyzer.md`](../backlog/01-ALM-DevOps/DeploymentRiskAnalyzer.md) (same US ids).
+> **Status:** Implemented. Source spec: [`docs/backlog/01-ALM-DevOps/DG1.DeploymentRiskAnalyzer.md`](../backlog/01-ALM-DevOps/DG1.DeploymentRiskAnalyzer.md) (same US ids).
 > **Project:** `src/Tools/XrmToolSuite.DeploymentRiskAnalyzer` · **Area tag:** `DG` — (pre-tagging; ALM track)
 > **Legend:** `[Implemented]` = built + covered (automated where SDK-free / fake-connection, else manual). `[Implemented*]` = built but only verifiable in a live Windows/XrmToolBox session (live Dataverse connection, GUI export dialogs, GDI/MigraDoc PDF, Anthropic HTTP) — pending manual sign-off.
 
