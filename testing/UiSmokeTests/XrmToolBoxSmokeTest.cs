@@ -50,6 +50,7 @@ namespace XrmToolSuite.UiSmokeTests
             "Environment Comparison Suite",
             "Solution Documentation Generator",
             "Duplicate Metadata Finder",
+            "Custom API Explorer",
         };
 
         private readonly ITestOutputHelper _output;

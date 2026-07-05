@@ -43,8 +43,9 @@ untagged backlog files.
 | SEC2 | Team Permission Explorer | [SEC2.TeamPermissionExplorer.md](SEC2.TeamPermissionExplorer.md) | `XrmToolSuite.TeamPermissionExplorer` |
 | DOC2 | ERD Generator | [DOC2.ErdGenerator.md](DOC2.ErdGenerator.md) | `XrmToolSuite.ErdGenerator` |
 | ADMIN3 | Duplicate Metadata Finder | [ADMIN3.DuplicateMetadataFinder.md](ADMIN3.DuplicateMetadataFinder.md) | `XrmToolSuite.DuplicateMetadataFinder` |
+| PLUGIN6 | Custom API Explorer | [PLUGIN6.CustomApiExplorer.md](PLUGIN6.CustomApiExplorer.md) | `XrmToolSuite.CustomApiExplorer` |
 
-One NEXT-20 tool remains un-built and has no file here yet: **Custom API Explorer** (PLUGIN6).
+All 20 NEXT-20 tools are now built.
 
 ## Scaffold
 

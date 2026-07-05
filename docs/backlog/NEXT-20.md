@@ -5,12 +5,13 @@ tools that consume them**, weighted toward high value + SDK-feasibility + the st
 ideas. See [RECOMMENDATIONS.md](RECOMMENDATIONS.md) for the full reasoning and
 [README.md](README.md) for the per-tool user stories.
 
-> **Build status (2026-07-05): 19 of 20 implemented.** Every tool in Phases A, B, and C except #20 is built —
+> **Build status (2026-07-05): 20 of 20 implemented. ✅ Complete.** Every tool in Phases A, B, and C is built —
 > shipped as a project under `src/Tools/`, present in `XrmToolSuite.sln`, UI-free engine + WinForms host,
 > with user stories under `docs/user-stories/<TAG>.<Tool>.md`, SDK-free unit tests in `testing/UnitTests`,
-> and testing artifacts under `testing/<Tool>/`. **Only #20 Custom API Explorer (PLUGIN6) remains un-built**
-> (no `src/Tools/` project yet). Live-connection and WinForms GUI cases (including Office/PDF export dialogs)
-> remain pending a Windows + XrmToolBox session across all built tools — documented, not claimed as passed.
+> and testing artifacts under `testing/<Tool>/`. The whole solution builds Release with zero warnings and
+> `dotnet test` is green. Live-connection and WinForms GUI cases (including Office/PDF export dialogs and the
+> Custom API Explorer's gated invoke console) remain pending a Windows + XrmToolBox session across all tools —
+> documented, not claimed as passed.
 
 Legend: **H** High · **M** Medium · Pack# = matching idea in `prompt/2.XrmToolBox_Plugin_Prompt_Pack.txt`.
 Status: ✅ built · ⬜ not started.
@@ -57,7 +58,7 @@ Status: ✅ built · ⬜ not started.
 
 ## Phase C — consumers & quick wins (cheap once A/B exist)
 
-> **Status:** #16–#19 ✅ built; **#20 is the only remaining work** — no `src/Tools/` project yet.
+> **Status:** ✅ all of #16–#20 built.
 
 | # | Tool | Status | Backlog file | Value | Pack# | Depends on |
 |---|---|---|---|---|---|---|
@@ -65,7 +66,7 @@ Status: ✅ built · ⬜ not started.
 | 17 | Team Permission Explorer | ✅ | [SEC2](02-Security-Governance/SEC2.TeamPermissionExplorer.md) | H | — | #3 privilege engine |
 | 18 | ERD Generator | ✅ | [DOC2](11-Documentation/DOC2.ErdGenerator.md) | H | — | #2 inventory → Mermaid/PNG; quick win |
 | 19 | Duplicate Metadata Finder | ✅ | [ADMIN3](04-Dataverse-Administration/ADMIN3.DuplicateMetadataFinder.md) | M | #14 | extends Attribute Auditor plumbing |
-| 20 | Custom API Explorer | ⬜ | [PLUGIN6](08-Plugins-Custom-APIs/PLUGIN6.CustomApiExplorer.md) | H | #13 | #6 plugin retrieval; gated test console |
+| 20 | Custom API Explorer | ✅ | [PLUGIN6](08-Plugins-Custom-APIs/PLUGIN6.CustomApiExplorer.md) | H | #13 | #6 plugin retrieval; gated test console |
 
 ## Pack coverage
 

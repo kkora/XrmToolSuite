@@ -59,6 +59,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XrmToolSuite.SolutionDocume
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XrmToolSuite.DuplicateMetadataFinder", "src\Tools\XrmToolSuite.DuplicateMetadataFinder\XrmToolSuite.DuplicateMetadataFinder.csproj", "{5D6B7E6D-31A1-4DFC-81A1-96298136E6FE}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XrmToolSuite.CustomApiExplorer", "src\Tools\XrmToolSuite.CustomApiExplorer\XrmToolSuite.CustomApiExplorer.csproj", "{40C97A5A-215C-4B5B-9B09-5D45F92F482D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -381,6 +383,18 @@ Global
 		{5D6B7E6D-31A1-4DFC-81A1-96298136E6FE}.Release|x64.Build.0 = Release|Any CPU
 		{5D6B7E6D-31A1-4DFC-81A1-96298136E6FE}.Release|x86.ActiveCfg = Release|Any CPU
 		{5D6B7E6D-31A1-4DFC-81A1-96298136E6FE}.Release|x86.Build.0 = Release|Any CPU
+		{40C97A5A-215C-4B5B-9B09-5D45F92F482D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{40C97A5A-215C-4B5B-9B09-5D45F92F482D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{40C97A5A-215C-4B5B-9B09-5D45F92F482D}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{40C97A5A-215C-4B5B-9B09-5D45F92F482D}.Debug|x64.Build.0 = Debug|Any CPU
+		{40C97A5A-215C-4B5B-9B09-5D45F92F482D}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{40C97A5A-215C-4B5B-9B09-5D45F92F482D}.Debug|x86.Build.0 = Debug|Any CPU
+		{40C97A5A-215C-4B5B-9B09-5D45F92F482D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{40C97A5A-215C-4B5B-9B09-5D45F92F482D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{40C97A5A-215C-4B5B-9B09-5D45F92F482D}.Release|x64.ActiveCfg = Release|Any CPU
+		{40C97A5A-215C-4B5B-9B09-5D45F92F482D}.Release|x64.Build.0 = Release|Any CPU
+		{40C97A5A-215C-4B5B-9B09-5D45F92F482D}.Release|x86.ActiveCfg = Release|Any CPU
+		{40C97A5A-215C-4B5B-9B09-5D45F92F482D}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -410,5 +424,6 @@ Global
 		{DFC179FC-0092-42D3-815B-3620FF9D95AE} = {DCB6FCB8-FF92-AC57-0842-1F72A354D6B1}
 		{66787124-689C-4158-B675-FF3684855C63} = {DCB6FCB8-FF92-AC57-0842-1F72A354D6B1}
 		{5D6B7E6D-31A1-4DFC-81A1-96298136E6FE} = {DCB6FCB8-FF92-AC57-0842-1F72A354D6B1}
+		{40C97A5A-215C-4B5B-9B09-5D45F92F482D} = {DCB6FCB8-FF92-AC57-0842-1F72A354D6B1}
 	EndGlobalSection
 EndGlobal

@@ -161,6 +161,11 @@
     <Compile Include="..\..\src\Tools\XrmToolSuite.DuplicateMetadataFinder\Analysis\DuplicateModels.cs" />
     <Compile Include="..\..\src\Tools\XrmToolSuite.DuplicateMetadataFinder\Analysis\SimilarityEngine.cs" />
     <Compile Include="..\..\src\Tools\XrmToolSuite.DuplicateMetadataFinder\Reporting\DuplicateReport.cs" />
+
+    <!-- Custom API Explorer: SDK-free models, value parsing, request-parameter builder + catalog exporters. -->
+    <Compile Include="..\..\src\Tools\XrmToolSuite.CustomApiExplorer\Analysis\CustomApiModels.cs" />
+    <Compile Include="..\..\src\Tools\XrmToolSuite.CustomApiExplorer\Analysis\RequestBuilder.cs" />
+    <Compile Include="..\..\src\Tools\XrmToolSuite.CustomApiExplorer\Reporting\CustomApiDoc.cs" />
   </ItemGroup>
 
 </Project>
