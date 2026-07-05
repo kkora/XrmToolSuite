@@ -1,0 +1,31 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <!-- TargetFramework, WinForms, XrmToolBoxPackage reference, and the shared core
+       all come from src/Tools/Directory.Build.props. Keep tool csproj files minimal. -->
+  <PropertyGroup>
+    <RootNamespace>XrmToolSuite.ErdGenerator</RootNamespace>
+    <AssemblyName>XrmToolSuite.ErdGenerator</AssemblyName>
+    <description>Generates Dataverse entity-relationship diagrams (Mermaid, PlantUML, SVG, PNG, PDF, HTML, Markdown, JSON) from live metadata.</description>
+    <!-- This tool ships the native-PDF (PdfSharp/MigraDoc-GDI) chain with its nupkg, so deps must land in output -->
+    <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- PNG export uses GDI+ (net48 GAC assembly). Referenced, NEVER shipped in the nupkg. -->
+    <Reference Include="System.Drawing" />
+    <!-- Native PDF export. GDI build = System.Drawing, net48-compatible, pure-managed (no SkiaSharp
+         native binaries). The five -gdi DLLs ship in the Plugins ROOT next to the tool DLL. -->
+    <PackageReference Include="PDFsharp-MigraDoc-GDI" Version="1.50.5147" />
+    <!-- Newtonsoft is provided by XrmToolBox at runtime — referenced, NOT shipped. -->
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+  </ItemGroup>
+
+  <!-- Extends the suite's DeployToXTB with ONLY the native-PDF (MigraDoc-GDI) dependency chain. These
+       go in the Plugins ROOT (next to the tool DLL) so XrmToolBox can resolve the tool's PdfSharp/MigraDoc
+       references during plugin analysis; a subfolder makes the tool silently fail to load. -->
+  <Target Name="DeployGuardDependencies" AfterTargets="DeployToXrmToolBox" Condition="'$(DeployToXTB)' == 'true'">
+    <ItemGroup>
+      <GuardDeps Include="$(TargetDir)PdfSharp-gdi.dll;$(TargetDir)PdfSharp.Charting-gdi.dll;$(TargetDir)MigraDoc.DocumentObjectModel-gdi.dll;$(TargetDir)MigraDoc.Rendering-gdi.dll;$(TargetDir)MigraDoc.RtfRendering-gdi.dll" />
+    </ItemGroup>
+    <Copy SourceFiles="@(GuardDeps)" DestinationFolder="$(AppData)\MscrmTools\XrmToolBox\Plugins" SkipUnchangedFiles="true" Condition="Exists('%(GuardDeps.Identity)')" />
+  </Target>
+</Project>
