@@ -12,11 +12,11 @@ Two automated projects, both green:
 - **Duration:** ~0.1 s.
 - **Evidence:** [`test-run.txt`](test-run.txt).
 
-Covers all risk-scoring/banding cases TC-DG-SCORE-01..05, TC-DG-BAND-06..11, TC-DG-EXPLAIN-12,
-TC-DG-SUMMARY-13 - i.e. the full acceptance criteria of **US-DG-8.1** (weights, cap at 100, Critical
+Covers all risk-scoring/banding cases TC-ALM07-SCORE-01..05, TC-ALM07-BAND-06..11, TC-ALM07-EXPLAIN-12,
+TC-ALM07-SUMMARY-13 - i.e. the full acceptance criteria of **US-ALM07-8.1** (weights, cap at 100, Critical
 forces High, Medium/High thresholds).
 
-Also covers deployment-summary logic TC-DG-SUM-01..05 (**US-DG-8**): the anonymized payload builder
+Also covers deployment-summary logic TC-ALM07-SUM-01..05 (**US-ALM07-8**): the anonymized payload builder
 (field mapping, component redaction / Mode C, top-N truncation & ordering) and the offline templated
 generator (go/no-go verdict per band, top-risks list). The live Anthropic HTTP path is manual.
 
@@ -33,24 +33,24 @@ Passed!  - Failed: 0, Passed: 24, Skipped: 0, Total: 24
 - **Duration:** ~0.23 s.
 
 Covers the query-driven logic of eight analyzers:
-- TC-DG-EV-01..09 (US-DG-4, environment variables & connection references)
-- TC-DG-SC-01..05 (US-DG-6, solution version / managed-state paths)
-- TC-DG-SC-06..10 (US-DG-6, metadata-level schema conflicts — attribute type mismatch, string-length
+- TC-ALM07-EV-01..09 (US-ALM07-4, environment variables & connection references)
+- TC-ALM07-SC-01..05 (US-ALM07-6, solution version / managed-state paths)
+- TC-ALM07-SC-06..10 (US-ALM07-6, metadata-level schema conflicts — attribute type mismatch, string-length
   shrink, choice value label/removal conflicts, relationship schema-name collision; seeded via `MetaBuilder`)
-- TC-DG-FP-01..10 (US-DG-5, cloud-flow draft state & missing connection references;
+- TC-ALM07-FP-01..10 (US-ALM07-5, cloud-flow draft state & missing connection references;
   duplicate SDK-step registrations & execution-rank conflicts)
-- TC-DG-DC-01..07 (US-DG-2.3, managed-upgrade component deletions)
-- TC-DG-PP-01..07 (US-DG-7, Power Pages web roles / table permissions / web files / snippets)
-- TC-DG-DEP-01..04 (US-DG-2/3, missing dependencies & managed state)
-- TC-DG-FM-01..04 (US-DG-11, form scripts/controls referencing missing web resources)
-- TC-DG-RB-01..03 (US-DG-12, ribbon commands referencing missing web resources)
+- TC-ALM07-DC-01..07 (US-ALM07-2.3, managed-upgrade component deletions)
+- TC-ALM07-PP-01..07 (US-ALM07-7, Power Pages web roles / table permissions / web files / snippets)
+- TC-ALM07-DEP-01..04 (US-ALM07-2/3, missing dependencies & managed state)
+- TC-ALM07-FM-01..04 (US-ALM07-11, form scripts/controls referencing missing web resources)
+- TC-ALM07-RB-01..03 (US-ALM07-12, ribbon commands referencing missing web resources)
 
-The plugin-step conflict checks (TC-DG-FP-05..10) read only the step's own columns, so they run in
+The plugin-step conflict checks (TC-ALM07-FP-05..10) read only the step's own columns, so they run in
 the automated suite. Schema attribute/relationship comparisons are now seeded via a reflection
-`EntityMetadata` builder (`Fakes/MetaBuilder.cs`) and run headlessly too (TC-DG-SC-06..10). Remaining
+`EntityMetadata` builder (`Fakes/MetaBuilder.cs`) and run headlessly too (TC-ALM07-SC-06..10). Remaining
 paths needing aliased LEFT-OUTER joins or richer metadata (plugin-step *health* — missing
 type/assembly/target table — security role/field metadata, publisher `Retrieve`, duplicate layers)
-remain manual - see TC-DG-M-*.
+remain manual - see TC-ALM07-M-*.
 
 ```
 Passed!  - Failed: 0, Passed: 54, Skipped: 0, Total: 54
@@ -62,7 +62,7 @@ Passed!  - Failed: 0, Passed: 54, Skipped: 0, Total: 54
 - **Framework:** xUnit on net48; compiles `Reporting/ReportExporters.cs` directly with the tool's
   export dependencies (ClosedXML, PdfSharp/MigraDoc-GDI, Newtonsoft) — no WinForms/XrmToolBox host.
 - **Result:** **6 passed, 0 failed, 0 skipped.**
-- **Covers:** TC-DG-RPT-01..06 — the native **PDF** exporter renders a valid `%PDF-` document
+- **Covers:** TC-ALM07-RPT-01..06 — the native **PDF** exporter renders a valid `%PDF-` document
   through MigraDoc/PdfSharp (GDI, fonts resolved via GDI+); HTML, JSON (CI gating), Markdown
   (rollback guidance), and Excel (OOXML/ZIP) each produce a well-formed payload; and an executive
   summary, when present, is embedded in the PDF/HTML/JSON outputs.
@@ -71,12 +71,12 @@ Passed!  - Failed: 0, Passed: 54, Skipped: 0, Total: 54
 Passed!  - Failed: 0, Passed: 6, Skipped: 0, Total: 6
 ```
 
-The GUI export flow itself (SaveFileDialog → open) stays manual — see TC-DG-M-11..15.
+The GUI export flow itself (SaveFileDialog → open) stays manual — see TC-ALM07-M-11..15.
 
 ## Manual run
 
 - **Status:** **Not executed in this environment.** The analyzer, connection, and export cases
-  (TC-DG-M-01..16) require a live Dataverse connection and the XrmToolBox host, which are not
+  (TC-ALM07-M-01..16) require a live Dataverse connection and the XrmToolBox host, which are not
   available here.
 - **Action for a Windows/XTB session:** work through `TEST_CASES.md`, mark Pass/Fail, and save one
   screenshot per case into `screenshots/`. Update the table below when done.

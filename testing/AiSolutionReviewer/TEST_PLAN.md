@@ -1,6 +1,6 @@
 # AI Solution Reviewer - Test Plan
 
-Traces to [`docs/user-stories/AR1.AiSolutionReviewer.md`](../../docs/user-stories/AR1.AiSolutionReviewer.md).
+Traces to [`docs/user-stories/AI10.AiSolutionReviewer.md`](../../docs/user-stories/AI10.AiSolutionReviewer.md).
 
 ## Scope
 
@@ -12,8 +12,8 @@ the WinForms UI (manual, against a live org — the AI path also needs an API ke
 
 | Tier | What | How | Environment |
 |---|---|---|---|
-| Automated | Concern score, per-area metrics, AI-prompt sections (US-AR-2, US-AR-3) | xUnit over `ReviewReport` | .NET 8 SDK (`testing/UnitTests`) |
-| Manual | Collectors, AI/offline review, Word/PDF/HTML export, UI (US-AR-1, US-AR-3, US-AR-4) | GUI cases in `TEST_CASES.md`, evidence in `screenshots/` | Windows + XrmToolBox + org (+ AI key for the AI path) |
+| Automated | Concern score, per-area metrics, AI-prompt sections (US-AI10-2, US-AI10-3) | xUnit over `ReviewReport` | .NET 8 SDK (`testing/UnitTests`) |
+| Manual | Collectors, AI/offline review, Word/PDF/HTML export, UI (US-AI10-1, US-AI10-3, US-AI10-4) | GUI cases in `TEST_CASES.md`, evidence in `screenshots/` | Windows + XrmToolBox + org (+ AI key for the AI path) |
 
 ## What is NOT automatable here
 
@@ -32,5 +32,5 @@ Word/PDF exporters and UI need the net48/WinForms host. These are documented man
 
 ## Risks
 
-- The AI must receive ONLY the anonymized payload — verify the consent preview (TC-AR-M-05).
-- The offline fallback must produce a usable review when no key is present (TC-AR-M-04).
+- The AI must receive ONLY the anonymized payload — verify the consent preview (TC-AI10-M-05).
+- The offline fallback must produce a usable review when no key is present (TC-AI10-M-04).

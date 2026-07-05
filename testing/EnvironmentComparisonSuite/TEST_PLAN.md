@@ -1,6 +1,6 @@
 # Environment Comparison Suite - Test Plan
 
-Traces to [`docs/user-stories/MIG1.EnvironmentComparisonSuite.md`](../../docs/user-stories/MIG1.EnvironmentComparisonSuite.md).
+Traces to [`docs/user-stories/MIG01.EnvironmentComparisonSuite.md`](../../docs/user-stories/MIG01.EnvironmentComparisonSuite.md).
 
 ## Scope
 

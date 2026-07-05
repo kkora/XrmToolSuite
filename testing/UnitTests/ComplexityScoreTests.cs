@@ -10,11 +10,11 @@ namespace XrmToolSuite.UnitTests
     /// Executable tests for the Solution Complexity Score's SDK-free metric/effort model
     /// (<see cref="ComplexityMetrics"/>) and report projection (<see cref="ComplexityReport"/>).
     /// The formulas are pure functions of the component tallies, so exact values are asserted.
-    /// Traces to US-SC-3 (complexity/maintainability) and US-SC-4 (effort/cost estimates).
+    /// Traces to US-SOLN08-3 (complexity/maintainability) and US-SOLN08-4 (effort/cost estimates).
     /// </summary>
     public class ComplexityScoreTests
     {
-        // TC-SC-METRIC-01: an empty solution is zero-complexity and fully maintainable.
+        // TC-SOLN08-METRIC-01: an empty solution is zero-complexity and fully maintainable.
         [Fact]
         public void Empty_ScoreZero_MaintainabilityFull()
         {
@@ -25,7 +25,7 @@ namespace XrmToolSuite.UnitTests
             Assert.Equal(0, r.TestingEffortDays);
         }
 
-        // TC-SC-METRIC-02: weighted points, score, maintainability, and effort are exact functions of the tallies.
+        // TC-SOLN08-METRIC-02: weighted points, score, maintainability, and effort are exact functions of the tallies.
         [Fact]
         public void KnownCounts_ProduceExactModel()
         {
@@ -41,7 +41,7 @@ namespace XrmToolSuite.UnitTests
             Assert.Equal(17600, r.SupportCostPerYear);    // (8+3)*800*2
         }
 
-        // TC-SC-METRIC-03: the score saturates at 100 for a very large solution.
+        // TC-SOLN08-METRIC-03: the score saturates at 100 for a very large solution.
         [Fact]
         public void LargeSolution_ScoreCapsAt100()
         {
@@ -50,7 +50,7 @@ namespace XrmToolSuite.UnitTests
             Assert.Equal(0, r.MaintainabilityScore);
         }
 
-        // TC-SC-METRIC-04: each dimension contributes its weighted points to the breakdown.
+        // TC-SOLN08-METRIC-04: each dimension contributes its weighted points to the breakdown.
         [Fact]
         public void Dimensions_CarryWeightedContribution()
         {
@@ -59,7 +59,7 @@ namespace XrmToolSuite.UnitTests
             Assert.Equal(5.0, r.Dimensions.Single(d => d.Name == "Custom APIs").Points);   // 2*2.5
         }
 
-        // TC-SC-REPORT-05: the report projection sets the complexity gauge, effort metrics, and band.
+        // TC-SOLN08-REPORT-05: the report projection sets the complexity gauge, effort metrics, and band.
         [Fact]
         public void Report_ProjectsScore_MetricsAndBand()
         {
@@ -73,7 +73,7 @@ namespace XrmToolSuite.UnitTests
             Assert.Contains(m.Metrics, x => x.Label == "Upgrade effort");
         }
 
-        // TC-SC-REPORT-06: a wide form is flagged as a hotspot; an unremarkable solution reads as "no hotspots".
+        // TC-SOLN08-REPORT-06: a wide form is flagged as a hotspot; an unremarkable solution reads as "no hotspots".
         [Fact]
         public void Report_FlagsWideForm_ElseNoHotspots()
         {
@@ -86,9 +86,9 @@ namespace XrmToolSuite.UnitTests
             Assert.Contains(plain.Findings, f => f.Title == "No structural hotspots");
         }
 
-        // ---- SOLN4 Quality Score (US-SC-8) ----
+        // ---- SOLN04 Quality Score (US-SOLN08-8) ----
 
-        // TC-SC-QUALITY-07: an empty solution is perfect quality with no deductions.
+        // TC-SOLN08-QUALITY-07: an empty solution is perfect quality with no deductions.
         [Fact]
         public void Quality_Empty_IsHundred_HighBand()
         {
@@ -99,7 +99,7 @@ namespace XrmToolSuite.UnitTests
             Assert.Empty(q.Deductions);
         }
 
-        // TC-SC-QUALITY-08: bands split at 80 (High) and 60 (Medium).
+        // TC-SOLN08-QUALITY-08: bands split at 80 (High) and 60 (Medium).
         [Theory]
         [InlineData(80, ScoreBand.High)]
         [InlineData(79, ScoreBand.Medium)]
@@ -107,7 +107,7 @@ namespace XrmToolSuite.UnitTests
         [InlineData(59, ScoreBand.Low)]
         public void Quality_Bands(int score, ScoreBand band) => Assert.Equal(band, QualityScore.BandFor(score));
 
-        // TC-SC-QUALITY-09: a solution with several violations deducts exactly and lands in the Low band.
+        // TC-SOLN08-QUALITY-09: a solution with several violations deducts exactly and lands in the Low band.
         [Fact]
         public void Quality_KnownViolations_ExactScore()
         {
@@ -127,7 +127,7 @@ namespace XrmToolSuite.UnitTests
             Assert.Contains(q.Deductions, d => d.Signal == "Low maintainability" && d.Points == 5);
         }
 
-        // TC-SC-QUALITY-10: the report projection surfaces the quality metric + a positive note when clean.
+        // TC-SOLN08-QUALITY-10: the report projection surfaces the quality metric + a positive note when clean.
         [Fact]
         public void Report_AddsQualityMetric_AndCleanNote()
         {
@@ -136,7 +136,7 @@ namespace XrmToolSuite.UnitTests
             Assert.Contains(clean.Findings, f => f.Title == "Well-structured solution");
         }
 
-        // TC-SC-QUALITY-11: violations become "Solution Quality" findings in the same report.
+        // TC-SOLN08-QUALITY-11: violations become "Solution Quality" findings in the same report.
         [Fact]
         public void Report_AddsQualityFindings()
         {

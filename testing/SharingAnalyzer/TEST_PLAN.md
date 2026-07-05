@@ -1,6 +1,6 @@
 # Sharing Analyzer - Test Plan
 
-Traces to [`docs/user-stories/SEC4.SharingAnalyzer.md`](../../docs/user-stories/SEC4.SharingAnalyzer.md).
+Traces to [`docs/user-stories/SEC04.SharingAnalyzer.md`](../../docs/user-stories/SEC04.SharingAnalyzer.md).
 
 ## Scope
 

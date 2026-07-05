@@ -6,7 +6,7 @@ using XrmToolSuite.Core.Reporting;
 namespace XrmToolSuite.UnitTests
 {
     /// <summary>
-    /// Executable tests for the HTML dashboard report (US-DG-EXPORT-HTML). The Deployment Risk
+    /// Executable tests for the HTML dashboard report (US-ALM07-EXPORT-HTML). The Deployment Risk
     /// Analyzer projects its result onto the suite-shared <c>ReportModel</c> (via
     /// <c>DeploymentReportModel.ToReportModel</c>) which the shared <c>HtmlDashboardBuilder</c>
     /// renders — a pure, SDK-free string builder, so we assert on the generated markup: escaping,
@@ -42,7 +42,7 @@ namespace XrmToolSuite.UnitTests
             return r;
         }
 
-        // TC-DG-HTML-01: a complete, self-contained document is produced.
+        // TC-ALM07-HTML-01: a complete, self-contained document is produced.
         [Fact]
         public void Build_ProducesSelfContainedDocument()
         {
@@ -53,7 +53,7 @@ namespace XrmToolSuite.UnitTests
             Assert.DoesNotContain("cdn", html.ToLowerInvariant());
         }
 
-        // TC-DG-HTML-02: both theme hooks are present so the report follows the reader's theme.
+        // TC-ALM07-HTML-02: both theme hooks are present so the report follows the reader's theme.
         [Fact]
         public void Build_IsThemeAware()
         {
@@ -63,7 +63,7 @@ namespace XrmToolSuite.UnitTests
             Assert.Contains("[data-theme=\"light\"]", html);
         }
 
-        // TC-DG-HTML-03: the gauge renders the score and the risk band.
+        // TC-ALM07-HTML-03: the gauge renders the score and the risk band.
         [Fact]
         public void Build_RendersScoreAndBand()
         {
@@ -73,7 +73,7 @@ namespace XrmToolSuite.UnitTests
             Assert.Contains("stroke-dasharray=\"78 100\"", html); // arc fill = score
         }
 
-        // TC-DG-HTML-04: severity KPI counts are tallied and the friendly category name surfaces.
+        // TC-ALM07-HTML-04: severity KPI counts are tallied and the friendly category name surfaces.
         [Fact]
         public void Build_TalliesSeverityCounts()
         {
@@ -82,7 +82,7 @@ namespace XrmToolSuite.UnitTests
             Assert.Contains("Environment Variables", html); // friendly category name (from the adapter)
         }
 
-        // TC-DG-HTML-05: findings, recommendations and help links surface.
+        // TC-ALM07-HTML-05: findings, recommendations and help links surface.
         [Fact]
         public void Build_SurfacesFindingsAndRecommendations()
         {
@@ -92,7 +92,7 @@ namespace XrmToolSuite.UnitTests
             Assert.Contains("https://learn.microsoft.com/x", html);
         }
 
-        // TC-DG-HTML-06: user content is HTML-encoded (no injection / broken markup).
+        // TC-ALM07-HTML-06: user content is HTML-encoded (no injection / broken markup).
         [Fact]
         public void Build_EncodesUserContent()
         {
@@ -104,7 +104,7 @@ namespace XrmToolSuite.UnitTests
             Assert.DoesNotContain("<script>", html);
         }
 
-        // TC-DG-HTML-07: the AI/offline executive summary is included when present.
+        // TC-ALM07-HTML-07: the AI/offline executive summary is included when present.
         [Fact]
         public void Build_IncludesExecutiveSummaryWhenPresent()
         {
@@ -128,7 +128,7 @@ namespace XrmToolSuite.UnitTests
             Assert.DoesNotContain("javascript:alert", html);
         }
 
-        // TC-DG-HTML-08: a clean solution reads as clear, not blank.
+        // TC-ALM07-HTML-08: a clean solution reads as clear, not blank.
         [Fact]
         public void Build_NoFindings_ShowsClearState()
         {

@@ -1,6 +1,6 @@
 # JavaScript Performance Analyzer - Test Plan
 
-Traces to [`docs/user-stories/PERF8.JavaScriptPerformanceAnalyzer.md`](../../docs/user-stories/PERF8.JavaScriptPerformanceAnalyzer.md).
+Traces to [`docs/user-stories/PERF08.JavaScriptPerformanceAnalyzer.md`](../../docs/user-stories/PERF08.JavaScriptPerformanceAnalyzer.md).
 
 ## Scope
 

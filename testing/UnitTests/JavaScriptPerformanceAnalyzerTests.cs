@@ -9,7 +9,7 @@ namespace XrmToolSuite.UnitTests
     /// SDK-free tests for the JavaScript Performance Analyzer's pure logic — the static rule engine
     /// (JsRules), the models (JsModels), and the FormXML event mapper (FormEventMap). No Dataverse,
     /// no WinForms. The SDK collector (JsCollector) is manual-tested against a live org.
-    /// Traces to US-PERF8.2.x (rules), US-PERF8.4.1 (score/band) and US-PERF8.3.x (form mapping).
+    /// Traces to US-PERF08.2.x (rules), US-PERF08.4.1 (score/band) and US-PERF08.3.x (form mapping).
     /// </summary>
     public class JavaScriptPerformanceAnalyzerTests
     {
@@ -22,7 +22,7 @@ namespace XrmToolSuite.UnitTests
         private static JsFinding Finding(JsScriptAnalysis a, string titleFragment) =>
             a.Findings.OfType<JsFinding>().First(f => f.Title.Contains(titleFragment));
 
-        // ---------------------------------------------------------------- Rules (US-PERF8.2.1)
+        // ---------------------------------------------------------------- Rules (US-PERF08.2.1)
 
         [Fact]
         public void XrmPage_IsMedium_WithLineContext()
@@ -127,7 +127,7 @@ namespace XrmToolSuite.UnitTests
             Assert.DoesNotContain(a.Findings, f => f.Title.Contains("Xrm.Page"));
         }
 
-        // ---------------------------------------------------------------- Clean script + score/band (US-PERF8.4.1)
+        // ---------------------------------------------------------------- Clean script + score/band (US-PERF08.4.1)
 
         [Fact]
         public void CleanScript_ProducesSingleInfo_ScoreZero_Low()
@@ -165,7 +165,7 @@ namespace XrmToolSuite.UnitTests
             Assert.Equal(risky.Score, ranked[0].Score);
         }
 
-        // ---------------------------------------------------------------- FormEventMap (US-PERF8.3.x)
+        // ---------------------------------------------------------------- FormEventMap (US-PERF08.3.x)
 
         private const string FormXml =
             "<form><events>" +

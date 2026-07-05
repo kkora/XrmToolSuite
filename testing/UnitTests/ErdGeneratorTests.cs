@@ -8,7 +8,7 @@ namespace XrmToolSuite.UnitTests
 {
     /// <summary>
     /// Executable tests for the ERD Generator's SDK-free model + emitters (Mermaid, PlantUML, JSON, SVG)
-    /// and the re-queryless <see cref="ErdModel.Apply"/> filter. Traces to US-DOC2.2.x/2.3.x/2.4.x/2.5.x.
+    /// and the re-queryless <see cref="ErdModel.Apply"/> filter. Traces to US-DOC02.2.x/2.3.x/2.4.x/2.5.x.
     /// The Dataverse collector and the System.Drawing/MigraDoc exporters are excluded (manual-tested).
     /// </summary>
     public class ErdGeneratorTests
@@ -57,7 +57,7 @@ namespace XrmToolSuite.UnitTests
             };
         }
 
-        // TC-ERD-MERMAID-01 (US-DOC2.5.1): Mermaid output is an erDiagram with correct cardinality tokens and PK markers.
+        // TC-ERD-MERMAID-01 (US-DOC02.5.1): Mermaid output is an erDiagram with correct cardinality tokens and PK markers.
         [Fact]
         public void Mermaid_EmitsErDiagram_WithCardinalityAndPk()
         {
@@ -69,7 +69,7 @@ namespace XrmToolSuite.UnitTests
             Assert.Contains("new_accountid FK", mmd);
         }
 
-        // TC-ERD-MERMAID-02 (US-DOC2.2.2): "keys + lookups" hides non-key columns; "all" shows them.
+        // TC-ERD-MERMAID-02 (US-DOC02.2.2): "keys + lookups" hides non-key columns; "all" shows them.
         [Fact]
         public void Mermaid_ColumnDisplay_ControlsColumns()
         {
@@ -79,7 +79,7 @@ namespace XrmToolSuite.UnitTests
             Assert.Contains("telephone1", all);
         }
 
-        // TC-ERD-PLANTUML-03 (US-DOC2.5.1): PlantUML emits entities and a relationship line.
+        // TC-ERD-PLANTUML-03 (US-DOC02.5.1): PlantUML emits entities and a relationship line.
         [Fact]
         public void PlantUml_EmitsEntitiesAndRelationships()
         {
@@ -91,7 +91,7 @@ namespace XrmToolSuite.UnitTests
             Assert.Contains("<<PK>>", puml);
         }
 
-        // TC-ERD-JSON-04 (US-DOC2.5.2): JSON carries the table/relationship counts and names.
+        // TC-ERD-JSON-04 (US-DOC02.5.2): JSON carries the table/relationship counts and names.
         [Fact]
         public void Json_CarriesCountsAndNames()
         {
@@ -104,7 +104,7 @@ namespace XrmToolSuite.UnitTests
             Assert.Equal(2, Regex.Matches(json, "\"schemaName\":\"Account\"|\"schemaName\":\"new_Project\"").Count);
         }
 
-        // TC-ERD-FILTER-05 (US-DOC2.4.1): custom-only keeps custom tables and drops now-dangling relationships.
+        // TC-ERD-FILTER-05 (US-DOC02.4.1): custom-only keeps custom tables and drops now-dangling relationships.
         [Fact]
         public void Filter_CustomOnly_TrimsTablesAndRelationships()
         {
@@ -114,7 +114,7 @@ namespace XrmToolSuite.UnitTests
             Assert.Empty(trimmed.Relationships); // account removed => both-ends rule drops every edge
         }
 
-        // TC-ERD-FILTER-06 (US-DOC2.4.1): managed-only keeps managed tables only.
+        // TC-ERD-FILTER-06 (US-DOC02.4.1): managed-only keeps managed tables only.
         [Fact]
         public void Filter_ManagedOnly_KeepsManaged()
         {
@@ -123,7 +123,7 @@ namespace XrmToolSuite.UnitTests
             Assert.Equal("account", trimmed.Tables[0].LogicalName);
         }
 
-        // TC-ERD-FILTER-07 (US-DOC2.4.1): relationship-type filter keeps only the allowed types.
+        // TC-ERD-FILTER-07 (US-DOC02.4.1): relationship-type filter keeps only the allowed types.
         [Fact]
         public void Filter_RelationshipType_KeepsOnlyAllowed()
         {
@@ -136,7 +136,7 @@ namespace XrmToolSuite.UnitTests
             Assert.Equal("OneToMany", trimmed.Relationships[0].RelationType);
         }
 
-        // TC-ERD-SVG-08 (US-DOC2.5.1): SVG is well-formed and draws a box (rect) per table.
+        // TC-ERD-SVG-08 (US-DOC02.5.1): SVG is well-formed and draws a box (rect) per table.
         [Fact]
         public void Svg_IsWellFormed_WithBoxPerTable()
         {
@@ -159,7 +159,7 @@ namespace XrmToolSuite.UnitTests
             Assert.Null(ex);
         }
 
-        // TC-ERD-COLSELECT-09 (US-DOC2.2.2): SelectColumns includes alternate-key members even when optional.
+        // TC-ERD-COLSELECT-09 (US-DOC02.2.2): SelectColumns includes alternate-key members even when optional.
         [Fact]
         public void SelectColumns_KeysAndLookups_IncludesAlternateKeyMembers()
         {

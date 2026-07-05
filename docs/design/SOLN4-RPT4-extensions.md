@@ -1,7 +1,7 @@
-# Design — SOLN4 & RPT4 as extensions of shipped tools
+# Design — SOLN04 & RPT04 as extensions of shipped tools
 
-> **Status:** ✅ **implemented.** SOLN4 shipped as Solution Complexity Score **FEAT-SC-4**; RPT4 shipped as
-> Technical Debt Analyzer **FEAT-TD-4**. Decisions (locked) below were followed as-is.
+> **Status:** ✅ **implemented.** SOLN04 shipped as Solution Complexity Score **FEAT-SOLN08-4**; RPT04 shipped as
+> Technical Debt Analyzer **FEAT-SOLN10-4**. Decisions (locked) below were followed as-is.
 > Both are built by **extending a shipped tool**, not as new `src/Tools/` projects (per the NEXT-20
 > "deliberately deferred" note). Neither adds a Dataverse write path.
 
@@ -14,7 +14,7 @@ Two facts that shape the design (verified in the code):
 
 ---
 
-## SOLN4 — Solution Quality Score (extend Solution Complexity Score)
+## SOLN04 — Solution Quality Score (extend Solution Complexity Score)
 
 A sibling **quality grade** computed alongside the existing complexity score, over the **same** collected
 `ComponentCounts` — no new Dataverse queries. Complexity answers "how big/hard"; Quality answers
@@ -51,7 +51,7 @@ score caps, empty solution); update the shipped tool's TEST_PLAN/CASES/SUMMARY +
 
 ---
 
-## RPT4 — Technical Debt Trends ("Trends" tab on Technical Debt Analyzer)
+## RPT04 — Technical Debt Trends ("Trends" tab on Technical Debt Analyzer)
 
 Charts the debt score run-over-run. **Trends need history and Dataverse doesn't retain past scores**, so the
 tool persists its own snapshots. **Decided storage: local JSON snapshots** (per-machine; no org writes).
@@ -89,15 +89,15 @@ manual UI work.
 
 ## Cross-cutting
 - No new `src/Tools/` project and no NEXT-20 row — both ship inside their parent tool. Update NEXT-20.md's
-  "deliberately deferred" note to record they shipped as extensions, and the backlog SOLN4/RPT4 entries.
+  "deliberately deferred" note to record they shipped as extensions, and the backlog SOLN04/RPT04 entries.
 - Add user stories for the new features under each shipped tool's story file; refresh testing artifacts.
 - Version bump in the root `Directory.Build.props` per release (your call on timing).
 
 ## Decisions (locked)
-1. **SOLN4 grade** — a **0–100 score + Low/Med/High band** (the suite's standard `ScoreCalculator` banding),
+1. **SOLN04 grade** — a **0–100 score + Low/Med/High band** (the suite's standard `ScoreCalculator` banding),
    not an A–F letter grade. Consistent with complexity/debt; the existing gauge and exporters speak it.
-2. **RPT4 layout** — introduce a **`TabControl`** into Technical Debt Analyzer: tab 1 = existing dashboard
+2. **RPT04 layout** — introduce a **`TabControl`** into Technical Debt Analyzer: tab 1 = existing dashboard
    (unchanged), tab 2 = Trends.
-3. **RPT4 chart** — **GDI-drawn** score-over-time line chart (`System.Drawing`), no external/GAC charting
+3. **RPT04 chart** — **GDI-drawn** score-over-time line chart (`System.Drawing`), no external/GAC charting
    dependency.
-4. **RPT4 history** — **local per-environment JSON snapshots** in app-data (no org writes).
+4. **RPT04 history** — **local per-environment JSON snapshots** in app-data (no org writes).

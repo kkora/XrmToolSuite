@@ -1,6 +1,6 @@
 # Solution Complexity Score - Test Plan
 
-Traces to [`docs/user-stories/SC1.SolutionComplexityScore.md`](../../docs/user-stories/SC1.SolutionComplexityScore.md).
+Traces to [`docs/user-stories/SOLN08.SolutionComplexityScore.md`](../../docs/user-stories/SOLN08.SolutionComplexityScore.md).
 
 ## Scope
 
@@ -12,8 +12,8 @@ the offline/AI executive summary (manual, against a live org).
 
 | Tier | What | How | Environment |
 |---|---|---|---|
-| Automated | Complexity/maintainability score, effort/cost estimates, hotspot findings (US-SC-3..5) | xUnit over `ComplexityMetrics` + `ComplexityReport` (exact-value) | .NET 8 SDK (`testing/UnitTests`) |
-| Manual | Solution picker, component collector, dashboard, exports, summary (US-SC-1, US-SC-6..7) | GUI cases in `TEST_CASES.md`, evidence in `screenshots/` | Windows + XrmToolBox + a Dataverse env |
+| Automated | Complexity/maintainability score, effort/cost estimates, hotspot findings (US-SOLN08-3..5) | xUnit over `ComplexityMetrics` + `ComplexityReport` (exact-value) | .NET 8 SDK (`testing/UnitTests`) |
+| Manual | Solution picker, component collector, dashboard, exports, summary (US-SOLN08-1, US-SOLN08-6..7) | GUI cases in `TEST_CASES.md`, evidence in `screenshots/` | Windows + XrmToolBox + a Dataverse env |
 
 ## What is NOT automatable here
 
@@ -32,5 +32,5 @@ WinForms dashboard need the net48/WinForms host. These are documented manual cas
 
 ## Risks
 
-- Component-type split (processes/web resources/forms) depends on sub-type codes — verify counts against the maker portal (TC-SC-M-03).
-- Effort/cost numbers are heuristics — the report labels them as estimates; verify the labeling (TC-SC-M-05).
+- Component-type split (processes/web resources/forms) depends on sub-type codes — verify counts against the maker portal (TC-SOLN08-M-03).
+- Effort/cost numbers are heuristics — the report labels them as estimates; verify the labeling (TC-SOLN08-M-05).

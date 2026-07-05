@@ -11,7 +11,7 @@ namespace XrmToolSuite.UnitTests
     /// SDK-free tests for the Managed Solution Impact Checker's pure layering engine
     /// (<see cref="LayerImpactRules"/> over <see cref="LayerAnalysisInput"/>). No Dataverse, no WinForms.
     /// The SDK collector (<c>ImpactCollector</c>) is manual-tested against a live org. Traces to
-    /// docs/user-stories/ManagedSolutionImpactChecker.md (US-ALM4.x).
+    /// docs/user-stories/ManagedSolutionImpactChecker.md (US-ALM04.x).
     /// </summary>
     public class ManagedSolutionImpactCheckerTests
     {
@@ -33,7 +33,7 @@ namespace XrmToolSuite.UnitTests
                 TargetPublisherPrefix = tgtPrefix
             };
 
-        // ---------------------------------------------------------------- Clean input (US-ALM4.5.1)
+        // ---------------------------------------------------------------- Clean input (US-ALM04.5.1)
 
         [Fact]
         public void CleanInput_ProducesSingleInfoFinding_LowBand()
@@ -44,14 +44,14 @@ namespace XrmToolSuite.UnitTests
             Assert.Equal(Severity.Info, report.Findings[0].Severity);
             Assert.Equal(0, report.Score);
             Assert.Equal(ScoreBand.Low, report.Band);
-            // Checklist + rollback are always generated, even for a clean run (US-ALM4.5.2).
+            // Checklist + rollback are always generated, even for a clean run (US-ALM04.5.2).
             Assert.NotEmpty(report.Checklist);
             Assert.NotEmpty(report.RollbackGuidance);
             Assert.NotEmpty(report.Metrics);
         }
 
         // Regression: an Upgrade whose removed components were NEVER assessed must NOT look deletion-safe —
-        // it surfaces an honest "not assessed" Info note instead of silently omitting the risk (US-ALM4.2.2).
+        // it surfaces an honest "not assessed" Info note instead of silently omitting the risk (US-ALM04.2.2).
         [Fact]
         public void Upgrade_WithUnassessedRemovals_NotesDeletionNotEvaluated()
         {
@@ -68,7 +68,7 @@ namespace XrmToolSuite.UnitTests
             Assert.DoesNotContain(report.Findings, f => f.Title == "Deletion / data-loss impact not assessed");
         }
 
-        // ---------------------------------------------------------------- Deletion: Upgrade vs Update/Patch (US-ALM4.2.2 / US-ALM4.3.1)
+        // ---------------------------------------------------------------- Deletion: Upgrade vs Update/Patch (US-ALM04.2.2 / US-ALM04.3.1)
 
         [Fact]
         public void RemovedTable_OnUpgrade_IsCriticalDataLoss()
@@ -79,7 +79,7 @@ namespace XrmToolSuite.UnitTests
             var f = Assert.Single(report.Findings, x => x.Title == "Table would be deleted (data loss)");
             Assert.Equal(Severity.Critical, f.Severity);
             Assert.Equal(Category, f.Category);
-            // Any Critical forces a High band (US-ALM4.5.1).
+            // Any Critical forces a High band (US-ALM04.5.1).
             Assert.Equal(ScoreBand.High, report.Band);
         }
 
@@ -143,7 +143,7 @@ namespace XrmToolSuite.UnitTests
                 f.Title == "Table would be deleted (data loss)" && f.Severity == Severity.Critical);
         }
 
-        // ---------------------------------------------------------------- Unmanaged layer above managed (US-ALM4.1.2 / US-ALM4.2.1)
+        // ---------------------------------------------------------------- Unmanaged layer above managed (US-ALM04.1.2 / US-ALM04.2.1)
 
         [Fact]
         public void UnmanagedLayerAbove_OnUpgrade_RaisesMediumDetectAndHighOverwrite()
@@ -177,7 +177,7 @@ namespace XrmToolSuite.UnitTests
             Assert.DoesNotContain(report.Findings, f => f.Title == "Component would be overwritten");
         }
 
-        // ---------------------------------------------------------------- Missing dependency (US-ALM4.4.1)
+        // ---------------------------------------------------------------- Missing dependency (US-ALM04.4.1)
 
         [Fact]
         public void MissingDependency_IsHigh()
@@ -189,7 +189,7 @@ namespace XrmToolSuite.UnitTests
             Assert.Equal(Severity.High, f.Severity);
         }
 
-        // ---------------------------------------------------------------- Publisher prefix mismatch (US-ALM4.4.1)
+        // ---------------------------------------------------------------- Publisher prefix mismatch (US-ALM04.4.1)
 
         [Fact]
         public void PublisherPrefixMismatch_IsMedium()
@@ -210,7 +210,7 @@ namespace XrmToolSuite.UnitTests
             Assert.DoesNotContain(report.Findings, f => f.Title == "Publisher prefix mismatch");
         }
 
-        // ---------------------------------------------------------------- Restrictive managed properties (US-ALM4.4.2)
+        // ---------------------------------------------------------------- Restrictive managed properties (US-ALM04.4.2)
 
         [Fact]
         public void RestrictiveManagedProperties_IsMedium_ListsComponents()
@@ -228,7 +228,7 @@ namespace XrmToolSuite.UnitTests
             Assert.Contains("contact", f.Description);
         }
 
-        // ---------------------------------------------------------------- Score, band, checklist, rollback (US-ALM4.5.1 / US-ALM4.5.2)
+        // ---------------------------------------------------------------- Score, band, checklist, rollback (US-ALM04.5.1 / US-ALM04.5.2)
 
         [Fact]
         public void AggregateScore_BandsHigh_AndGeneratesChecklistAndRollback()

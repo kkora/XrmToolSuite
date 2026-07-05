@@ -11,8 +11,8 @@ namespace XrmToolSuite.UnitTests
     /// Executable tests for the SDK-free merge comparison engine (<see cref="MergeRules.Compare"/>).
     /// All rules are pure functions of hand-built <see cref="SolutionInfo"/> / <see cref="ConfigItem"/>
     /// lists, so exact conflicts, severities, verdicts and determinism are asserted with no live org.
-    /// Traces to EPIC-ALM1: US-ALM1.2.1/2.2 (overlap), US-ALM1.3.1 (publisher/version),
-    /// US-ALM1.3.2 (managed state), US-ALM1.4.1 (env-var/conn-ref), US-ALM1.5.1 (verdict).
+    /// Traces to EPIC-ALM01: US-ALM01.2.1/2.2 (overlap), US-ALM01.3.1 (publisher/version),
+    /// US-ALM01.3.2 (managed state), US-ALM01.4.1 (env-var/conn-ref), US-ALM01.5.1 (verdict).
     /// </summary>
     public class SolutionMergeAssistantTests
     {
@@ -40,7 +40,7 @@ namespace XrmToolSuite.UnitTests
                 Components = comps.ToList()
             };
 
-        // ---- overlap detection (US-ALM1.2.1 / US-ALM1.2.2) ------------------------------------
+        // ---- overlap detection (US-ALM01.2.1 / US-ALM01.2.2) ------------------------------------
 
         [Fact]
         public void DuplicateComponent_AcrossTwoSolutions_IsFlagged()
@@ -81,7 +81,7 @@ namespace XrmToolSuite.UnitTests
             Assert.DoesNotContain(report.Findings, f => f.Title.StartsWith("Duplicate"));
         }
 
-        // ---- managed / unmanaged conflict (US-ALM1.3.2) ---------------------------------------
+        // ---- managed / unmanaged conflict (US-ALM01.3.2) ---------------------------------------
 
         [Fact]
         public void ManagedInOne_UnmanagedInAnother_IsHigh()
@@ -99,7 +99,7 @@ namespace XrmToolSuite.UnitTests
             Assert.Equal(MergeVerdict.HighRisk, report.Verdict);
         }
 
-        // ---- publisher prefix mismatch (US-ALM1.3.1) ------------------------------------------
+        // ---- publisher prefix mismatch (US-ALM01.3.1) ------------------------------------------
 
         [Fact]
         public void PublisherPrefixMismatch_IsMedium_AndPicksStandard()
@@ -133,7 +133,7 @@ namespace XrmToolSuite.UnitTests
             Assert.DoesNotContain(report.Findings, f => f.Category == "Publisher");
         }
 
-        // ---- version divergence (US-ALM1.3.1) -------------------------------------------------
+        // ---- version divergence (US-ALM01.3.1) -------------------------------------------------
 
         [Fact]
         public void VersionDifference_WithOverlap_IsMedium()
@@ -148,7 +148,7 @@ namespace XrmToolSuite.UnitTests
             Assert.Equal(Severity.Medium, ver.Severity);
         }
 
-        // ---- env-var / connection-reference conflicts (US-ALM1.4.1) ---------------------------
+        // ---- env-var / connection-reference conflicts (US-ALM01.4.1) ---------------------------
 
         [Fact]
         public void EnvVarConflict_DifferentValues_IsHigh()
@@ -200,7 +200,7 @@ namespace XrmToolSuite.UnitTests
             Assert.DoesNotContain(report.Findings, f => f.Category == "Environment Variables");
         }
 
-        // ---- verdict selection (US-ALM1.5.1) --------------------------------------------------
+        // ---- verdict selection (US-ALM01.5.1) --------------------------------------------------
 
         [Fact]
         public void CleanMerge_YieldsSafeToMerge()

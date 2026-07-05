@@ -12,7 +12,7 @@ namespace XrmToolSuite.UnitTests
     /// <see cref="TeamProfile.Effective"/> helper, which reuses the shared
     /// <see cref="PrivilegeEngine.ResolveEffective"/>. All rules are pure functions of a populated
     /// <see cref="TeamProfile"/>, so exact verdicts are asserted with no live org.
-    /// Traces to EPIC-SEC2 (US-SEC2.4.1 risk findings, US-SEC2.2.2 effective privileges).
+    /// Traces to EPIC-SEC02 (US-SEC02.4.1 risk findings, US-SEC02.2.2 effective privileges).
     /// </summary>
     public class TeamPermissionExplorerTests
     {
@@ -44,7 +44,7 @@ namespace XrmToolSuite.UnitTests
             };
         }
 
-        // ---- no members (US-SEC2.4.1) ---------------------------------------------------------
+        // ---- no members (US-SEC02.4.1) ---------------------------------------------------------
 
         [Fact]
         public void NoMembers_NonAad_YieldsMedium()
@@ -71,7 +71,7 @@ namespace XrmToolSuite.UnitTests
             Assert.DoesNotContain(findings, x => x.Title == "Team is inactive / orphaned");
         }
 
-        // ---- no roles (US-SEC2.4.1) -----------------------------------------------------------
+        // ---- no roles (US-SEC02.4.1) -----------------------------------------------------------
 
         [Fact]
         public void NoRoles_YieldsMedium()
@@ -86,7 +86,7 @@ namespace XrmToolSuite.UnitTests
             Assert.Equal(Severity.Medium, f.Severity);
         }
 
-        // ---- over-privileged (US-SEC2.4.1) ----------------------------------------------------
+        // ---- over-privileged (US-SEC02.4.1) ----------------------------------------------------
 
         [Fact]
         public void OverPrivileged_ManyDeepOrGlobal_YieldsHigh()
@@ -116,7 +116,7 @@ namespace XrmToolSuite.UnitTests
             Assert.Contains(findings, x => x.Title == "Team is over-privileged");
         }
 
-        // ---- duplicate role (US-SEC2.4.1) -----------------------------------------------------
+        // ---- duplicate role (US-SEC02.4.1) -----------------------------------------------------
 
         [Fact]
         public void DuplicateRole_SameRoleViaMultipleTeams_YieldsLow()
@@ -145,7 +145,7 @@ namespace XrmToolSuite.UnitTests
             Assert.Contains(findings, x => x.Title == "Duplicate role assignment" && x.Severity == Severity.Low);
         }
 
-        // ---- orphaned (US-SEC2.4.1) -----------------------------------------------------------
+        // ---- orphaned (US-SEC02.4.1) -----------------------------------------------------------
 
         [Fact]
         public void Orphaned_ZeroMembersAndZeroOwned_YieldsMedium()
@@ -160,7 +160,7 @@ namespace XrmToolSuite.UnitTests
             Assert.Equal(Severity.Medium, f.Severity);
         }
 
-        // ---- clean (US-SEC2.4.1) --------------------------------------------------------------
+        // ---- clean (US-SEC02.4.1) --------------------------------------------------------------
 
         [Fact]
         public void CleanTeam_YieldsSingleInfoFinding()
@@ -172,7 +172,7 @@ namespace XrmToolSuite.UnitTests
             Assert.Equal("No team risks detected", f.Title);
         }
 
-        // ---- effective privileges reuse the shared engine (US-SEC2.2.2) -----------------------
+        // ---- effective privileges reuse the shared engine (US-SEC02.2.2) -----------------------
 
         [Fact]
         public void Effective_ResolvesDeepestScopePerPrivilege()

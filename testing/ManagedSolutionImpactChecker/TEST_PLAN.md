@@ -1,6 +1,6 @@
 # Managed Solution Impact Checker - Test Plan
 
-Traces to [`docs/user-stories/ALM4.ManagedSolutionImpactChecker.md`](../../docs/user-stories/ALM4.ManagedSolutionImpactChecker.md).
+Traces to [`docs/user-stories/ALM04.ManagedSolutionImpactChecker.md`](../../docs/user-stories/ALM04.ManagedSolutionImpactChecker.md).
 
 ## Scope
 

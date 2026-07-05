@@ -9,7 +9,7 @@ namespace XrmToolSuite.UnitTests
 {
     /// <summary>
     /// SDK-free tests for the Flow Dependency Analyzer's pure logic — the clientdata parser, the risk rules,
-    /// and the reverse component-impact map (US-PA1.2.x / 1.3.x / 1.4.x / 1.5.x / 1.6.x). No Dataverse, no
+    /// and the reverse component-impact map (US-PA01.2.x / 1.3.x / 1.4.x / 1.5.x / 1.6.x). No Dataverse, no
     /// WinForms. The SDK collector (FlowCollector) is manual-tested against a live org.
     /// </summary>
     public class FlowDependencyAnalyzerTests
@@ -76,7 +76,7 @@ namespace XrmToolSuite.UnitTests
 
         private static FlowDependencies Parse() => FlowClientDataParser.Parse("Order flow", ClientData);
 
-        // ---------------------------------------------------------------- Trigger (US-PA1.2.1)
+        // ---------------------------------------------------------------- Trigger (US-PA01.2.1)
 
         [Fact]
         public void Parse_DataverseTrigger_ResolvesTypeEntityAndMessage()
@@ -89,7 +89,7 @@ namespace XrmToolSuite.UnitTests
 
         // Regression: Dataverse trigger message codes must map to the correct CRUD type.
         // Code 2=Update and 3=Delete were previously swapped, silently mislabeling the two most
-        // common triggers (US-PA1.2.1).
+        // common triggers (US-PA01.2.1).
         [Theory]
         [InlineData("1", "Create")]
         [InlineData("2", "Update")]
@@ -122,7 +122,7 @@ namespace XrmToolSuite.UnitTests
             Assert.Contains("new_realvar", dep.EnvironmentVariables);
         }
 
-        // ---------------------------------------------------------------- Tables & columns (US-PA1.2.2)
+        // ---------------------------------------------------------------- Tables & columns (US-PA01.2.2)
 
         [Fact]
         public void Parse_ExtractsTablesAndColumns()
@@ -135,7 +135,7 @@ namespace XrmToolSuite.UnitTests
             Assert.Contains("contacts.emailaddress1", dep.Columns);
         }
 
-        // ---------------------------------------------------------------- Connectors & conn refs (US-PA1.3.1)
+        // ---------------------------------------------------------------- Connectors & conn refs (US-PA01.3.1)
 
         [Fact]
         public void Parse_ExtractsConnectorsAndConnectionReferences()
@@ -148,7 +148,7 @@ namespace XrmToolSuite.UnitTests
             Assert.Contains("new_office365conn", dep.ConnectionReferences);
         }
 
-        // ---------------------------------------------------------------- Direct connection (US-PA1.3.2)
+        // ---------------------------------------------------------------- Direct connection (US-PA01.3.2)
 
         [Fact]
         public void Parse_DetectsDirectConnection()
@@ -157,7 +157,7 @@ namespace XrmToolSuite.UnitTests
             Assert.True(dep.UsesDirectConnection); // Direct_SharePoint binds a raw connection GUID
         }
 
-        // ---------------------------------------------------------------- Child flows & custom APIs (US-PA1.4.1)
+        // ---------------------------------------------------------------- Child flows & custom APIs (US-PA01.4.1)
 
         [Fact]
         public void Parse_ExtractsChildFlowsAndCustomApis()
@@ -167,7 +167,7 @@ namespace XrmToolSuite.UnitTests
             Assert.Contains("new_RecalculatePremium", dep.CustomApis);
         }
 
-        // ---------------------------------------------------------------- Environment variables (US-PA1.3.1)
+        // ---------------------------------------------------------------- Environment variables (US-PA01.3.1)
 
         [Fact]
         public void Parse_ExtractsEnvironmentVariableReferences()
@@ -176,7 +176,7 @@ namespace XrmToolSuite.UnitTests
             Assert.Contains("new_recipientvar", dep.EnvironmentVariables);
         }
 
-        // ---------------------------------------------------------------- HTTP + secret redaction (US-PA1.4.2)
+        // ---------------------------------------------------------------- HTTP + secret redaction (US-PA01.4.2)
 
         [Fact]
         public void Parse_HttpActionRecorded_ButUrlsAndSecretsRedacted()
@@ -222,7 +222,7 @@ namespace XrmToolSuite.UnitTests
             Assert.Empty(dep.Connectors);
         }
 
-        // ---------------------------------------------------------------- Risk rules (US-PA1.3.2 / 1.5.x)
+        // ---------------------------------------------------------------- Risk rules (US-PA01.3.2 / 1.5.x)
 
         [Fact]
         public void Rules_DirectConnection_IsHigh()
@@ -266,7 +266,7 @@ namespace XrmToolSuite.UnitTests
             Assert.DoesNotContain(analysis.Findings, f => f.Title.Contains("missing environment variable"));
         }
 
-        // ---------------------------------------------------------------- Reverse impact (US-PA1.6.1)
+        // ---------------------------------------------------------------- Reverse impact (US-PA01.6.1)
 
         [Fact]
         public void Impact_ReverseMap_ListsEveryFlowDependingOnAComponent()

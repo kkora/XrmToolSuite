@@ -138,10 +138,10 @@ Anthropic/OpenAI/Google API key (used session-only; never persisted).
    by the case ID, e.g.:
 
    ```
-   testing/TechnicalDebtAnalyzer/screenshots/TC-TD-M-04-deprecated.png
-   testing/SolutionComplexityScore/screenshots/TC-SC-M-04-html.png
-   testing/AiSolutionReviewer/screenshots/TC-AR-M-03-review.png
-   testing/SolutionKnowledgeGraph/screenshots/TC-KG-M-04-interactive.png
+   testing/TechnicalDebtAnalyzer/screenshots/TC-SOLN10-M-04-deprecated.png
+   testing/SolutionComplexityScore/screenshots/TC-SOLN08-M-04-html.png
+   testing/AiSolutionReviewer/screenshots/TC-AI10-M-03-review.png
+   testing/SolutionKnowledgeGraph/screenshots/TC-SOLN09-M-04-interactive.png
    ```
 
    Tip: for the score/report tools, running the analysis then **Export → HTML** gives one screenshot that

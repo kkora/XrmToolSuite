@@ -9,8 +9,8 @@ namespace XrmToolSuite.UnitTests
     /// Executable tests for the SDK-free effective-privilege engine
     /// (<see cref="PrivilegeEngine"/> over <see cref="PrivilegeModels"/>). The engine is a pure
     /// function of the granted privileges + table metadata, so exact verdicts are asserted with no
-    /// live org. Traces to EPIC-SEC1 (US-SEC1.2.x resolve/deepest scope, US-SEC1.3.x gap
-    /// classification, US-SEC1.5.x diff).
+    /// live org. Traces to EPIC-SEC01 (US-SEC01.2.x resolve/deepest scope, US-SEC01.3.x gap
+    /// classification, US-SEC01.5.x diff).
     /// </summary>
     public class PrivilegeEngineTests
     {
@@ -56,7 +56,7 @@ namespace XrmToolSuite.UnitTests
 
         // ---- ResolveEffective -----------------------------------------------------------------
 
-        // TC-SEC1-RESOLVE-01 (US-SEC1.2.1): duplicate grants collapse to the DEEPEST scope, keeping the winning source.
+        // TC-SEC01-RESOLVE-01 (US-SEC01.2.1): duplicate grants collapse to the DEEPEST scope, keeping the winning source.
         [Fact]
         public void ResolveEffective_KeepsDeepestScope_AcrossDuplicateGrants()
         {
@@ -73,7 +73,7 @@ namespace XrmToolSuite.UnitTests
             Assert.False(effective["prvReadaccount"].ViaTeam); // has direct grants
         }
 
-        // TC-SEC1-RESOLVE-02 (US-SEC1.2.1): a privilege granted ONLY through teams is flagged ViaTeam on the resolved entry.
+        // TC-SEC01-RESOLVE-02 (US-SEC01.2.1): a privilege granted ONLY through teams is flagged ViaTeam on the resolved entry.
         [Fact]
         public void ResolveEffective_FlagsTeamOnly_WhenNoDirectGrant()
         {
@@ -88,7 +88,7 @@ namespace XrmToolSuite.UnitTests
         }
 
         // Regression: a DEEPER team grant coexisting with a SHALLOWER direct grant — the deepest scope is
-        // team-only, so the resolved entry is ViaTeam and records the direct-only scope (US-SEC1.2.1).
+        // team-only, so the resolved entry is ViaTeam and records the direct-only scope (US-SEC01.2.1).
         [Fact]
         public void ResolveEffective_DeepestScopeFromTeam_TracksDirectScopeAndViaTeam()
         {
@@ -139,7 +139,7 @@ namespace XrmToolSuite.UnitTests
 
         // ---- Evaluate: allow / missing / scope ------------------------------------------------
 
-        // TC-SEC1-EVAL-01 (US-SEC1.3.1): sufficient scope from a direct role => AccessAllowed.
+        // TC-SEC01-EVAL-01 (US-SEC01.3.1): sufficient scope from a direct role => AccessAllowed.
         [Fact]
         public void Evaluate_AccessAllowed_WhenScopeSufficient()
         {
@@ -152,7 +152,7 @@ namespace XrmToolSuite.UnitTests
             Assert.Equal("prvReadaccount", v.RequiredPrivilege);
         }
 
-        // TC-SEC1-EVAL-02 (US-SEC1.3.1): privilege absent entirely => MissingPrivilege, denied.
+        // TC-SEC01-EVAL-02 (US-SEC01.3.1): privilege absent entirely => MissingPrivilege, denied.
         [Fact]
         public void Evaluate_MissingPrivilege_WhenAbsent()
         {
@@ -166,7 +166,7 @@ namespace XrmToolSuite.UnitTests
             Assert.Equal(AccessScope.None, v.HeldScope);
         }
 
-        // TC-SEC1-EVAL-03 (US-SEC1.3.1): held shallower than required => InsufficientScope, held vs required reported.
+        // TC-SEC01-EVAL-03 (US-SEC01.3.1): held shallower than required => InsufficientScope, held vs required reported.
         [Fact]
         public void Evaluate_InsufficientScope_WhenHeldTooShallow()
         {
@@ -180,7 +180,7 @@ namespace XrmToolSuite.UnitTests
             Assert.Equal(AccessScope.Deep, v.RequiredScope);
         }
 
-        // TC-SEC1-EVAL-04 (US-SEC1.3.1): sole grant via team but sufficient => TeamInheritanceOnly, still allowed.
+        // TC-SEC01-EVAL-04 (US-SEC01.3.1): sole grant via team but sufficient => TeamInheritanceOnly, still allowed.
         [Fact]
         public void Evaluate_TeamInheritanceOnly_WhenSoleGrantViaTeam()
         {
@@ -196,7 +196,7 @@ namespace XrmToolSuite.UnitTests
 
         // ---- Evaluate: Append pair ------------------------------------------------------------
 
-        // TC-SEC1-APPEND-01 (US-SEC1.1.2): Append present on A but AppendTo missing on B => AppendMismatch.
+        // TC-SEC01-APPEND-01 (US-SEC01.1.2): Append present on A but AppendTo missing on B => AppendMismatch.
         [Fact]
         public void Evaluate_AppendMismatch_WhenAppendPresentButAppendToMissing()
         {
@@ -211,7 +211,7 @@ namespace XrmToolSuite.UnitTests
             Assert.Equal("prvAppendTocontact", v.RequiredPrivilege);
         }
 
-        // TC-SEC1-APPEND-02 (US-SEC1.1.2): both sides present => allowed.
+        // TC-SEC01-APPEND-02 (US-SEC01.1.2): both sides present => allowed.
         [Fact]
         public void Evaluate_AppendPair_Allowed_WhenBothSidesPresent()
         {
@@ -227,7 +227,7 @@ namespace XrmToolSuite.UnitTests
 
         // ---- Diff -----------------------------------------------------------------------------
 
-        // TC-SEC1-DIFF-01 (US-SEC1.5.1): diff highlights differing scopes and present-in-one-only privileges.
+        // TC-SEC01-DIFF-01 (US-SEC01.5.1): diff highlights differing scopes and present-in-one-only privileges.
         [Fact]
         public void Diff_HighlightsScopeDifferences_AndPresentInOneOnly()
         {
@@ -247,7 +247,7 @@ namespace XrmToolSuite.UnitTests
             Assert.Equal(3, diff.Count);
         }
 
-        // TC-SEC1-MAX-01: Max returns the deeper scope.
+        // TC-SEC01-MAX-01: Max returns the deeper scope.
         [Fact]
         public void Max_ReturnsDeeperScope()
         {

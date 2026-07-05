@@ -13,7 +13,7 @@ namespace XrmToolSuite.AnalyzerTests
     /// mismatch, string-length shrink, choice (option set) conflicts, and relationship schema-name
     /// collisions. These were previously manual-only because they need constructed source + target
     /// <see cref="EntityMetadata"/>; they are now seeded headlessly via <see cref="MetaBuilder"/> (reflection).
-    /// Traces to US-DG-6 (schema conflicts). TC-DG-SC-06..10.
+    /// Traces to US-ALM07-6 (schema conflicts). TC-ALM07-SC-06..10.
     /// </summary>
     public class SchemaConflictMetadataTests
     {
@@ -44,7 +44,7 @@ namespace XrmToolSuite.AnalyzerTests
         private static EntityMetadata Detail(params AttributeMetadata[] attributes) =>
             MetaBuilder.Entity(Table, attributes: attributes);
 
-        // TC-DG-SC-06: an attribute whose type differs between source and target is a Critical import blocker.
+        // TC-ALM07-SC-06: an attribute whose type differs between source and target is a Critical import blocker.
         [Fact]
         public void AttributeTypeMismatch_FlagsCritical()
         {
@@ -57,7 +57,7 @@ namespace XrmToolSuite.AnalyzerTests
             Assert.Equal("new_account.new_field", f.AffectedComponent);
         }
 
-        // TC-DG-SC-07: shrinking a string column's max length below the target's is a High conflict.
+        // TC-ALM07-SC-07: shrinking a string column's max length below the target's is a High conflict.
         [Fact]
         public void StringLengthShrink_FlagsHigh()
         {
@@ -68,7 +68,7 @@ namespace XrmToolSuite.AnalyzerTests
             Assert.Contains(findings, x => x.Title == "Column max length reduced" && x.Severity == Severity.High);
         }
 
-        // TC-DG-SC-08: the same choice value carrying different labels is a Medium conflict.
+        // TC-ALM07-SC-08: the same choice value carrying different labels is a Medium conflict.
         [Fact]
         public void ChoiceLabelConflict_FlagsMedium()
         {
@@ -79,7 +79,7 @@ namespace XrmToolSuite.AnalyzerTests
             Assert.Contains(findings, x => x.Title == "Choice value label conflict" && x.Severity == Severity.Medium);
         }
 
-        // TC-DG-SC-09: a choice value that exists in target but not source is deleted on upgrade -> High.
+        // TC-ALM07-SC-09: a choice value that exists in target but not source is deleted on upgrade -> High.
         [Fact]
         public void ChoiceValueRemoved_FlagsHigh()
         {
@@ -90,7 +90,7 @@ namespace XrmToolSuite.AnalyzerTests
             Assert.Contains(findings, x => x.Title == "Choice value removed" && x.Severity == Severity.High);
         }
 
-        // TC-DG-SC-10: a relationship whose shape differs under the same schema name is a High collision.
+        // TC-ALM07-SC-10: a relationship whose shape differs under the same schema name is a High collision.
         [Fact]
         public void RelationshipShapeCollision_FlagsHigh()
         {

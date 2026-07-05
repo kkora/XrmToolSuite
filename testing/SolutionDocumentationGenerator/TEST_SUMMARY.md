@@ -7,9 +7,9 @@ Dataverse session; not run in this environment).
 
 ## Automated results
 
-- Suite: `testing/UnitTests/SolutionDocumentationGeneratorTests.cs` (10 cases: TC-SOLN5-COUNT-01,
-  TC-SOLN5-MODE-02/03/04, TC-SOLN5-SECT-05, TC-SOLN5-SCHEMA-06, TC-SOLN5-NA-07, TC-SOLN5-MD-08,
-  TC-SOLN5-HTML-09, TC-SOLN5-JSON-10).
+- Suite: `testing/UnitTests/SolutionDocumentationGeneratorTests.cs` (10 cases: TC-SOLN05-COUNT-01,
+  TC-SOLN05-MODE-02/03/04, TC-SOLN05-SECT-05, TC-SOLN05-SCHEMA-06, TC-SOLN05-NA-07, TC-SOLN05-MD-08,
+  TC-SOLN05-HTML-09, TC-SOLN05-JSON-10).
 - Result: **10 passed, 0 failed** (executed against the SDK-free `Doc/DocModels.cs`, `Doc/DocBuilder.cs`,
   `Doc/DocRenderers.cs` sources).
 - Coverage: the `SolutionScanData.ComponentCount` rollup, the `DocBuilder` documentation-mode gating
@@ -43,7 +43,7 @@ Dataverse session; not run in this environment).
 
 ## Pending (manual, live)
 
-- TC-SOLN5-M01..M15 — solution loading, the preview pane, per-section progress + cancellation, settings
+- TC-SOLN05-M01..M15 — solution loading, the preview pane, per-section progress + cancellation, settings
   round-trip, degradation on permission gaps, no-secret-leakage, and the Word (OpenXML) / PDF (MigraDoc-GDI)
   / Excel (ClosedXML) exporters. These cannot run headlessly and are **not** claimed as passed.
 - Evidence to be captured under `testing/SolutionDocumentationGenerator/screenshots/` when executed.

@@ -1,6 +1,6 @@
 # Duplicate Metadata Finder - Test Plan
 
-Traces to [`docs/user-stories/ADMIN3.DuplicateMetadataFinder.md`](../../docs/user-stories/ADMIN3.DuplicateMetadataFinder.md).
+Traces to [`docs/user-stories/ADMIN03.DuplicateMetadataFinder.md`](../../docs/user-stories/ADMIN03.DuplicateMetadataFinder.md).
 
 ## Scope
 

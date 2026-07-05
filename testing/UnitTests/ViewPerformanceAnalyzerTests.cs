@@ -7,7 +7,7 @@ namespace XrmToolSuite.UnitTests
 {
     /// <summary>
     /// SDK-free tests for the View Performance Analyzer's pure logic — the LayoutXML parser and the
-    /// per-view scorer that reuses the shared FetchXML engine (US-PERF4.2.x / 4.3.x / 4.4.x). No
+    /// per-view scorer that reuses the shared FetchXML engine (US-PERF04.2.x / 4.3.x / 4.4.x). No
     /// Dataverse, no WinForms. The SDK collector (ViewCollector) is manual-tested against a live org.
     /// </summary>
     public class ViewPerformanceAnalyzerTests
@@ -27,7 +27,7 @@ namespace XrmToolSuite.UnitTests
                    $"<row name='result' id='accountid'>{cells}</row></grid>";
         }
 
-        // ---------------------------------------------------------------- LayoutXmlParser (US-PERF4.3.1)
+        // ---------------------------------------------------------------- LayoutXmlParser (US-PERF04.3.1)
 
         [Fact]
         public void LayoutXml_Normal_CountsDisplayedCells()
@@ -56,7 +56,7 @@ namespace XrmToolSuite.UnitTests
             Assert.Empty(LayoutXmlParser.Columns(xml));
         }
 
-        // ---------------------------------------------------------------- ViewScorer (US-PERF4.4.1)
+        // ---------------------------------------------------------------- ViewScorer (US-PERF04.4.1)
 
         // Heavy view: all-attributes + no filter + many links + a wide layout => High band.
         [Fact]
@@ -91,7 +91,7 @@ namespace XrmToolSuite.UnitTests
             Assert.Contains(v.Findings, f => f.Severity == Severity.Info);
         }
 
-        // US-PERF4.3.1 — an over-wide layout on an otherwise-lean view raises a Medium View finding.
+        // US-PERF04.3.1 — an over-wide layout on an otherwise-lean view raises a Medium View finding.
         [Fact]
         public void Analyze_WideLayout_RaisesMediumFinding()
         {
@@ -106,7 +106,7 @@ namespace XrmToolSuite.UnitTests
         }
 
         // Regression: a view whose FetchXML can't be parsed but which has a genuinely wide layout must still
-        // surface the over-wide-layout risk (and score it) — the parse failure must not hide it (US-PERF4.3.1).
+        // surface the over-wide-layout risk (and score it) — the parse failure must not hide it (US-PERF04.3.1).
         [Fact]
         public void Analyze_ParseFailureButWideLayout_StillFlagsAndScoresLayout()
         {
@@ -118,7 +118,7 @@ namespace XrmToolSuite.UnitTests
             Assert.True(v.Score > 0); // the layout penalty still counts even though the query cost is unknown
         }
 
-        // US-PERF4.2.1 — an unparseable FetchXML degrades to a single Info note and score 0 (never throws).
+        // US-PERF04.2.1 — an unparseable FetchXML degrades to a single Info note and score 0 (never throws).
         [Fact]
         public void Analyze_ParseFailure_IsInfoAndScoreZero()
         {
@@ -134,7 +134,7 @@ namespace XrmToolSuite.UnitTests
             Assert.Equal(2, v.LayoutColumnCount);
         }
 
-        // US-PERF4.4.2 — Rank orders the analyzed views by score, worst first.
+        // US-PERF04.4.2 — Rank orders the analyzed views by score, worst first.
         [Fact]
         public void Rank_OrdersByScoreDescending()
         {

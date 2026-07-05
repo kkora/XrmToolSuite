@@ -14,7 +14,7 @@ namespace XrmToolSuite.CollectorTests
     /// <see cref="IOrganizationService"/>, so it runs against the shared <see cref="FakeOrganizationService"/>.
     /// Metadata-driven branches (custom-table row counts, wide tables, publisher-prefix on tables/columns,
     /// secured-column counts) are covered separately in <c>TechDebtMetadataTests</c> via a reflection
-    /// EntityMetadata builder. Traces to US-TD-1..5. TC-TD-COL-01..07.
+    /// EntityMetadata builder. Traces to US-SOLN10-1..5. TC-SOLN10-COL-01..07.
     /// </summary>
     public class TechDebtAnalyzerTests
     {
@@ -45,7 +45,7 @@ namespace XrmToolSuite.CollectorTests
         private static Entity Role(string name) => new Entity("role", Guid.NewGuid()) { ["name"] = name };
         private static string B64(string s) => Convert.ToBase64String(Encoding.UTF8.GetBytes(s));
 
-        // TC-TD-COL-01: a plugin step on RetrieveMultiple is High (per-query latency source).
+        // TC-SOLN10-COL-01: a plugin step on RetrieveMultiple is High (per-query latency source).
         [Fact]
         public void Performance_PluginOnRetrieveMultiple_High()
         {
@@ -59,7 +59,7 @@ namespace XrmToolSuite.CollectorTests
             Assert.Equal(Severity.High, f.Severity);
         }
 
-        // TC-TD-COL-02: a synchronous Update plugin with no filtering attributes is Medium.
+        // TC-SOLN10-COL-02: a synchronous Update plugin with no filtering attributes is Medium.
         [Fact]
         public void Performance_SyncUpdateNoFilter_Medium()
         {
@@ -72,7 +72,7 @@ namespace XrmToolSuite.CollectorTests
                 x => x.Title == "Synchronous Update plugin without filtering attributes" && x.Severity == Severity.Medium);
         }
 
-        // TC-TD-COL-03: dead-plugin registration flags disabled step, step-less type, and step-less assembly.
+        // TC-SOLN10-COL-03: dead-plugin registration flags disabled step, step-less type, and step-less assembly.
         [Fact]
         public void DeadPlugins_DisabledStep_UnsteppedTypeAndAssembly()
         {
@@ -92,7 +92,7 @@ namespace XrmToolSuite.CollectorTests
             Assert.Contains(findings, x => x.Title == "Plugin assembly has no active steps" && x.Severity == Severity.Medium);
         }
 
-        // TC-TD-COL-04: a draft process (type 1, statecode 0) is Low; an active process is not flagged.
+        // TC-SOLN10-COL-04: a draft process (type 1, statecode 0) is Low; an active process is not flagged.
         [Fact]
         public void Orphaned_DraftProcess_Low_ActiveIgnored()
         {
@@ -105,7 +105,7 @@ namespace XrmToolSuite.CollectorTests
             Assert.Equal("Never Ran", f.Component);   // only the draft, not the active process
         }
 
-        // TC-TD-COL-05: a JScript web resource using a deprecated API is Medium (titled by token).
+        // TC-SOLN10-COL-05: a JScript web resource using a deprecated API is Medium (titled by token).
         [Fact]
         public void DeprecatedApi_XrmPage_Medium()
         {
@@ -117,7 +117,7 @@ namespace XrmToolSuite.CollectorTests
             Assert.Equal(Severity.Medium, f.Severity);
         }
 
-        // TC-TD-COL-06: two web resources sharing a display name flag a Low duplicate finding.
+        // TC-SOLN10-COL-06: two web resources sharing a display name flag a Low duplicate finding.
         [Fact]
         public void DuplicateArtifacts_SharedDisplayName_Low()
         {
@@ -131,7 +131,7 @@ namespace XrmToolSuite.CollectorTests
             Assert.Equal(Severity.Low, f.Severity);
         }
 
-        // TC-TD-COL-07: a "Copy of …" security role is flagged Low (unmanaged security drift).
+        // TC-SOLN10-COL-07: a "Copy of …" security role is flagged Low (unmanaged security drift).
         [Fact]
         public void Security_CopiedRole_Low()
         {

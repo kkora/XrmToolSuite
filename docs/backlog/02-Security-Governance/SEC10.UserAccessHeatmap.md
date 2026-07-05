@@ -3,15 +3,15 @@
 > **Status:** Candidate backlog — not started (no code).
 > **Source:** `all` — `prompt/3.XrmToolBox_ALL_PROMPTS.txt`, Section 2 (Security & Governance), item 10. Not in pack file.
 > **Suggested tag:** `SEC10` · **Suggested project:** `XrmToolSuite.UserAccessHeatmap`
-> **Overlaps:** Reuses the effective-privilege core from Privilege Gap Analyzer (SEC1) and team inheritance from Team Permission Explorer (SEC2); shares heatmap UI patterns with Sharing Analyzer (SEC4); access-intensity signals feed Environment Governance Score (SEC9); inactive-high-access overlaps Licensing Usage Analyzer (SEC8).
-> **Value/priority (my read):** Medium-High — a visual "who has broad/admin-like access" view answers a common security question fast, though it leans on the same privilege engine as SEC1/SEC6.
+> **Overlaps:** Reuses the effective-privilege core from Privilege Gap Analyzer (SEC01) and team inheritance from Team Permission Explorer (SEC02); shares heatmap UI patterns with Sharing Analyzer (SEC04); access-intensity signals feed Environment Governance Score (SEC09); inactive-high-access overlaps Licensing Usage Analyzer (SEC08).
+> **Value/priority (my read):** Medium-High — a visual "who has broad/admin-like access" view answers a common security question fast, though it leans on the same privilege engine as SEC01/SEC06.
 
 ## Notes
 - Core tables: `systemuser`, `systemuserroles`, `teammembership`, `teamroles`, `role`, `roleprivileges`, `privilege`, `businessunit`; resolve each user's effective privilege depth per table (union of direct + team-inherited, deepest scope).
 - Access scoring model (from source): Global = highest weight, Deep = high, Local = medium, Basic = low; Delete/Assign/Share weighted higher risk; inactive user with high access = Critical. Produce a per-user access-intensity score.
 - Heatmaps: user × table, user × privilege, and by business unit. Highlight excessive-access users, admin-equivalent users, inactive-but-high-access users.
 - Read-only. Role/privilege expansion is heavy — page via `RetrieveAll`, run off the UI thread with progress + cancellation, cache metadata (clear on `UpdateConnection`).
-- Reuse the SEC1 effective-privilege engine; keep the scoring engine UI-free and unit-testable against fixtures.
+- Reuse the SEC01 effective-privilege engine; keep the scoring engine UI-free and unit-testable against fixtures.
 
 ---
 

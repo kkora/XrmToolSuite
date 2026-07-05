@@ -7,7 +7,7 @@ namespace XrmToolSuite.AnalyzerTests
 {
     /// <summary>
     /// Executable tests for the Form Changes analyzer: form scripts/controls that reference a web
-    /// resource missing from the source are flagged. Traces to US-DG-11 (form changes).
+    /// resource missing from the source are flagged. Traces to US-ALM07-11 (form changes).
     /// </summary>
     public class FormAnalyzerTests
     {
@@ -17,7 +17,7 @@ namespace XrmToolSuite.AnalyzerTests
             return new FormAnalyzer().Analyze(TestData.Context(source), _ => { });
         }
 
-        // TC-DG-FM-01: a form referencing a web resource absent from the source is flagged High.
+        // TC-ALM07-FM-01: a form referencing a web resource absent from the source is flagged High.
         [Fact]
         public void Form_MissingWebResource_FlagsHigh()
         {
@@ -31,7 +31,7 @@ namespace XrmToolSuite.AnalyzerTests
             Assert.Contains("cc_/scripts/app.js", f.Description);
         }
 
-        // TC-DG-FM-02: when the referenced web resource exists in the source, there is no finding.
+        // TC-ALM07-FM-02: when the referenced web resource exists in the source, there is no finding.
         [Fact]
         public void Form_KnownWebResource_NoFinding()
         {
@@ -43,7 +43,7 @@ namespace XrmToolSuite.AnalyzerTests
             Assert.DoesNotContain(Run(source), x => x.Title == "Form references missing web resource");
         }
 
-        // TC-DG-FM-03: a $webresource: handler token missing from the source is flagged.
+        // TC-ALM07-FM-03: a $webresource: handler token missing from the source is flagged.
         [Fact]
         public void Form_MissingHandlerToken_FlagsHigh()
         {
@@ -55,7 +55,7 @@ namespace XrmToolSuite.AnalyzerTests
             Assert.Single(Run(source), x => x.Title == "Form references missing web resource");
         }
 
-        // TC-DG-FM-04: an empty solution (no forms) reports a single informational finding.
+        // TC-ALM07-FM-04: an empty solution (no forms) reports a single informational finding.
         [Fact]
         public void NoForms_ReportsInfo()
         {

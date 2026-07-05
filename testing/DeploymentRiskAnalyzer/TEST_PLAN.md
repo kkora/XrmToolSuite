@@ -1,6 +1,6 @@
 # Deployment Risk Analyzer - Test Plan
 
-Traces to [`docs/user-stories/DG1.DeploymentRiskAnalyzer.md`](../../docs/user-stories/DG1.DeploymentRiskAnalyzer.md).
+Traces to [`docs/user-stories/ALM07.DeploymentRiskAnalyzer.md`](../../docs/user-stories/ALM07.DeploymentRiskAnalyzer.md).
 
 ## Scope
 
@@ -11,8 +11,8 @@ and the four export formats.
 
 | Tier | What | How | Environment |
 |---|---|---|---|
-| Automated | Risk scoring & banding (US-DG-8.1) and other SDK-free logic | xUnit in `testing/UnitTests/`, run with `dotnet test` | .NET 8 SDK only |
-| Manual | Analyzers, connections, exports (US-DG-1..7, 9, 10) | Numbered GUI cases in `TEST_CASES.md`, evidence in `screenshots/` | Windows + XrmToolBox + a source (and target) Dataverse env with System Customizer+ |
+| Automated | Risk scoring & banding (US-ALM07-8.1) and other SDK-free logic | xUnit in `testing/UnitTests/`, run with `dotnet test` | .NET 8 SDK only |
+| Manual | Analyzers, connections, exports (US-ALM07-1..7, 9, 10) | Numbered GUI cases in `TEST_CASES.md`, evidence in `screenshots/` | Windows + XrmToolBox + a source (and target) Dataverse env with System Customizer+ |
 
 ## What is NOT automatable here
 
@@ -34,6 +34,6 @@ is intentionally limited to pure logic so it runs anywhere with no connection.
 ## Risks
 
 - Analyzers degrade query failures to informational findings; manual cases must confirm that a
-  permission gap produces an info finding rather than aborting the run (US-DG-10.1).
+  permission gap produces an info finding rather than aborting the run (US-ALM07-10.1).
 - Excel export depends on the shipped ClosedXML chain; the "no output on export" case guards the
   packaging regression documented in the tool's DEPLOYMENT.md.

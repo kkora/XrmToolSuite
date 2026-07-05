@@ -1,6 +1,6 @@
 # Attribute Auditor - Test Plan
 
-Traces to [`docs/user-stories/AA1.AttributeAuditor.md`](../../docs/user-stories/AA1.AttributeAuditor.md).
+Traces to [`docs/user-stories/ADMIN10.AttributeAuditor.md`](../../docs/user-stories/ADMIN10.AttributeAuditor.md).
 
 ## Scope
 
@@ -27,4 +27,4 @@ In scope now: usage-signal detection, classification, report projection, CSV exp
 ## Exit criteria
 
 - Every shipped feature has at least one executed case at Pass.
-- No delete path passes without a confirmation dialog and a passing dependency check (US-AA-5.1).
+- No delete path passes without a confirmation dialog and a passing dependency check (US-ADMIN10-5.1).

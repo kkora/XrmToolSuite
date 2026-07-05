@@ -11,8 +11,8 @@ namespace XrmToolSuite.UnitTests
     /// classification and <see cref="AuditComplianceRules.Evaluate"/> (findings, deterministic scoring,
     /// banding, category breakdown, activity rules). All rules are pure functions of populated
     /// <see cref="AuditCoverage"/>/<see cref="AuditActivitySummary"/> models, so exact verdicts are
-    /// asserted with no live org. Traces to EPIC-SEC5 (US-SEC5.1.x coverage, US-SEC5.2.x activity,
-    /// US-SEC5.4.1 score, US-SEC5.5.1 recommendations).
+    /// asserted with no live org. Traces to EPIC-SEC05 (US-SEC05.1.x coverage, US-SEC05.2.x activity,
+    /// US-SEC05.4.1 score, US-SEC05.5.1 recommendations).
     /// </summary>
     public class AuditComplianceCheckerTests
     {
@@ -44,7 +44,7 @@ namespace XrmToolSuite.UnitTests
             }
         };
 
-        // ---- SensitivityHeuristics (US-SEC5.1.2) ------------------------------------------------
+        // ---- SensitivityHeuristics (US-SEC05.1.2) ------------------------------------------------
 
         [Theory]
         [InlineData("cr123_ssn", true)]
@@ -78,7 +78,7 @@ namespace XrmToolSuite.UnitTests
         public void IsSensitiveColumn_ClassifiesByNameOrType(string logical, string type, bool expected) =>
             Assert.Equal(expected, SensitivityHeuristics.IsSensitiveColumn(logical, type));
 
-        // ---- org audit disabled -> Critical (US-SEC5.1.1) ---------------------------------------
+        // ---- org audit disabled -> Critical (US-SEC05.1.1) ---------------------------------------
 
         // Regression: a null table element (or a null column within a table) must not crash the metrics
         // rollup — the rule bodies already null-guard, so Evaluate must return a report, not throw.
@@ -114,7 +114,7 @@ namespace XrmToolSuite.UnitTests
             Assert.True(report.Score <= AuditComplianceRules.OrgDisabledCap);
         }
 
-        // ---- sensitive table without audit -> High (US-SEC5.1.2) --------------------------------
+        // ---- sensitive table without audit -> High (US-SEC05.1.2) --------------------------------
 
         [Fact]
         public void SensitiveTableWithoutAudit_YieldsHigh()
@@ -130,10 +130,10 @@ namespace XrmToolSuite.UnitTests
             var f = report.Findings.Single(x => x.Title == "Sensitive table is not audited");
             Assert.Equal(Severity.High, f.Severity);
             Assert.Equal("cr123_patientssn", f.Component);
-            Assert.False(string.IsNullOrEmpty(f.Recommendation)); // remediation present (US-SEC5.5.1)
+            Assert.False(string.IsNullOrEmpty(f.Recommendation)); // remediation present (US-SEC05.5.1)
         }
 
-        // ---- sensitive column without audit on an audited table -> Medium (US-SEC5.1.2) ---------
+        // ---- sensitive column without audit on an audited table -> Medium (US-SEC05.1.2) ---------
 
         [Fact]
         public void SensitiveColumnWithoutAudit_OnAuditedTable_YieldsMedium()
@@ -155,7 +155,7 @@ namespace XrmToolSuite.UnitTests
             Assert.Equal("contact.cr123_ssn", f.Component);
         }
 
-        // ---- all covered -> good (US-SEC5.4.1) --------------------------------------------------
+        // ---- all covered -> good (US-SEC05.4.1) --------------------------------------------------
 
         [Fact]
         public void AllCovered_YieldsHighScoreAndBand_WithCategoryBreakdown()
@@ -166,14 +166,14 @@ namespace XrmToolSuite.UnitTests
             Assert.True(report.Score >= AuditComplianceRules.HighThreshold, $"score was {report.Score}");
             Assert.DoesNotContain(report.Findings, f => f.Severity >= Severity.Medium);
 
-            // Category breakdown present in the metrics (US-SEC5.4.1 AC).
+            // Category breakdown present in the metrics (US-SEC05.4.1 AC).
             Assert.Contains(report.Metrics, m => m.Label == "Org config score");
             Assert.Contains(report.Metrics, m => m.Label == "Table coverage score");
             Assert.Contains(report.Metrics, m => m.Label == "Column coverage score");
             Assert.Contains(report.Metrics, m => m.Label == "Activity health score");
         }
 
-        // ---- deterministic (US-SEC5.4.1 AC: deterministic from evidence) ------------------------
+        // ---- deterministic (US-SEC05.4.1 AC: deterministic from evidence) ------------------------
 
         [Fact]
         public void Evaluate_IsDeterministic_SameInputTwiceEqual()
@@ -189,7 +189,7 @@ namespace XrmToolSuite.UnitTests
                 b.Findings.Select(f => f.Title + "|" + f.Component));
         }
 
-        // ---- activity rules (US-SEC5.2.2) -------------------------------------------------------
+        // ---- activity rules (US-SEC05.2.2) -------------------------------------------------------
 
         private static AuditActivitySummary SampleActivity() => new AuditActivitySummary
         {

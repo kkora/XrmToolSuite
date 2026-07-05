@@ -1,6 +1,6 @@
 # Audit Compliance Checker - Test Plan
 
-Traces to [`docs/user-stories/SEC5.AuditComplianceChecker.md`](../../docs/user-stories/SEC5.AuditComplianceChecker.md).
+Traces to [`docs/user-stories/SEC05.AuditComplianceChecker.md`](../../docs/user-stories/SEC05.AuditComplianceChecker.md).
 
 ## Scope
 

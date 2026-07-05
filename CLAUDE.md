@@ -32,19 +32,21 @@ dotnet test testing/UnitTests/UnitTests.csproj
 
 Whenever a tool is **created or changed**, produce all of the following, in order — no tool is "done" until they exist:
 
-1. **Plan** — user stories in `docs/user-stories/<TAG>N.<Tool>.md` and a `testing/<Tool>/TEST_PLAN.md`.
+1. **Plan** — user stories in `docs/user-stories/<TAG>NN.<Tool>.md` and a `testing/<Tool>/TEST_PLAN.md`.
    **Backlog & user-story file naming (keep the two in lock-step):** a tool's **backlog** file
    (`docs/backlog/<category>/`) and its **user-story** file (`docs/user-stories/`) share the **same**
-   `<TAG>N.<Tool>.md` name, where `<TAG>N` is the category area tag + item number (e.g.
-   `SEC4.SharingAnalyzer.md`, `ADMIN3.DuplicateMetadataFinder.md`). The six tools that shipped before this
-   convention have no numbered candidate slot, so both their files use the area tag with `1`: `DG1`
-   (Deployment Risk Analyzer), `AA1` (Attribute Auditor), `SC1` (Solution Complexity Score), `KG1` (Solution
-   Knowledge Graph), `TD1` (Technical Debt Analyzer), `AR1` (AI Solution Reviewer). The `TemplateTool.md`
-   scaffold is exempt. `New-Tool.ps1` stamps an **untagged** `docs/backlog/<Name>.md` at the backlog root —
-   rename it to `<TAG>N.<Name>.md` and move it under the correct `docs/backlog/<category>/` folder, then give
-   the user-story file the matching name. When you add or rename either file, keep in sync: the
-   `docs/backlog/README.md` category index, the `docs/user-stories/README.md` index, the user-story file's
-   "Source spec" backlink to its backlog file, and the `testing/<Tool>/TEST_PLAN.md` "Traces to …" backlink.
+   `<TAG>NN.<Tool>.md` name, where `<TAG>` is the category code and `NN` is the **two-digit, zero-padded**
+   item number within that category (`01`, `02`, … `10`) — e.g. `SEC04.SharingAnalyzer.md`,
+   `ADMIN03.DuplicateMetadataFinder.md`. The tool's EPIC/FEAT/US ids use the **same** `<TAG>NN` as their area
+   (`EPIC-SEC04`, `FEAT-SEC04-1`, `US-SEC04-…`). **Every** tool follows this — the six that shipped first take
+   the next number in their category (`ALM07` Deployment Risk Analyzer, `ADMIN10` Attribute Auditor, `SOLN08`
+   Solution Complexity Score, `SOLN09` Solution Knowledge Graph, `SOLN10` Technical Debt Analyzer, `AI10` AI
+   Solution Reviewer). The `TemplateTool.md` scaffold is exempt. `New-Tool.ps1` stamps an **untagged**
+   `docs/backlog/<Name>.md` at the backlog root — rename it to `<TAG>NN.<Name>.md`, move it under the correct
+   `docs/backlog/<category>/` folder, and give the user-story file the matching name. When you add or rename
+   either file, keep in sync: the `docs/backlog/README.md` category index, the `docs/user-stories/README.md`
+   index, the user-story "Source spec" backlink, the `testing/<Tool>/TEST_PLAN.md` "Traces to …" backlink,
+   and the tool's EPIC/FEAT/US ids.
 2. **Tool** — the implementation under `src/Tools/`.
 3. **Test cases** — `testing/<Tool>/TEST_CASES.md`, each case traced to a user story.
 4. **Execute + screenshots** — run `dotnet test`, perform the manual/GUI cases, and save evidence (screenshots) under `testing/<Tool>/screenshots/`. **A "tool loads in XrmToolBox" screenshot is REQUIRED for every tool**, saved as `testing/<Tool>/screenshots/xrmtoolbox-tools-list.png` — the XrmToolBox **Tools** tab filtered to that tool, showing its name/version/description (proof MEF registration and any shipped dependency chain resolved at scan time). The `testing/UiSmokeTests` FlaUI harness generates all of these automatically: deploy with `dotnet build XrmToolSuite.sln -c Release -p:DeployToXTB=true`, then run `dotnet test testing/UiSmokeTests/UiSmokeTests.csproj` with `XTB_EXE` set — it asserts every tool in its `ExpectedTools` list appears and captures a per-tool `tool_<slug>.png` under its `screenshots/`. When adding a tool, add its exact `ExportMetadata("Name", …)` to `ExpectedTools`, run the harness, and copy its shot into `testing/<Tool>/screenshots/xrmtoolbox-tools-list.png`.

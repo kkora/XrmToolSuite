@@ -1,6 +1,6 @@
 ﻿# Solution Documentation Generator - Test Plan
 
-Traces to [`docs/user-stories/SOLN5.SolutionDocumentationGenerator.md`](../../docs/user-stories/SOLN5.SolutionDocumentationGenerator.md).
+Traces to [`docs/user-stories/SOLN05.SolutionDocumentationGenerator.md`](../../docs/user-stories/SOLN05.SolutionDocumentationGenerator.md).
 
 ## Scope
 

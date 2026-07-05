@@ -8,9 +8,9 @@ namespace XrmToolSuite.UnitTests
 {
     /// <summary>
     /// Executable tests for the Plugin Dependency Graph's SDK-free engine: builder projection
-    /// (US-PLUGIN1.1.x / 2.1), subgraph isolation (US-PLUGIN1.2.2), filtering (US-PLUGIN1.2.3),
-    /// risk rules — high-impact / duplicate / unmanaged (US-PLUGIN1.4.x), the emitters
-    /// (US-PLUGIN1.5.3), and the guarantee that a secure-config value is never present (US-PLUGIN1.3.3).
+    /// (US-PLUGIN01.1.x / 2.1), subgraph isolation (US-PLUGIN01.2.2), filtering (US-PLUGIN01.2.3),
+    /// risk rules — high-impact / duplicate / unmanaged (US-PLUGIN01.4.x), the emitters
+    /// (US-PLUGIN01.5.3), and the guarantee that a secure-config value is never present (US-PLUGIN01.3.3).
     /// </summary>
     public class PluginDependencyGraphTests
     {
@@ -42,7 +42,7 @@ namespace XrmToolSuite.UnitTests
         private static bool HasEdge(PluginGraph g, string from, string to, string kind) =>
             g.Edges.Any(e => e.FromId == from && e.ToId == to && e.Kind == kind);
 
-        // TC-PDG-BUILD-01: builder emits the expected typed nodes and pipeline edges (US-PLUGIN1.1.x, 2.1).
+        // TC-PDG-BUILD-01: builder emits the expected typed nodes and pipeline edges (US-PLUGIN01.1.x, 2.1).
         [Fact]
         public void Build_ProducesNodesAndEdges()
         {
@@ -76,7 +76,7 @@ namespace XrmToolSuite.UnitTests
         }
 
         // TC-PDG-SUB-03: subgraph of an assembly keeps its footprint + owning solution but not an
-        // unrelated custom API (US-PLUGIN1.2.2).
+        // unrelated custom API (US-PLUGIN01.2.2).
         [Fact]
         public void Subgraph_IsolatesAssemblyFootprint()
         {
@@ -90,7 +90,7 @@ namespace XrmToolSuite.UnitTests
             Assert.Null(sub.Node(PluginGraphBuilder.CustomApiId("C1")));         // not in the forward footprint
         }
 
-        // TC-PDG-FILTER-04: filtering by table keeps only the matching step's lineage (US-PLUGIN1.2.3).
+        // TC-PDG-FILTER-04: filtering by table keeps only the matching step's lineage (US-PLUGIN01.2.3).
         [Fact]
         public void Filter_ByTable_KeepsMatchingStepsOnly()
         {
@@ -112,7 +112,7 @@ namespace XrmToolSuite.UnitTests
             Assert.Equal(g.Nodes.Count, f.Nodes.Count);
         }
 
-        // TC-PDG-RISK-06: high-impact assembly flagged when fan-out exceeds the threshold (US-PLUGIN1.4.1).
+        // TC-PDG-RISK-06: high-impact assembly flagged when fan-out exceeds the threshold (US-PLUGIN01.4.1).
         [Fact]
         public void Risk_HighImpactAssembly_Flagged()
         {
@@ -129,7 +129,7 @@ namespace XrmToolSuite.UnitTests
             Assert.DoesNotContain(none, f => f.Title.StartsWith("High-impact"));
         }
 
-        // TC-PDG-RISK-07: overlapping steps on the same message+entity+stage+mode flagged (US-PLUGIN1.4.2).
+        // TC-PDG-RISK-07: overlapping steps on the same message+entity+stage+mode flagged (US-PLUGIN01.4.2).
         [Fact]
         public void Risk_DuplicateSteps_Flagged()
         {
@@ -147,7 +147,7 @@ namespace XrmToolSuite.UnitTests
             Assert.Equal(Severity.High, dup.Severity);
         }
 
-        // TC-PDG-RISK-08: unmanaged assembly flagged High, naming the component + owning solution (US-PLUGIN1.4.3).
+        // TC-PDG-RISK-08: unmanaged assembly flagged High, naming the component + owning solution (US-PLUGIN01.4.3).
         [Fact]
         public void Risk_UnmanagedAssembly_Flagged()
         {
@@ -164,7 +164,7 @@ namespace XrmToolSuite.UnitTests
             Assert.Contains("Dev Tools", un.Description);
         }
 
-        // TC-PDG-EMIT-09: Mermaid / GraphML / JSON are well-formed and count nodes+edges (US-PLUGIN1.5.3).
+        // TC-PDG-EMIT-09: Mermaid / GraphML / JSON are well-formed and count nodes+edges (US-PLUGIN01.5.3).
         [Fact]
         public void Emitters_ProduceWellFormedOutput()
         {
@@ -210,7 +210,7 @@ namespace XrmToolSuite.UnitTests
         }
 
         // TC-PDG-SEC-11: a secure-config VALUE is never present — only a "uses config" flag/edge
-        // (US-PLUGIN1.3.3). The graph carries no secure value at all, so no output can leak one.
+        // (US-PLUGIN01.3.3). The graph carries no secure value at all, so no output can leak one.
         [Fact]
         public void SecureConfig_ValueNeverPresent()
         {

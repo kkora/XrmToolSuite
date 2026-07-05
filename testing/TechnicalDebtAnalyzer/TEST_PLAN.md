@@ -1,6 +1,6 @@
 # Technical Debt Analyzer - Test Plan
 
-Traces to [`docs/user-stories/TD1.TechnicalDebtAnalyzer.md`](../../docs/user-stories/TD1.TechnicalDebtAnalyzer.md).
+Traces to [`docs/user-stories/SOLN10.TechnicalDebtAnalyzer.md`](../../docs/user-stories/SOLN10.TechnicalDebtAnalyzer.md).
 
 ## Scope
 
@@ -12,8 +12,8 @@ offline/AI executive summary (manual, against a live org in XrmToolBox).
 
 | Tier | What | How | Environment |
 |---|---|---|---|
-| Automated | Debt score/band, cap, per-category metrics, report-model shape (US-TD-3, US-TD-4) | xUnit over `TechDebtReport` + shared `ScoreCalculator`/`ReportModel` | .NET 8 SDK (`testing/UnitTests`) |
-| Manual | Analyzers over live metadata, UI, exports, summary (US-TD-1, US-TD-5..7) | Numbered GUI cases in `TEST_CASES.md`, evidence in `screenshots/` | Windows + XrmToolBox + a Dataverse env |
+| Automated | Debt score/band, cap, per-category metrics, report-model shape (US-SOLN10-3, US-SOLN10-4) | xUnit over `TechDebtReport` + shared `ScoreCalculator`/`ReportModel` | .NET 8 SDK (`testing/UnitTests`) |
+| Manual | Analyzers over live metadata, UI, exports, summary (US-SOLN10-1, US-SOLN10-5..7) | Numbered GUI cases in `TEST_CASES.md`, evidence in `screenshots/` | Windows + XrmToolBox + a Dataverse env |
 
 ## What is NOT automatable here
 
@@ -33,5 +33,5 @@ headlessly. These are documented manual cases executed in XrmToolBox with a scre
 
 ## Risks
 
-- Row-count probing is capped (`MaxEntityProbes`) — verify the cap is reported (TC-TD-M-02) rather than silently truncating.
-- The AI summary must never send record data or persist the key — verify the consent payload (TC-TD-M-09).
+- Row-count probing is capped (`MaxEntityProbes`) — verify the cap is reported (TC-SOLN10-M-02) rather than silently truncating.
+- The AI summary must never send record data or persist the key — verify the consent payload (TC-SOLN10-M-09).

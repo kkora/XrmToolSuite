@@ -11,7 +11,7 @@ namespace XrmToolSuite.UnitTests
     /// Executable tests for the SDK-free sharing logic: <see cref="AccessRights"/> mask decoding,
     /// the <see cref="SharingSummary"/> aggregations, and the <see cref="SharingRiskRules"/> risk rules
     /// (all pure functions of a populated summary, so exact verdicts are asserted with no live org).
-    /// Traces to EPIC-SEC4 (US-SEC4.2.1 rights decoding, US-SEC4.3.1/US-SEC4.3.2 risk findings).
+    /// Traces to EPIC-SEC04 (US-SEC04.2.1 rights decoding, US-SEC04.3.1/US-SEC04.3.2 risk findings).
     /// </summary>
     public class SharingAnalyzerTests
     {
@@ -40,7 +40,7 @@ namespace XrmToolSuite.UnitTests
         private static SharingSummary SummaryOf(params SharedRecordAccess[] shares) =>
             new SharingSummary { Shares = shares.ToList(), ScannedTables = { "account" } };
 
-        // ---- AccessRights.Decode (US-SEC4.2.1) ------------------------------------------------
+        // ---- AccessRights.Decode (US-SEC04.2.1) ------------------------------------------------
 
         [Fact]
         public void Decode_Read_YieldsReadOnly()
@@ -77,7 +77,7 @@ namespace XrmToolSuite.UnitTests
             Assert.Equal("None", AccessRights.Summary(0));
         }
 
-        // ---- aggregations (US-SEC4.2.1) -------------------------------------------------------
+        // ---- aggregations (US-SEC04.2.1) -------------------------------------------------------
 
         [Fact]
         public void RecordStats_CountsDistinctPrincipalsAndShares()
@@ -109,7 +109,7 @@ namespace XrmToolSuite.UnitTests
             Assert.Equal(2, stat.InboundShares);
         }
 
-        // ---- excessive sharing -> High (US-SEC4.3.1) ------------------------------------------
+        // ---- excessive sharing -> High (US-SEC04.3.1) ------------------------------------------
 
         [Fact]
         public void Excessive_RecordSharedWithManyPrincipals_YieldsHigh()
@@ -142,7 +142,7 @@ namespace XrmToolSuite.UnitTests
             Assert.Contains(findings, x => x.Title == "Excessive record sharing" && x.Severity == Severity.High);
         }
 
-        // ---- inactive user -> Medium (US-SEC4.3.1) --------------------------------------------
+        // ---- inactive user -> Medium (US-SEC04.3.1) --------------------------------------------
 
         [Fact]
         public void InactiveUser_Share_YieldsMedium()
@@ -156,7 +156,7 @@ namespace XrmToolSuite.UnitTests
             Assert.Equal(Severity.Medium, f.Severity);
         }
 
-        // ---- disabled / empty team -> Medium (US-SEC4.3.1) ------------------------------------
+        // ---- disabled / empty team -> Medium (US-SEC04.3.1) ------------------------------------
 
         [Fact]
         public void DisabledTeam_Share_YieldsMedium()
@@ -170,7 +170,7 @@ namespace XrmToolSuite.UnitTests
             Assert.Equal(Severity.Medium, f.Severity);
         }
 
-        // ---- high inbound -> Medium (US-SEC4.3.2) ---------------------------------------------
+        // ---- high inbound -> Medium (US-SEC04.3.2) ---------------------------------------------
 
         [Fact]
         public void HighInbound_User_YieldsMedium()
@@ -187,7 +187,7 @@ namespace XrmToolSuite.UnitTests
             Assert.Equal(Severity.Medium, f.Severity);
         }
 
-        // ---- statistical outlier -> Medium (US-SEC4.3.1) --------------------------------------
+        // ---- statistical outlier -> Medium (US-SEC04.3.1) --------------------------------------
 
         [Fact]
         public void OutlierRecord_HighPrincipalCount_YieldsMedium()
@@ -207,7 +207,7 @@ namespace XrmToolSuite.UnitTests
             Assert.DoesNotContain(findings, x => x.Title == "Excessive record sharing");
         }
 
-        // ---- clean -> single Info (US-SEC4.3.1) -----------------------------------------------
+        // ---- clean -> single Info (US-SEC04.3.1) -----------------------------------------------
 
         [Fact]
         public void CleanSharing_YieldsSingleInfoFinding()
@@ -222,7 +222,7 @@ namespace XrmToolSuite.UnitTests
             Assert.Equal("No sharing risks detected", f.Title);
         }
 
-        // ---- score / band (US-SEC4.3.1) -------------------------------------------------------
+        // ---- score / band (US-SEC04.3.1) -------------------------------------------------------
 
         [Fact]
         public void Score_CleanFindings_IsZeroAndLowBand()

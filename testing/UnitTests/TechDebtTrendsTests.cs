@@ -8,9 +8,9 @@ using XrmToolSuite.TechnicalDebtAnalyzer.Trends;
 namespace XrmToolSuite.UnitTests
 {
     /// <summary>
-    /// SDK-free tests for the RPT4 Technical Debt Trends logic: the snapshot store (append / per-env cap /
+    /// SDK-free tests for the RPT04 Technical Debt Trends logic: the snapshot store (append / per-env cap /
     /// same-run dedupe / per-env selection) and the analytics (run-over-run delta, direction, series,
-    /// best/worst). The JSON+file persistence layer (Newtonsoft/disk) is manual-tested. Traces to US-TD-8.
+    /// best/worst). The JSON+file persistence layer (Newtonsoft/disk) is manual-tested. Traces to US-SOLN10-8.
     /// </summary>
     public class TechDebtTrendsTests
     {
@@ -27,7 +27,7 @@ namespace XrmToolSuite.UnitTests
                 CategoryCounts = cats ?? new Dictionary<string, int>(),
             };
 
-        // ---- store (US-TD-8) ----
+        // ---- store (US-SOLN10-8) ----
 
         [Fact]
         public void Append_AddsAndSelectsPerEnvironment_Ordered()
@@ -74,7 +74,7 @@ namespace XrmToolSuite.UnitTests
             Assert.Equal(2, TrendStore.ForEnvironment(h, "PROD").Count);
         }
 
-        // ---- analytics (US-TD-8) ----
+        // ---- analytics (US-SOLN10-8) ----
 
         [Fact]
         public void SincePrevious_FewerThanTwo_IsNull()

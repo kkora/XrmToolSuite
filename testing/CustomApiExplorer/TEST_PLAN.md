@@ -1,6 +1,6 @@
 # Custom API Explorer - Test Plan
 
-Traces to [`docs/user-stories/PLUGIN6.CustomApiExplorer.md`](../../docs/user-stories/PLUGIN6.CustomApiExplorer.md).
+Traces to [`docs/user-stories/PLUGIN06.CustomApiExplorer.md`](../../docs/user-stories/PLUGIN06.CustomApiExplorer.md).
 
 ## Scope
 

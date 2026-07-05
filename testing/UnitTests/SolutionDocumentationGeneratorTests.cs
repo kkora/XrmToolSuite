@@ -9,7 +9,7 @@ namespace XrmToolSuite.UnitTests
     /// <summary>
     /// Executable tests for the Solution Documentation Generator's SDK-free document pipeline: the
     /// <see cref="DocBuilder"/> (mode + sections gating, inventory counts, "not available" degradation)
-    /// and the <see cref="DocRenderers"/> (Markdown / HTML / JSON). Traces to US-SOLN5.1.x / 5.2.x / 5.3.x
+    /// and the <see cref="DocRenderers"/> (Markdown / HTML / JSON). Traces to US-SOLN05.1.x / 5.2.x / 5.3.x
     /// / 5.5.x. The SDK collector and the Word/PDF/Excel exporters are excluded (manual-tested).
     /// </summary>
     public class SolutionDocumentationGeneratorTests
@@ -75,7 +75,7 @@ namespace XrmToolSuite.UnitTests
             return scan;
         }
 
-        // TC-SOLN5-COUNT-01 (US-SOLN5.3.2): ComponentCount rolls up per category and overall.
+        // TC-SOLN05-COUNT-01 (US-SOLN05.3.2): ComponentCount rolls up per category and overall.
         [Fact]
         public void ComponentCount_CountsPerCategoryAndTotal()
         {
@@ -86,7 +86,7 @@ namespace XrmToolSuite.UnitTests
             Assert.Equal(12, scan.ComponentCount());                     // 2 entities + 10 components
         }
 
-        // TC-SOLN5-MODE-02 (US-SOLN5.1.1): Executive Summary keeps only the executive framing sections.
+        // TC-SOLN05-MODE-02 (US-SOLN05.1.1): Executive Summary keeps only the executive framing sections.
         [Fact]
         public void Build_ExecutiveSummary_OmitsDetailSections()
         {
@@ -102,7 +102,7 @@ namespace XrmToolSuite.UnitTests
             Assert.DoesNotContain(SectionKinds.Diagrams, kinds);
         }
 
-        // TC-SOLN5-MODE-03 (US-SOLN5.1.1): Full Solution Reference includes every section, incl. diagrams.
+        // TC-SOLN05-MODE-03 (US-SOLN05.1.1): Full Solution Reference includes every section, incl. diagrams.
         [Fact]
         public void Build_FullReference_IncludesAllSections()
         {
@@ -116,7 +116,7 @@ namespace XrmToolSuite.UnitTests
 
         // Regression: when the primary component enumeration FAILED (permission gap), an empty component
         // section must render the "not available" note — NOT a false "No X components are included in this
-        // solution", which would misinform the reader in exactly the permission-gap case (US-SOLN5.2.3).
+        // solution", which would misinform the reader in exactly the permission-gap case (US-SOLN05.2.3).
         [Fact]
         public void Build_ComponentScanFailed_RendersNotAvailable_NotNoComponents()
         {
@@ -134,7 +134,7 @@ namespace XrmToolSuite.UnitTests
                 n.IndexOf("are included in this solution", StringComparison.OrdinalIgnoreCase) >= 0);
         }
 
-        // TC-SOLN5-MODE-04 (US-SOLN5.1.1): Standard Reference drops only the heavy diagram section.
+        // TC-SOLN05-MODE-04 (US-SOLN05.1.1): Standard Reference drops only the heavy diagram section.
         [Fact]
         public void Build_StandardReference_OmitsDiagramsButKeepsDetail()
         {
@@ -146,7 +146,7 @@ namespace XrmToolSuite.UnitTests
             Assert.DoesNotContain(SectionKinds.Diagrams, kinds);
         }
 
-        // TC-SOLN5-SECT-05 (US-SOLN5.1.1): an unchecked section is excluded even when the mode allows it.
+        // TC-SOLN05-SECT-05 (US-SOLN05.1.1): an unchecked section is excluded even when the mode allows it.
         [Fact]
         public void Build_UncheckedSection_IsExcluded()
         {
@@ -161,7 +161,7 @@ namespace XrmToolSuite.UnitTests
             Assert.Contains(SectionKinds.Schema, kinds); // still checked
         }
 
-        // TC-SOLN5-SCHEMA-06 (US-SOLN5.2.1): Full Reference emits a per-table column detail table.
+        // TC-SOLN05-SCHEMA-06 (US-SOLN05.2.1): Full Reference emits a per-table column detail table.
         [Fact]
         public void Build_FullReference_Schema_HasPerTableColumnDetail()
         {
@@ -173,7 +173,7 @@ namespace XrmToolSuite.UnitTests
                                                 t.Rows.Any(r => r.Any(c => c == "telephone1")));
         }
 
-        // TC-SOLN5-NA-07 (US-SOLN5.2.3): a null typed list degrades to a documented "not available" note.
+        // TC-SOLN05-NA-07 (US-SOLN05.2.3): a null typed list degrades to a documented "not available" note.
         [Fact]
         public void Build_NullSchema_RendersNotAvailableNote()
         {
@@ -185,7 +185,7 @@ namespace XrmToolSuite.UnitTests
             Assert.Contains(schema.Notes, n => n.Contains("not available"));
         }
 
-        // TC-SOLN5-MD-08 (US-SOLN5.5.1): Markdown carries the title and section headers.
+        // TC-SOLN05-MD-08 (US-SOLN05.5.1): Markdown carries the title and section headers.
         [Fact]
         public void Markdown_ContainsTitleAndSectionHeaders()
         {
@@ -199,7 +199,7 @@ namespace XrmToolSuite.UnitTests
             Assert.Contains("| Component type | Count |", md);
         }
 
-        // TC-SOLN5-HTML-09 (US-SOLN5.5.1): HTML is self-contained + theme-aware and carries the sections.
+        // TC-SOLN05-HTML-09 (US-SOLN05.5.1): HTML is self-contained + theme-aware and carries the sections.
         [Fact]
         public void Html_IsSelfContainedThemeAware()
         {
@@ -213,7 +213,7 @@ namespace XrmToolSuite.UnitTests
             Assert.Contains(">" + SectionKinds.Title(SectionKinds.Roles) + "<", html);
         }
 
-        // TC-SOLN5-JSON-10 (US-SOLN5.5.1): JSON carries the structured inventory + sections.
+        // TC-SOLN05-JSON-10 (US-SOLN05.5.1): JSON carries the structured inventory + sections.
         [Fact]
         public void Json_CarriesStructuredInventoryAndSections()
         {

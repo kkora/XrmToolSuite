@@ -10,7 +10,7 @@ namespace XrmToolSuite.AnalyzerTests
 {
     /// <summary>
     /// Executable tests for the Power Pages Readiness analyzer. It is entirely query-driven (no
-    /// metadata, no target), so the fake connection exercises the full path. Traces to US-DG-7.
+    /// metadata, no target), so the fake connection exercises the full path. Traces to US-ALM07-7.
     /// </summary>
     public class PowerPagesAnalyzerTests
     {
@@ -27,7 +27,7 @@ namespace XrmToolSuite.AnalyzerTests
             return new PowerPagesAnalyzer().Analyze(ctx, _ => { });
         }
 
-        // TC-DG-PP-01: no portal tables present -> single Info "no site detected".
+        // TC-ALM07-PP-01: no portal tables present -> single Info "no site detected".
         [Fact]
         public void NoSite_SingleInfo()
         {
@@ -36,7 +36,7 @@ namespace XrmToolSuite.AnalyzerTests
             Assert.Equal("No Power Pages site detected", f.Title);
         }
 
-        // TC-DG-PP-02: site present but no web roles -> High (all permissions hang off web roles).
+        // TC-ALM07-PP-02: site present but no web roles -> High (all permissions hang off web roles).
         [Fact]
         public void SiteWithoutWebRoles_FlagsHigh()
         {
@@ -47,7 +47,7 @@ namespace XrmToolSuite.AnalyzerTests
             Assert.Equal(Severity.High, f.Severity);
         }
 
-        // TC-DG-PP-03: a table surfaced by a basic form with no table-permission record -> High.
+        // TC-ALM07-PP-03: a table surfaced by a basic form with no table-permission record -> High.
         [Fact]
         public void TableOnFormWithoutPermission_FlagsHigh()
         {
@@ -65,7 +65,7 @@ namespace XrmToolSuite.AnalyzerTests
             Assert.Equal("contoso_case", f.AffectedComponent);
         }
 
-        // TC-DG-PP-04: a basic form with table permissions turned OFF -> High (runs elevated).
+        // TC-ALM07-PP-04: a basic form with table permissions turned OFF -> High (runs elevated).
         [Fact]
         public void FormWithPermissionsOff_FlagsHigh()
         {
@@ -81,7 +81,7 @@ namespace XrmToolSuite.AnalyzerTests
                 x.Title == "Basic form bypasses table permissions" && x.Severity == Severity.High);
         }
 
-        // TC-DG-PP-05: a web file with no attached document annotation -> Medium (will 404).
+        // TC-ALM07-PP-05: a web file with no attached document annotation -> Medium (will 404).
         [Fact]
         public void WebFileWithoutContent_FlagsMedium()
         {
@@ -94,7 +94,7 @@ namespace XrmToolSuite.AnalyzerTests
                 x.Title == "Web file has no content" && x.Severity == Severity.Medium);
         }
 
-        // TC-DG-PP-06: a content snippet with an empty value -> Low (renders blank).
+        // TC-ALM07-PP-06: a content snippet with an empty value -> Low (renders blank).
         [Fact]
         public void EmptyContentSnippet_FlagsLow()
         {
@@ -107,7 +107,7 @@ namespace XrmToolSuite.AnalyzerTests
                 x.Title == "Empty content snippet" && x.Severity == Severity.Low);
         }
 
-        // TC-DG-PP-07: the enhanced 'mspp_' data model is detected as well as classic 'adx_'.
+        // TC-ALM07-PP-07: the enhanced 'mspp_' data model is detected as well as classic 'adx_'.
         [Fact]
         public void EnhancedMsppSchema_IsDetected()
         {

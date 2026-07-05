@@ -12,7 +12,7 @@ namespace XrmToolSuite.AnalyzerTests
     /// connection references parsed from clientdata) and the plugin-step conflict checks
     /// (duplicate registrations, execution-rank collisions), which read only the step's own columns.
     /// The plugin-step <em>health</em> checks (missing type/assembly, missing target table) rely on
-    /// aliased LEFT-OUTER joins and stay in the manual suite. Traces to US-DG-5 (flows &amp; plugins).
+    /// aliased LEFT-OUTER joins and stay in the manual suite. Traces to US-ALM07-5 (flows &amp; plugins).
     /// </summary>
     public class FlowPluginAnalyzerTests
     {
@@ -35,7 +35,7 @@ namespace XrmToolSuite.AnalyzerTests
             return new FlowPluginAnalyzer().Analyze(ctx, _ => { });
         }
 
-        // TC-DG-FP-01: an OFF (draft) cloud flow is flagged Medium (managed import preserves OFF state).
+        // TC-ALM07-FP-01: an OFF (draft) cloud flow is flagged Medium (managed import preserves OFF state).
         [Fact]
         public void DraftCloudFlow_FlagsMedium()
         {
@@ -46,7 +46,7 @@ namespace XrmToolSuite.AnalyzerTests
             Assert.Equal(Severity.Medium, f.Severity);
         }
 
-        // TC-DG-FP-02: a draft classic process is flagged Low.
+        // TC-ALM07-FP-02: a draft classic process is flagged Low.
         [Fact]
         public void DraftClassicProcess_FlagsLow()
         {
@@ -57,7 +57,7 @@ namespace XrmToolSuite.AnalyzerTests
             Assert.Equal(Severity.Low, f.Severity);
         }
 
-        // TC-DG-FP-03: an activated cloud flow with a resolvable connection reference produces no finding.
+        // TC-ALM07-FP-03: an activated cloud flow with a resolvable connection reference produces no finding.
         [Fact]
         public void ActivatedFlow_KnownConnectionRef_NoFinding()
         {
@@ -70,7 +70,7 @@ namespace XrmToolSuite.AnalyzerTests
             Assert.Empty(Run(source));
         }
 
-        // TC-DG-FP-04: a cloud flow referencing a connection reference absent from the env is flagged High.
+        // TC-ALM07-FP-04: a cloud flow referencing a connection reference absent from the env is flagged High.
         [Fact]
         public void Flow_MissingConnectionRef_FlagsHigh()
         {
@@ -85,7 +85,7 @@ namespace XrmToolSuite.AnalyzerTests
             Assert.Contains("contoso_ghost", f.Description);
         }
 
-        // TC-DG-FP-05: the same plugin type registered twice on one event (no filters) is a duplicate → High.
+        // TC-ALM07-FP-05: the same plugin type registered twice on one event (no filters) is a duplicate → High.
         [Fact]
         public void SameType_SameEvent_NoFilters_FlagsDuplicateHigh()
         {
@@ -98,7 +98,7 @@ namespace XrmToolSuite.AnalyzerTests
             Assert.Equal(Severity.High, f.Severity);
         }
 
-        // TC-DG-FP-06: same type on one event but disjoint filtering attributes do not overlap → no duplicate.
+        // TC-ALM07-FP-06: same type on one event but disjoint filtering attributes do not overlap → no duplicate.
         [Fact]
         public void SameType_DisjointFilters_NoDuplicate()
         {
@@ -110,7 +110,7 @@ namespace XrmToolSuite.AnalyzerTests
             Assert.DoesNotContain(Run(source), x => x.Title == "Duplicate SDK step registration");
         }
 
-        // TC-DG-FP-07: same type where one step filters a subset the other (all-attributes) covers → overlap → duplicate.
+        // TC-ALM07-FP-07: same type where one step filters a subset the other (all-attributes) covers → overlap → duplicate.
         [Fact]
         public void SameType_OverlappingFilters_FlagsDuplicate()
         {
@@ -122,7 +122,7 @@ namespace XrmToolSuite.AnalyzerTests
             Assert.Single(Run(source), x => x.Title == "Duplicate SDK step registration");
         }
 
-        // TC-DG-FP-08: a duplicate where one step is disabled is not a runtime double-execution → no finding.
+        // TC-ALM07-FP-08: a duplicate where one step is disabled is not a runtime double-execution → no finding.
         [Fact]
         public void SameType_OneDisabled_NoDuplicate()
         {
@@ -134,7 +134,7 @@ namespace XrmToolSuite.AnalyzerTests
             Assert.DoesNotContain(Run(source), x => x.Title == "Duplicate SDK step registration");
         }
 
-        // TC-DG-FP-09: different plugin types sharing a rank on one event run non-deterministically → Medium.
+        // TC-ALM07-FP-09: different plugin types sharing a rank on one event run non-deterministically → Medium.
         [Fact]
         public void DifferentTypes_SameRank_FlagsRankConflictMedium()
         {
@@ -147,7 +147,7 @@ namespace XrmToolSuite.AnalyzerTests
             Assert.Equal(Severity.Medium, f.Severity);
         }
 
-        // TC-DG-FP-10: different types at distinct ranks on one event are deterministic → no rank conflict.
+        // TC-ALM07-FP-10: different types at distinct ranks on one event are deterministic → no rank conflict.
         [Fact]
         public void DifferentTypes_DistinctRanks_NoRankConflict()
         {

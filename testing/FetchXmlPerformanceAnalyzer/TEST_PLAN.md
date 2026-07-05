@@ -1,6 +1,6 @@
 # FetchXML Performance Analyzer - Test Plan
 
-Traces to [`docs/user-stories/PERF3.FetchXmlPerformanceAnalyzer.md`](../../docs/user-stories/PERF3.FetchXmlPerformanceAnalyzer.md).
+Traces to [`docs/user-stories/PERF03.FetchXmlPerformanceAnalyzer.md`](../../docs/user-stories/PERF03.FetchXmlPerformanceAnalyzer.md).
 
 ## Scope
 

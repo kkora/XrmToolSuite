@@ -1,11 +1,11 @@
 # View Performance Analyzer - Test Plan
 
-Traces to [`docs/user-stories/PERF4.ViewPerformanceAnalyzer.md`](../../docs/user-stories/PERF4.ViewPerformanceAnalyzer.md).
+Traces to [`docs/user-stories/PERF04.ViewPerformanceAnalyzer.md`](../../docs/user-stories/PERF04.ViewPerformanceAnalyzer.md).
 
 ## Scope
 
 The View Performance Analyzer batch-analyzes every system view (`savedquery`) and, optionally, personal
-view (`userquery`) for a chosen table. Each view's FetchXML runs through the **shared** PERF3 FetchXML rule
+view (`userquery`) for a chosen table. Each view's FetchXML runs through the **shared** PERF03 FetchXML rule
 engine (reused, not reimplemented) and its LayoutXML is parsed for displayed-column width; the two combine
 into a labeled-heuristic 0–100 per-view cost score that ranks the slowest/riskiest views. It offers a
 per-view FetchXML + layout-columns + findings detail view, optional read-only execution timing, and

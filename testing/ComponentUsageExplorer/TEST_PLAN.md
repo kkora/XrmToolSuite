@@ -1,6 +1,6 @@
 # Component Usage Explorer - Test Plan
 
-Traces to [`docs/user-stories/SOLN1.ComponentUsageExplorer.md`](../../docs/user-stories/SOLN1.ComponentUsageExplorer.md).
+Traces to [`docs/user-stories/SOLN01.ComponentUsageExplorer.md`](../../docs/user-stories/SOLN01.ComponentUsageExplorer.md).
 
 ## Scope
 

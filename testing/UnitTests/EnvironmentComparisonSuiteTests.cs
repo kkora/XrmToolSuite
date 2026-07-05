@@ -10,7 +10,7 @@ namespace XrmToolSuite.UnitTests
     /// SDK-free tests for the Environment Comparison Suite's pure diff engine — the classifier
     /// (<see cref="SnapshotComparer.Compare"/>) and the roll-up (<see cref="SnapshotComparer.Roll"/>).
     /// No Dataverse, no WinForms; the SDK collector (<c>ComparisonCollector</c>) is manual-tested against
-    /// live orgs. Traces to US-MIG1.2.2 / US-MIG1.3.3 / US-MIG1.4.1 / US-MIG1.4.2.
+    /// live orgs. Traces to US-MIG01.2.2 / US-MIG01.3.3 / US-MIG01.4.1 / US-MIG01.4.2.
     /// </summary>
     public class EnvironmentComparisonSuiteTests
     {
@@ -24,9 +24,9 @@ namespace XrmToolSuite.UnitTests
             return s;
         }
 
-        // ---------------------------------------------------------------- classification (US-MIG1.4.1)
+        // ---------------------------------------------------------------- classification (US-MIG01.4.1)
 
-        [Fact] // US-MIG1.4.1 — a component in source but not target is Missing.
+        [Fact] // US-MIG01.4.1 — a component in source but not target is Missing.
         public void Compare_InSourceOnly_IsMissing()
         {
             var diffs = SnapshotComparer.Compare(Cat,
@@ -38,7 +38,7 @@ namespace XrmToolSuite.UnitTests
             Assert.Equal("account", d.Key);
         }
 
-        [Fact] // US-MIG1.4.1 — a component in target but not source is Extra.
+        [Fact] // US-MIG01.4.1 — a component in target but not source is Extra.
         public void Compare_InTargetOnly_IsExtra()
         {
             var diffs = SnapshotComparer.Compare(Cat,
@@ -49,7 +49,7 @@ namespace XrmToolSuite.UnitTests
             Assert.Equal(DiffClass.Extra, d.Class);
         }
 
-        [Fact] // US-MIG1.2.2 — matched components with a differing property are Changed, with the delta listed.
+        [Fact] // US-MIG01.2.2 — matched components with a differing property are Changed, with the delta listed.
         public void Compare_DifferingProperty_IsChangedWithDelta()
         {
             var diffs = SnapshotComparer.Compare(Cat,
@@ -64,7 +64,7 @@ namespace XrmToolSuite.UnitTests
             Assert.Equal("Memo", cp.Target);
         }
 
-        [Fact] // US-MIG1.4.1 — a managed/unmanaged layering difference is its own class (takes precedence).
+        [Fact] // US-MIG01.4.1 — a managed/unmanaged layering difference is its own class (takes precedence).
         public void Compare_ManagedDiffers_IsManagedVsUnmanaged()
         {
             var diffs = SnapshotComparer.Compare(Cat,
@@ -77,7 +77,7 @@ namespace XrmToolSuite.UnitTests
             Assert.False(d.TargetManaged);
         }
 
-        [Fact] // US-MIG1.4.1 — identical components (same props, same managed state) are Identical.
+        [Fact] // US-MIG01.4.1 — identical components (same props, same managed state) are Identical.
         public void Compare_SameEverything_IsIdentical()
         {
             var diffs = SnapshotComparer.Compare(Cat,
@@ -130,7 +130,7 @@ namespace XrmToolSuite.UnitTests
             Assert.Contains(d.ChangedProperties, c => c.Prop == "version");
         }
 
-        // ---------------------------------------------------------------- severity (US-MIG1.4.2)
+        // ---------------------------------------------------------------- severity (US-MIG01.4.2)
 
         [Fact] // Missing a structural component (table) is High; managed/unmanaged is High.
         public void SeverityFor_StructuralMissing_IsHigh()
@@ -158,7 +158,7 @@ namespace XrmToolSuite.UnitTests
             Assert.Equal(Severity.Critical, SnapshotComparer.SeverityFor(ComparisonCategories.Views, DiffClass.Extra, opts));
         }
 
-        // ---------------------------------------------------------------- roll-up (US-MIG1.4.2)
+        // ---------------------------------------------------------------- roll-up (US-MIG01.4.2)
 
         [Fact] // Roll produces a weighted score/band, findings (excluding identical), and a count matrix.
         public void Roll_ScoresBandsAndCounts()
@@ -195,7 +195,7 @@ namespace XrmToolSuite.UnitTests
             Assert.Equal(r1.Diffs.Count, r2.Diffs.Count);
         }
 
-        // ---------------------------------------------------------------- secret masking (US-MIG1.3.3)
+        // ---------------------------------------------------------------- secret masking (US-MIG01.3.3)
 
         [Fact] // A secret-typed property (marked on the snapshot) is masked in the diff output, though the
                 // underlying change is still detected.

@@ -10,8 +10,8 @@ namespace XrmToolSuite.UnitTests
     /// <summary>
     /// SDK-free tests for the Environment Inventory normalization model, exporters and report projection.
     /// Snapshots are built by hand (no Dataverse SDK); the live <c>InventoryCollector</c> is manual-tested.
-    /// Traces to US-ADMIN7.4.1 (search/filter), US-ADMIN7.4.2 (detail), US-ADMIN7.3.2 (no secrets) and
-    /// US-ADMIN7.5.1 (export engine).
+    /// Traces to US-ADMIN07.4.1 (search/filter), US-ADMIN07.4.2 (detail), US-ADMIN07.3.2 (no secrets) and
+    /// US-ADMIN07.5.1 (export engine).
     /// </summary>
     public class EnvironmentInventoryTests
     {
@@ -50,7 +50,7 @@ namespace XrmToolSuite.UnitTests
             return snap;
         }
 
-        // ---- Filter (US-ADMIN7.4.1) ----
+        // ---- Filter (US-ADMIN07.4.1) ----
 
         [Fact]
         public void Filter_ByText_MatchesNameSchemaAndType_CaseInsensitive()
@@ -87,7 +87,7 @@ namespace XrmToolSuite.UnitTests
             Assert.Equal("Account", result[0].Name);
         }
 
-        // ---- Counts (US-ADMIN7.4.1) ----
+        // ---- Counts (US-ADMIN07.4.1) ----
 
         [Fact]
         public void CountByCategory_CountsPerCategory()
@@ -124,7 +124,7 @@ namespace XrmToolSuite.UnitTests
             Assert.Equal(2, counts["(uncategorized)"]);               // null + blank collapse together
         }
 
-        // ---- CSV export (US-ADMIN7.5.1) ----
+        // ---- CSV export (US-ADMIN07.5.1) ----
 
         [Fact]
         public void Csv_HasHeaderAndRows()
@@ -160,7 +160,7 @@ namespace XrmToolSuite.UnitTests
             Assert.DoesNotContain(",=1+2", csv);  // the raw formula never appears at a field boundary
         }
 
-        // ---- JSON export (US-ADMIN7.5.1) ----
+        // ---- JSON export (US-ADMIN07.5.1) ----
 
         [Fact]
         public void Json_IsRoundTrippableAndCarriesItems()
@@ -188,7 +188,7 @@ namespace XrmToolSuite.UnitTests
             }
         }
 
-        // ---- Markdown / HTML export (US-ADMIN7.5.1) ----
+        // ---- Markdown / HTML export (US-ADMIN07.5.1) ----
 
         [Fact]
         public void Markdown_ContainsSummaryAndCategoryHeaders()
@@ -222,7 +222,7 @@ namespace XrmToolSuite.UnitTests
             Assert.DoesNotContain("<script>x", html);
         }
 
-        // ---- No secrets (US-ADMIN7.3.2) ----
+        // ---- No secrets (US-ADMIN07.3.2) ----
 
         [Fact]
         public void Exports_NeverEmitSecretOrValueColumn()
@@ -241,7 +241,7 @@ namespace XrmToolSuite.UnitTests
             }
         }
 
-        // ---- Report projection (US-ADMIN7.5.1) ----
+        // ---- Report projection (US-ADMIN07.5.1) ----
 
         [Fact]
         public void ToReportModel_ProjectsMetricsWithZeroScore()

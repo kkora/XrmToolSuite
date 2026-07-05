@@ -10,11 +10,11 @@ namespace XrmToolSuite.UnitTests
     /// <summary>
     /// SDK-free tests for the Custom API Explorer: scalar value parsing, request-parameter binding /
     /// required-validation, the illustrative snippet generator, and the catalog exporters. The Dataverse
-    /// collector and the gated live invocation are manual-tested. Traces to US-PLUGIN6.2 / US-PLUGIN6.4 / US-PLUGIN6.5.
+    /// collector and the gated live invocation are manual-tested. Traces to US-PLUGIN06.2 / US-PLUGIN06.4 / US-PLUGIN06.5.
     /// </summary>
     public class CustomApiExplorerTests
     {
-        // ---- value parsing (US-PLUGIN6.4.1) ----
+        // ---- value parsing (US-PLUGIN06.4.1) ----
 
         [Theory]
         [InlineData(CustomApiFieldType.Integer, "42", true)]
@@ -52,7 +52,7 @@ namespace XrmToolSuite.UnitTests
             Assert.True(ValueParsing.IsScalar(CustomApiFieldType.String));
         }
 
-        // ---- request binding (US-PLUGIN6.4.1) ----
+        // ---- request binding (US-PLUGIN06.4.1) ----
 
         private static CustomApiInfo Api(params CustomApiParameter[] ps)
         {
@@ -115,7 +115,7 @@ namespace XrmToolSuite.UnitTests
             Assert.Contains("Target", binding.ComplexInputs.Keys);
         }
 
-        // ---- snippet (US-PLUGIN6.5.2) ----
+        // ---- snippet (US-PLUGIN06.5.2) ----
 
         [Fact]
         public void Snippet_Action_IsPostWithBody_NoSecrets()
@@ -138,7 +138,7 @@ namespace XrmToolSuite.UnitTests
             Assert.Contains("Id=<Guid>", snippet);
         }
 
-        // ---- catalog exporters (US-PLUGIN6.2.3 / US-PLUGIN6.5.1) ----
+        // ---- catalog exporters (US-PLUGIN06.2.3 / US-PLUGIN06.5.1) ----
 
         private static CustomApiCatalog SampleCatalog()
         {

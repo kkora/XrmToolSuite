@@ -5,7 +5,7 @@
 > **Legend:** `[Scaffold]` = generic wiring every tool inherits. When you clone this tool, replace this
 > file with the new tool's real stories (title, EPIC/FEAT/US ids, and `[Implemented]` / `[Implemented*]`
 > markers) modelled on an implemented example such as
-> [`DOC2.ErdGenerator.md`](DOC2.ErdGenerator.md).
+> [`DOC02.ErdGenerator.md`](DOC02.ErdGenerator.md).
 
 The Template Tool is the reference scaffold for a suite tool: one MEF-registered `PluginBase` with the
 required `SmallImageBase64`/`BigImageBase64` metadata, a `BaseToolControl` host, connection-aware command

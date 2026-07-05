@@ -1,6 +1,6 @@
 # Plugin Dependency Graph - Test Plan
 
-Traces to [`docs/user-stories/PLUGIN1.PluginDependencyGraph.md`](../../docs/user-stories/PLUGIN1.PluginDependencyGraph.md).
+Traces to [`docs/user-stories/PLUGIN01.PluginDependencyGraph.md`](../../docs/user-stories/PLUGIN01.PluginDependencyGraph.md).
 
 ## Scope
 

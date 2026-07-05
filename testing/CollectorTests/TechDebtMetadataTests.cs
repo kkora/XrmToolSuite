@@ -10,13 +10,13 @@ namespace XrmToolSuite.CollectorTests
     /// Headless tests for the Technical Debt Analyzer's metadata-driven branches: custom-table row counts
     /// (aggregate FetchXML), wide tables, default-publisher prefixes on tables/columns, and secured-column
     /// sprawl. These seed <see cref="Microsoft.Xrm.Sdk.Metadata.EntityMetadata"/> via <see cref="MetaBuilder"/>
-    /// (reflection) and use the fake's row-count support. Traces to US-TD-2/3/4. TC-TD-COL-08..11.
+    /// (reflection) and use the fake's row-count support. Traces to US-SOLN10-2/3/4. TC-SOLN10-COL-08..11.
     /// </summary>
     public class TechDebtMetadataTests
     {
         private static TechDebtContext Ctx(FakeOrganizationService fake) => new TechDebtContext(fake, "TEST");
 
-        // TC-TD-COL-08: a custom table with zero rows is flagged Medium (candidate for removal).
+        // TC-SOLN10-COL-08: a custom table with zero rows is flagged Medium (candidate for removal).
         [Fact]
         public void Unused_CustomTableNoRows_Medium()
         {
@@ -29,7 +29,7 @@ namespace XrmToolSuite.CollectorTests
             Assert.Equal(Severity.Medium, f.Severity);
         }
 
-        // TC-TD-COL-09: a custom table with 200+ custom columns is flagged Low (very wide).
+        // TC-SOLN10-COL-09: a custom table with 200+ custom columns is flagged Low (very wide).
         [Fact]
         public void Unused_VeryWideTable_Low()
         {
@@ -43,7 +43,7 @@ namespace XrmToolSuite.CollectorTests
                 x => x.Title == "Very wide custom table" && x.Severity == Severity.Low);
         }
 
-        // TC-TD-COL-10: default 'new_' prefix + missing description + prefixed columns all flag on a custom table.
+        // TC-SOLN10-COL-10: default 'new_' prefix + missing description + prefixed columns all flag on a custom table.
         [Fact]
         public void Naming_DefaultPrefixAndNoDescription_Flag()
         {
@@ -58,7 +58,7 @@ namespace XrmToolSuite.CollectorTests
             Assert.Contains(findings, x => x.Title == "Default publisher prefix on columns" && x.Severity == Severity.Low);
         }
 
-        // TC-TD-COL-11: secured columns on custom tables raise an informational field-security finding.
+        // TC-SOLN10-COL-11: secured columns on custom tables raise an informational field-security finding.
         [Fact]
         public void Security_SecuredColumns_Info()
         {

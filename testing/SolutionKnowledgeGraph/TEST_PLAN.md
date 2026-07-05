@@ -1,6 +1,6 @@
 # Solution Knowledge Graph - Test Plan
 
-Traces to [`docs/user-stories/KG1.SolutionKnowledgeGraph.md`](../../docs/user-stories/KG1.SolutionKnowledgeGraph.md).
+Traces to [`docs/user-stories/SOLN09.SolutionKnowledgeGraph.md`](../../docs/user-stories/SOLN09.SolutionKnowledgeGraph.md).
 
 ## Scope
 
@@ -12,8 +12,8 @@ interactive browser view, and the WinForms UI (manual, against a live org).
 
 | Tier | What | How | Environment |
 |---|---|---|---|
-| Automated | Model, dependency trace, impact, cycle detection, GraphML/SVG/HTML output (US-KG-2..5) | xUnit over `GraphModel` + exporters | .NET 8 SDK (`testing/UnitTests`) |
-| Manual | Graph builder, PNG export, interactive view, UI (US-KG-1, US-KG-4..5) | GUI cases in `TEST_CASES.md`, evidence in `screenshots/` | Windows + XrmToolBox + a Dataverse env |
+| Automated | Model, dependency trace, impact, cycle detection, GraphML/SVG/HTML output (US-SOLN09-2..5) | xUnit over `GraphModel` + exporters | .NET 8 SDK (`testing/UnitTests`) |
+| Manual | Graph builder, PNG export, interactive view, UI (US-SOLN09-1, US-SOLN09-4..5) | GUI cases in `TEST_CASES.md`, evidence in `screenshots/` | Windows + XrmToolBox + a Dataverse env |
 
 ## What is NOT automatable here
 
@@ -32,5 +32,5 @@ interactive view and UI need the WinForms host + a browser. These are documented
 
 ## Risks
 
-- The `dependency` table only exposes tracked dependencies — edges may be sparser than a full reference graph; note this in the summary (TC-KG-M-02).
-- Very large solutions: verify the interactive view and layout remain usable (TC-KG-M-04).
+- The `dependency` table only exposes tracked dependencies — edges may be sparser than a full reference graph; note this in the summary (TC-SOLN09-M-02).
+- Very large solutions: verify the interactive view and layout remain usable (TC-SOLN09-M-04).

@@ -1,6 +1,6 @@
 ﻿# Privilege Gap Analyzer - Test Plan
 
-Traces to [`docs/user-stories/SEC1.PrivilegeGapAnalyzer.md`](../../docs/user-stories/SEC1.PrivilegeGapAnalyzer.md).
+Traces to [`docs/user-stories/SEC01.PrivilegeGapAnalyzer.md`](../../docs/user-stories/SEC01.PrivilegeGapAnalyzer.md).
 
 ## Scope
 

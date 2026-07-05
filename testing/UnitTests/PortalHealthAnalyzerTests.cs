@@ -11,7 +11,7 @@ namespace XrmToolSuite.UnitTests
     /// SDK-free tests for the Portal Health Analyzer's deterministic rule engine (PortalModels +
     /// PortalHealthRules). No Dataverse, no WinForms — the SDK collector (PortalCollector) is manual-tested
     /// against a live org. Fixtures are hand-built <see cref="PortalInventory"/> objects. Traces to
-    /// US-PP1.3.x / 1.4.x / 1.5.x / 1.6.x.
+    /// US-PP01.3.x / 1.4.x / 1.5.x / 1.6.x.
     /// </summary>
     public class PortalHealthAnalyzerTests
     {
@@ -31,7 +31,7 @@ namespace XrmToolSuite.UnitTests
             return inv;
         }
 
-        // ---------------------------------------------------------------- Clean baseline (US-PP1.6.1)
+        // ---------------------------------------------------------------- Clean baseline (US-PP01.6.1)
 
         [Fact]
         public void Clean_ScoresLow_NoActionableFindings()
@@ -43,7 +43,7 @@ namespace XrmToolSuite.UnitTests
             Assert.DoesNotContain(report.Findings, f => f.Severity >= Severity.Medium);
         }
 
-        // ---------------------------------------------------------------- Structural (US-PP1.3.x)
+        // ---------------------------------------------------------------- Structural (US-PP01.3.x)
 
         [Fact]
         public void MissingPageTemplate_IsHigh()
@@ -123,7 +123,7 @@ namespace XrmToolSuite.UnitTests
                 f.Severity == Severity.High && f.Title.Contains("missing/disabled table"));
         }
 
-        // ---------------------------------------------------------------- Site settings (US-PP1.4.x)
+        // ---------------------------------------------------------------- Site settings (US-PP01.4.x)
 
         [Fact]
         public void MissingRequiredSetting_IsHigh()
@@ -171,7 +171,7 @@ namespace XrmToolSuite.UnitTests
                 f.Title.Contains("Duplicate"));
         }
 
-        // ---------------------------------------------------------------- Security surface (US-PP1.5.x)
+        // ---------------------------------------------------------------- Security surface (US-PP01.5.x)
 
         [Fact]
         public void AnonymousPermission_RaisesCriticalAndHigh()

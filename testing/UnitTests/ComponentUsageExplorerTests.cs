@@ -11,7 +11,7 @@ namespace XrmToolSuite.UnitTests
     /// Executable tests for the SDK-free change-safety rules (<see cref="UsageVerdictRules"/>) and the
     /// usage-by-type tally (<see cref="UsageFootprint.BuildUsageByType"/>). Every verdict is a pure function
     /// of a hand-built <see cref="UsageFootprint"/>, so exact verdicts, score bands, and tallies are asserted
-    /// with no live org. Traces to EPIC-SOLN1 (US-SOLN1.2.1/2.2, US-SOLN1.3.3, US-SOLN1.4.1/4.2).
+    /// with no live org. Traces to EPIC-SOLN01 (US-SOLN01.2.1/2.2, US-SOLN01.3.3, US-SOLN01.4.1/4.2).
     /// </summary>
     public class ComponentUsageExplorerTests
     {
@@ -46,7 +46,7 @@ namespace XrmToolSuite.UnitTests
             return fp;
         }
 
-        // ---- SafeToChange: no dependents (US-SOLN1.4.1) ---------------------------------------
+        // ---- SafeToChange: no dependents (US-SOLN01.4.1) ---------------------------------------
 
         [Fact]
         public void NoDependents_YieldsSafeToChange()
@@ -58,7 +58,7 @@ namespace XrmToolSuite.UnitTests
             Assert.Contains(report.Findings, f => f.Title == "No dependent components found");
         }
 
-        // ---- ChangeWithCaution: a few plain dependents (US-SOLN1.4.1) -------------------------
+        // ---- ChangeWithCaution: a few plain dependents (US-SOLN01.4.1) -------------------------
 
         [Fact]
         public void FewPlainDependents_YieldsChangeWithCaution()
@@ -75,7 +75,7 @@ namespace XrmToolSuite.UnitTests
             Assert.Equal(ScoreBand.Medium, report.Band);
         }
 
-        // ---- HighImpact: high-value dependent types (US-SOLN1.4.1) ----------------------------
+        // ---- HighImpact: high-value dependent types (US-SOLN01.4.1) ----------------------------
 
         [Fact]
         public void HighValueDependents_YieldHighImpact()
@@ -106,7 +106,7 @@ namespace XrmToolSuite.UnitTests
             Assert.Equal(ChangeSafety.HighImpact, report.Verdict);
         }
 
-        // ---- RequiresAlmReview: managed or cross-solution dependents (US-SOLN1.4.1) -----------
+        // ---- RequiresAlmReview: managed or cross-solution dependents (US-SOLN01.4.1) -----------
 
         [Fact]
         public void ManagedDependents_YieldRequiresAlmReview()
@@ -137,7 +137,7 @@ namespace XrmToolSuite.UnitTests
             Assert.Contains(report.Findings, f => f.Title.Contains("cross-solution"));
         }
 
-        // ---- DoNotDelete: a table with many dependents (US-SOLN1.4.1) -------------------------
+        // ---- DoNotDelete: a table with many dependents (US-SOLN01.4.1) -------------------------
 
         [Fact]
         public void TableWithManyDependents_YieldsDoNotDelete()
@@ -156,7 +156,7 @@ namespace XrmToolSuite.UnitTests
             Assert.Equal(ScoreBand.High, report.Band);
         }
 
-        // ---- RequiresDependencyReview: incomplete platform data (US-SOLN1.2.2) ----------------
+        // ---- RequiresDependencyReview: incomplete platform data (US-SOLN01.2.2) ----------------
 
         [Fact]
         public void IncompleteDependencyData_YieldsRequiresDependencyReview()
@@ -181,7 +181,7 @@ namespace XrmToolSuite.UnitTests
             Assert.Equal(ChangeSafety.HighImpact, report.Verdict);
         }
 
-        // ---- score / band ordering (US-SOLN1.4.1) --------------------------------------------
+        // ---- score / band ordering (US-SOLN01.4.1) --------------------------------------------
 
         [Fact]
         public void Score_IncreasesWithVerdictSeverity()
@@ -198,7 +198,7 @@ namespace XrmToolSuite.UnitTests
             Assert.InRange(doNotDelete.Score, 0, 100);
         }
 
-        // ---- usage-by-type tally (US-SOLN1.3.3) ----------------------------------------------
+        // ---- usage-by-type tally (US-SOLN01.3.3) ----------------------------------------------
 
         [Fact]
         public void UsageByType_TalliesDependentsByTypeName()
@@ -231,7 +231,7 @@ namespace XrmToolSuite.UnitTests
             Assert.Equal("2", dependentMetric.Value);
         }
 
-        // ---- explanation is populated for every verdict (US-SOLN1.4.2) ------------------------
+        // ---- explanation is populated for every verdict (US-SOLN01.4.2) ------------------------
 
         [Fact]
         public void Explanation_NamesVerdictAndNextSteps()

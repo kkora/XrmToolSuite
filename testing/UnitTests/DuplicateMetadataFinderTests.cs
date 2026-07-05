@@ -10,11 +10,11 @@ namespace XrmToolSuite.UnitTests
     /// SDK-free tests for the Duplicate Metadata Finder engine: text-similarity primitives, per-pair
     /// scoring, blocking by kind, threshold-driven grouping/clustering, and the recommended-primary
     /// rule. The Dataverse collector that produces the MetadataComponent list is manual-tested.
-    /// Traces to US-ADMIN3.2 / US-ADMIN3.3 / US-ADMIN3.4.
+    /// Traces to US-ADMIN03.2 / US-ADMIN03.3 / US-ADMIN03.4.
     /// </summary>
     public class DuplicateMetadataFinderTests
     {
-        // ---- text-similarity primitives (US-ADMIN3.2.1) ----
+        // ---- text-similarity primitives (US-ADMIN03.2.1) ----
 
         [Fact]
         public void Normalize_StripsCaseAndSeparators()
@@ -67,7 +67,7 @@ namespace XrmToolSuite.UnitTests
             Assert.NotEqual(TextSimilarity.ContentHash("x"), TextSimilarity.ContentHash("y"));
         }
 
-        // ---- pair scoring (US-ADMIN3.2 / US-ADMIN3.3.2) ----
+        // ---- pair scoring (US-ADMIN03.2 / US-ADMIN03.3.2) ----
 
         private static MetadataComponent Col(string key, string display, string schema,
             string type = "String", int usage = 0, bool managed = false) =>
@@ -140,7 +140,7 @@ namespace XrmToolSuite.UnitTests
             Assert.Contains(high.Factors, f => f.Name == "option-overlap");
         }
 
-        // ---- grouping / clustering (US-ADMIN3.4.1) ----
+        // ---- grouping / clustering (US-ADMIN03.4.1) ----
 
         [Fact]
         public void Group_ClustersTransitiveDuplicates_AcrossContainers()
@@ -217,7 +217,7 @@ namespace XrmToolSuite.UnitTests
             Assert.Empty(SimilarityEngine.Group(new[] { Col("a", "Phone", "new_phone") }, 80).Groups);
         }
 
-        // ---- ReportModel projection (US-ADMIN3.5.1) ----
+        // ---- ReportModel projection (US-ADMIN03.5.1) ----
 
         [Fact]
         public void Report_Projects_MetricsAndOneFindingPerGroup()

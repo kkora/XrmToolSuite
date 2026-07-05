@@ -10,7 +10,7 @@ namespace XrmToolSuite.AnalyzerTests
     /// <summary>
     /// Executable tests for the Solution Dependencies analyzer's managed-state and missing-dependency
     /// paths. Publisher checks (Retrieve) and duplicate-layer detection (aliased joins) stay manual.
-    /// Traces to US-DG-2 (dependencies) and US-DG-3 (managed state).
+    /// Traces to US-ALM07-2 (dependencies) and US-ALM07-3 (managed state).
     /// </summary>
     public class DependencyAnalyzerTests
     {
@@ -20,7 +20,7 @@ namespace XrmToolSuite.AnalyzerTests
             return new DependencyAnalyzer().Analyze(ctx, _ => { });
         }
 
-        // TC-DG-DEP-01: an unmanaged solution is flagged Medium (no clean rollback downstream).
+        // TC-ALM07-DEP-01: an unmanaged solution is flagged Medium (no clean rollback downstream).
         [Fact]
         public void UnmanagedSolution_FlagsMedium()
         {
@@ -30,7 +30,7 @@ namespace XrmToolSuite.AnalyzerTests
             Assert.Contains(findings, x => x.Title == "Solution is unmanaged" && x.Severity == Severity.Medium);
         }
 
-        // TC-DG-DEP-02: a managed solution produces no unmanaged-state finding.
+        // TC-ALM07-DEP-02: a managed solution produces no unmanaged-state finding.
         [Fact]
         public void ManagedSolution_NoUnmanagedFinding()
         {
@@ -39,7 +39,7 @@ namespace XrmToolSuite.AnalyzerTests
                 x => x.Title == "Solution is unmanaged");
         }
 
-        // TC-DG-DEP-03: no missing dependencies -> reassuring Info.
+        // TC-ALM07-DEP-03: no missing dependencies -> reassuring Info.
         [Fact]
         public void NoMissingDependencies_InfoNote()
         {
@@ -48,7 +48,7 @@ namespace XrmToolSuite.AnalyzerTests
                 x => x.Title == "No missing dependencies" && x.Severity == Severity.Info);
         }
 
-        // TC-DG-DEP-04: a missing component dependency (no target to confirm) is flagged High.
+        // TC-ALM07-DEP-04: a missing component dependency (no target to confirm) is flagged High.
         [Fact]
         public void MissingDependency_FlagsHigh()
         {
