@@ -147,6 +147,15 @@
     <!-- Component Usage Explorer: SDK-free usage footprint model + change-safety verdict. -->
     <Compile Include="..\..\src\Tools\XrmToolSuite.ComponentUsageExplorer\Analysis\UsageModels.cs" />
     <Compile Include="..\..\src\Tools\XrmToolSuite.ComponentUsageExplorer\Analysis\UsageVerdictRules.cs" />
+
+    <!-- Environment Comparison Suite: SDK-free diff engine (snapshot models + comparer/roll-up). -->
+    <Compile Include="..\..\src\Tools\XrmToolSuite.EnvironmentComparisonSuite\Analysis\ComparisonModels.cs" />
+    <Compile Include="..\..\src\Tools\XrmToolSuite.EnvironmentComparisonSuite\Analysis\SnapshotComparer.cs" />
+
+    <!-- Solution Documentation Generator: SDK-free document model, template engine + text renderers. -->
+    <Compile Include="..\..\src\Tools\XrmToolSuite.SolutionDocumentationGenerator\Doc\DocModels.cs" />
+    <Compile Include="..\..\src\Tools\XrmToolSuite.SolutionDocumentationGenerator\Doc\DocBuilder.cs" />
+    <Compile Include="..\..\src\Tools\XrmToolSuite.SolutionDocumentationGenerator\Doc\DocRenderers.cs" />
   </ItemGroup>
 
 </Project>

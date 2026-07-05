@@ -47,6 +47,8 @@ namespace XrmToolSuite.UiSmokeTests
             "Flow Dependency Analyzer",
             "Plugin Dependency Graph",
             "Component Usage Explorer",
+            "Environment Comparison Suite",
+            "Solution Documentation Generator",
         };
 
         private readonly ITestOutputHelper _output;
