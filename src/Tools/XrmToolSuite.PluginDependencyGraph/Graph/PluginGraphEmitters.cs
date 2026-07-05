@@ -300,7 +300,18 @@ namespace XrmToolSuite.PluginDependencyGraph.Graph
         public static void ExportJson(PluginGraph g, string path) => File.WriteAllText(path, Json(g), Encoding.UTF8);
         public static void ExportHtml(PluginGraph g, string path) => File.WriteAllText(path, Html(g), Encoding.UTF8);
 
-        private static string X(string s) => WebUtility.HtmlEncode(s ?? "");
+        // Strip characters illegal in XML 1.0 (C0 controls other than tab/CR/LF, plus 0xFFFE/0xFFFF)
+        // before HTML-encoding, so a stray control char in a label can't make the GraphML/SVG malformed.
+        private static string X(string s)
+        {
+            if (string.IsNullOrEmpty(s)) return "";
+            var clean = new string(s.Where(c =>
+            {
+                int u = c;
+                return u == 0x09 || u == 0x0A || u == 0x0D || (u >= 0x20 && u <= 0xFFFD);
+            }).ToArray());
+            return WebUtility.HtmlEncode(clean);
+        }
         private static string Trim(string s, int max) =>
             string.IsNullOrEmpty(s) || s.Length <= max ? s : s.Substring(0, max - 1) + "…";
 

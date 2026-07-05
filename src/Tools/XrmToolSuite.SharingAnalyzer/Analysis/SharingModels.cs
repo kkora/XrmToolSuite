@@ -171,9 +171,9 @@ namespace XrmToolSuite.SharingAnalyzer.Analysis
 
         public int TotalShares => Shares?.Count ?? 0;
         public int DistinctRecords =>
-            (Shares ?? new List<SharedRecordAccess>()).Select(s => s.ObjectId).Distinct().Count();
+            (Shares ?? new List<SharedRecordAccess>()).Where(s => s != null).Select(s => s.ObjectId).Distinct().Count();
         public int DistinctPrincipals =>
-            (Shares ?? new List<SharedRecordAccess>()).Select(s => s.PrincipalId).Distinct().Count();
+            (Shares ?? new List<SharedRecordAccess>()).Where(s => s != null).Select(s => s.PrincipalId).Distinct().Count();
     }
 
     /// <summary>Tunable thresholds for <see cref="SharingRiskRules"/>. Defaults are conservative.</summary>

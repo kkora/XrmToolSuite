@@ -162,9 +162,9 @@ namespace XrmToolSuite.AuditComplianceChecker.Analysis
                 : 100; // nothing sensitive to protect at the table level
 
             var auditedSensitive = sensitiveTables.Where(t => t.IsAuditEnabled).ToList();
-            int totalSensCols = auditedSensitive.Sum(t => (t.Columns ?? new List<ColumnAudit>()).Count(c => c.IsSensitive));
+            int totalSensCols = auditedSensitive.Sum(t => (t.Columns ?? new List<ColumnAudit>()).Count(c => c != null && c.IsSensitive));
             int auditedSensCols = auditedSensitive.Sum(t =>
-                (t.Columns ?? new List<ColumnAudit>()).Count(c => c.IsSensitive && c.IsAuditEnabled));
+                (t.Columns ?? new List<ColumnAudit>()).Count(c => c != null && c.IsSensitive && c.IsAuditEnabled));
             int columnScore = totalSensCols > 0 ? Pct(auditedSensCols, totalSensCols) : 100;
 
             int activityScore = 100;
@@ -202,7 +202,7 @@ namespace XrmToolSuite.AuditComplianceChecker.Analysis
                 new MetricRow("Compliance score", $"{overall}/100", $"{band} — higher is more compliant"),
                 new MetricRow("Organization auditing", cov.OrgAuditEnabled ? "On" : "Off"),
                 new MetricRow("Tables audited",
-                    $"{tables.Count(t => t.IsAuditEnabled)}/{tables.Count}"),
+                    $"{tables.Count(t => t != null && t.IsAuditEnabled)}/{tables.Count}"),
                 new MetricRow("Sensitive tables covered",
                     $"{sensitiveTables.Count(t => t.IsAuditEnabled)}/{sensitiveTables.Count}"),
                 new MetricRow("Sensitive columns covered (audited tables)",

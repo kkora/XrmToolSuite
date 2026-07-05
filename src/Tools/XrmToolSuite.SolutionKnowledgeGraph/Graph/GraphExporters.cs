@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -7,6 +8,27 @@ using System.Text;
 
 namespace XrmToolSuite.SolutionKnowledgeGraph.Graph
 {
+    /// <summary>
+    /// Encodes text for an XML/SVG body: strips characters illegal in XML 1.0 (C0 controls other than
+    /// tab/CR/LF, and the two non-characters) before HTML-encoding, so a stray control char in a label
+    /// can't make the emitted GraphML/SVG non-well-formed.
+    /// </summary>
+    internal static class XmlText
+    {
+        public static string Enc(string s)
+        {
+            if (string.IsNullOrEmpty(s)) return "";
+            // Valid XML 1.0 chars: 0x09, 0x0A, 0x0D, and 0x20..0xFFFD (excludes C0 controls and the
+            // non-characters 0xFFFE/0xFFFF). Surrogates (<= 0xFFFD) pass through for well-formed pairs.
+            var clean = new string(s.Where(c =>
+            {
+                int u = c;
+                return u == 0x09 || u == 0x0A || u == 0x0D || (u >= 0x20 && u <= 0xFFFD);
+            }).ToArray());
+            return WebUtility.HtmlEncode(clean);
+        }
+    }
+
     /// <summary>Exports the graph to GraphML (a standard XML graph format read by yEd, Gephi, Cytoscape).</summary>
     public static class GraphMlExporter
     {
@@ -16,7 +38,7 @@ namespace XrmToolSuite.SolutionKnowledgeGraph.Graph
             int i = 0;
             foreach (var n in g.Nodes) idMap[n.Id] = "n" + (i++);
 
-            string X(string s) => WebUtility.HtmlEncode(s ?? "");
+            string X(string s) => XmlText.Enc(s);
             var sb = new StringBuilder();
             sb.AppendLine("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
             sb.AppendLine("<graphml xmlns=\"http://graphml.graphdrawing.org/xmlns\">");
@@ -57,18 +79,21 @@ namespace XrmToolSuite.SolutionKnowledgeGraph.Graph
                 pos[nodes[i].Id] = (cx + r * Math.Cos(a), cy + r * Math.Sin(a));
             }
 
-            string X(string s) => WebUtility.HtmlEncode(s ?? "");
+            string X(string s) => XmlText.Enc(s);
+            // Invariant culture: coordinate attributes must use '.' as the decimal separator or the SVG is
+            // invalid on comma-decimal locales (de-DE, fr-FR, …).
+            string N(double d) => d.ToString("0.#", CultureInfo.InvariantCulture);
             var sb = new StringBuilder();
-            sb.AppendLine($"<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"{size:0}\" height=\"{size:0}\" viewBox=\"0 0 {size:0} {size:0}\" font-family=\"Segoe UI, sans-serif\">");
+            sb.AppendLine($"<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"{N(size)}\" height=\"{N(size)}\" viewBox=\"0 0 {N(size)} {N(size)}\" font-family=\"Segoe UI, sans-serif\">");
             sb.AppendLine("  <rect width=\"100%\" height=\"100%\" fill=\"#ffffff\"/>");
             foreach (var e in g.Edges)
                 if (pos.TryGetValue(e.From, out var a) && pos.TryGetValue(e.To, out var b))
-                    sb.AppendLine($"  <line x1=\"{a.x:0.#}\" y1=\"{a.y:0.#}\" x2=\"{b.x:0.#}\" y2=\"{b.y:0.#}\" stroke=\"#c3ccda\" stroke-width=\"1\"/>");
+                    sb.AppendLine($"  <line x1=\"{N(a.x)}\" y1=\"{N(a.y)}\" x2=\"{N(b.x)}\" y2=\"{N(b.y)}\" stroke=\"#c3ccda\" stroke-width=\"1\"/>");
             foreach (var node in nodes)
             {
                 var p = pos[node.Id];
-                sb.AppendLine($"  <circle cx=\"{p.x:0.#}\" cy=\"{p.y:0.#}\" r=\"6\" fill=\"{ColorFor(node.Type)}\"/>");
-                sb.AppendLine($"  <text x=\"{p.x + 9:0.#}\" y=\"{p.y + 4:0.#}\" font-size=\"10\" fill=\"#333\">{X(Trim(node.Label))}</text>");
+                sb.AppendLine($"  <circle cx=\"{N(p.x)}\" cy=\"{N(p.y)}\" r=\"6\" fill=\"{ColorFor(node.Type)}\"/>");
+                sb.AppendLine($"  <text x=\"{N(p.x + 9)}\" y=\"{N(p.y + 4)}\" font-size=\"10\" fill=\"#333\">{X(Trim(node.Label))}</text>");
             }
             sb.AppendLine("</svg>");
             return sb.ToString();

@@ -187,6 +187,18 @@ namespace XrmToolSuite.UnitTests
             Assert.Contains("\"edgeCount\":" + g.Edges.Count, json);
         }
 
+        // Regression: a control character in a node label (illegal in XML 1.0) is stripped so the emitted
+        // GraphML stays well-formed and parseable.
+        [Fact]
+        public void GraphMl_WithControlCharLabel_IsWellFormedXml()
+        {
+            var d = Sample();
+            d.Types[0].FriendlyName = "AccountHandler"; // 0x0B vertical tab is not a valid XML char
+            var xml = PluginGraphEmitters.GraphML(PluginGraphBuilder.Build(d));
+            var ex = Record.Exception(() => System.Xml.Linq.XDocument.Parse(xml));
+            Assert.Null(ex);
+        }
+
         // TC-PDG-EMIT-10: SVG is self-contained (no external hosts beyond the SVG namespace).
         [Fact]
         public void Svg_IsSelfContained()

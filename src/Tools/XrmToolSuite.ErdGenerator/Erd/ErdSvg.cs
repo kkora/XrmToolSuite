@@ -64,7 +64,13 @@ namespace XrmToolSuite.ErdGenerator.Erd
                 b.Y = rowY[b.Row];
             }
 
-            string X(string s) => WebUtility.HtmlEncode(s ?? "");
+            // Strip XML-1.0-illegal chars (C0 controls other than tab/CR/LF, plus 0xFFFE/0xFFFF) before
+            // encoding, so a stray control char in a display name can't make the SVG non-well-formed.
+            string X(string s) => WebUtility.HtmlEncode(s == null ? "" : new string(s.Where(c =>
+            {
+                int u = c;
+                return u == 0x09 || u == 0x0A || u == 0x0D || (u >= 0x20 && u <= 0xFFFD);
+            }).ToArray()));
             string N(double d) => d.ToString("0.#", CultureInfo.InvariantCulture);
 
             var sb = new StringBuilder();
