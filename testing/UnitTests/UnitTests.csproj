@@ -132,6 +132,21 @@
     <!-- Solution Merge Assistant: SDK-free multi-solution comparison + merge verdict. -->
     <Compile Include="..\..\src\Tools\XrmToolSuite.SolutionMergeAssistant\Analysis\MergeModels.cs" />
     <Compile Include="..\..\src\Tools\XrmToolSuite.SolutionMergeAssistant\Analysis\MergeRules.cs" />
+
+    <!-- Flow Dependency Analyzer: SDK-free clientdata parser + risk rules + reverse-impact model. -->
+    <Compile Include="..\..\src\Tools\XrmToolSuite.FlowDependencyAnalyzer\Analysis\FlowModels.cs" />
+    <Compile Include="..\..\src\Tools\XrmToolSuite.FlowDependencyAnalyzer\Analysis\FlowClientDataParser.cs" />
+    <Compile Include="..\..\src\Tools\XrmToolSuite.FlowDependencyAnalyzer\Analysis\FlowRiskRules.cs" />
+
+    <!-- Plugin Dependency Graph: SDK-free graph model + builder + risk rules + emitters. -->
+    <Compile Include="..\..\src\Tools\XrmToolSuite.PluginDependencyGraph\Graph\PluginGraphModel.cs" />
+    <Compile Include="..\..\src\Tools\XrmToolSuite.PluginDependencyGraph\Graph\PluginGraphBuilder.cs" />
+    <Compile Include="..\..\src\Tools\XrmToolSuite.PluginDependencyGraph\Graph\PluginRiskRules.cs" />
+    <Compile Include="..\..\src\Tools\XrmToolSuite.PluginDependencyGraph\Graph\PluginGraphEmitters.cs" />
+
+    <!-- Component Usage Explorer: SDK-free usage footprint model + change-safety verdict. -->
+    <Compile Include="..\..\src\Tools\XrmToolSuite.ComponentUsageExplorer\Analysis\UsageModels.cs" />
+    <Compile Include="..\..\src\Tools\XrmToolSuite.ComponentUsageExplorer\Analysis\UsageVerdictRules.cs" />
   </ItemGroup>
 
 </Project>
