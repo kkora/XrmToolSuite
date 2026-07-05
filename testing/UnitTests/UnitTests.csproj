@@ -156,6 +156,11 @@
     <Compile Include="..\..\src\Tools\XrmToolSuite.SolutionDocumentationGenerator\Doc\DocModels.cs" />
     <Compile Include="..\..\src\Tools\XrmToolSuite.SolutionDocumentationGenerator\Doc\DocBuilder.cs" />
     <Compile Include="..\..\src\Tools\XrmToolSuite.SolutionDocumentationGenerator\Doc\DocRenderers.cs" />
+
+    <!-- Duplicate Metadata Finder: SDK-free similarity primitives + scoring/grouping engine + ReportModel projection. -->
+    <Compile Include="..\..\src\Tools\XrmToolSuite.DuplicateMetadataFinder\Analysis\DuplicateModels.cs" />
+    <Compile Include="..\..\src\Tools\XrmToolSuite.DuplicateMetadataFinder\Analysis\SimilarityEngine.cs" />
+    <Compile Include="..\..\src\Tools\XrmToolSuite.DuplicateMetadataFinder\Reporting\DuplicateReport.cs" />
   </ItemGroup>
 
 </Project>

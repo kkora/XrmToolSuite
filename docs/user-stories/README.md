@@ -42,9 +42,9 @@ untagged backlog files.
 | PERF4 | View Performance Analyzer | [PERF4.ViewPerformanceAnalyzer.md](PERF4.ViewPerformanceAnalyzer.md) | `XrmToolSuite.ViewPerformanceAnalyzer` |
 | SEC2 | Team Permission Explorer | [SEC2.TeamPermissionExplorer.md](SEC2.TeamPermissionExplorer.md) | `XrmToolSuite.TeamPermissionExplorer` |
 | DOC2 | ERD Generator | [DOC2.ErdGenerator.md](DOC2.ErdGenerator.md) | `XrmToolSuite.ErdGenerator` |
+| ADMIN3 | Duplicate Metadata Finder | [ADMIN3.DuplicateMetadataFinder.md](ADMIN3.DuplicateMetadataFinder.md) | `XrmToolSuite.DuplicateMetadataFinder` |
 
-Two NEXT-20 tools remain un-built and have no file here yet: **Duplicate Metadata Finder** (ADMIN3) and
-**Custom API Explorer** (PLUGIN6).
+One NEXT-20 tool remains un-built and has no file here yet: **Custom API Explorer** (PLUGIN6).
 
 ## Scaffold
 

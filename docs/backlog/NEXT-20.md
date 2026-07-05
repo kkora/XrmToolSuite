@@ -5,13 +5,12 @@ tools that consume them**, weighted toward high value + SDK-feasibility + the st
 ideas. See [RECOMMENDATIONS.md](RECOMMENDATIONS.md) for the full reasoning and
 [README.md](README.md) for the per-tool user stories.
 
-> **Build status (2026-07-05): 18 of 20 implemented.** Every tool in Phases A, B, and C is built —
+> **Build status (2026-07-05): 19 of 20 implemented.** Every tool in Phases A, B, and C except #20 is built —
 > shipped as a project under `src/Tools/`, present in `XrmToolSuite.sln`, UI-free engine + WinForms host,
 > with user stories under `docs/user-stories/<TAG>.<Tool>.md`, SDK-free unit tests in `testing/UnitTests`,
-> and testing artifacts under `testing/<Tool>/`. **Only #19 Duplicate Metadata Finder (ADMIN3) and
-> #20 Custom API Explorer (PLUGIN6) remain un-built** (no `src/Tools/` project yet). Live-connection and
-> WinForms GUI cases (including Office/PDF export dialogs) remain pending a Windows + XrmToolBox session
-> across all built tools — documented, not claimed as passed.
+> and testing artifacts under `testing/<Tool>/`. **Only #20 Custom API Explorer (PLUGIN6) remains un-built**
+> (no `src/Tools/` project yet). Live-connection and WinForms GUI cases (including Office/PDF export dialogs)
+> remain pending a Windows + XrmToolBox session across all built tools — documented, not claimed as passed.
 
 Legend: **H** High · **M** Medium · Pack# = matching idea in `prompt/2.XrmToolBox_Plugin_Prompt_Pack.txt`.
 Status: ✅ built · ⬜ not started.
@@ -58,14 +57,14 @@ Status: ✅ built · ⬜ not started.
 
 ## Phase C — consumers & quick wins (cheap once A/B exist)
 
-> **Status:** #16–#18 ✅ built; **#19 and #20 are the only remaining work** — no `src/Tools/` project yet.
+> **Status:** #16–#19 ✅ built; **#20 is the only remaining work** — no `src/Tools/` project yet.
 
 | # | Tool | Status | Backlog file | Value | Pack# | Depends on |
 |---|---|---|---|---|---|---|
 | 16 | View Performance Analyzer | ✅ | [PERF4](03-Performance/PERF4.ViewPerformanceAnalyzer.md) | H | — | #1 FetchXML engine |
 | 17 | Team Permission Explorer | ✅ | [SEC2](02-Security-Governance/SEC2.TeamPermissionExplorer.md) | H | — | #3 privilege engine |
 | 18 | ERD Generator | ✅ | [DOC2](11-Documentation/DOC2.ErdGenerator.md) | H | — | #2 inventory → Mermaid/PNG; quick win |
-| 19 | Duplicate Metadata Finder | ⬜ | [ADMIN3](04-Dataverse-Administration/ADMIN3.DuplicateMetadataFinder.md) | M | #14 | extends Attribute Auditor plumbing |
+| 19 | Duplicate Metadata Finder | ✅ | [ADMIN3](04-Dataverse-Administration/ADMIN3.DuplicateMetadataFinder.md) | M | #14 | extends Attribute Auditor plumbing |
 | 20 | Custom API Explorer | ⬜ | [PLUGIN6](08-Plugins-Custom-APIs/PLUGIN6.CustomApiExplorer.md) | H | #13 | #6 plugin retrieval; gated test console |
 
 ## Pack coverage
