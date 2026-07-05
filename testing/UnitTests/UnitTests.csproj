@@ -100,6 +100,16 @@
     <Compile Include="..\..\src\Tools\XrmToolSuite.ErdGenerator\Erd\ErdSvg.cs" />
     <Compile Include="..\..\src\Tools\XrmToolSuite.ErdGenerator\Erd\ErdHtml.cs" />
     <Compile Include="..\..\src\Tools\XrmToolSuite.ErdGenerator\Erd\ErdMarkdown.cs" />
+
+    <!-- JavaScript Performance Analyzer: SDK-free static rule engine + FormXML event mapper. -->
+    <Compile Include="..\..\src\Tools\XrmToolSuite.JavaScriptPerformanceAnalyzer\Analysis\JsModels.cs" />
+    <Compile Include="..\..\src\Tools\XrmToolSuite.JavaScriptPerformanceAnalyzer\Analysis\JsRules.cs" />
+    <Compile Include="..\..\src\Tools\XrmToolSuite.JavaScriptPerformanceAnalyzer\Analysis\FormEventMap.cs" />
+
+    <!-- Form Performance Analyzer: SDK-free FormXML parser + heaviness scorer. -->
+    <Compile Include="..\..\src\Tools\XrmToolSuite.FormPerformanceAnalyzer\Analysis\FormModels.cs" />
+    <Compile Include="..\..\src\Tools\XrmToolSuite.FormPerformanceAnalyzer\Analysis\FormXmlParser.cs" />
+    <Compile Include="..\..\src\Tools\XrmToolSuite.FormPerformanceAnalyzer\Analysis\FormScorer.cs" />
   </ItemGroup>
 
 </Project>
