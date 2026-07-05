@@ -1,7 +1,10 @@
 # XrmToolSuite — Build & Install Guide for XrmToolBox
 
 Step-by-step instructions for building **any tool in this suite** and installing it into
-XrmToolBox.
+XrmToolBox **locally** (build → copy DLL → unblock → launch).
+
+> To **publish a tool to the public XrmToolBox Tool Library** (package → push to nuget.org, manual
+> or via CI), see [`Publishing_Guide_XrmToolBox.md`](Publishing_Guide_XrmToolBox.md) instead.
 
 Throughout this guide, replace `<ToolName>` with the tool you are building. The suite
 currently ships:

@@ -1,0 +1,114 @@
+name: Publish to NuGet
+
+# Packages every publishable tool (all of src/Tools except the TemplateTool scaffold) and pushes
+# the .nupkg files to nuget.org, which is what feeds the XrmToolBox Tool Library.
+# See Publishing_Guide_XrmToolBox.md for the full flow.
+#
+# Auth: NuGet Trusted Publishing (OIDC) — no API-key secret. A Trusted Publishing policy on
+# nuget.org (owner kora.kanchan, repo kkora/XrmToolSuite, workflow publish.yml) mints a short-lived
+# key at run time via the NuGet/login action. Requires `id-token: write` (set below).
+#
+# Safe by default:
+#   - Tag push  (v*)               -> build, test, pack, and PUBLISH.
+#   - Manual run (workflow_dispatch) -> build, test, pack, upload artifacts; publishes only if you
+#                                       tick `publish: true`.
+# Nothing is ever pushed on a normal branch push or PR.
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+    inputs:
+      publish:
+        description: "Push to nuget.org (otherwise dry run: build + pack + upload artifacts only)"
+        type: boolean
+        default: false
+
+jobs:
+  publish:
+    name: pack & publish
+    # net48 build + `nuget pack` of net48 output need the Windows targeting pack.
+    runs-on: windows-latest
+    permissions:
+      contents: read
+      id-token: write   # required for NuGet Trusted Publishing (OIDC)
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Setup .NET 8
+        uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: '8.0.x'
+
+      - name: Setup NuGet
+        uses: NuGet/setup-nuget@v2
+
+      - name: Read suite version
+        id: ver
+        shell: pwsh
+        run: |
+          [xml]$p = Get-Content Directory.Build.props
+          $v = ([string]$p.Project.PropertyGroup.Version).Trim()
+          if (-not $v) { throw "Could not read <Version> from Directory.Build.props" }
+          Write-Output "version=$v" >> $env:GITHUB_OUTPUT
+          Write-Output "Suite version: $v"
+
+      # For a tag build, fail fast if the tag (v1.2.3.4) doesn't match Directory.Build.props.
+      - name: Verify tag matches version
+        if: startsWith(github.ref, 'refs/tags/v')
+        shell: pwsh
+        run: |
+          $tag = "${{ github.ref_name }}" -replace '^v',''
+          if ($tag -ne "${{ steps.ver.outputs.version }}") {
+            throw "Tag '$tag' != Directory.Build.props version '${{ steps.ver.outputs.version }}'. Bump one to match."
+          }
+          Write-Output "Tag matches suite version ${{ steps.ver.outputs.version }}."
+
+      - name: Build (Release)
+        run: dotnet build XrmToolSuite.sln -c Release --nologo
+
+      - name: Test (SDK-free unit tests)
+        run: dotnet test testing/UnitTests/UnitTests.csproj -c Release --nologo
+
+      # Pack every tool except the TemplateTool scaffold. nuget resolves each nuspec's relative
+      # <file src="bin\Release\net48\..."> paths against the nuspec's own folder.
+      - name: Pack tools
+        shell: pwsh
+        run: |
+          New-Item -ItemType Directory -Force artifacts | Out-Null
+          $specs = Get-ChildItem src/Tools -Recurse -Filter *.nuspec |
+            Where-Object { $_.Name -notlike '*TemplateTool*' }
+          if (-not $specs) { throw "No publishable .nuspec files found." }
+          foreach ($s in $specs) {
+            Write-Output "Packing $($s.Name)"
+            nuget pack $s.FullName -OutputDirectory artifacts
+            if ($LASTEXITCODE -ne 0) { throw "nuget pack failed for $($s.Name)" }
+          }
+          Get-ChildItem artifacts\*.nupkg | ForEach-Object { Write-Output "  -> $($_.Name)" }
+
+      - name: Upload packages (artifact)
+        uses: actions/upload-artifact@v4
+        with:
+          name: nupkgs-${{ steps.ver.outputs.version }}
+          path: artifacts/*.nupkg
+          if-no-files-found: error
+
+      # Publish only on a tag push, or a manual run with publish=true.
+      # Trusted Publishing: exchange the workflow's OIDC token for a short-lived nuget.org key.
+      - name: Authenticate to NuGet (Trusted Publishing / OIDC)
+        if: startsWith(github.ref, 'refs/tags/v') || (github.event_name == 'workflow_dispatch' && inputs.publish)
+        id: nuget-login
+        uses: NuGet/login@v1
+        with:
+          user: kora.kanchan   # nuget.org account that owns the Trusted Publishing policy
+
+      - name: Push to nuget.org
+        if: startsWith(github.ref, 'refs/tags/v') || (github.event_name == 'workflow_dispatch' && inputs.publish)
+        shell: pwsh
+        run: |
+          dotnet nuget push "artifacts\*.nupkg" `
+            --api-key ${{ steps.nuget-login.outputs.NUGET_API_KEY }} `
+            --source https://api.nuget.org/v3/index.json `
+            --skip-duplicate
