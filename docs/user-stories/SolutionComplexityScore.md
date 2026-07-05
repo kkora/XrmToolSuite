@@ -9,9 +9,11 @@ maintainability score, upgrade/migration/testing effort in person-days, and a ro
 estimate) from the tallies via a UI-free, SDK-free scoring engine. Surfaces structural hotspots (wide
 forms, high plugin-step counts, large automation/JS/data-model), shows a score + metric-strip + hotspot
 dashboard, and exports to PDF, HTML, Excel, JSON and Markdown plus an offline (or opt-in AI) executive
-summary. Read-only (counts components; never modifies the solution). The `ComplexityMetrics` scoring/effort
-model and the `ComplexityReport` projection are SDK-free and unit-tested; the Dataverse collector, WinForms
-dashboard and exporters are manual-tested (the collector also has a headless fake-service suite).
+summary. Also computes a sibling **build-quality score** (0–100, higher = better) over the same tallies
+(FEAT-SC-4). Read-only (counts components; never modifies the solution). The `ComplexityMetrics`
+scoring/effort model, the `QualityScore` engine and the `ComplexityReport` projection are SDK-free and
+unit-tested; the Dataverse collector, WinForms dashboard and exporters are manual-tested (the collector also
+has a headless fake-service suite).
 
 ---
 
@@ -89,6 +91,24 @@ PDF/HTML/Excel/JSON/Markdown reports plus an executive summary — all from a li
     anonymized JSON (no record data, credentials, or environment names) before anything is sent; component
     names in the payload are toggleable. The chosen provider/model-id persist; the key does not.
     Manual — `TC-SC-M-07`. *(Live host + external AI call.)*
+
+## FEAT-SC-4 — Solution Quality Score `[Implemented]`
+> Formerly the standalone **SOLN4 Solution Quality Score** candidate; built as an extension here (it reuses
+> the same `ComponentCounts`, so a separate tool/collector would have duplicated the plumbing).
+- **US-SC-8** `[Implemented]` A 0–100 **build-quality** score (with a Low/Med/High band) alongside the
+  complexity score, so I can see how *well-built* a solution is, not just how big.
+  - **AC:** `QualityScore.Compute(counts, complexityResult)` starts at 100 and deducts for best-practice
+    violations derived from the SAME tallies (oversized forms, plugin-step density per table, automation
+    sprawl, client-script weight, legacy-workflow reliance, schema sprawl / wide tables, low maintainability);
+    the band splits at 80 (High) / 60 (Medium). Higher score = better. SDK-free — no new Dataverse queries.
+    **Automated** — `TC-SC-QUALITY-07..11` (empty = 100/High; band cutoffs; exact multi-violation score;
+    projection adds the quality metric + a clean note; violations become `Solution Quality` findings).
+  - **AC:** `ComplexityReport.Build` folds the grade into the existing `ReportModel` — a "Quality score"
+    metric plus one `Solution Quality` finding per deduction — so the current PDF/HTML/Excel/JSON/Markdown
+    exporters carry it with no new dependencies; the dashboard shows it in the header + metric strip. *(Dashboard/exports: manual.)*
+  - **Deferred (needs a collector change):** naming-prefix consistency, description coverage and
+    managed/unmanaged layering would be stronger quality signals but require extending
+    `ComplexityCollector`/`ComponentCounts` — a phase-2 item, not in this pass.
 
 ## Definition of Done
 - Follows suite conventions (BaseToolControl, RunAsync/RetrieveAll semantics, Load/SaveSettings, progress

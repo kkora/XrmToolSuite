@@ -85,5 +85,64 @@ namespace XrmToolSuite.UnitTests
             var plain = ComplexityReport.Build(new ComponentCounts { Tables = 2 }, "Sales", "sales", "1.0", false, "DEV");
             Assert.Contains(plain.Findings, f => f.Title == "No structural hotspots");
         }
+
+        // ---- SOLN4 Quality Score (US-SC-8) ----
+
+        // TC-SC-QUALITY-07: an empty solution is perfect quality with no deductions.
+        [Fact]
+        public void Quality_Empty_IsHundred_HighBand()
+        {
+            var c = new ComponentCounts();
+            var q = QualityScore.Compute(c, ComplexityMetrics.Compute(c));
+            Assert.Equal(100, q.QualityScore);
+            Assert.Equal(ScoreBand.High, q.Band);
+            Assert.Empty(q.Deductions);
+        }
+
+        // TC-SC-QUALITY-08: bands split at 80 (High) and 60 (Medium).
+        [Theory]
+        [InlineData(80, ScoreBand.High)]
+        [InlineData(79, ScoreBand.Medium)]
+        [InlineData(60, ScoreBand.Medium)]
+        [InlineData(59, ScoreBand.Low)]
+        public void Quality_Bands(int score, ScoreBand band) => Assert.Equal(band, QualityScore.BandFor(score));
+
+        // TC-SC-QUALITY-09: a solution with several violations deducts exactly and lands in the Low band.
+        [Fact]
+        public void Quality_KnownViolations_ExactScore()
+        {
+            var c = new ComponentCounts
+            {
+                Tables = 10, Columns = 500, PluginSteps = 40, JavaScriptWebResources = 30,
+                Workflows = 12, Flows = 2, WidestForm = 160, WidestFormName = "account_main",
+            };
+            var q = QualityScore.Compute(c, ComplexityMetrics.Compute(c));
+
+            // 15 (oversized form) + 12 (plugin density 4/table) + 6 (JS 30) + 8 (legacy wf)
+            // + 4 (wide tables 50/table) + 5 (maintainability 50) = 50 -> quality 50 -> Low.
+            Assert.Equal(50, q.QualityScore);
+            Assert.Equal(ScoreBand.Low, q.Band);
+            Assert.Contains(q.Deductions, d => d.Signal == "Oversized form" && d.Points == 15);
+            Assert.Contains(q.Deductions, d => d.Signal == "Plugin-step density" && d.Points == 12);
+            Assert.Contains(q.Deductions, d => d.Signal == "Low maintainability" && d.Points == 5);
+        }
+
+        // TC-SC-QUALITY-10: the report projection surfaces the quality metric + a positive note when clean.
+        [Fact]
+        public void Report_AddsQualityMetric_AndCleanNote()
+        {
+            var clean = ComplexityReport.Build(new ComponentCounts { Tables = 2 }, "Sales", "sales", "1.0", false, "DEV");
+            Assert.Contains(clean.Metrics, x => x.Label == "Quality score");
+            Assert.Contains(clean.Findings, f => f.Title == "Well-structured solution");
+        }
+
+        // TC-SC-QUALITY-11: violations become "Solution Quality" findings in the same report.
+        [Fact]
+        public void Report_AddsQualityFindings()
+        {
+            var c = new ComponentCounts { Tables = 10, PluginSteps = 40, WidestForm = 160, WidestFormName = "f" };
+            var m = ComplexityReport.Build(c, "Sales", "sales", "1.0", false, "DEV");
+            Assert.Contains(m.Findings, f => f.Category == "Solution Quality" && f.Title == "Oversized form");
+        }
     }
 }

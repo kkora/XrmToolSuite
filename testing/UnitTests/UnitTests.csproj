@@ -43,9 +43,10 @@
     <!-- Technical Debt Analyzer: SDK-free scoring/report projection (no Dataverse/ClosedXML/MigraDoc). -->
     <Compile Include="..\..\src\Tools\XrmToolSuite.TechnicalDebtAnalyzer\Reporting\TechDebtReport.cs" />
 
-    <!-- Solution Complexity Score: SDK-free metric/effort model + report projection. -->
+    <!-- Solution Complexity Score: SDK-free metric/effort model, quality score + report projection. -->
     <Compile Include="..\..\src\Tools\XrmToolSuite.SolutionComplexityScore\Analysis\ComponentCounts.cs" />
     <Compile Include="..\..\src\Tools\XrmToolSuite.SolutionComplexityScore\Analysis\ComplexityMetrics.cs" />
+    <Compile Include="..\..\src\Tools\XrmToolSuite.SolutionComplexityScore\Analysis\QualityScore.cs" />
     <Compile Include="..\..\src\Tools\XrmToolSuite.SolutionComplexityScore\Reporting\ComplexityReport.cs" />
 
     <!-- AI Solution Reviewer: SDK-free report projection (collectors + Word export are manual-tested). -->

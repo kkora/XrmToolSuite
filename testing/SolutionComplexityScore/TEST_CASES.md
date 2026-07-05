@@ -15,6 +15,18 @@ Executed via `dotnet test testing/UnitTests/UnitTests.csproj`. Source: `testing/
 | TC-SC-REPORT-05 | Report projection | 200 tables | scoreWord "complexity", score 100, band High, effort metrics present | Automated | Pass |
 | TC-SC-REPORT-06 | Hotspots | wide form / plain solution | wide form flagged Medium; else "No structural hotspots" | Automated | Pass |
 
+## Automated — build-quality score (US-SC-8)
+
+Executed via `dotnet test testing/UnitTests/UnitTests.csproj`. Source: `testing/UnitTests/ComplexityScoreTests.cs`.
+
+| ID | Case | Input | Expected | Type | Status |
+|---|---|---|---|---|---|
+| TC-SC-QUALITY-07 | Empty = perfect | no components | quality 100, High band, no deductions | Automated | Pass |
+| TC-SC-QUALITY-08 | Band cutoffs | 80 / 79 / 60 / 59 | High / Medium / Medium / Low | Automated | Pass |
+| TC-SC-QUALITY-09 | Exact multi-violation | 10 tbl, 500 col, 40 steps, 30 JS, 12 wf, 2 flows, form 160 | deductions 15+12+6+8+4+5=50 → quality 50, Low band | Automated | Pass |
+| TC-SC-QUALITY-10 | Projection metric + clean note | 2 tables | "Quality score" metric present; "Well-structured solution" finding | Automated | Pass |
+| TC-SC-QUALITY-11 | Violations become findings | 10 tbl, 40 steps, form 160 | a `Solution Quality` finding "Oversized form" present | Automated | Pass |
+
 ## Automated — component collector against a fake connection (US-SC-2)
 
 Executed via `dotnet test testing/CollectorTests/CollectorTests.csproj`. Source: `testing/CollectorTests/ComplexityCollectorTests.cs` (`ComplexityCollector` over a fake `IOrganizationService`).

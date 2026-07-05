@@ -267,7 +267,9 @@ namespace XrmToolSuite.SolutionComplexityScore
             _lblBand.Text = model.BandText();
             _lblBand.ForeColor = model.Band == ScoreBand.High ? Color.FromArgb(209, 52, 56)
                 : model.Band == ScoreBand.Medium ? Color.FromArgb(200, 130, 0) : Color.FromArgb(16, 124, 16);
-            _lblScore.Text = $"Score {model.Score}/100 · maintainability {100 - model.Score}/100";
+            var quality = model.Metrics.FirstOrDefault(m => m.Label == "Quality score")?.Value;
+            _lblScore.Text = $"Score {model.Score}/100 · maintainability {100 - model.Score}/100" +
+                (string.IsNullOrEmpty(quality) ? "" : $" · quality {quality}");
         }
 
         #endregion

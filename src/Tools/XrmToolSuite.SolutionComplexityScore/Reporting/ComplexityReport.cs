@@ -24,10 +24,15 @@ namespace XrmToolSuite.SolutionComplexityScore.Reporting
             "line. Write 2-3 short paragraphs separated by a single blank line. End with a final line that " +
             "begins exactly with 'RECOMMENDATION: ' and a one-sentence action. Do not invent numbers.";
 
+        // Quality-finding category + severity mapping (deduction weight -> severity).
+        private const string QualityCategory = "Solution Quality";
+        private static Severity QualitySeverity(int points) => points >= 10 ? Severity.Medium : Severity.Low;
+
         public static ReportModel Build(ComponentCounts counts, string subjectName, string subjectKey,
             string version, bool managed, string environmentName)
         {
             var r = ComplexityMetrics.Compute(counts);
+            var q = QualityScore.Compute(counts, r);
             var band = ScoreCalculator.BandFor(r.ComplexityScore, MediumBand, HighBand);
 
             var model = new ReportModel
@@ -48,10 +53,13 @@ namespace XrmToolSuite.SolutionComplexityScore.Reporting
                 VerdictMedium = "Moderate complexity — manageable, but watch the largest dimensions.",
                 VerdictLow = "Low complexity — straightforward to maintain and upgrade.",
                 LeadIn = $"This solution scores {r.ComplexityScore}/100 for complexity " +
-                         $"({band.ToString().ToLowerInvariant()}). Maintainability is {r.MaintainabilityScore}/100.",
+                         $"({band.ToString().ToLowerInvariant()}). Maintainability is {r.MaintainabilityScore}/100. " +
+                         $"Build quality is {q.QualityScore}/100 ({q.BandLabel.ToLowerInvariant()}).",
             };
 
             // Headline dashboard metrics: the derived estimates first, then the raw tallies.
+            model.Metrics.Add(new MetricRow("Quality score", $"{q.QualityScore}/100 ({q.BandLabel})",
+                "how well-built vs. best practice (higher is better)"));
             model.Metrics.Add(new MetricRow("Maintainability", $"{r.MaintainabilityScore}/100"));
             model.Metrics.Add(new MetricRow("Upgrade effort", $"{r.UpgradeEffortDays} d", "person-days"));
             model.Metrics.Add(new MetricRow("Migration effort", $"{r.MigrationEffortDays} d", "person-days"));
@@ -66,6 +74,7 @@ namespace XrmToolSuite.SolutionComplexityScore.Reporting
             model.Metrics.Add(new MetricRow("Business rules", counts.BusinessRules.ToString()));
 
             AddHotspots(model, counts);
+            AddQualityFindings(model, q);
 
             model.NextSteps.Add(new NextStep("Tackle the largest dimension first",
                 "Complexity concentrates where counts are highest — reduce there for the biggest win."));
@@ -114,6 +123,27 @@ namespace XrmToolSuite.SolutionComplexityScore.Reporting
                 model.Findings.Add(new Finding(Hotspots, Severity.Info, "No structural hotspots",
                     "No single dimension stands out as an outlier — complexity is evenly distributed.",
                     "(overview)", "Maintain current hygiene; re-score after major changes."));
+        }
+
+        /// <summary>
+        /// Adds one finding per quality deduction (called AFTER <see cref="AddHotspots"/> so the hotspot
+        /// "no structural hotspots" fallback still keys off an empty findings list). A clean solution gets a
+        /// single positive note.
+        /// </summary>
+        private static void AddQualityFindings(ReportModel model, QualityResult q)
+        {
+            if (q.Deductions.Count == 0)
+            {
+                model.Findings.Add(new Finding(QualityCategory, Severity.Info, "Well-structured solution",
+                    $"Build quality is {q.QualityScore}/100 ({q.BandLabel}) — no best-practice violations detected.",
+                    "(overview)", "Maintain current standards; re-score after major changes."));
+                return;
+            }
+
+            foreach (var d in q.Deductions)
+                model.Findings.Add(new Finding(QualityCategory, QualitySeverity(d.Points),
+                    d.Signal, d.Why, "(quality)",
+                    "Address to raise the build-quality score toward best practice."));
         }
     }
 }

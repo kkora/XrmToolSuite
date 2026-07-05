@@ -1,6 +1,14 @@
 # Solution Quality Score — User Stories (Candidate / Backlog)
 
-> **Status:** Candidate backlog — not started (no code).
+> **Status:** ✅ **Shipped as an extension** — built into the **Solution Complexity Score** tool as
+> **FEAT-SC-4** (a 0–100 build-quality score over the same `ComponentCounts`), per the recommendation below,
+> rather than as a standalone `XrmToolSuite.SolutionQualityScore` project. See
+> [`../../user-stories/SolutionComplexityScore.md`](../../user-stories/SolutionComplexityScore.md) →
+> FEAT-SC-4 and the design at [`../../design/SOLN4-RPT4-extensions.md`](../../design/SOLN4-RPT4-extensions.md).
+> The governance/documentation/security categories noted below remain a phase-2 extension (they need a
+> collector change).
+>
+> **(Original candidate status:** Candidate backlog — not started (no code).**)**
 > **Source:** `all` — `prompt/3.XrmToolBox_ALL_PROMPTS.txt`, Section 5 (Solution Management), item 4. Not in pack file.
 > **Suggested tag:** `SOLN4` · **Suggested project:** `XrmToolSuite.SolutionQualityScore`
 > **Overlaps:** **STRONGLY overlaps the shipped Solution Complexity Score** — that tool already selects a solution, inventories components, and computes a weighted score with category breakdown, findings, and export. It also overlaps Deployment Risk Analyzer (dependency/publisher/env-var/connection-ref checks), Technical Debt Analyzer (unused/duplicate/JS-quality signals), and AI Solution Reviewer (recommendations). **Recommendation: do NOT ship as a duplicate scorer — extend Solution Complexity Score with the governance/ALM-readiness categories it lacks (Documentation Completeness, ALM Readiness, Security Readiness, Configuration Readiness), or reuse its scoring engine and analyzer set.** Standalone value is low; extension value is real.

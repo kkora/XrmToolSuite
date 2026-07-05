@@ -4,12 +4,12 @@
 
 - **Command:** `dotnet test testing/UnitTests/UnitTests.csproj -c Release`
 - **Framework:** xUnit (net8.0)
-- **Result:** 6 Complexity cases passed, 0 failed, 0 skipped (44 total across the suite).
-- **Coverage:** TC-SC-METRIC-01..04 (weighted points, exact score/maintainability/effort/cost values, cap, per-dimension breakdown) and TC-SC-REPORT-05..06 (report projection, band, hotspot findings), tracing to US-SC-3/4/5. The effort/cost formulas are asserted to exact values, so a change to any weight is caught.
+- **Result:** 14 Complexity cases passed, 0 failed, 0 skipped (402 total across the suite).
+- **Coverage:** TC-SC-METRIC-01..04 (weighted points, exact score/maintainability/effort/cost values, cap, per-dimension breakdown), TC-SC-REPORT-05..06 (report projection, band, hotspot findings), and TC-SC-QUALITY-07..11 (build-quality score: empty=100/High, band cutoffs, exact multi-violation deduction, projection metric + clean note, quality findings), tracing to US-SC-3/4/5/8. The effort/cost and quality formulas are asserted to exact values, so a change to any weight is caught.
 - **Collector (headless):** `dotnet test testing/CollectorTests/CollectorTests.csproj` — TC-SC-COL-01..08 drive `ComplexityCollector` against the shared fake `IOrganizationService` (component-type tallies, JScript web resources, dashboards vs forms, widest form, workflow categories, apps, views/charts). 8 passed.
 
 ```
-Passed! - Failed: 0, Passed: 44, Skipped: 0, Total: 44 (whole suite)
+Passed! - Failed: 0, Passed: 402, Skipped: 0, Total: 402 (whole suite)
 ```
 
 ## Manual run
@@ -20,7 +20,7 @@ exercised in a Windows + XrmToolBox session against a real org; capture a screen
 
 | Group | Cases | Executed | Pass | Fail | Pending |
 |---|---|---|---|---|---|
-| Automated (metrics/report) | 6 | 6 | 6 | 0 | 0 |
+| Automated (metrics/report/quality) | 14 | 14 | 14 | 0 | 0 |
 | Automated (collector, headless) | 8 | 8 | 8 | 0 | 0 |
 | Manual (UI/exports/summary) | 7 | 0 | 0 | 0 | 7 |
 
