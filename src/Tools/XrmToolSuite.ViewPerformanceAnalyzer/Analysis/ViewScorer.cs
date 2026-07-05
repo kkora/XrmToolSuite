@@ -41,35 +41,12 @@ namespace XrmToolSuite.ViewPerformanceAnalyzer.Analysis
                 LayoutXml = layoutXml
             };
 
-            // Layout analysis is independent of the FetchXML parse (a broken fetch can still have a layout).
+            // Layout analysis is independent of the FetchXML parse (a broken fetch can still have a wide
+            // layout), so evaluate the over-wide-layout rule UP FRONT — otherwise a parse failure would hide
+            // a genuinely wide layout's risk.
             view.LayoutColumns.AddRange(LayoutXmlParser.Columns(layoutXml));
             view.LayoutColumnCount = view.LayoutColumns.Count;
 
-            var parse = FetchXmlParser.Parse(fetchXml);
-            if (!parse.Success)
-            {
-                // A view whose FetchXML can't be parsed is not scored as risky — surfaced as an informational
-                // note so the row is still visible and actionable, but contributes nothing to the score.
-                view.Findings.Add(new Finding(Category, Severity.Info,
-                    "View FetchXML could not be parsed",
-                    "This view's FetchXML could not be parsed, so no query-cost analysis was run for it: " + parse.Error,
-                    component: name,
-                    recommendation: "Open the view and verify its FetchXML is well-formed."));
-                view.Score = 0;
-                view.Band = ScoreBand.Low;
-                return view;
-            }
-
-            var q = parse.Query;
-            view.FetchAttributeCount = q.TotalAttributeCount;
-            view.LinkCount = q.LinkCount;
-            view.AllAttributes = q.AllAttributes;
-
-            // Reuse the shared FetchXML engine for all query findings + the heuristic cost estimate.
-            var analysis = FetchXmlRules.Analyze(q, opts.FetchOptions);
-            view.Findings.AddRange(analysis.Findings);
-
-            // View-specific rule: an over-wide grid layout (many displayed columns) is a payload/render cost.
             int layoutPenalty = 0;
             if (view.LayoutColumnCount > opts.MaxLayoutColumns)
             {
@@ -85,9 +62,44 @@ namespace XrmToolSuite.ViewPerformanceAnalyzer.Analysis
                     recommendation: "Remove rarely-used columns from the view layout so users load only what they need."));
             }
 
+            var parse = FetchXmlParser.Parse(fetchXml);
+            if (!parse.Success)
+            {
+                // FetchXML can't be parsed: no query-cost analysis is run, but any over-wide-layout finding
+                // above still stands and still contributes its (labeled, heuristic) penalty to the score.
+                view.Findings.Add(new Finding(Category, Severity.Info,
+                    "View FetchXML could not be parsed",
+                    "This view's FetchXML could not be parsed, so no query-cost analysis was run for it: " + parse.Error,
+                    component: name,
+                    recommendation: "Open the view and verify its FetchXML is well-formed."));
+                view.Score = Math.Min(100, layoutPenalty);
+                view.Band = ScoreCalculator.BandFor(view.Score, 15, 40);
+                return view;
+            }
+
+            var q = parse.Query;
+            view.FetchAttributeCount = q.TotalAttributeCount;
+            view.LinkCount = q.LinkCount;
+            view.AllAttributes = q.AllAttributes;
+
+            // Reuse the shared FetchXML engine for query findings + the heuristic cost. Drop its standalone
+            // "No performance risks detected" placeholder: it is only meaningful for the FetchXML tool in
+            // isolation, and here it would contradict a layout finding this consumer adds (a view flagged
+            // Medium that simultaneously claims it has no risks).
+            var analysis = FetchXmlRules.Analyze(q, opts.FetchOptions);
+            view.Findings.AddRange(analysis.Findings.Where(f => f.Title != "No performance risks detected"));
+
             // Score = shared FetchXML cost estimate + transparent, labeled layout penalty, capped at 100.
             view.Score = Math.Min(100, analysis.CostEstimate + layoutPenalty);
             view.Band = ScoreCalculator.BandFor(view.Score, 15, 40);
+
+            // Only after ALL rules (query + layout): if nothing actionable was found, restore a single clean
+            // note so a genuinely risk-free view still reads clearly.
+            if (!view.Findings.Any(f => f.Severity > Severity.Info))
+                view.Findings.Add(new Finding(Category, Severity.Info,
+                    "No performance risks detected",
+                    "No FetchXML or layout performance risks were found for this view.",
+                    component: name));
 
             return view;
         }
