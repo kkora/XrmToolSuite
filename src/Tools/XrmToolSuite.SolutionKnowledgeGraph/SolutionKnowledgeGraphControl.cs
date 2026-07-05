@@ -24,11 +24,9 @@ namespace XrmToolSuite.SolutionKnowledgeGraph
     /// </summary>
     public partial class SolutionKnowledgeGraphControl : BaseToolControl, IGitHubPlugin, IHelpPlugin
     {
-        private const string DocsUrl = "https://github.com/kkora/XrmToolSuite";
-
         public string RepositoryName => "XrmToolSuite";
         public string UserName => "kkora";
-        public string HelpUrl => DocsUrl;
+        public string HelpUrl => SuiteDocsUrl;
 
         private GraphSettings _settings = new GraphSettings();
         private GraphModel _graph;
@@ -75,14 +73,11 @@ namespace XrmToolSuite.SolutionKnowledgeGraph
             _btnExport.DropDownItems.Add("PNG (.png)", null, (s, e) => Export("png"));
             _btnExport.DropDownItems.Add("Interactive HTML (.html)", null, (s, e) => Export("html"));
 
-            var btnHelp = new ToolStripButton("Help") { Alignment = ToolStripItemAlignment.Right, DisplayStyle = ToolStripItemDisplayStyle.Text };
-            btnHelp.Click += (s, e) => System.Diagnostics.Process.Start(DocsUrl);
-
             toolbar.Items.AddRange(new ToolStripItem[]
             {
                 btnClose, new ToolStripSeparator(), btnLoad, new ToolStripLabel("Solution:"),
                 new ToolStripControlHost(_cboSolution), btnBuild, new ToolStripSeparator(),
-                _btnInteractive, _btnCycles, _btnExport, btnHelp
+                _btnInteractive, _btnCycles, _btnExport, CreateHelpButton("Solution Knowledge Graph")
             });
 
             _lblStats = new Label { Dock = DockStyle.Top, Height = 24, Padding = new Padding(6, 4, 0, 0), Text = "Build a graph from a solution." };

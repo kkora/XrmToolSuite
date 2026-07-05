@@ -27,11 +27,9 @@ namespace XrmToolSuite.TechnicalDebtAnalyzer
     /// </summary>
     public partial class TechnicalDebtAnalyzerControl : BaseToolControl, IGitHubPlugin, IHelpPlugin
     {
-        private const string DocsUrl = "https://github.com/kkora/XrmToolSuite";
-
         public string RepositoryName => "XrmToolSuite";
         public string UserName => "kkora";
-        public string HelpUrl => DocsUrl;
+        public string HelpUrl => SuiteDocsUrl;
 
         // Every analyzer in the suite, in display order. Drives the picker and the run loop.
         private readonly List<IAnalyzer<TechDebtContext>> _allAnalyzers = new List<IAnalyzer<TechDebtContext>>
@@ -98,13 +96,11 @@ namespace XrmToolSuite.TechnicalDebtAnalyzer
             _miAiIncludeComponents = new ToolStripMenuItem("Include component names in AI payload") { CheckOnClick = true, Checked = true };
             btnAiOptions.DropDownItems.Add(_miAiIncludeComponents);
 
-            var btnHelp = new ToolStripButton("Help") { Alignment = ToolStripItemAlignment.Right, DisplayStyle = ToolStripItemDisplayStyle.Text };
-            btnHelp.Click += (s, e) => System.Diagnostics.Process.Start(DocsUrl);
-
             toolbar.Items.AddRange(new ToolStripItem[]
             {
                 btnClose, new ToolStripSeparator(), _btnAnalyze, new ToolStripSeparator(),
-                _btnExport, new ToolStripSeparator(), _btnAiSummary, btnAiOptions, btnHelp
+                _btnExport, new ToolStripSeparator(), _btnAiSummary, btnAiOptions,
+                CreateHelpButton("Technical Debt Analyzer")
             });
 
             // Left: analyzer picker

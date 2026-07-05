@@ -31,11 +31,6 @@ namespace XrmToolSuite.DeploymentRiskAnalyzer
     {
         private const string TargetActionName = "TargetOrganization";
 
-        // Help & support links (surfaced in the Help dialog and via IHelpPlugin).
-        private const string DocsUrl = "https://github.com/kkora/XrmToolSuite#readme";
-        private const string IssuesUrl = "https://github.com/kkora/XrmToolSuite/issues/new";
-        private const string CoffeeUrl = "https://www.buymeacoffee.com/kkora";
-
         private IOrganizationService _targetService;
         private string _targetName;
         private List<Entity> _solutions = new List<Entity>();
@@ -78,7 +73,7 @@ namespace XrmToolSuite.DeploymentRiskAnalyzer
 
         public string RepositoryName => "XrmToolSuite";
         public string UserName => "kkora";
-        public string HelpUrl => DocsUrl;
+        public string HelpUrl => SuiteDocsUrl;
 
         public DeploymentRiskAnalyzerControl()
         {
@@ -157,15 +152,6 @@ namespace XrmToolSuite.DeploymentRiskAnalyzer
                 _miAiIncludeComponents, new ToolStripSeparator(), miSettings
             });
 
-            // Right-aligned Help button (opens the Help & Support dialog).
-            var btnHelp = new ToolStripButton("Help")
-            {
-                DisplayStyle = ToolStripItemDisplayStyle.Text,
-                Alignment = ToolStripItemAlignment.Right,
-                ToolTipText = "Documentation, report an issue, and support the plugin"
-            };
-            btnHelp.Click += (s, e) => ShowHelpDialog();
-
             _toolbar.Items.AddRange(new ToolStripItem[]
             {
                 _btnClose, new ToolStripSeparator(),
@@ -173,7 +159,7 @@ namespace XrmToolSuite.DeploymentRiskAnalyzer
                 new ToolStripSeparator(), _btnConnectTarget, _lblTarget,
                 new ToolStripSeparator(), _btnAnalyze, _btnExport,
                 new ToolStripSeparator(), _btnAiSummary, _btnAiOptions,
-                btnHelp
+                CreateHelpButton("Deployment Risk Analyzer")
             });
 
             // Summary strip
@@ -759,122 +745,6 @@ namespace XrmToolSuite.DeploymentRiskAnalyzer
                 start += line.Length + 1; // account for the newline separator
             }
             rtb.Select(0, 0);
-        }
-
-        #endregion
-
-        #region Help & Support
-
-        /// <summary>
-        /// Help &amp; Support dialog: documentation, a "report an issue" link (GitHub), and a
-        /// Buy-me-a-coffee support prompt. All links open in the default browser.
-        /// </summary>
-        private void ShowHelpDialog()
-        {
-            var accent = Color.FromArgb(37, 99, 235);
-            var ink2 = Color.FromArgb(85, 96, 122);
-            var ver = GetType().Assembly.GetName().Version;
-
-            using (var f = new Form
-            {
-                Text = "Help & Support",
-                ClientSize = new Size(440, 462),
-                FormBorderStyle = FormBorderStyle.FixedDialog,
-                StartPosition = FormStartPosition.CenterParent,
-                MinimizeBox = false, MaximizeBox = false, BackColor = Color.White
-            })
-            {
-                var header = new Panel { Dock = DockStyle.Top, Height = 72, BackColor = Color.FromArgb(27, 27, 47) };
-                header.Controls.Add(new Label
-                {
-                    Text = "Deployment Risk Analyzer", Font = new Font("Segoe UI", 13.5f, FontStyle.Bold),
-                    ForeColor = Color.White, AutoSize = true, Location = new Point(18, 13)
-                });
-                header.Controls.Add(new Label
-                {
-                    Text = $"XrmToolSuite  ·  v{ver.Major}.{ver.Minor}.{ver.Build}", Font = new Font("Segoe UI", 9f),
-                    ForeColor = Color.Gainsboro, AutoSize = true, Location = new Point(20, 42)
-                });
-
-                var body = new Panel { Dock = DockStyle.Fill, BackColor = Color.White };
-
-                AddHelpItem(body, 16, "Documentation",
-                    "How each analyzer works, risk scoring, and the report exports.",
-                    "Open documentation", DocsUrl, accent, ink2);
-
-                AddHelpItem(body, 92, "Report an issue",
-                    "Found a bug or have a feature request? Let me know on GitHub.",
-                    "Report an issue on GitHub", IssuesUrl, accent, ink2);
-
-                // Support card
-                var support = new Panel
-                {
-                    Location = new Point(18, 170), Size = new Size(404, 158),
-                    BackColor = Color.FromArgb(255, 248, 235), BorderStyle = BorderStyle.FixedSingle
-                };
-                support.Controls.Add(new Label
-                {
-                    Text = "❤  Enjoying this plugin?", Font = new Font("Segoe UI", 11f, FontStyle.Bold),
-                    ForeColor = Color.FromArgb(180, 40, 40), AutoSize = true, Location = new Point(14, 12)
-                });
-                support.Controls.Add(new Label
-                {
-                    Text = "This tool is free and maintained in my own time.\r\nIf it saved you a risky deployment, please consider\r\nsupporting future updates — thank you!",
-                    Font = new Font("Segoe UI", 9f), ForeColor = ink2, AutoSize = true, Location = new Point(15, 42)
-                });
-                var coffee = new Button
-                {
-                    Text = "☕  Buy me a coffee", Font = new Font("Segoe UI", 9.75f, FontStyle.Bold),
-                    ForeColor = Color.FromArgb(51, 34, 0), BackColor = Color.FromArgb(255, 221, 0),
-                    FlatStyle = FlatStyle.Flat, Location = new Point(15, 110), Size = new Size(184, 34), Cursor = Cursors.Hand
-                };
-                coffee.FlatAppearance.BorderColor = Color.FromArgb(230, 190, 0);
-                coffee.Click += (s, e) => OpenUrl(CoffeeUrl);
-                support.Controls.Add(coffee);
-                body.Controls.Add(support);
-
-                var bottom = new Panel { Dock = DockStyle.Bottom, Height = 46, BackColor = Color.White };
-                var close = new Button
-                {
-                    Text = "Close", DialogResult = DialogResult.OK, Size = new Size(90, 28),
-                    Location = new Point(f.ClientSize.Width - 108, 9),
-                    Anchor = AnchorStyles.Top | AnchorStyles.Right
-                };
-                bottom.Controls.Add(close);
-
-                f.Controls.Add(body);
-                f.Controls.Add(bottom);
-                f.Controls.Add(header);
-                f.AcceptButton = close;
-                f.ShowDialog(this);
-            }
-        }
-
-        /// <summary>Adds a bold title, a one-line description, and a clickable link to the given panel.</summary>
-        private void AddHelpItem(Panel parent, int y, string title, string desc, string linkText, string url, Color accent, Color ink2)
-        {
-            parent.Controls.Add(new Label
-            {
-                Text = title, Font = new Font("Segoe UI", 11f, FontStyle.Bold), AutoSize = true, Location = new Point(18, y)
-            });
-            parent.Controls.Add(new Label
-            {
-                Text = desc, Font = new Font("Segoe UI", 9f), ForeColor = ink2, AutoSize = true, Location = new Point(19, y + 24)
-            });
-            var link = new LinkLabel
-            {
-                Text = linkText, Font = new Font("Segoe UI", 9.5f), AutoSize = true, Location = new Point(19, y + 44),
-                LinkColor = accent, ActiveLinkColor = accent, Cursor = Cursors.Hand
-            };
-            link.LinkClicked += (s, e) => OpenUrl(url);
-            parent.Controls.Add(link);
-        }
-
-        /// <summary>Opens a URL in the default browser; surfaces failures rather than swallowing them.</summary>
-        private void OpenUrl(string url)
-        {
-            try { System.Diagnostics.Process.Start(url); }
-            catch (Exception ex) { ShowError(ex); }
         }
 
         #endregion
