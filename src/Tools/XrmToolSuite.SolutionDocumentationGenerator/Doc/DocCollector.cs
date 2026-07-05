@@ -192,6 +192,9 @@ namespace XrmToolSuite.SolutionDocumentationGenerator.Doc
                 catch (Exception ex)
                 {
                     scan.UnavailableSources.Add("Solution components: " + ex.Message);
+                    // Both the summary and the raw-component enumeration failed: no component data was read,
+                    // so downstream sections must say "not available", not "no components".
+                    scan.ComponentScanFailed = true;
                 }
             }
 

@@ -44,7 +44,7 @@ namespace XrmToolSuite.FlowDependencyAnalyzer.Analysis
         // Dataverse SdkMessage codes used by the "Common Data Service (current environment)" connector trigger.
         private static readonly Dictionary<string, string> MessageMap = new Dictionary<string, string>
         {
-            { "1", "Create" }, { "2", "Delete" }, { "3", "Update" },
+            { "1", "Create" }, { "2", "Update" }, { "3", "Delete" },
             { "4", "CreateOrUpdate" }, { "5", "CreateOrDelete" },
             { "6", "UpdateOrDelete" }, { "7", "CreateOrUpdateOrDelete" },
         };
@@ -385,10 +385,13 @@ namespace XrmToolSuite.FlowDependencyAnalyzer.Analysis
                     foreach (Match m in ParameterRef.Matches(s))
                     {
                         var refName = m.Groups[1].Value;
-                        // Heuristic: environment variables surface as parameters named like schema names
-                        // (contain an underscore prefix) — keep it, but the collector reconciles to real EVs.
-                        if (!string.IsNullOrEmpty(refName) &&
-                            !dep.EnvironmentVariables.Contains(refName, StringComparer.OrdinalIgnoreCase))
+                        // Skip Power Automate built-in parameters ($connections, $authentication): they are
+                        // runtime/auth references, NOT environment variables, and flagging them produces a
+                        // false "missing environment variable" finding since they never resolve to an EV.
+                        if (string.IsNullOrEmpty(refName) || refName[0] == '$') continue;
+                        // Heuristic: environment variables surface as parameters named like schema names;
+                        // keep the reference, and the collector reconciles it against real EVs.
+                        if (!dep.EnvironmentVariables.Contains(refName, StringComparer.OrdinalIgnoreCase))
                             dep.EnvironmentVariables.Add(refName);
                     }
                 }

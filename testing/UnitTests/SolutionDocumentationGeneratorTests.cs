@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using System.Text.RegularExpressions;
 using Xunit;
@@ -111,6 +112,26 @@ namespace XrmToolSuite.UnitTests
             foreach (var kind in SectionKinds.All)
                 Assert.Contains(kind, kinds);
             Assert.Equal("Full Solution Reference", doc.ModeLabel);
+        }
+
+        // Regression: when the primary component enumeration FAILED (permission gap), an empty component
+        // section must render the "not available" note — NOT a false "No X components are included in this
+        // solution", which would misinform the reader in exactly the permission-gap case (US-SOLN5.2.3).
+        [Fact]
+        public void Build_ComponentScanFailed_RendersNotAvailable_NotNoComponents()
+        {
+            var scan = new SolutionScanData
+            {
+                SolutionName = "S", UniqueName = "s", Version = "1.0.0.0",
+                ComponentScanFailed = true // components could not be read
+            };
+            var doc = DocBuilder.Build(scan, new DocOptions { Mode = DocMode.FullReference });
+            var plugins = doc.Sections.Single(s => s.Kind == SectionKinds.Plugins);
+
+            Assert.Contains(plugins.Notes, n =>
+                n.IndexOf("not available in the source environment", StringComparison.OrdinalIgnoreCase) >= 0);
+            Assert.DoesNotContain(plugins.Notes, n =>
+                n.IndexOf("are included in this solution", StringComparison.OrdinalIgnoreCase) >= 0);
         }
 
         // TC-SOLN5-MODE-04 (US-SOLN5.1.1): Standard Reference drops only the heavy diagram section.

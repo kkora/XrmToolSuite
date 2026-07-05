@@ -338,6 +338,13 @@ namespace XrmToolSuite.SolutionDocumentationGenerator.Doc
         /// <summary>Sources that could not be read (permission gaps / unsupported) — a note, never a hard error.</summary>
         public List<string> UnavailableSources { get; set; } = new List<string>();
 
+        /// <summary>
+        /// True when the primary solution-component enumeration itself failed, so EVERY component section is
+        /// empty because the data could not be read — NOT because the solution has no such components. When
+        /// set, sections must render the "not available" note instead of a misleading "No X components".
+        /// </summary>
+        public bool ComponentScanFailed { get; set; }
+
         public DateTime GeneratedUtc { get; set; } = DateTime.UtcNow;
 
         /// <summary>

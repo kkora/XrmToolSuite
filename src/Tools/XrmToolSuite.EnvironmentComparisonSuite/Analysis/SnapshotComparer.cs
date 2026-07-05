@@ -99,10 +99,13 @@ namespace XrmToolSuite.EnvironmentComparisonSuite.Analysis
             // Count matrix (every category that appears gets a full row so summary cards line up).
             foreach (var d in report.Diffs)
             {
-                if (!report.CountsByCategoryAndClass.TryGetValue(d.Category, out var row))
+                // Guard a null Category: Dictionary rejects a null key. Bucket it under "" so the roll-up
+                // never throws (the engine is designed to be reusable/liftable, so callers may pass one).
+                var cat = d.Category ?? string.Empty;
+                if (!report.CountsByCategoryAndClass.TryGetValue(cat, out var row))
                 {
                     row = NewClassRow();
-                    report.CountsByCategoryAndClass[d.Category] = row;
+                    report.CountsByCategoryAndClass[cat] = row;
                 }
                 row[d.Class]++;
             }

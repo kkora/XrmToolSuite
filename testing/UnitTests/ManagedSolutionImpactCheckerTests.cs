@@ -22,10 +22,12 @@ namespace XrmToolSuite.UnitTests
             IEnumerable<string> removed = null,
             IEnumerable<(string, string)> missing = null,
             string srcPrefix = null,
-            string tgtPrefix = null) => new LayerAnalysisInput
+            string tgtPrefix = null,
+            bool assessed = true) => new LayerAnalysisInput
             {
                 Layers = (layers ?? Enumerable.Empty<ComponentLayer>()).ToList(),
                 RemovedComponents = (removed ?? Enumerable.Empty<string>()).ToList(),
+                RemovedComponentsAssessed = assessed, // tests supply a fully-assessed input by default
                 MissingDependencies = (missing ?? Enumerable.Empty<(string, string)>()).ToList(),
                 SourcePublisherPrefix = srcPrefix,
                 TargetPublisherPrefix = tgtPrefix
@@ -46,6 +48,24 @@ namespace XrmToolSuite.UnitTests
             Assert.NotEmpty(report.Checklist);
             Assert.NotEmpty(report.RollbackGuidance);
             Assert.NotEmpty(report.Metrics);
+        }
+
+        // Regression: an Upgrade whose removed components were NEVER assessed must NOT look deletion-safe —
+        // it surfaces an honest "not assessed" Info note instead of silently omitting the risk (US-ALM4.2.2).
+        [Fact]
+        public void Upgrade_WithUnassessedRemovals_NotesDeletionNotEvaluated()
+        {
+            var report = LayerImpactRules.Evaluate(Input(assessed: false), DeploymentPath.Upgrade);
+            Assert.Contains(report.Findings, f =>
+                f.Severity == Severity.Info && f.Title == "Deletion / data-loss impact not assessed");
+        }
+
+        // A Patch never deletes, so an unassessed removal list produces no "not assessed" alarm.
+        [Fact]
+        public void Patch_WithUnassessedRemovals_NoNotAssessedNote()
+        {
+            var report = LayerImpactRules.Evaluate(Input(assessed: false), DeploymentPath.Patch);
+            Assert.DoesNotContain(report.Findings, f => f.Title == "Deletion / data-loss impact not assessed");
         }
 
         // ---------------------------------------------------------------- Deletion: Upgrade vs Update/Patch (US-ALM4.2.2 / US-ALM4.3.1)
@@ -81,6 +101,20 @@ namespace XrmToolSuite.UnitTests
 
             var f = Assert.Single(report.Findings, x => x.Title == "Component would be deleted");
             Assert.Equal(Severity.Medium, f.Severity);
+        }
+
+        // Regression: a multi-word type must not be substring-escalated. "Entity Relationship"/"Entity Key"
+        // are NOT tables (no data loss) and "Field Security Profile" is NOT a column — they classify Medium.
+        [Theory]
+        [InlineData("Entity Relationship: new_rel")]
+        [InlineData("Entity Key: new_key")]
+        [InlineData("Field Security Profile: new_fsp")]
+        public void RemovedMultiWordType_IsNotEscalatedToTableOrColumn(string entry)
+        {
+            var report = LayerImpactRules.Evaluate(Input(removed: new[] { entry }), DeploymentPath.Upgrade);
+            Assert.DoesNotContain(report.Findings, f =>
+                f.Title == "Table would be deleted (data loss)" || f.Title == "Column would be deleted (data loss)");
+            Assert.Contains(report.Findings, f => f.Title == "Component would be deleted" && f.Severity == Severity.Medium);
         }
 
         [Theory]

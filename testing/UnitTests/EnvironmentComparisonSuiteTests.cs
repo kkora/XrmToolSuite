@@ -89,6 +89,19 @@ namespace XrmToolSuite.UnitTests
             Assert.Empty(d.ChangedProperties);
         }
 
+        // Regression: the roll-up buckets a null diff Category (allowed for the reusable engine) instead of
+        // throwing ArgumentNullException on a null Dictionary key.
+        [Fact]
+        public void Roll_WithNullCategory_DoesNotThrow()
+        {
+            var diffs = SnapshotComparer.Compare(null,
+                new[] { new ComponentSnapshot(null, "a", "a", false, null) },
+                new ComponentSnapshot[0]);
+            var report = SnapshotComparer.Roll(diffs); // must not throw
+            Assert.NotNull(report);
+            Assert.Single(report.Diffs);
+        }
+
         [Fact] // Version is compared like a property (solutions/publishers carry versions).
         public void Compare_VersionDiffers_IsChanged()
         {

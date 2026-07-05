@@ -17,14 +17,20 @@ namespace XrmToolSuite.AuditComplianceChecker.Analysis
         /// Covers: government IDs, DOB, financials/compensation, banking/payment, credentials/secrets,
         /// and direct contact identifiers.
         /// </summary>
+        // NOTE: these are matched as case-insensitive SUBSTRINGS of the lower-cased logical name, so every
+        // entry must be distinctive enough not to appear inside ordinary schema words. Short, ambiguous
+        // tokens are deliberately excluded and covered by longer synonyms instead:
+        //   "tin" -> covered by taxid/nationalid/ssn (bare "tin" falsely matches set-"tin"-g, mee-"tin"-g, rou-"tin"-g)
+        //   "pin" -> covered by password/secret/credential (bare "pin" falsely matches ship-"pin"-g, shop-"pin"-g)
+        //   "routing" -> narrowed to "routingnumber" (bare "routing" falsely matches routingrule / msdyn_routing*)
         public static readonly string[] SensitiveNamePatterns =
         {
-            "ssn", "socialsecurity", "nationalid", "passport", "taxid", "vatnumber", "tin",
+            "ssn", "socialsecurity", "nationalid", "passport", "taxid", "vatnumber",
             "dob", "dateofbirth", "birth", "birthdate",
             "salary", "compensation", "wage", "income", "networth",
-            "bank", "iban", "swift", "routing", "accountnumber", "creditcard", "cardnumber",
+            "bank", "iban", "swift", "routingnumber", "accountnumber", "creditcard", "cardnumber",
             "creditscore", "payment",
-            "password", "secret", "apikey", "token", "credential", "pin",
+            "password", "secret", "apikey", "token", "credential",
             "email", "emailaddress", "phone", "mobile", "telephone",
             "healthid", "medical", "diagnosis", "biometric", "driverslicense", "licensenumber",
         };
