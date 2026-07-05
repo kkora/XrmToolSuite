@@ -166,6 +166,22 @@ namespace XrmToolSuite.PortalHealthAnalyzer.Analysis
 
         private static void EvaluateSiteSettings(PortalInventory inv, PortalHealthOptions opts, List<Finding> findings)
         {
+            // If the site-settings table itself could not be read, its emptiness is a permission/availability
+            // gap, not genuinely-absent configuration. Flagging every required setting as High here would be a
+            // false positive that inflates the (higher = less healthy) score — note it once and skip the check.
+            var settingsUnavailable = inv.UnavailableTables != null &&
+                inv.UnavailableTables.Any(t => t != null && t.IndexOf("sitesetting", StringComparison.OrdinalIgnoreCase) >= 0);
+            if (settingsUnavailable)
+            {
+                findings.Add(new Finding(CatSettings, Severity.Info,
+                    "Site settings could not be verified",
+                    "The site-settings table could not be read, so required-setting coverage was not verified. " +
+                    "Missing-setting findings are suppressed to avoid false positives.",
+                    component: null,
+                    recommendation: "Ensure the connection can read the portal site-settings table, then re-run."));
+                return;
+            }
+
             var present = new HashSet<string>(
                 inv.Settings.Where(s => !string.IsNullOrWhiteSpace(s.Name)).Select(s => s.Name.Trim()),
                 StringComparer.OrdinalIgnoreCase);

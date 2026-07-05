@@ -139,6 +139,23 @@ namespace XrmToolSuite.UnitTests
                 f.Title.Contains("Missing required site setting"));
         }
 
+        // Regression: if the site-settings table itself could not be read, missing-required-setting checks
+        // must be suppressed (else every required setting false-flags High and inflates the score); a single
+        // informational note is emitted instead.
+        [Fact]
+        public void SettingsTableUnavailable_SuppressesMissingSettingFalsePositives()
+        {
+            var inv = Clean();
+            inv.Settings.Clear();                       // couldn't read any settings...
+            inv.UnavailableTables.Add("adx_sitesetting"); // ...because the table was unavailable
+
+            var report = PortalHealthRules.Evaluate(inv);
+
+            Assert.DoesNotContain(report.Findings, f => f.Title.Contains("Missing required site setting"));
+            Assert.Contains(report.Findings, f =>
+                f.Severity == Severity.Info && f.Title == "Site settings could not be verified");
+        }
+
         [Fact]
         public void DuplicateSetting_IsMedium()
         {

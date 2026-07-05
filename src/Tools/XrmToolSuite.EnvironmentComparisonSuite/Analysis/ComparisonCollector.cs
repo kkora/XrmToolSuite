@@ -61,7 +61,7 @@ namespace XrmToolSuite.EnvironmentComparisonSuite.Analysis
                 if (needsRelationships) filters |= EntityFilters.Relationships;
                 progress?.Invoke("Retrieving source metadata…");
                 srcMeta = SafeMetadata(source, filters);
-                if (Cancelled(worker)) return Roll(diffs, degraded);
+                if (Cancelled(worker)) return Roll(diffs, degraded, enabledCategories);
                 progress?.Invoke("Retrieving target metadata…");
                 tgtMeta = SafeMetadata(target, filters);
             }
@@ -89,12 +89,12 @@ namespace XrmToolSuite.EnvironmentComparisonSuite.Analysis
                 }
             }
 
-            return Roll(diffs, degraded);
+            return Roll(diffs, degraded, enabledCategories);
         }
 
-        private ComparisonReport Roll(List<ComponentDiff> diffs, List<Finding> degraded)
+        private ComparisonReport Roll(List<ComponentDiff> diffs, List<Finding> degraded, IEnumerable<string> categories)
         {
-            var report = SnapshotComparer.Roll(diffs, _opts);
+            var report = SnapshotComparer.Roll(diffs, _opts, categories);
             report.Findings.AddRange(degraded); // informational; weight 0, does not move the score
             return report;
         }

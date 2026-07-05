@@ -102,6 +102,22 @@ namespace XrmToolSuite.UnitTests
             Assert.Single(report.Diffs);
         }
 
+        // Regression: a category that was compared but is fully empty on both sides (no diffs) must still get
+        // a zeroed row in the count matrix when its category is passed, so summary cards don't silently vanish.
+        [Fact]
+        public void Roll_SeedsRowsForEnabledButEmptyCategories()
+        {
+            var report = SnapshotComparer.Roll(
+                new ComponentDiff[0], // nothing differed / nothing present
+                opts: null,
+                categories: new[] { ComparisonCategories.Solutions, ComparisonCategories.Tables });
+
+            Assert.True(report.CountsByCategoryAndClass.ContainsKey(ComparisonCategories.Solutions));
+            Assert.True(report.CountsByCategoryAndClass.ContainsKey(ComparisonCategories.Tables));
+            // Seeded rows are all-zero across every DiffClass.
+            Assert.All(report.CountsByCategoryAndClass[ComparisonCategories.Solutions].Values, v => Assert.Equal(0, v));
+        }
+
         [Fact] // Version is compared like a property (solutions/publishers carry versions).
         public void Compare_VersionDiffers_IsChanged()
         {

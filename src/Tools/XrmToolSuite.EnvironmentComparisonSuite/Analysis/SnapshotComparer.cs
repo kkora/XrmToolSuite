@@ -88,13 +88,22 @@ namespace XrmToolSuite.EnvironmentComparisonSuite.Analysis
         /// (reusing the suite's <see cref="ScoreCalculator.RiskDefault"/> weighting), one finding per
         /// non-identical diff, headline metrics, and a per-category × class count matrix. Deterministic.
         /// </summary>
-        public static ComparisonReport Roll(IEnumerable<ComponentDiff> diffs, CompareOptions opts = null)
+        public static ComparisonReport Roll(IEnumerable<ComponentDiff> diffs, CompareOptions opts = null,
+            IEnumerable<string> categories = null)
         {
             var report = new ComparisonReport();
             report.Diffs.AddRange((diffs ?? Enumerable.Empty<ComponentDiff>())
                 .OrderBy(d => d.Category, StringComparer.OrdinalIgnoreCase)
                 .ThenByDescending(d => d.Severity)
                 .ThenBy(d => d.Name ?? d.Key, StringComparer.OrdinalIgnoreCase));
+
+            // Seed a zeroed row for every explicitly-compared category, so the count matrix (and the summary
+            // cards that read it) still show a category that was compared but is fully empty/identical on both
+            // sides — honouring the "every enabled category appears" contract on CountsByCategoryAndClass.
+            if (categories != null)
+                foreach (var cat in categories)
+                    if (cat != null && !report.CountsByCategoryAndClass.ContainsKey(cat))
+                        report.CountsByCategoryAndClass[cat] = NewClassRow();
 
             // Count matrix (every category that appears gets a full row so summary cards line up).
             foreach (var d in report.Diffs)
