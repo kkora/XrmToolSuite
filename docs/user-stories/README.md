@@ -5,20 +5,21 @@ traces to a source spec under [`docs/backlog/`](../backlog/) and to the tool's t
 [`testing/<Tool>/`](../../testing/). Candidate tools that aren't built yet live only in `docs/backlog/`
 (see [NEXT-20.md](../backlog/NEXT-20.md) for the build plan) and get a file here when they ship.
 
-**Naming:** `<TAG>N.<ToolName>.md`, matching the backlog area tag (e.g. `PERF3.FetchXmlPerformanceAnalyzer.md`).
-The six flagship tools shipped before the tagging convention keep untagged filenames, matching their
-untagged backlog files.
+**Naming:** every user-story file is `<TAG>N.<ToolName>.md`, matching the tool's backlog area tag
+(e.g. `PERF3.FetchXmlPerformanceAnalyzer.md`). The six tools that shipped before the tagging convention
+have no numbered backlog slot, so they use their area tag with `1` (`DG1`/`AA1`/`SC1`/`KG1`/`TD1`/`AR1`).
+The `TemplateTool.md` scaffold is exempt (it isn't a shipped tool).
 
 ## Shipped tools (pre-tagging convention)
 
-| Tool | User stories | Backlog | Project |
-|---|---|---|---|
-| Deployment Risk Analyzer | [DeploymentRiskAnalyzer.md](DeploymentRiskAnalyzer.md) | [ALM](../backlog/01-ALM-DevOps/DeploymentRiskAnalyzer.md) | `XrmToolSuite.DeploymentRiskAnalyzer` |
-| Attribute Auditor | [AttributeAuditor.md](AttributeAuditor.md) | [ADMIN](../backlog/04-Dataverse-Administration/AttributeAuditor.md) | `XrmToolSuite.AttributeAuditor` |
-| Technical Debt Analyzer | [TechnicalDebtAnalyzer.md](TechnicalDebtAnalyzer.md) | [SOLN](../backlog/05-Solution-Management/TechnicalDebtAnalyzer.md) | `XrmToolSuite.TechnicalDebtAnalyzer` |
-| Solution Knowledge Graph | [SolutionKnowledgeGraph.md](SolutionKnowledgeGraph.md) | [SOLN](../backlog/05-Solution-Management/SolutionKnowledgeGraph.md) | `XrmToolSuite.SolutionKnowledgeGraph` |
-| Solution Complexity Score | [SolutionComplexityScore.md](SolutionComplexityScore.md) | [SOLN](../backlog/05-Solution-Management/SolutionComplexityScore.md) | `XrmToolSuite.SolutionComplexityScore` |
-| AI Solution Reviewer | [AiSolutionReviewer.md](AiSolutionReviewer.md) | [AI](../backlog/09-AI-Assistants/AiSolutionReviewer.md) | `XrmToolSuite.AiSolutionReviewer` |
+| Tag | Tool | User stories | Backlog | Project |
+|---|---|---|---|---|
+| DG1 | Deployment Risk Analyzer | [DG1.DeploymentRiskAnalyzer.md](DG1.DeploymentRiskAnalyzer.md) | [ALM](../backlog/01-ALM-DevOps/DeploymentRiskAnalyzer.md) | `XrmToolSuite.DeploymentRiskAnalyzer` |
+| AA1 | Attribute Auditor | [AA1.AttributeAuditor.md](AA1.AttributeAuditor.md) | [ADMIN](../backlog/04-Dataverse-Administration/AttributeAuditor.md) | `XrmToolSuite.AttributeAuditor` |
+| TD1 | Technical Debt Analyzer | [TD1.TechnicalDebtAnalyzer.md](TD1.TechnicalDebtAnalyzer.md) | [SOLN](../backlog/05-Solution-Management/TechnicalDebtAnalyzer.md) | `XrmToolSuite.TechnicalDebtAnalyzer` |
+| KG1 | Solution Knowledge Graph | [KG1.SolutionKnowledgeGraph.md](KG1.SolutionKnowledgeGraph.md) | [SOLN](../backlog/05-Solution-Management/SolutionKnowledgeGraph.md) | `XrmToolSuite.SolutionKnowledgeGraph` |
+| SC1 | Solution Complexity Score | [SC1.SolutionComplexityScore.md](SC1.SolutionComplexityScore.md) | [SOLN](../backlog/05-Solution-Management/SolutionComplexityScore.md) | `XrmToolSuite.SolutionComplexityScore` |
+| AR1 | AI Solution Reviewer | [AR1.AiSolutionReviewer.md](AR1.AiSolutionReviewer.md) | [AI](../backlog/09-AI-Assistants/AiSolutionReviewer.md) | `XrmToolSuite.AiSolutionReviewer` |
 
 ## Backlog build (NEXT-20, tagged)
 

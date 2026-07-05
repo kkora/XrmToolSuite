@@ -1,6 +1,6 @@
 # Solution Knowledge Graph - Test Plan
 
-Traces to [`docs/user-stories/SolutionKnowledgeGraph.md`](../../docs/user-stories/SolutionKnowledgeGraph.md).
+Traces to [`docs/user-stories/KG1.SolutionKnowledgeGraph.md`](../../docs/user-stories/KG1.SolutionKnowledgeGraph.md).
 
 ## Scope
 

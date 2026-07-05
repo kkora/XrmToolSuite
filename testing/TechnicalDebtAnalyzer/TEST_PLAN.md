@@ -1,6 +1,6 @@
 # Technical Debt Analyzer - Test Plan
 
-Traces to [`docs/user-stories/TechnicalDebtAnalyzer.md`](../../docs/user-stories/TechnicalDebtAnalyzer.md).
+Traces to [`docs/user-stories/TD1.TechnicalDebtAnalyzer.md`](../../docs/user-stories/TD1.TechnicalDebtAnalyzer.md).
 
 ## Scope
 

@@ -1,6 +1,6 @@
 # Solution Complexity Score - Test Plan
 
-Traces to [`docs/user-stories/SolutionComplexityScore.md`](../../docs/user-stories/SolutionComplexityScore.md).
+Traces to [`docs/user-stories/SC1.SolutionComplexityScore.md`](../../docs/user-stories/SC1.SolutionComplexityScore.md).
 
 ## Scope
 

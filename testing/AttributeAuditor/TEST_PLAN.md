@@ -1,6 +1,6 @@
 # Attribute Auditor - Test Plan
 
-Traces to [`docs/user-stories/AttributeAuditor.md`](../../docs/user-stories/AttributeAuditor.md).
+Traces to [`docs/user-stories/AA1.AttributeAuditor.md`](../../docs/user-stories/AA1.AttributeAuditor.md).
 
 ## Scope
 

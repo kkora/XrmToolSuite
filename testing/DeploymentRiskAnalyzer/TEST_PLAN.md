@@ -1,6 +1,6 @@
 # Deployment Risk Analyzer - Test Plan
 
-Traces to [`docs/user-stories/DeploymentRiskAnalyzer.md`](../../docs/user-stories/DeploymentRiskAnalyzer.md).
+Traces to [`docs/user-stories/DG1.DeploymentRiskAnalyzer.md`](../../docs/user-stories/DG1.DeploymentRiskAnalyzer.md).
 
 ## Scope
 

@@ -32,7 +32,14 @@ dotnet test testing/UnitTests/UnitTests.csproj
 
 Whenever a tool is **created or changed**, produce all of the following, in order — no tool is "done" until they exist:
 
-1. **Plan** — user stories in `docs/user-stories/<Tool>.md` and a `testing/<Tool>/TEST_PLAN.md`.
+1. **Plan** — user stories in `docs/user-stories/<TAG>N.<Tool>.md` and a `testing/<Tool>/TEST_PLAN.md`.
+   **User-story file naming:** every file under `docs/user-stories/` is `<TAG>N.<Tool>.md`, where `<TAG>N` is
+   the tool's backlog area tag + item number (e.g. `SEC4.SharingAnalyzer.md`, `ADMIN3.DuplicateMetadataFinder.md`).
+   The six tools that shipped before this convention have no numbered backlog slot, so they use their area tag
+   with `1`: `DG1` (Deployment Risk Analyzer), `AA1` (Attribute Auditor), `SC1` (Solution Complexity Score),
+   `KG1` (Solution Knowledge Graph), `TD1` (Technical Debt Analyzer), `AR1` (AI Solution Reviewer). The
+   `TemplateTool.md` scaffold is exempt. When you add or rename a story file, keep the `docs/user-stories/README.md`
+   index and the `testing/<Tool>/TEST_PLAN.md` "Traces to …" backlink in sync.
 2. **Tool** — the implementation under `src/Tools/`.
 3. **Test cases** — `testing/<Tool>/TEST_CASES.md`, each case traced to a user story.
 4. **Execute + screenshots** — run `dotnet test`, perform the manual/GUI cases, and save evidence (screenshots) under `testing/<Tool>/screenshots/`. **A "tool loads in XrmToolBox" screenshot is REQUIRED for every tool**, saved as `testing/<Tool>/screenshots/xrmtoolbox-tools-list.png` — the XrmToolBox **Tools** tab filtered to that tool, showing its name/version/description (proof MEF registration and any shipped dependency chain resolved at scan time). The `testing/UiSmokeTests` FlaUI harness generates all of these automatically: deploy with `dotnet build XrmToolSuite.sln -c Release -p:DeployToXTB=true`, then run `dotnet test testing/UiSmokeTests/UiSmokeTests.csproj` with `XTB_EXE` set — it asserts every tool in its `ExpectedTools` list appears and captures a per-tool `tool_<slug>.png` under its `screenshots/`. When adding a tool, add its exact `ExportMetadata("Name", …)` to `ExpectedTools`, run the harness, and copy its shot into `testing/<Tool>/screenshots/xrmtoolbox-tools-list.png`.
@@ -83,7 +90,7 @@ Builds cannot run in non-Windows environments; when a build isn't possible, say 
 4. ExportMetadata Name/Description updated (no "Template Tool" leftovers): `grep -ri "template" src/Tools/XrmToolSuite.<Name>/`.
 5. Settings round-trip: load in `*_Load`, save in `ClosingPlugin`.
 6. Nuspec id/version/description match the tool.
-7. Testing artifacts exist and are current under `testing/<Tool>/` (TEST_PLAN, TEST_CASES, TEST_SUMMARY, screenshots — **including the required `xrmtoolbox-tools-list.png` load screenshot**), the tool is listed in `testing/UiSmokeTests` `ExpectedTools`, user stories under `docs/user-stories/<Tool>.md`, and `dotnet test testing/UnitTests/UnitTests.csproj` passes. State plainly which cases were executed vs. pending-manual — never report a manual GUI case as passed if it wasn't run.
+7. Testing artifacts exist and are current under `testing/<Tool>/` (TEST_PLAN, TEST_CASES, TEST_SUMMARY, screenshots — **including the required `xrmtoolbox-tools-list.png` load screenshot**), the tool is listed in `testing/UiSmokeTests` `ExpectedTools`, user stories under `docs/user-stories/<TAG>N.<Tool>.md` (tagged naming — see the Tool lifecycle section), and `dotnet test testing/UnitTests/UnitTests.csproj` passes. State plainly which cases were executed vs. pending-manual — never report a manual GUI case as passed if it wasn't run.
 
 ## Tool-specific notes
 

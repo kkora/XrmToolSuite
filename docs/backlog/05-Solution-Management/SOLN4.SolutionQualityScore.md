@@ -3,7 +3,7 @@
 > **Status:** ✅ **Shipped as an extension** — built into the **Solution Complexity Score** tool as
 > **FEAT-SC-4** (a 0–100 build-quality score over the same `ComponentCounts`), per the recommendation below,
 > rather than as a standalone `XrmToolSuite.SolutionQualityScore` project. See
-> [`../../user-stories/SolutionComplexityScore.md`](../../user-stories/SolutionComplexityScore.md) →
+> [`../../user-stories/SC1.SolutionComplexityScore.md`](../../user-stories/SC1.SolutionComplexityScore.md) →
 > FEAT-SC-4 and the design at [`../../design/SOLN4-RPT4-extensions.md`](../../design/SOLN4-RPT4-extensions.md).
 > The governance/documentation/security categories noted below remain a phase-2 extension (they need a
 > collector change).

@@ -3,7 +3,7 @@
 > **Status:** ✅ **Shipped as an extension** — built into the **Technical Debt Analyzer** tool as
 > **FEAT-TD-4** (a Trends tab charting the debt score run-over-run from per-machine JSON snapshots), rather
 > than as a standalone project — trends need the tool's own run history, which it already produces. See
-> [`../../user-stories/TechnicalDebtAnalyzer.md`](../../user-stories/TechnicalDebtAnalyzer.md) → FEAT-TD-4
+> [`../../user-stories/TD1.TechnicalDebtAnalyzer.md`](../../user-stories/TD1.TechnicalDebtAnalyzer.md) → FEAT-TD-4
 > and the design at [`../../design/SOLN4-RPT4-extensions.md`](../../design/SOLN4-RPT4-extensions.md).
 >
 > **(Original candidate status:** Candidate backlog — not started (no code).**)**

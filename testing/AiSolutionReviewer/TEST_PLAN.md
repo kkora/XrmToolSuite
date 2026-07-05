@@ -1,6 +1,6 @@
 # AI Solution Reviewer - Test Plan
 
-Traces to [`docs/user-stories/AiSolutionReviewer.md`](../../docs/user-stories/AiSolutionReviewer.md).
+Traces to [`docs/user-stories/AR1.AiSolutionReviewer.md`](../../docs/user-stories/AR1.AiSolutionReviewer.md).
 
 ## Scope
 
