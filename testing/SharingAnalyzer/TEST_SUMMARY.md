@@ -30,3 +30,9 @@
 - **Build:** `dotnet build src/Tools/XrmToolSuite.SharingAnalyzer/XrmToolSuite.SharingAnalyzer.csproj -c
   Release` succeeds with 0 warnings / 0 errors; ClosedXML + the `-gdi` PDF assemblies land in
   `bin/Release/net48`.
+
+## Live UI smoke test (XrmToolBox)
+
+- **Command:** `dotnet test testing/UiSmokeTests/UiSmokeTests.csproj` with `XTB_EXE` set, on 2026-07-05.
+- **Result:** PASS — real XrmToolBox v1.2025.10.74 (FlaUI) confirms **Sharing Analyzer** loads and appears in the Tools list (24/24 suite tools verified in one run).
+- **Evidence:** `screenshots/xrmtoolbox-tools-list.png` — the Tools tab filtered to **Sharing Analyzer** v1.2026.7.2 (Kanchan Kora).

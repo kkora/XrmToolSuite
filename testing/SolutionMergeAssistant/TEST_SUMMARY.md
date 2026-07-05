@@ -35,3 +35,9 @@ to be captured per case under `screenshots/`.
 
 Automated comparison-engine coverage is **complete and passing** (14/14). The tool builds cleanly with its
 export chain. Live-org and export UI cases remain **Pending** manual execution.
+
+## Live UI smoke test (XrmToolBox)
+
+- **Command:** `dotnet test testing/UiSmokeTests/UiSmokeTests.csproj` with `XTB_EXE` set, on 2026-07-05.
+- **Result:** PASS — real XrmToolBox v1.2025.10.74 (FlaUI) confirms **Solution Merge Assistant** loads and appears in the Tools list (24/24 suite tools verified in one run).
+- **Evidence:** `screenshots/xrmtoolbox-tools-list.png` — the Tools tab filtered to **Solution Merge Assistant** v1.2026.7.2 (Kanchan Kora).

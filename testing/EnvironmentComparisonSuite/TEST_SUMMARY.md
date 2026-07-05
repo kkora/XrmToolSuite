@@ -37,3 +37,9 @@ remain **Pending** — to be executed in an XrmToolBox session with a screenshot
 **Automated: Pass** (SDK-free diff engine fully green, build clean, export chain present).
 **Manual: Pending** — the live dual-connection collection, UI, secret masking in the grid/exports, and
 read-only guarantee must be verified in an XrmToolBox session before the tool is declared fully done.
+
+## Live UI smoke test (XrmToolBox)
+
+- **Command:** `dotnet test testing/UiSmokeTests/UiSmokeTests.csproj` with `XTB_EXE` set, on 2026-07-05.
+- **Result:** PASS — real XrmToolBox v1.2025.10.74 (FlaUI) confirms **Environment Comparison Suite** loads and appears in the Tools list (24/24 suite tools verified in one run).
+- **Evidence:** `screenshots/xrmtoolbox-tools-list.png` — the Tools tab filtered to **Environment Comparison Suite** v1.2026.7.2 (Kanchan Kora).
