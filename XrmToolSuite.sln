@@ -63,6 +63,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XrmToolSuite.CustomApiExplo
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XrmToolSuite.ArchitectureDiagramGenerator", "src\Tools\XrmToolSuite.ArchitectureDiagramGenerator\XrmToolSuite.ArchitectureDiagramGenerator.csproj", "{6929AE69-9D96-4998-87BE-6B909618FA27}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XrmToolSuite.ApiDocumentationBuilder", "src\Tools\XrmToolSuite.ApiDocumentationBuilder\XrmToolSuite.ApiDocumentationBuilder.csproj", "{93A813F5-BCD0-4913-96C5-EE5A37AA234F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -409,6 +411,18 @@ Global
 		{6929AE69-9D96-4998-87BE-6B909618FA27}.Release|x64.Build.0 = Release|Any CPU
 		{6929AE69-9D96-4998-87BE-6B909618FA27}.Release|x86.ActiveCfg = Release|Any CPU
 		{6929AE69-9D96-4998-87BE-6B909618FA27}.Release|x86.Build.0 = Release|Any CPU
+		{93A813F5-BCD0-4913-96C5-EE5A37AA234F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{93A813F5-BCD0-4913-96C5-EE5A37AA234F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{93A813F5-BCD0-4913-96C5-EE5A37AA234F}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{93A813F5-BCD0-4913-96C5-EE5A37AA234F}.Debug|x64.Build.0 = Debug|Any CPU
+		{93A813F5-BCD0-4913-96C5-EE5A37AA234F}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{93A813F5-BCD0-4913-96C5-EE5A37AA234F}.Debug|x86.Build.0 = Debug|Any CPU
+		{93A813F5-BCD0-4913-96C5-EE5A37AA234F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{93A813F5-BCD0-4913-96C5-EE5A37AA234F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{93A813F5-BCD0-4913-96C5-EE5A37AA234F}.Release|x64.ActiveCfg = Release|Any CPU
+		{93A813F5-BCD0-4913-96C5-EE5A37AA234F}.Release|x64.Build.0 = Release|Any CPU
+		{93A813F5-BCD0-4913-96C5-EE5A37AA234F}.Release|x86.ActiveCfg = Release|Any CPU
+		{93A813F5-BCD0-4913-96C5-EE5A37AA234F}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -440,5 +454,6 @@ Global
 		{5D6B7E6D-31A1-4DFC-81A1-96298136E6FE} = {DCB6FCB8-FF92-AC57-0842-1F72A354D6B1}
 		{40C97A5A-215C-4B5B-9B09-5D45F92F482D} = {DCB6FCB8-FF92-AC57-0842-1F72A354D6B1}
 		{6929AE69-9D96-4998-87BE-6B909618FA27} = {DCB6FCB8-FF92-AC57-0842-1F72A354D6B1}
+		{93A813F5-BCD0-4913-96C5-EE5A37AA234F} = {DCB6FCB8-FF92-AC57-0842-1F72A354D6B1}
 	EndGlobalSection
 EndGlobal

@@ -175,6 +175,13 @@
     <!-- Architecture Diagram Generator: SDK-free diagram model + Mermaid/PlantUML/DOT/Markdown/HTML/SVG/JSON emitters. -->
     <Compile Include="..\..\src\Tools\XrmToolSuite.ArchitectureDiagramGenerator\Diagram\ArchModel.cs" />
     <Compile Include="..\..\src\Tools\XrmToolSuite.ArchitectureDiagramGenerator\Diagram\DiagramEmitters.cs" />
+
+    <!-- API Documentation Builder: SDK-free API model, redaction engine, doc emitters + OpenAPI-style generator. -->
+    <Compile Include="..\..\src\Tools\XrmToolSuite.ApiDocumentationBuilder\Api\ApiModels.cs" />
+    <Compile Include="..\..\src\Tools\XrmToolSuite.ApiDocumentationBuilder\Api\JsonText.cs" />
+    <Compile Include="..\..\src\Tools\XrmToolSuite.ApiDocumentationBuilder\Api\Redactor.cs" />
+    <Compile Include="..\..\src\Tools\XrmToolSuite.ApiDocumentationBuilder\Api\ApiDocEmitters.cs" />
+    <Compile Include="..\..\src\Tools\XrmToolSuite.ApiDocumentationBuilder\Api\OpenApiEmitter.cs" />
   </ItemGroup>
 
 </Project>

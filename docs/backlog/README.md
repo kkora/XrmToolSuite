@@ -6,8 +6,8 @@ tools' stories filed into their category and marked **Done**.
 
 > **Build status (living):** this file is the original planning snapshot (the `✅ Done` marks below are
 > the 6 tools shipped when it was generated). Since then **all 20 tools in [NEXT-20.md](NEXT-20.md) have
-> shipped**, plus **DOC01 Architecture Diagram Generator** beyond the NEXT-20 set — so **27 tools total** are
-now built. NEXT-20.md is the authoritative build tracker; the
+> shipped**, plus **DOC01 Architecture Diagram Generator** and **DOC06 API Documentation Builder** beyond the
+NEXT-20 set — so **28 tools total** are now built. NEXT-20.md is the authoritative build tracker; the
 > as-built user stories live in [`../user-stories/`](../user-stories/README.md). The category tables
 > below still reflect the candidate/priority planning and are not re-marked per build.
 
@@ -192,7 +192,7 @@ Value = my read (see each file's header for the reasoning). Legend: **H**igh · 
 | DOC03.MarkdownDocumentationGenerator.md | Markdown Documentation Generator | H | ✅ folded into SOLN05 (Markdown export) |
 | DOC04.WordDocumentationGenerator.md | Word Documentation Generator | M-H | ✅ folded into SOLN05 (Word/PDF export) |
 | DOC05.HtmlDocumentationPortal.md | HTML Documentation Portal | M-H | ✅ folded into SOLN05 (searchable HTML portal) |
-| DOC06.ApiDocumentationBuilder.md | API Documentation Builder | M-H | redact secrets |
+| DOC06.ApiDocumentationBuilder.md | API Documentation Builder | M-H | ✅ SHIPPED (`XrmToolSuite.ApiDocumentationBuilder`) — OpenAPI + redaction specialist |
 
 > The DOC track are format-specific renderers over one shared extracted model (reuse ADMIN07
 > Environment Inventory + SOLN05). Strong overlap with SOLN05 — see RECOMMENDATIONS.

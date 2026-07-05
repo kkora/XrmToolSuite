@@ -55,6 +55,7 @@ All 20 NEXT-20 tools are now built.
 | Tag | Tool | User stories | Backlog | Project |
 |---|---|---|---|---|
 | DOC01 | Architecture Diagram Generator | [DOC01.ArchitectureDiagramGenerator.md](DOC01.ArchitectureDiagramGenerator.md) | [DOC](../backlog/11-Documentation/DOC01.ArchitectureDiagramGenerator.md) | `XrmToolSuite.ArchitectureDiagramGenerator` |
+| DOC06 | API Documentation Builder | [DOC06.ApiDocumentationBuilder.md](DOC06.ApiDocumentationBuilder.md) | [DOC](../backlog/11-Documentation/DOC06.ApiDocumentationBuilder.md) | `XrmToolSuite.ApiDocumentationBuilder` |
 
 ## Scaffold
 

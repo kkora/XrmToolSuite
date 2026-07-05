@@ -52,6 +52,7 @@ namespace XrmToolSuite.UiSmokeTests
             "Duplicate Metadata Finder",
             "Custom API Explorer",
             "Architecture Diagram Generator",
+            "API Documentation Builder",
         };
 
         private readonly ITestOutputHelper _output;

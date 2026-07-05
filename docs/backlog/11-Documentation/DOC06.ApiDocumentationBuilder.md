@@ -1,6 +1,14 @@
 # API Documentation Builder — User Stories (Candidate / Backlog)
 
-> **Status:** Candidate backlog — not started (no code).
+> **Status:** ✅ **SHIPPED** as `XrmToolSuite.ApiDocumentationBuilder`. Built as the OpenAPI + redaction
+> specialist (distinct from the already-shipped **Custom API Explorer** / PLUGIN06, which browses & test-invokes
+> APIs). SDK-free `ApiModels` + `Redactor` + `ApiCollector` read `customapi` / `customapirequestparameter` /
+> `customapiresponseproperty` (+ `plugintype`), then emit a **Markdown** reference, a **self-contained
+> theme-aware HTML** reference, a **raw JSON** model, and a **best-effort OpenAPI 3.0-style JSON** spec.
+> Secret-named parameters are masked in samples/spec, free-text bearer tokens + URL query strings (SAS/trigger
+> secrets) are stripped, and the operator can add redaction terms. As-built user stories:
+> `docs/user-stories/DOC06.ApiDocumentationBuilder.md`. Deferred to future extensions: Word/PDF export (the
+> sanctioned OpenXML/MigraDoc chains), legacy custom-action (`workflow`) coverage, and per-API solution scoping.
 > **Source:** `all` — `prompt/3.XrmToolBox_ALL_PROMPTS.txt`, Section 11 (Documentation), item 6. Not in pack file (except ERD/Doc generators relate to pack #11).
 > **Suggested tag:** `DOC06` · **Suggested project:** `XrmToolSuite.ApiDocumentationBuilder`
 > **Overlaps:** **Solution Documentation Generator** (SOLN05 candidate) documents Custom APIs as one section — this tool is the deep, API-focused specialist (parameters, responses, OpenAPI-style, examples, redaction). **Markdown / Word / HTML Documentation Generators** (DOC03/DOC04/DOC05) are format renderers whose API section can consume this tool's model. Custom API + plugin metadata overlaps **Plugin Dependency Graph** (PLUGIN01) extraction. Export patterns reuse **Deployment Risk Analyzer** (SHIPPED) PDF/Excel and the self-contained-HTML pattern.
