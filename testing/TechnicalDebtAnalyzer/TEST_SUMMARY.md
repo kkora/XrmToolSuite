@@ -30,3 +30,9 @@ Automated debt-scoring logic passes and the tool builds `Release` with zero warn
 The analyzers are now covered headlessly (TC-TD-COL-01..11, `CollectorTests`); only the WinForms UI,
 exporters, and offline/AI summary remain manual. Manual GUI/Dataverse cases (TC-TD-M-01..09) are **pending
 a live org** and must be run before release — no manual case is claimed as passed here.
+
+## Live UI smoke test (XrmToolBox)
+
+- **Command:** `dotnet test testing/UiSmokeTests/UiSmokeTests.csproj` with `XTB_EXE` set, on 2026-07-04.
+- **Result:** PASS — real XrmToolBox v1.2025.10.74 (FlaUI) confirms **Technical Debt Analyzer** loads and appears in the Tools list.
+- **Evidence:** `screenshots/xrmtoolbox-tools-list.png` — the Tools tab filtered to **Technical Debt Analyzer** v1.2026.7.1 (Kanchan Kora).

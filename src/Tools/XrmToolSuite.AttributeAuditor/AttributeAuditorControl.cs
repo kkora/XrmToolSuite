@@ -27,6 +27,8 @@ namespace XrmToolSuite.AttributeAuditor
         public AttributeAuditorControl()
         {
             InitializeComponent();
+            // Suite convention: every tool carries a right-aligned Help button (shared dialog).
+            toolStrip.Items.Add(CreateHelpButton("Attribute Auditor"));
         }
 
         private void AttributeAuditorControl_Load(object sender, EventArgs e)

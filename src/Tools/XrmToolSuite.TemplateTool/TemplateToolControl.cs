@@ -23,6 +23,9 @@ namespace XrmToolSuite.TemplateTool
         public TemplateToolControl()
         {
             InitializeComponent();
+            // Suite convention: every tool carries a right-aligned Help button (shared dialog).
+            // Pass your tool's display name to title the dialog.
+            toolStrip.Items.Add(CreateHelpButton());
         }
 
         private void TemplateToolControl_Load(object sender, EventArgs e)

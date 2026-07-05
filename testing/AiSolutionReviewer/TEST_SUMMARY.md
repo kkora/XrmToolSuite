@@ -31,3 +31,9 @@ across the solution. The Dataverse review collectors are now covered headlessly 
 `CollectorTests`); only the AI/HTTP review, exports, and UI remain manual. Manual GUI/Dataverse/AI cases
 (TC-AR-M-01..07) are **pending a live org and an AI key** and must be run before release — no manual case
 is claimed as passed here.
+
+## Live UI smoke test (XrmToolBox)
+
+- **Command:** `dotnet test testing/UiSmokeTests/UiSmokeTests.csproj` with `XTB_EXE` set, on 2026-07-04.
+- **Result:** PASS — real XrmToolBox v1.2025.10.74 (FlaUI) confirms **AI Solution Reviewer** loads and appears in the Tools list.
+- **Evidence:** `screenshots/xrmtoolbox-tools-list.png` — the Tools tab filtered to **AI Solution Reviewer** v1.2026.7.1 (Kanchan Kora).

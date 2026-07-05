@@ -54,10 +54,18 @@ Each tool has a `.nuspec`. Rules enforced by the Tool Library (see xrmtoolbox.co
 - nupkg `version` must equal your DLL's assembly version (both flow from `Version` in the root `Directory.Build.props`)
 - `tags` must start with `XrmToolBox` plus extra words
 - dependency must be on **`XrmToolBox`** (not `XrmToolBoxPackage`)
-- your DLL must sit under a `Plugins` folder in the package; ship only your DLL
+- your DLL must sit under a `Plugins` folder in the package; ship only this suite's files (single DLL for most tools; the tool DLL **plus its 17-DLL ClosedXML/PdfSharp-MigraDoc-GDI chain** for the Excel/PDF/Word export tools)
 - `iconUrl` is required and must be your own icon
 
 Pack with: `nuget pack src/Tools/XrmToolSuite.MyTool/XrmToolSuite.MyTool.nuspec`
+
+**Full publishing flow (package → push to nuget.org → Tool Library), manual and CI:** see
+[`Publishing_Guide_XrmToolBox.md`](Publishing_Guide_XrmToolBox.md). Automated releases run via
+[`.github/workflows/publish.yml`](.github/workflows/publish.yml) — tag `v<version>` (or a manual
+dry run) builds, packs every tool except the template, and pushes via **NuGet Trusted Publishing**
+(OIDC — no API-key secret).
+For **local** install (build → copy DLL → unblock → launch), see
+[`Deployment_Guide_XrmToolBox.md`](Deployment_Guide_XrmToolBox.md).
 
 ## Tools in this suite
 
@@ -69,9 +77,12 @@ Pack with: `nuget pack src/Tools/XrmToolSuite.MyTool/XrmToolSuite.MyTool.nuspec`
 | **AI Solution Reviewer** | AI-assisted architecture review (recommendations, modernization, prioritized backlog, sprint plan) over collected solution facts, with an offline deterministic fallback; exports Word/PDF/HTML/Markdown/JSON |
 | **Solution Knowledge Graph** | Interactive dependency graph with search, dependency tracing, deletion-impact analysis, and circular-dependency detection; exports interactive HTML, GraphML, SVG, and PNG |
 | **Attribute Auditor** | Finds unused custom columns by detecting usage across forms, views, processes, and field security; classifies retirement candidates and exports CSV + an HTML dashboard (chart/data-population signals and guarded cleanup planned) |
+| **FetchXML Performance Analyzer** | Parses any FetchXML (pasted or loaded from a system/user view) and flags performance risks (all-attributes, missing filters, excessive/outer joins, risky sorts, aggregation/paging) with a heuristic cost estimate, suggested fixes, and optional opt-in live timing; exports Excel/PDF/JSON/HTML/Markdown/CSV. Its UI-free parser + rule engine lives in `src/Shared/Core/FetchXml` for reuse by the View/Dashboard analyzers |
+| **Environment Inventory** | Collects a normalized, searchable inventory of an environment (solutions, tables, security, automation, web/dev components, configuration) with per-component detail and Excel/Word/PDF/CSV/JSON/Markdown/HTML export (Excel carries the full item grid; Word/PDF a summary); never reads or exports secrets. The SDK-free normalization model is the data backbone for future ERD/Docs/Drift tools |
+| **Privilege Gap Analyzer** | Answers "why can't this user do X?": computes a principal's effective privileges (direct + team-inherited, deepest scope) for a table + operation and returns a verdict (allowed / missing privilege / insufficient scope / append mismatch / team-inheritance) with a read-only recommended fix; compares two principals; exports Excel/PDF/JSON/CSV/HTML. UI-free engine is console/CI-liftable |
 | Template Tool | Clone source for new tools (not published) |
 
-All five shipping tools follow the suite conventions (`XrmToolSuite.<Tool>` namespace, `BaseToolControl`, shared `RetrieveAll` paging, `Load/SaveSettings`). The scoring/report family shares one engine compiled in from **`src/Shared/`**: `Core/Analysis` (findings, `ScoreCalculator`, `ReportModel`), `Reporting` (JSON/Markdown/HTML/Excel/PDF/Word exporters), and `Summarization` (offline + AI executive summaries). Tools that export to Excel/PDF/Word ship the ClosedXML and PdfSharp/MigraDoc-GDI dependency chains in their nupkg (the Word exporter reuses the OpenXML assembly from the ClosedXML chain) — see any of their csproj/nuspec files for the pattern to follow when a tool needs third-party libraries. The Solution Knowledge Graph ships only its own DLL (its GraphML/SVG/HTML output is pure string; PNG uses the net48 System.Drawing GAC assembly).
+All nine shipping tools follow the suite conventions (`XrmToolSuite.<Tool>` namespace, `BaseToolControl`, shared `RetrieveAll` paging, `Load/SaveSettings`). The scoring/report family shares one engine compiled in from **`src/Shared/`**: `Core/Analysis` (findings, `ScoreCalculator`, `ReportModel`), `Reporting` (JSON/Markdown/HTML/Excel/PDF/Word exporters), and `Summarization` (offline + AI executive summaries). Tools that export to Excel/PDF/Word ship the ClosedXML and PdfSharp/MigraDoc-GDI dependency chains in their nupkg (the Word exporter reuses the OpenXML assembly from the ClosedXML chain) — see any of their csproj/nuspec files for the pattern to follow when a tool needs third-party libraries. The Solution Knowledge Graph ships only its own DLL (its GraphML/SVG/HTML output is pure string; PNG uses the net48 System.Drawing GAC assembly).
 
 ## Backlog & user stories
 
