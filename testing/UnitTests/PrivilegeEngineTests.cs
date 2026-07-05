@@ -87,6 +87,56 @@ namespace XrmToolSuite.UnitTests
             Assert.Equal(AccessScope.Local, effective["prvWriteaccount"].Scope);
         }
 
+        // Regression: a DEEPER team grant coexisting with a SHALLOWER direct grant — the deepest scope is
+        // team-only, so the resolved entry is ViaTeam and records the direct-only scope (US-SEC1.2.1).
+        [Fact]
+        public void ResolveEffective_DeepestScopeFromTeam_TracksDirectScopeAndViaTeam()
+        {
+            var set = Set("Ann",
+                Grant("prvReadaccount", AccessScope.Basic, role: "Salesperson"),                       // direct, shallow
+                Grant("prvReadaccount", AccessScope.Global, role: "Admins", viaTeam: true, team: "IT")); // team, deepest
+
+            var e = PrivilegeEngine.ResolveEffective(set)["prvReadaccount"];
+            Assert.Equal(AccessScope.Global, e.Scope);
+            Assert.Equal(AccessScope.Basic, e.DirectScope);
+            Assert.True(e.ViaTeam); // top scope reachable only via the team
+        }
+
+        // Regression: with direct Basic + team Global, a Deep requirement is met only via the team =>
+        // TeamInheritanceOnly; but a Basic requirement is met by the direct grant => AccessAllowed (the direct
+        // grant must NOT be over-flagged as team-dependent). This is the mixed case the old ViaTeam missed.
+        [Fact]
+        public void Evaluate_MixedDirectAndTeam_FlagsTeamDependenceOnlyWhenRequiredScopeNeedsTheTeam()
+        {
+            var set = Set("Ann",
+                Grant("prvReadaccount", AccessScope.Basic),
+                Grant("prvReadaccount", AccessScope.Global, role: "Admins", viaTeam: true, team: "IT"));
+
+            var deep = PrivilegeEngine.Evaluate(set, Account(), CrmOperation.Read, AccessScope.Deep);
+            Assert.True(deep.Allowed);
+            Assert.Equal(GapVerdictType.TeamInheritanceOnly, deep.Type);
+
+            var basic = PrivilegeEngine.Evaluate(set, Account(), CrmOperation.Read, AccessScope.Basic);
+            Assert.True(basic.Allowed);
+            Assert.Equal(GapVerdictType.AccessAllowed, basic.Type); // direct Basic suffices; not team-dependent
+        }
+
+        // Regression: an Append pair where BOTH privileges are held but below the required scope must be
+        // InsufficientScope with the real held scope — not MissingPrivilege with a false HeldScope=None.
+        [Fact]
+        public void Evaluate_AppendPair_BothHeldButShallow_IsInsufficientScopeNotMissing()
+        {
+            var set = Set("Ann",
+                Grant("prvAppendaccount", AccessScope.Basic),
+                Grant("prvAppendTocontact", AccessScope.Basic));
+
+            var v = PrivilegeEngine.Evaluate(set, Account(), CrmOperation.Append, AccessScope.Deep, Contact());
+
+            Assert.False(v.Allowed);
+            Assert.Equal(GapVerdictType.InsufficientScope, v.Type);
+            Assert.Equal(AccessScope.Basic, v.HeldScope); // NOT None
+        }
+
         // ---- Evaluate: allow / missing / scope ------------------------------------------------
 
         // TC-SEC1-EVAL-01 (US-SEC1.3.1): sufficient scope from a direct role => AccessAllowed.

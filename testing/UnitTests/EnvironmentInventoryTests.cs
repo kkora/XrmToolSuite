@@ -106,6 +106,24 @@ namespace XrmToolSuite.UnitTests
             Assert.Equal(4, snap.Total);
         }
 
+        // Regression: a null/blank Category must bucket identically in Categories() and CountByCategory()
+        // (both as "(uncategorized)"), so the export summary counts and per-category detail sections reconcile.
+        [Fact]
+        public void NullOrBlankCategory_BucketsConsistentlyInBothViews()
+        {
+            var snap = new InventorySnapshot();
+            snap.Items.Add(new InventoryItem { Category = null, ComponentType = "X", Name = "a" });
+            snap.Items.Add(new InventoryItem { Category = "   ", ComponentType = "X", Name = "b" });
+            snap.Items.Add(new InventoryItem { Category = "Tables", ComponentType = "Table", Name = "c" });
+
+            var cats = snap.Categories().OrderBy(x => x).ToList();
+            var counts = snap.CountByCategory();
+
+            Assert.Equal(cats, counts.Keys.OrderBy(x => x).ToList()); // identical key sets
+            Assert.Contains("(uncategorized)", cats);
+            Assert.Equal(2, counts["(uncategorized)"]);               // null + blank collapse together
+        }
+
         // ---- CSV export (US-ADMIN7.5.1) ----
 
         [Fact]
@@ -128,6 +146,18 @@ namespace XrmToolSuite.UnitTests
             var csv = InventoryExporter.ToCsv(snap);
             Assert.Contains("\"Weird, \"\"quoted\"\" name\"", csv); // comma + doubled quotes
             Assert.Contains("\"line\nbreak\"", csv);                 // newline quoted
+        }
+
+        // Regression: a value that Excel/Sheets would read as a formula (leading =, +, -, @ or tab) is
+        // neutralized with a leading apostrophe, so a CSV export can't smuggle a spreadsheet formula.
+        [Fact]
+        public void Csv_NeutralizesFormulaInjection()
+        {
+            var snap = new InventorySnapshot();
+            snap.Items.Add(new InventoryItem { Category = "Tables", ComponentType = "Table", Name = "=1+2" });
+            var csv = InventoryExporter.ToCsv(snap);
+            Assert.Contains("'=1+2", csv);        // apostrophe-prefixed => read as text
+            Assert.DoesNotContain(",=1+2", csv);  // the raw formula never appears at a field boundary
         }
 
         // ---- JSON export (US-ADMIN7.5.1) ----

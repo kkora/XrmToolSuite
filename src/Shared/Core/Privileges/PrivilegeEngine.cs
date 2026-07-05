@@ -35,14 +35,24 @@ namespace XrmToolSuite.Core.Privileges
                     .ThenBy(g => g.ViaTeam) // prefer a direct grant on a scope tie
                     .First();
 
+                // Deepest scope reachable WITHOUT teams — None if this privilege is team-only.
+                var directScope = group.Where(g => !g.ViaTeam)
+                    .Select(g => g.Scope)
+                    .DefaultIfEmpty(AccessScope.None)
+                    .Max();
+
                 effective[group.Key] = new GrantedPrivilege
                 {
                     PrivilegeName = winner.PrivilegeName,
                     Scope = winner.Scope,
                     SourceRole = winner.SourceRole,
                     SourceTeam = winner.SourceTeam,
-                    // team-only when there is no direct (non-team) grant for this privilege at all
-                    ViaTeam = group.All(g => g.ViaTeam)
+                    DirectScope = directScope,
+                    // Team-dependent when the grant supplying the winning (deepest) scope is team-inherited,
+                    // i.e. no direct grant reaches this scope. (group.All(...) was wrong: it hid team dependence
+                    // whenever ANY shallower direct grant existed, e.g. direct Basic + team Global.) Whether a
+                    // SPECIFIC required scope is team-dependent is decided by Evaluate against DirectScope.
+                    ViaTeam = (int)directScope < (int)winner.Scope
                 };
             }
 
@@ -129,8 +139,11 @@ namespace XrmToolSuite.Core.Privileges
                 };
             }
 
-            // ---- Allowed — but flag if it's only there because of a team ----
-            if (held.ViaTeam)
+            // ---- Allowed — but flag if the REQUIRED scope is reachable only through a team ----
+            // (i.e. removing the team would drop the principal below the required scope). If a directly-assigned
+            // role already reaches the required scope, the access is NOT team-dependent even when a deeper team
+            // grant also exists — so we compare the direct-only scope against what's required, not just ViaTeam.
+            if ((int)held.DirectScope < (int)requiredScope)
             {
                 return new GapVerdict
                 {
@@ -229,18 +242,45 @@ namespace XrmToolSuite.Core.Privileges
                 };
             }
 
-            // neither side sufficient
+            // Neither side is sufficient. Distinguish "present but too shallow" from "absent": collapsing
+            // them into MissingPrivilege with HeldScope=None was factually wrong output when the principal
+            // actually holds both privileges (just below the required scope).
+            bool appendPresent = appendHeld != null && appendScope > AccessScope.None;
+            bool appendToPresent = appendToHeld != null && appendToScope > AccessScope.None;
+            var heldMax = Max(appendScope, appendToScope);
+
+            if (appendPresent && appendToPresent)
+            {
+                return new GapVerdict
+                {
+                    Type = GapVerdictType.InsufficientScope,
+                    Allowed = false,
+                    RequiredPrivilege = $"{appendName} + {appendToName}",
+                    RequiredScope = requiredScope,
+                    HeldScope = heldMax,
+                    Explanation = $"{principal} holds both '{appendName}' (Append, {ScopeWord(appendScope)}) and " +
+                                  $"'{appendToName}' (AppendTo, {ScopeWord(appendToScope)}), but at least one is below " +
+                                  $"the required {ScopeWord(requiredScope)} scope, so the relate is denied.",
+                    Recommendation = $"Raise the shallower of '{appendName}'/'{appendToName}' to " +
+                                     $"{ScopeWord(requiredScope)} (or deeper).",
+                    ContributingGrants = contributing
+                };
+            }
+
+            // At least one side is entirely absent.
             return new GapVerdict
             {
                 Type = GapVerdictType.MissingPrivilege,
                 Allowed = false,
                 RequiredPrivilege = $"{appendName} + {appendToName}",
                 RequiredScope = requiredScope,
-                HeldScope = AccessScope.None,
+                HeldScope = heldMax, // reflect what IS held (may be Basic on one side), not a false None
                 Explanation = $"{principal} cannot append '{target.EntityLogicalName}' records to " +
-                              $"'{appendToTarget.EntityLogicalName}': neither '{appendName}' (Append) nor " +
-                              $"'{appendToName}' (AppendTo) is granted at the required scope.",
-                Recommendation = $"Grant both '{appendName}' and '{appendToName}' at " +
+                              $"'{appendToTarget.EntityLogicalName}': " +
+                              (appendPresent ? $"holds '{appendName}' (Append) but " : $"'{appendName}' (Append) is not granted; ") +
+                              (appendToPresent ? $"holds '{appendToName}' (AppendTo) but " : $"'{appendToName}' (AppendTo) is not granted") +
+                              " — both are required.",
+                Recommendation = $"Grant the missing of '{appendName}' / '{appendToName}' at " +
                                  $"{ScopeWord(requiredScope)} (or deeper).",
                 ContributingGrants = contributing
             };

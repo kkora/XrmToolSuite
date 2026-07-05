@@ -51,6 +51,14 @@ namespace XrmToolSuite.Core.Privileges
 
         /// <summary><c>true</c> when the grant reaches the principal only through a team's role.</summary>
         public bool ViaTeam { get; set; }
+
+        /// <summary>
+        /// On a RESOLVED (effective) entry only: the deepest scope this privilege reaches through
+        /// DIRECTLY-assigned (non-team) roles — <see cref="AccessScope.None"/> if it is reachable only via
+        /// teams. Lets the evaluator decide, for a specific required scope, whether removing team membership
+        /// would actually drop the principal below it (true team dependence) vs. leaving them still sufficient.
+        /// </summary>
+        public AccessScope DirectScope { get; set; }
     }
 
     /// <summary>The full set of privileges a principal (user, team, or role) effectively holds.</summary>

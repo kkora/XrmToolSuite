@@ -52,12 +52,17 @@ namespace XrmToolSuite.EnvironmentInventory.Inventory
 
         public int Total => Items?.Count ?? 0;
 
-        /// <summary>Distinct categories present, in stable display order.</summary>
+        /// <summary>Normalizes a category so a null/blank value buckets consistently everywhere.</summary>
+        private static string NormalizeCategory(string category) =>
+            string.IsNullOrWhiteSpace(category) ? "(uncategorized)" : category;
+
+        /// <summary>Distinct categories present, in stable display order. Uses the same null/blank
+        /// normalization as <see cref="CountByCategory"/> so the two never disagree (a null/blank category
+        /// must appear in BOTH — otherwise the export summary counts a row the detail sections never show).</summary>
         public IEnumerable<string> Categories()
         {
             return (Items ?? Enumerable.Empty<InventoryItem>())
-                .Select(i => i.Category ?? "")
-                .Where(c => c.Length > 0)
+                .Select(i => NormalizeCategory(i.Category))
                 .Distinct()
                 .OrderBy(c => c, StringComparer.OrdinalIgnoreCase);
         }
@@ -66,7 +71,7 @@ namespace XrmToolSuite.EnvironmentInventory.Inventory
         public Dictionary<string, int> CountByCategory()
         {
             return (Items ?? Enumerable.Empty<InventoryItem>())
-                .GroupBy(i => i.Category ?? "(uncategorized)")
+                .GroupBy(i => NormalizeCategory(i.Category))
                 .OrderBy(g => g.Key, StringComparer.OrdinalIgnoreCase)
                 .ToDictionary(g => g.Key, g => g.Count());
         }

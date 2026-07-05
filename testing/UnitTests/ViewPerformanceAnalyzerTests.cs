@@ -100,6 +100,22 @@ namespace XrmToolSuite.UnitTests
             Assert.Contains(v.Findings, f =>
                 f.Category == "View" && f.Severity == Severity.Medium && f.Title.Contains("Over-wide"));
             Assert.True(v.Score > 0); // the labeled layout penalty lifts the score above the lean baseline
+            // Regression: a view flagged for a wide layout must NOT also carry the reused engine's
+            // "No performance risks detected" placeholder (a self-contradictory finding).
+            Assert.DoesNotContain(v.Findings, f => f.Title == "No performance risks detected");
+        }
+
+        // Regression: a view whose FetchXML can't be parsed but which has a genuinely wide layout must still
+        // surface the over-wide-layout risk (and score it) — the parse failure must not hide it (US-PERF4.3.1).
+        [Fact]
+        public void Analyze_ParseFailureButWideLayout_StillFlagsAndScoresLayout()
+        {
+            var v = ViewScorer.Analyze("Broken Wide", "System", "account",
+                "<fetch><entity name='account'></fetch>", Layout(40));
+
+            Assert.Contains(v.Findings, f => f.Category == "View" && f.Title.Contains("Over-wide"));
+            Assert.Contains(v.Findings, f => f.Title.Contains("could not be parsed"));
+            Assert.True(v.Score > 0); // the layout penalty still counts even though the query cost is unknown
         }
 
         // US-PERF4.2.1 — an unparseable FetchXML degrades to a single Info note and score 0 (never throws).
