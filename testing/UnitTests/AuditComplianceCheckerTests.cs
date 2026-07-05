@@ -57,6 +57,8 @@ namespace XrmToolSuite.UnitTests
         // over-broad short tokens "tin" (se-tting, rou-ting) and "routing" (routing-rule).
         [InlineData("adx_sitesetting", false)]
         [InlineData("msdyn_routingrule", false)]
+        // Regression: "automobile*" must not match the dropped "mobile" token (covered by "phone").
+        [InlineData("automobilepolicy", false)]
         public void IsSensitiveTable_ClassifiesByName(string logical, bool expected) =>
             Assert.Equal(expected, SensitivityHeuristics.IsSensitiveTable(logical));
 
@@ -70,10 +72,33 @@ namespace XrmToolSuite.UnitTests
         // shop-ping) and "tin" (mee-ting).
         [InlineData("new_shippingaddress", "String", false)]
         [InlineData("meetingnotes", "String", false)]
+        // Regression: "automobiletype" must not match the dropped "mobile" token; "mobilephone" still matches
+        // via the retained "phone" token, so real coverage is preserved.
+        [InlineData("automobiletype", "String", false)]
         public void IsSensitiveColumn_ClassifiesByNameOrType(string logical, string type, bool expected) =>
             Assert.Equal(expected, SensitivityHeuristics.IsSensitiveColumn(logical, type));
 
         // ---- org audit disabled -> Critical (US-SEC5.1.1) ---------------------------------------
+
+        // Regression: a null table element (or a null column within a table) must not crash the metrics
+        // rollup — the rule bodies already null-guard, so Evaluate must return a report, not throw.
+        [Fact]
+        public void Evaluate_NullTableOrColumnElement_DoesNotThrow()
+        {
+            var cov = new AuditCoverage
+            {
+                OrgAuditEnabled = true,
+                Tables = new List<TableAudit>
+                {
+                    null,
+                    Table("contact", audit: true, sensitive: true,
+                        Col("emailaddress1", "String", audit: true, sensitive: true), null)
+                }
+            };
+
+            var report = AuditComplianceRules.Evaluate(cov, null);
+            Assert.NotNull(report);
+        }
 
         [Fact]
         public void OrgAuditDisabled_YieldsCritical_AndLowBand()

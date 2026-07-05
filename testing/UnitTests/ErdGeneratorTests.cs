@@ -147,6 +147,18 @@ namespace XrmToolSuite.UnitTests
             Assert.Equal(2, Regex.Matches(svg, @"height=""26""").Count);
         }
 
+        // Regression: a control character in a table display name (illegal in XML 1.0) is stripped so the
+        // emitted SVG stays well-formed and parseable as XML.
+        [Fact]
+        public void Svg_WithControlCharDisplayName_IsWellFormedXml()
+        {
+            var model = Sample();
+            model.Tables.First().DisplayName = "AccountName"; // 0x0B vertical tab is not a valid XML char
+            var svg = ErdSvg.Emit(model, ColumnDisplay.KeysAndLookupsOnly);
+            var ex = Record.Exception(() => System.Xml.Linq.XDocument.Parse(svg));
+            Assert.Null(ex);
+        }
+
         // TC-ERD-COLSELECT-09 (US-DOC2.2.2): SelectColumns includes alternate-key members even when optional.
         [Fact]
         public void SelectColumns_KeysAndLookups_IncludesAlternateKeyMembers()

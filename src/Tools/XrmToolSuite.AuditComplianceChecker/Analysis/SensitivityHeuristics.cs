@@ -23,6 +23,11 @@ namespace XrmToolSuite.AuditComplianceChecker.Analysis
         //   "tin" -> covered by taxid/nationalid/ssn (bare "tin" falsely matches set-"tin"-g, mee-"tin"-g, rou-"tin"-g)
         //   "pin" -> covered by password/secret/credential (bare "pin" falsely matches ship-"pin"-g, shop-"pin"-g)
         //   "routing" -> narrowed to "routingnumber" (bare "routing" falsely matches routingrule / msdyn_routing*)
+        //   "mobile"/"telephone" -> dropped: fully covered by "phone" (mobilephone/telephone both contain it),
+        //       so removing them kills the auto-"mobile" false match with zero loss of real coverage.
+        // Tokens like wage/bank/secret are intentionally KEPT even though they can over-match (se-wage,
+        // em-bank-ment, secret-ary): narrowing them would drop bare "wage"/"bankname"/"clientsecret" fields,
+        // and over-flagging is the safe direction for a conservative hint (missing a real secret is worse).
         public static readonly string[] SensitiveNamePatterns =
         {
             "ssn", "socialsecurity", "nationalid", "passport", "taxid", "vatnumber",
@@ -31,7 +36,7 @@ namespace XrmToolSuite.AuditComplianceChecker.Analysis
             "bank", "iban", "swift", "routingnumber", "accountnumber", "creditcard", "cardnumber",
             "creditscore", "payment",
             "password", "secret", "apikey", "token", "credential",
-            "email", "emailaddress", "phone", "mobile", "telephone",
+            "email", "emailaddress", "phone",
             "healthid", "medical", "diagnosis", "biometric", "driverslicense", "licensenumber",
         };
 

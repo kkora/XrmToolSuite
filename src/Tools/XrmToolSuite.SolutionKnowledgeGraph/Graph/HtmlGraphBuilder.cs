@@ -19,7 +19,7 @@ namespace XrmToolSuite.SolutionKnowledgeGraph.Graph
         public static string Build(GraphModel g, string title)
         {
             var sb = new StringBuilder();
-            sb.Append("<title>").Append(J(title)).Append(" — Knowledge Graph</title>\n");
+            sb.Append("<title>").Append(Html(title)).Append(" — Knowledge Graph</title>\n");
             sb.Append("<style>").Append(Css).Append("</style>\n");
             sb.Append("<div id=\"bar\">");
             sb.Append("<b>").Append(Html(title)).Append("</b> Knowledge Graph — ");
@@ -69,6 +69,10 @@ namespace XrmToolSuite.SolutionKnowledgeGraph.Graph
                     case '\n': sb.Append("\\n"); break;
                     case '\r': sb.Append("\\r"); break;
                     case '\t': sb.Append("\\t"); break;
+                    // Escape < and > so a label containing "</script>" can't terminate the embedding
+                    // <script> block early (HTML tokenizes </script literally, ignoring JS string quoting).
+                    case '<': sb.Append("\\u003c"); break;
+                    case '>': sb.Append("\\u003e"); break;
                     default:
                         if (ch < 0x20) sb.Append("\\u").Append(((int)ch).ToString("x4"));
                         else sb.Append(ch);

@@ -115,6 +115,19 @@ namespace XrmToolSuite.UnitTests
             Assert.Contains("Resolve criticals first", html);
         }
 
+        // Regression: a non-http(s) HelpUrl scheme (javascript:/data:) must never reach an href — the link
+        // is dropped rather than rendered.
+        [Fact]
+        public void Build_DropsUnsafeHelpUrlScheme()
+        {
+            var r = Sample();
+            r.Findings.Add(new RiskFinding(AnalyzerCategory.General, Severity.Medium,
+                "Injected", "desc", "comp", "fix", "javascript:alert(document.domain)"));
+            var html = BuildHtml(r);
+            Assert.DoesNotContain("href=\"javascript:", html);
+            Assert.DoesNotContain("javascript:alert", html);
+        }
+
         // TC-DG-HTML-08: a clean solution reads as clear, not blank.
         [Fact]
         public void Build_NoFindings_ShowsClearState()

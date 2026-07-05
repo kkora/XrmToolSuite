@@ -250,5 +250,23 @@ namespace XrmToolSuite.UnitTests
             Assert.Equal(48, SharingRiskRules.Score(risk));
             Assert.Equal(ScoreBand.High, SharingRiskRules.Band(risk));
         }
+
+        // Regression: the scalar rollups must ignore null share rows like every other aggregation on
+        // SharingSummary does, so a null in the list doesn't crash DistinctRecords/DistinctPrincipals or
+        // the clean "no risks" path of Evaluate.
+        [Fact]
+        public void ScalarRollups_IgnoreNullShareRows()
+        {
+            var s = new SharingSummary
+            {
+                Shares = new List<SharedRecordAccess> { null, Share("account", Guid.NewGuid(), Guid.NewGuid()) },
+                ScannedTables = { "account" }
+            };
+
+            Assert.Equal(1, s.DistinctRecords);
+            Assert.Equal(1, s.DistinctPrincipals);
+            var f = Assert.Single(SharingRiskRules.Evaluate(s)); // clean path must not throw
+            Assert.Equal("No sharing risks detected", f.Title);
+        }
     }
 }

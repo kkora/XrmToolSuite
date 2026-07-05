@@ -164,5 +164,21 @@ namespace XrmToolSuite.UnitTests
             var csv = AuditCsvExporter.ToCsv(r);
             Assert.Contains("\"View: Active, Open\"", csv);
         }
+
+        // Regression: a display name Excel would read as a formula (leading =, +, -, @ or tab) is neutralized
+        // with a leading apostrophe (this exporter even writes a BOM for Excel).
+        [Fact]
+        public void Csv_NeutralizesFormulaInjection()
+        {
+            var r = new AuditResult { EnvironmentName = "DEV" };
+            r.Columns.Add(new ColumnAudit
+            {
+                Table = "account", LogicalName = "new_x",
+                DisplayName = "=HYPERLINK(\"http://evil\")", AttributeType = "String", IsCustom = true
+            });
+            var csv = AuditCsvExporter.ToCsv(r);
+            Assert.Contains("'=HYPERLINK", csv);       // apostrophe-prefixed => read as text
+            Assert.DoesNotContain(",=HYPERLINK", csv); // never starts a cell with '='
+        }
     }
 }

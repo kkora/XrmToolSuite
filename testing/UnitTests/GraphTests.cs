@@ -123,5 +123,44 @@ namespace XrmToolSuite.UnitTests
             Assert.DoesNotContain("http://", html.Replace("http://www.w3.org", "")); // no external hosts (w3 ns only)
             Assert.DoesNotContain("cdn", html.ToLowerInvariant());
         }
+
+        // Regression: a label containing "</script>" must not terminate the embedding <script> block early
+        // (HTML tokenizes </script literally, ignoring JS string quoting) — < and > are \u-escaped in the JSON.
+        [Fact]
+        public void Html_EscapesScriptTerminatorInLabels()
+        {
+            var g = new GraphModel();
+            g.AddNode("id1", "Form", "x</script><img src=x onerror=alert(1)>y");
+            var html = HtmlGraphBuilder.Build(g, "T");
+            Assert.DoesNotContain("</script><img", html); // no raw terminator survives inside the data block
+            Assert.Contains("const DATA=", html);
+        }
+
+        // Regression: SVG coordinates must use an invariant '.' decimal separator, or the file is invalid on
+        // comma-decimal locales (de-DE, fr-FR, …).
+        [Fact]
+        public void Svg_UsesInvariantDecimalSeparator_UnderCommaCulture()
+        {
+            var old = System.Globalization.CultureInfo.CurrentCulture;
+            try
+            {
+                System.Globalization.CultureInfo.CurrentCulture = new System.Globalization.CultureInfo("de-DE");
+                var svg = SvgExporter.Build(Sample());
+                Assert.DoesNotMatch(new System.Text.RegularExpressions.Regex(@"(cx|cy|x1|y1|x2|y2)=""\d+,\d"), svg);
+            }
+            finally { System.Globalization.CultureInfo.CurrentCulture = old; }
+        }
+
+        // Regression: a control character in a label (illegal in XML 1.0) must be stripped so the emitted
+        // GraphML stays well-formed and parseable by yEd/Gephi/an XML reader.
+        [Fact]
+        public void GraphMl_WithControlCharLabel_IsWellFormedXml()
+        {
+            var g = new GraphModel();
+            g.AddNode("A", "Table", "Orderline"); // vertical tab (0x0B) is not a valid XML char
+            var xml = GraphMlExporter.Build(g);
+            var ex = Record.Exception(() => System.Xml.Linq.XDocument.Parse(xml));
+            Assert.Null(ex);
+        }
     }
 }

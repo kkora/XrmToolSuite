@@ -12,8 +12,12 @@ namespace XrmToolSuite.Core.Summarization
         /// <summary>API key for the selected provider (session-only; from env var or a prompt).</summary>
         public string ApiKey { get; set; }
 
-        /// <summary>Model id for the selected provider (editable; defaults to the provider's mid tier).</summary>
-        public string ModelId { get; set; } = "claude-haiku-4-5";
+        /// <summary>
+        /// Model id for the selected provider (editable). Left null by default so the generator resolves the
+        /// selected provider's mid tier (<see cref="AiProviderCatalog"/>) — a hardcoded default would send a
+        /// Claude id to OpenAI/Google when only <see cref="Provider"/> is changed.
+        /// </summary>
+        public string ModelId { get; set; }
 
         /// <summary>When false, component/schema names are redacted from the payload.</summary>
         public bool IncludeComponents { get; set; } = true;
