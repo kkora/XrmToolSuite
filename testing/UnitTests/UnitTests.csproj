@@ -110,6 +110,16 @@
     <Compile Include="..\..\src\Tools\XrmToolSuite.FormPerformanceAnalyzer\Analysis\FormModels.cs" />
     <Compile Include="..\..\src\Tools\XrmToolSuite.FormPerformanceAnalyzer\Analysis\FormXmlParser.cs" />
     <Compile Include="..\..\src\Tools\XrmToolSuite.FormPerformanceAnalyzer\Analysis\FormScorer.cs" />
+
+    <!-- Sharing Analyzer: SDK-free access-rights decode, sharing aggregations + risk rules. -->
+    <Compile Include="..\..\src\Tools\XrmToolSuite.SharingAnalyzer\Analysis\AccessRights.cs" />
+    <Compile Include="..\..\src\Tools\XrmToolSuite.SharingAnalyzer\Analysis\SharingModels.cs" />
+    <Compile Include="..\..\src\Tools\XrmToolSuite.SharingAnalyzer\Analysis\SharingRiskRules.cs" />
+
+    <!-- Audit Compliance Checker: SDK-free sensitivity heuristics + compliance rules/scoring. -->
+    <Compile Include="..\..\src\Tools\XrmToolSuite.AuditComplianceChecker\Analysis\AuditModels.cs" />
+    <Compile Include="..\..\src\Tools\XrmToolSuite.AuditComplianceChecker\Analysis\SensitivityHeuristics.cs" />
+    <Compile Include="..\..\src\Tools\XrmToolSuite.AuditComplianceChecker\Analysis\AuditComplianceRules.cs" />
   </ItemGroup>
 
 </Project>

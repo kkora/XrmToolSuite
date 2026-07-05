@@ -39,6 +39,8 @@ namespace XrmToolSuite.UiSmokeTests
             "ERD Generator",
             "JavaScript Performance Analyzer",
             "Form Performance Analyzer",
+            "Sharing Analyzer",
+            "Audit Compliance Checker",
         };
 
         private readonly ITestOutputHelper _output;
