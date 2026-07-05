@@ -29,11 +29,9 @@ namespace XrmToolSuite.AiSolutionReviewer
     /// </summary>
     public partial class AiSolutionReviewerControl : BaseToolControl, IGitHubPlugin, IHelpPlugin
     {
-        private const string DocsUrl = "https://github.com/kkora/XrmToolSuite";
-
         public string RepositoryName => "XrmToolSuite";
         public string UserName => "kkora";
-        public string HelpUrl => DocsUrl;
+        public string HelpUrl => SuiteDocsUrl;
 
         private readonly List<IAnalyzer<ReviewContext>> _collectors = new List<IAnalyzer<ReviewContext>>
         {
@@ -99,14 +97,11 @@ namespace XrmToolSuite.AiSolutionReviewer
             _miAiIncludeComponents = new ToolStripMenuItem("Include component names in AI payload") { CheckOnClick = true, Checked = true };
             btnAiOptions.DropDownItems.Add(_miAiIncludeComponents);
 
-            var btnHelp = new ToolStripButton("Help") { Alignment = ToolStripItemAlignment.Right, DisplayStyle = ToolStripItemDisplayStyle.Text };
-            btnHelp.Click += (s, e) => System.Diagnostics.Process.Start(DocsUrl);
-
             toolbar.Items.AddRange(new ToolStripItem[]
             {
                 btnClose, new ToolStripSeparator(), btnLoad, new ToolStripLabel("Solution:"),
                 new ToolStripControlHost(_cboSolution), _btnReview, _btnAiSummary, new ToolStripSeparator(),
-                _btnExport, btnAiOptions, btnHelp
+                _btnExport, btnAiOptions, CreateHelpButton("AI Solution Reviewer")
             });
 
             var summaryPanel = new Panel { Dock = DockStyle.Top, Height = 56, Padding = new Padding(8, 6, 8, 6) };

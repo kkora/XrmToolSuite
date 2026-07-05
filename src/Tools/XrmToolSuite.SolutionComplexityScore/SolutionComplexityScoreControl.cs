@@ -28,11 +28,9 @@ namespace XrmToolSuite.SolutionComplexityScore
     /// </summary>
     public partial class SolutionComplexityScoreControl : BaseToolControl, IGitHubPlugin, IHelpPlugin
     {
-        private const string DocsUrl = "https://github.com/kkora/XrmToolSuite";
-
         public string RepositoryName => "XrmToolSuite";
         public string UserName => "kkora";
-        public string HelpUrl => DocsUrl;
+        public string HelpUrl => SuiteDocsUrl;
 
         private ComplexitySettings _settings = new ComplexitySettings();
         private ReportModel _lastModel;
@@ -89,14 +87,12 @@ namespace XrmToolSuite.SolutionComplexityScore
             _miAiIncludeComponents = new ToolStripMenuItem("Include component names in AI payload") { CheckOnClick = true, Checked = true };
             btnAiOptions.DropDownItems.Add(_miAiIncludeComponents);
 
-            var btnHelp = new ToolStripButton("Help") { Alignment = ToolStripItemAlignment.Right, DisplayStyle = ToolStripItemDisplayStyle.Text };
-            btnHelp.Click += (s, e) => System.Diagnostics.Process.Start(DocsUrl);
-
             toolbar.Items.AddRange(new ToolStripItem[]
             {
                 btnClose, new ToolStripSeparator(), btnLoad, new ToolStripLabel("Solution:"),
                 new ToolStripControlHost(_cboSolution), _btnAnalyze, new ToolStripSeparator(),
-                _btnExport, new ToolStripSeparator(), _btnAiSummary, btnAiOptions, btnHelp
+                _btnExport, new ToolStripSeparator(), _btnAiSummary, btnAiOptions,
+                CreateHelpButton("Solution Complexity Score")
             });
 
             var summaryPanel = new Panel { Dock = DockStyle.Top, Height = 56, Padding = new Padding(8, 6, 8, 6) };
