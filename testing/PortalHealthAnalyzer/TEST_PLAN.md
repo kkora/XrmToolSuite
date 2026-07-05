@@ -1,6 +1,6 @@
 # Portal Health Analyzer - Test Plan
 
-Traces to [`docs/user-stories/PortalHealthAnalyzer.md`](../../docs/user-stories/PortalHealthAnalyzer.md).
+Traces to [`docs/user-stories/PP1.PortalHealthAnalyzer.md`](../../docs/user-stories/PP1.PortalHealthAnalyzer.md).
 
 ## Scope
 

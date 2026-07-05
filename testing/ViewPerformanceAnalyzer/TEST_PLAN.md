@@ -1,6 +1,6 @@
 # View Performance Analyzer - Test Plan
 
-Traces to [`docs/user-stories/ViewPerformanceAnalyzer.md`](../../docs/user-stories/ViewPerformanceAnalyzer.md).
+Traces to [`docs/user-stories/PERF4.ViewPerformanceAnalyzer.md`](../../docs/user-stories/PERF4.ViewPerformanceAnalyzer.md).
 
 ## Scope
 

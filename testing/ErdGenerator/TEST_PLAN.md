@@ -1,6 +1,6 @@
 # ERD Generator - Test Plan
 
-Traces to [`docs/user-stories/ErdGenerator.md`](../../docs/user-stories/ErdGenerator.md).
+Traces to [`docs/user-stories/DOC2.ErdGenerator.md`](../../docs/user-stories/DOC2.ErdGenerator.md).
 
 ## Scope
 

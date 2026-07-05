@@ -1,6 +1,6 @@
 # Team Permission Explorer - Test Plan
 
-Traces to [`docs/user-stories/TeamPermissionExplorer.md`](../../docs/user-stories/TeamPermissionExplorer.md)
+Traces to [`docs/user-stories/SEC2.TeamPermissionExplorer.md`](../../docs/user-stories/SEC2.TeamPermissionExplorer.md)
 (EPIC-SEC2).
 
 ## Scope

@@ -1,6 +1,6 @@
 # Environment Inventory - Test Plan
 
-Traces to [`docs/user-stories/EnvironmentInventory.md`](../../docs/user-stories/EnvironmentInventory.md).
+Traces to [`docs/user-stories/ADMIN7.EnvironmentInventory.md`](../../docs/user-stories/ADMIN7.EnvironmentInventory.md).
 
 ## Scope
 

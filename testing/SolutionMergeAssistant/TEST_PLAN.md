@@ -1,6 +1,6 @@
 # Solution Merge Assistant - Test Plan
 
-Traces to [`docs/user-stories/SolutionMergeAssistant.md`](../../docs/user-stories/SolutionMergeAssistant.md).
+Traces to [`docs/user-stories/ALM1.SolutionMergeAssistant.md`](../../docs/user-stories/ALM1.SolutionMergeAssistant.md).
 
 ## Scope
 

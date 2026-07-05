@@ -1,6 +1,6 @@
 # Flow Dependency Analyzer - Test Plan
 
-Traces to [`docs/user-stories/FlowDependencyAnalyzer.md`](../../docs/user-stories/FlowDependencyAnalyzer.md).
+Traces to [`docs/user-stories/PA1.FlowDependencyAnalyzer.md`](../../docs/user-stories/PA1.FlowDependencyAnalyzer.md).
 
 ## Scope
 
