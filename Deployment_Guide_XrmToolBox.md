@@ -6,17 +6,22 @@ XrmToolBox **locally** (build → copy DLL → unblock → launch).
 > To **publish a tool to the public XrmToolBox Tool Library** (package → push to nuget.org, manual
 > or via CI), see [`Publishing_Guide_XrmToolBox.md`](Publishing_Guide_XrmToolBox.md) instead.
 
-Throughout this guide, replace `<ToolName>` with the tool you are building. The suite
-currently ships:
+Throughout this guide, replace `<ToolName>` with the tool you are building. Every tool follows the
+**same** build/copy/unblock/launch flow; the only difference is **how many DLLs you copy**, which
+depends on whether the tool exports to Office/PDF. The suite currently ships **12 tools** in three
+dependency categories:
 
-| `<ToolName>` | Tool | Notes |
+| Category | What you copy | Tools (`<ToolName>`) |
 |---|---|---|
-| `AttributeAuditor` | Attribute Auditor | Single-DLL tool |
-| `DeploymentRiskAnalyzer` | Deployment Risk Analyzer | Ships two extra dependency chains (Excel + native PDF) — see the call-outs below |
-| `TemplateTool` | Template Tool | The scaffold for new tools; build it the same way |
+| **Single-DLL** | just `XrmToolSuite.<ToolName>.dll` | `AttributeAuditor`, `SolutionKnowledgeGraph` |
+| **Full export chain** (Excel + native PDF/Word) | the tool DLL **+ the 17-DLL ClosedXML/PdfSharp-MigraDoc-GDI chain** below | `DeploymentRiskAnalyzer`, `TechnicalDebtAnalyzer`, `SolutionComplexityScore`, `AiSolutionReviewer`, `FetchXmlPerformanceAnalyzer`, `EnvironmentInventory`, `PrivilegeGapAnalyzer`, `ViewPerformanceAnalyzer`, `TeamPermissionExplorer` |
+| **PDF-only chain** | the tool DLL **+ the five `-gdi` PdfSharp/MigraDoc DLLs** (no ClosedXML) | `ErdGenerator` |
 
-> Every tool follows the **same** build/copy/unblock/launch flow. The only tool that needs
-> extra files copied is **DeploymentRiskAnalyzer**; those steps are marked **“DeploymentRiskAnalyzer only.”**
+`TemplateTool` is the scaffold for new tools (not published); build it the same way (single-DLL).
+
+> Steps that only apply to a tool that ships a dependency chain are marked **“export tools only.”**
+> If you build with `-p:DeployToXTB=true` (below) the right DLLs are copied for you automatically,
+> whichever category the tool is in.
 
 ---
 
@@ -68,9 +73,9 @@ Then **restart XrmToolBox**. No manual copy, and no unblocking needed — files 
 by your own build are not marked as internet-downloaded. Steps 2–4 below are only for
 distributing a build to *another* machine.
 
-> **DeploymentRiskAnalyzer only:** the same flag additionally copies both export dependency
-> chains — Excel and native PDF (its csproj carries a dedicated deploy target), so nothing extra
-> is needed there either.
+> **Export tools:** the same flag additionally copies whatever dependency chain the tool ships
+> (the full Excel + native-PDF chain, or ERD Generator's PDF-only chain) via each tool's dedicated
+> deploy target, so nothing extra is needed there either.
 
 ---
 
@@ -82,22 +87,24 @@ Navigate to:
 src\Tools\XrmToolSuite.<ToolName>\bin\Release\net48\
 ```
 
-**For most tools, you copy exactly one file:** `XrmToolSuite.<ToolName>.dll`. That is the
-whole tool — the shared core is compiled into it, and XrmToolBox already ships the SDK and
-common libraries.
+**For a single-DLL tool** (`AttributeAuditor`, `SolutionKnowledgeGraph`), **you copy exactly one
+file:** `XrmToolSuite.<ToolName>.dll`. That is the whole tool — the shared core is compiled into it,
+and XrmToolBox already ships the SDK and common libraries.
 
 **Do NOT copy** `Newtonsoft.Json.dll` or any `Microsoft.Xrm.*` / `Microsoft.Crm.*`
 DLLs — XrmToolBox already ships its own copies and duplicates can cause load conflicts.
 
-### DeploymentRiskAnalyzer only — additional dependencies
+### Export tools only — additional dependencies
 
-DeploymentRiskAnalyzer is the one tool that ships extra libraries — for **Excel** export and
-**native PDF** export. In addition to `XrmToolSuite.DeploymentRiskAnalyzer.dll`, copy **all** of these
-DLLs from the same `bin\Release\net48\` folder:
+The **full-export-chain** tools (`DeploymentRiskAnalyzer`, `TechnicalDebtAnalyzer`,
+`SolutionComplexityScore`, `AiSolutionReviewer`, `FetchXmlPerformanceAnalyzer`,
+`EnvironmentInventory`, `PrivilegeGapAnalyzer`, `ViewPerformanceAnalyzer`, `TeamPermissionExplorer`)
+ship extra libraries for **Excel** and **native PDF/Word** export. In addition to
+`XrmToolSuite.<ToolName>.dll`, copy **all** of these DLLs from the same `bin\Release\net48\` folder:
 
 | DLL | Purpose |
 |---|---|
-| `XrmToolSuite.DeploymentRiskAnalyzer.dll` | The tool itself |
+| `XrmToolSuite.<ToolName>.dll` | The tool itself |
 | `ClosedXML.dll` | Excel export |
 | `DocumentFormat.OpenXml.dll` | ClosedXML dependency |
 | `ExcelNumberFormat.dll` | ClosedXML dependency |
@@ -124,6 +131,11 @@ DLLs from the same `bin\Release\net48\` folder:
 > XrmToolBox ships the `System.*` facades with binding redirects, so `SixLabors.Fonts`' version
 > mismatch resolves without a "Tools not loaded" warning.
 
+> **ERD Generator (PDF-only chain):** it exports PDF but not Excel, so it ships **only** the five
+> `-gdi` PdfSharp/MigraDoc DLLs (the last five rows above) alongside `XrmToolSuite.ErdGenerator.dll` —
+> **not** ClosedXML or the `System.*` facades. (Its PNG export uses the net48 `System.Drawing` GAC
+> assembly, which is not shipped.)
+
 ---
 
 ## Step 3 — Copy into the XrmToolBox Plugins folder
@@ -142,13 +154,15 @@ DLLs from the same `bin\Release\net48\` folder:
      XrmToolSuite.<ToolName>.dll
    ```
 
-   *DeploymentRiskAnalyzer only* — the folder also contains its dependency chain, all flat:
+   *Export tools* — the folder also contains that tool's dependency chain, all flat (all 17 DLLs for
+   a full-export-chain tool, or just the five `-gdi` DLLs for ERD Generator):
 
    ```
    Plugins\
-     XrmToolSuite.DeploymentRiskAnalyzer.dll
-     ClosedXML.dll
-     SixLabors.Fonts.dll
+     XrmToolSuite.<ToolName>.dll
+     ClosedXML.dll            (full-export-chain tools only)
+     SixLabors.Fonts.dll      (full-export-chain tools only)
+     PdfSharp-gdi.dll
      ... (the rest of the Step 2 list)
    ```
 
@@ -230,21 +244,21 @@ if (-not $r.ci.pass) {
 | Symptom | Fix |
 |---|---|
 | Tool doesn't appear in XrmToolBox | 1) DLL still blocked — redo Step 4. 2) Version mismatch — align `XrmToolBoxPackage` in `Directory.Build.props` with your installed XrmToolBox, rebuild, re-copy. |
-| **DeploymentRiskAnalyzer** doesn't appear | As above, plus: a dependency is missing — copy the **entire** Step 2 list into the Plugins root (all in one folder, no subfolder). XrmToolBox silently drops a tool whose `ClosedXML` reference it can't resolve during its scan. |
-| "Tools not loaded" listing `System.Numerics.Vectors` / `SixLabors.Fonts` (DeploymentRiskAnalyzer) | Your XrmToolBox is older than ~1.2025.10 and lacks the facade binding redirects. Update XrmToolBox to the current version. |
-| Crash / no output when exporting to Excel (DeploymentRiskAnalyzer) | A ClosedXML dependency from Step 2 is missing from the Plugins root — copy the **entire** list (including `System.IO.Packaging.dll` and `Irony.dll`). |
-| Crash / no output when exporting to PDF (DeploymentRiskAnalyzer) | A PDF dependency from Step 2 is missing — copy all five `-gdi` DLLs (`PdfSharp-gdi`, `PdfSharp.Charting-gdi`, `MigraDoc.DocumentObjectModel-gdi`, `MigraDoc.Rendering-gdi`, `MigraDoc.RtfRendering-gdi`). |
-| "Could not load file or assembly" for `Microsoft.Xrm.*` or `Newtonsoft.Json` | You copied a DLL XrmToolBox already ships — delete it (keep only your tool DLL, plus the Step 2 list for DeploymentRiskAnalyzer). |
+| An **export tool** doesn't appear | As above, plus: a dependency is missing — copy the **entire** Step 2 list into the Plugins root (all in one folder, no subfolder). XrmToolBox silently drops a tool whose `ClosedXML`/`PdfSharp`/`MigraDoc` reference it can't resolve during its scan. (ERD Generator needs only its five `-gdi` DLLs.) |
+| "Tools not loaded" listing `System.Numerics.Vectors` / `SixLabors.Fonts` (a full-export-chain tool) | Your XrmToolBox is older than ~1.2025.10 and lacks the facade binding redirects. Update XrmToolBox to the current version. |
+| Crash / no output when exporting to **Excel** | A ClosedXML dependency from Step 2 is missing from the Plugins root — copy the **entire** list (including `System.IO.Packaging.dll` and `Irony.dll`). |
+| Crash / no output when exporting to **PDF** | A PDF dependency from Step 2 is missing — copy all five `-gdi` DLLs (`PdfSharp-gdi`, `PdfSharp.Charting-gdi`, `MigraDoc.DocumentObjectModel-gdi`, `MigraDoc.Rendering-gdi`, `MigraDoc.RtfRendering-gdi`). |
+| "Could not load file or assembly" for `Microsoft.Xrm.*` or `Newtonsoft.Json` | You copied a DLL XrmToolBox already ships — delete it (keep only your tool DLL, plus the Step 2 dependency list if it's an export tool). |
 | Analyzers/queries return "skipped" findings | Usually insufficient privileges — verify System Customizer or higher in both environments. |
 
 ---
 
 ## Iterating during development
 
-Build with `-p:DeployToXTB=true` (see *Easiest path* above). For most tools that copies the
-single tool DLL into the Plugins root; **for DeploymentRiskAnalyzer** it also copies both export
-dependency chains (Excel + native PDF). After the first deploy your loop is just:
-**rebuild with `-p:DeployToXTB=true` → restart XrmToolBox**.
+Build with `-p:DeployToXTB=true` (see *Easiest path* above). For a single-DLL tool that copies the
+tool DLL into the Plugins root; **for an export tool** it also copies that tool's dependency chain
+(the full Excel + native-PDF chain, or ERD Generator's PDF-only chain). After the first deploy your
+loop is just: **rebuild with `-p:DeployToXTB=true` → restart XrmToolBox**.
 
 (XrmToolBox locks the tool DLL while running, so close XrmToolBox before rebuilding with the
 deploy flag.)
