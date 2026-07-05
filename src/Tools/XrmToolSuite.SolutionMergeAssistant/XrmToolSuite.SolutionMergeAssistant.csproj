@@ -1,0 +1,36 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <!-- TargetFramework, WinForms, XrmToolBoxPackage reference, and the shared core
+       all come from src/Tools/Directory.Build.props. Keep tool csproj files minimal. -->
+  <PropertyGroup>
+    <RootNamespace>XrmToolSuite.SolutionMergeAssistant</RootNamespace>
+    <AssemblyName>XrmToolSuite.SolutionMergeAssistant</AssemblyName>
+    <description>Read-only comparison of two or more solutions from one environment: duplicate/overlapping components, publisher/version/managed-state conflicts, and env-var/connection-reference conflicts rolled into a pre-merge verdict, strategy, and checklist.</description>
+    <!-- This tool ships ClosedXML + PdfSharp/MigraDoc with its nupkg, so deps must land in the output -->
+    <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- Suite-shared reporters (JSON/Markdown/HTML/Excel/PDF), compiled in as source. Opt-in (unlike
+         Shared\Core which every tool globs) because they carry the Newtonsoft/ClosedXML/MigraDoc deps. -->
+    <Compile Include="..\..\Shared\Reporting\**\*.cs" LinkBase="Shared\Reporting" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- Newtonsoft is compiled against but NOT shipped (XrmToolBox provides it) -->
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+    <PackageReference Include="ClosedXML" Version="0.102.3" />
+    <!-- Native PDF export (no HTML round-trip). GDI build = System.Drawing, net48-compatible,
+         pure-managed (no SkiaSharp native binaries). Ships in the Plugins ROOT like ClosedXML. -->
+    <PackageReference Include="PDFsharp-MigraDoc-GDI" Version="1.50.5147" />
+  </ItemGroup>
+
+  <!-- Extends the suite's DeployToXTB with the export dependency chain. These go in the Plugins ROOT
+       (next to the tool DLL) so XrmToolBox can resolve the tool's ClosedXML/PdfSharp references during
+       plugin analysis; a subfolder makes the tool silently fail to load. -->
+  <Target Name="DeployGuardDependencies" AfterTargets="DeployToXrmToolBox" Condition="'$(DeployToXTB)' == 'true'">
+    <ItemGroup>
+      <GuardDeps Include="$(TargetDir)ClosedXML.dll;$(TargetDir)DocumentFormat.OpenXml.dll;$(TargetDir)ExcelNumberFormat.dll;$(TargetDir)SixLabors.Fonts.dll;$(TargetDir)XLParser.dll;$(TargetDir)Irony.dll;$(TargetDir)System.IO.Packaging.dll;$(TargetDir)System.Numerics.Vectors.dll;$(TargetDir)System.Runtime.CompilerServices.Unsafe.dll;$(TargetDir)System.Buffers.dll;$(TargetDir)System.Memory.dll;$(TargetDir)System.Threading.Tasks.Extensions.dll;$(TargetDir)PdfSharp-gdi.dll;$(TargetDir)PdfSharp.Charting-gdi.dll;$(TargetDir)MigraDoc.DocumentObjectModel-gdi.dll;$(TargetDir)MigraDoc.Rendering-gdi.dll;$(TargetDir)MigraDoc.RtfRendering-gdi.dll" />
+    </ItemGroup>
+    <Copy SourceFiles="@(GuardDeps)" DestinationFolder="$(AppData)\MscrmTools\XrmToolBox\Plugins" SkipUnchangedFiles="true" Condition="Exists('%(GuardDeps.Identity)')" />
+  </Target>
+</Project>
