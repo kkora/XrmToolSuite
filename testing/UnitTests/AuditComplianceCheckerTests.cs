@@ -53,6 +53,10 @@ namespace XrmToolSuite.UnitTests
         [InlineData("passportnumber", true)]
         [InlineData("account", false)]
         [InlineData("cr123_color", false)]
+        // Regression: these ordinary tables must NOT be flagged — they previously false-matched the
+        // over-broad short tokens "tin" (se-tting, rou-ting) and "routing" (routing-rule).
+        [InlineData("adx_sitesetting", false)]
+        [InlineData("msdyn_routingrule", false)]
         public void IsSensitiveTable_ClassifiesByName(string logical, bool expected) =>
             Assert.Equal(expected, SensitivityHeuristics.IsSensitiveTable(logical));
 
@@ -62,6 +66,10 @@ namespace XrmToolSuite.UnitTests
         [InlineData("annualrevenue", "Money", true)]    // type: money is inherently sensitive
         [InlineData("description", "Memo", false)]      // neither
         [InlineData("cr123_dob", "DateTime", true)]     // name pattern (dob)
+        // Regression: ordinary columns must NOT be flagged — previously false-matched "pin" (ship-ping,
+        // shop-ping) and "tin" (mee-ting).
+        [InlineData("new_shippingaddress", "String", false)]
+        [InlineData("meetingnotes", "String", false)]
         public void IsSensitiveColumn_ClassifiesByNameOrType(string logical, string type, bool expected) =>
             Assert.Equal(expected, SensitivityHeuristics.IsSensitiveColumn(logical, type));
 

@@ -71,6 +71,15 @@ namespace XrmToolSuite.ManagedSolutionImpactChecker.Analysis
         /// </summary>
         public List<string> RemovedComponents { get; set; } = new List<string>();
 
+        /// <summary>
+        /// True only when removed-component analysis actually ran (the caller compared the target against the
+        /// incoming solution package or a source environment). When false, an empty <see cref="RemovedComponents"/>
+        /// means "not assessed" — NOT "nothing is deleted" — so the rules must not imply a delete-capable
+        /// upgrade is data-loss-free. A single-connection collector inspecting only the installed solution
+        /// leaves this false.
+        /// </summary>
+        public bool RemovedComponentsAssessed { get; set; }
+
         /// <summary>Required components the solution depends on but does not contain (type, name).</summary>
         public List<(string type, string name)> MissingDependencies { get; set; } = new List<(string type, string name)>();
 

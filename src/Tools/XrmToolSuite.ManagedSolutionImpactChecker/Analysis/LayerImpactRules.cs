@@ -28,7 +28,7 @@ namespace XrmToolSuite.ManagedSolutionImpactChecker.Analysis
             bool pathDeletes = PathDeletes(path, opts);
 
             EvaluateUnmanagedLayers(findings, layers, path, pathDeletes);
-            EvaluateRemovedComponents(findings, input.RemovedComponents ?? new List<string>(), path, pathDeletes);
+            EvaluateRemovedComponents(findings, input.RemovedComponents ?? new List<string>(), path, pathDeletes, input.RemovedComponentsAssessed);
             EvaluateMissingDependencies(findings, input.MissingDependencies ?? new List<(string, string)>());
             EvaluatePublisherPrefix(findings, input.SourcePublisherPrefix, input.TargetPublisherPrefix);
             EvaluateRestrictiveManagedProperties(findings, layers);
@@ -103,9 +103,24 @@ namespace XrmToolSuite.ManagedSolutionImpactChecker.Analysis
         // ----------------------------------------------------------------- Rule: removed components (deletion)
 
         private static void EvaluateRemovedComponents(
-            List<Finding> findings, List<string> removed, DeploymentPath path, bool pathDeletes)
+            List<Finding> findings, List<string> removed, DeploymentPath path, bool pathDeletes, bool assessed)
         {
-            if (removed.Count == 0) return;
+            if (removed.Count == 0)
+            {
+                // Honesty guard: on a delete-capable path, an empty removed list only means "no data loss"
+                // if removal was actually assessed. If it wasn't (e.g. a single-connection scan of just the
+                // installed solution), say so plainly rather than implying the upgrade is deletion-safe.
+                if (pathDeletes && !assessed)
+                    findings.Add(new Finding(Category, Severity.Info,
+                        "Deletion / data-loss impact not assessed",
+                        $"The {path} path deletes components that the incoming solution removes, but this analysis " +
+                        "did not receive removed-component data, so no deletion/data-loss risk could be evaluated. " +
+                        "This is NOT a guarantee that the upgrade deletes nothing.",
+                        component: null,
+                        recommendation: "Compare the target against the incoming solution package (or the source " +
+                        "environment) to enumerate removed components before upgrading."));
+                return;
+            }
 
             // Path-aware: Update and Patch NEVER delete, so removed components are not a data-loss risk on
             // those paths — surface a single informational note instead of per-component deletion findings.
@@ -298,9 +313,13 @@ namespace XrmToolSuite.ManagedSolutionImpactChecker.Analysis
 
         private static RemovedKind ClassifyRemoved(string type)
         {
+            // Match the type token EXACTLY, not by substring: a substring test escalates related
+            // multi-word types ("Entity Relationship"/"Entity Key" -> Table/Critical, "Field Security
+            // Profile" -> Column/High), overstating data-loss risk. Only the bare table/column types
+            // carry deletion data-loss severity.
             var t = (type ?? "").Trim().ToLowerInvariant();
-            if (t.Contains("entity") || t.Contains("table")) return RemovedKind.Table;
-            if (t.Contains("attribute") || t.Contains("column") || t.Contains("field")) return RemovedKind.Column;
+            if (t == "entity" || t == "table") return RemovedKind.Table;
+            if (t == "attribute" || t == "column" || t == "field") return RemovedKind.Column;
             return RemovedKind.Other;
         }
 

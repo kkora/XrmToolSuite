@@ -287,7 +287,10 @@ namespace XrmToolSuite.SolutionDocumentationGenerator.Doc
 
             if (rows.Count == 0)
             {
-                if (SourceUnavailable(scan, kind))
+                // "No components" is only truthful if the component data was actually read. If the primary
+                // component enumeration failed (permission gap), every section is empty from a read failure,
+                // not from an empty solution — render the "not available" note instead of misinforming.
+                if (scan.ComponentScanFailed || SourceUnavailable(scan, kind))
                     s.Notes.Add(NotAvailable);
                 else
                     s.Notes.Add($"No {noun} components are included in this solution.");

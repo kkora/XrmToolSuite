@@ -30,7 +30,7 @@ namespace XrmToolSuite.UnitTests
           ""type"": ""OpenApiConnectionWebhook"",
           ""inputs"": {
             ""host"": { ""connectionName"": ""shared_commondataserviceforapps"", ""apiId"": ""/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"", ""operationId"": ""SubscribeWebhookTrigger"" },
-            ""parameters"": { ""subscriptionRequest/entityname"": ""account"", ""subscriptionRequest/message"": ""3"" }
+            ""parameters"": { ""subscriptionRequest/entityname"": ""account"", ""subscriptionRequest/message"": ""2"" }
           }
         }
       },
@@ -84,7 +84,42 @@ namespace XrmToolSuite.UnitTests
             var dep = Parse();
             Assert.Equal("Dataverse", dep.TriggerType);
             Assert.Equal("account", dep.TriggerEntity);
-            Assert.Equal("Update", dep.TriggerMessage); // SdkMessage code 3 → Update
+            Assert.Equal("Update", dep.TriggerMessage); // SdkMessage code 2 → Update
+        }
+
+        // Regression: Dataverse trigger message codes must map to the correct CRUD type.
+        // Code 2=Update and 3=Delete were previously swapped, silently mislabeling the two most
+        // common triggers (US-PA1.2.1).
+        [Theory]
+        [InlineData("1", "Create")]
+        [InlineData("2", "Update")]
+        [InlineData("3", "Delete")]
+        [InlineData("4", "CreateOrUpdate")]
+        public void Parse_TriggerMessageCode_MapsToCorrectCrudType(string code, string expected)
+        {
+            var json = @"{ ""properties"": { ""definition"": { ""triggers"": { ""t"": {
+                ""type"": ""OpenApiConnectionWebhook"",
+                ""inputs"": { ""host"": { ""connectionName"": ""shared_commondataserviceforapps"" },
+                    ""parameters"": { ""subscriptionRequest/entityname"": ""account"", ""subscriptionRequest/message"": """ + code + @""" } } } } } } }";
+            var dep = FlowClientDataParser.Parse("f", json);
+            Assert.Equal(expected, dep.TriggerMessage);
+        }
+
+        // Regression: Power Automate built-in parameters ($connections, $authentication) are runtime/auth
+        // references, not environment variables — they must not be collected as EVs (which would raise a
+        // false "missing environment variable" finding).
+        [Fact]
+        public void Parse_DoesNotCollectBuiltinParametersAsEnvironmentVariables()
+        {
+            var json = @"{ ""properties"": { ""definition"": { ""actions"": { ""a"": {
+                ""type"": ""OpenApiConnection"",
+                ""inputs"": { ""x"": ""@parameters('$connections')['shared_x']['connectionId']"",
+                              ""y"": ""@parameters('$authentication')"",
+                              ""z"": ""@parameters('new_realvar')"" } } } } } }";
+            var dep = FlowClientDataParser.Parse("f", json);
+            Assert.DoesNotContain("$connections", dep.EnvironmentVariables);
+            Assert.DoesNotContain("$authentication", dep.EnvironmentVariables);
+            Assert.Contains("new_realvar", dep.EnvironmentVariables);
         }
 
         // ---------------------------------------------------------------- Tables & columns (US-PA1.2.2)
