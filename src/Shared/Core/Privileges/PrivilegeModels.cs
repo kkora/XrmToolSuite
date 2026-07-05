@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace XrmToolSuite.PrivilegeGapAnalyzer.Privileges
+namespace XrmToolSuite.Core.Privileges
 {
     /// <summary>
     /// Dataverse access depth for a single privilege. Order is meaningful: a deeper scope is

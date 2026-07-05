@@ -17,7 +17,8 @@ using XrmToolBox.Extensibility.Interfaces;
 using XrmToolSuite.Core;
 using XrmToolSuite.Core.Analysis;
 using XrmToolSuite.Core.Reporting;
-using XrmToolSuite.PrivilegeGapAnalyzer.Privileges;
+using XrmToolSuite.Core.Privileges;            // shared effective-privilege model + engine
+using XrmToolSuite.PrivilegeGapAnalyzer.Privileges; // tool-local SDK collector
 // Both McTools.Xrm.Connection and Microsoft.Xrm.Sdk.Metadata expose types that clash (CS0104);
 // pin the ones the suite uses.
 using MetadataCache = XrmToolSuite.Core.MetadataCache;

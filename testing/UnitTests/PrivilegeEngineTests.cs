@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Xunit;
-using XrmToolSuite.PrivilegeGapAnalyzer.Privileges;
+using XrmToolSuite.Core.Privileges;
 
 namespace XrmToolSuite.UnitTests
 {
