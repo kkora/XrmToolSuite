@@ -44,6 +44,9 @@ namespace XrmToolSuite.UiSmokeTests
             "Managed Solution Impact Checker",
             "Portal Health Analyzer",
             "Solution Merge Assistant",
+            "Flow Dependency Analyzer",
+            "Plugin Dependency Graph",
+            "Component Usage Explorer",
         };
 
         private readonly ITestOutputHelper _output;

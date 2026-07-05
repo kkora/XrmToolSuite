@@ -1,0 +1,33 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <!-- TargetFramework, WinForms, XrmToolBoxPackage reference, and the shared core
+       all come from src/Tools/Directory.Build.props. Keep tool csproj files minimal. -->
+  <PropertyGroup>
+    <RootNamespace>XrmToolSuite.ComponentUsageExplorer</RootNamespace>
+    <AssemblyName>XrmToolSuite.ComponentUsageExplorer</AssemblyName>
+    <description>Pick one Dataverse component and see its full where-used footprint (required/dependent components, per-type usage) plus a change-safety verdict; read-only, exportable to Excel, PDF, JSON, HTML.</description>
+    <!-- Ships the ClosedXML (Excel) + PdfSharp/MigraDoc-GDI (native PDF) chains with its nupkg, so deps must land in the output. -->
+    <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- Suite-shared reporters (JSON/Markdown/HTML/Excel/PDF/Word), compiled in as source.
+         Opt-in (not the Shared\Core glob) because they carry Newtonsoft/ClosedXML/MigraDoc. -->
+    <Compile Include="..\..\Shared\Reporting\**\*.cs" LinkBase="Shared\Reporting" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+    <PackageReference Include="ClosedXML" Version="0.102.3" />
+    <PackageReference Include="PDFsharp-MigraDoc-GDI" Version="1.50.5147" />
+  </ItemGroup>
+
+  <!-- Excel + native-PDF dependency chains go in the Plugins ROOT next to the tool DLL (never a
+       subfolder) so XrmToolBox can resolve the tool's ClosedXML/PdfSharp references at plugin-scan
+       time. Mirrors the Deployment Risk Analyzer / View Performance Analyzer. -->
+  <Target Name="DeployGuardDependencies" AfterTargets="DeployToXrmToolBox" Condition="'$(DeployToXTB)' == 'true'">
+    <ItemGroup>
+      <GuardDeps Include="$(TargetDir)ClosedXML.dll;$(TargetDir)DocumentFormat.OpenXml.dll;$(TargetDir)ExcelNumberFormat.dll;$(TargetDir)SixLabors.Fonts.dll;$(TargetDir)XLParser.dll;$(TargetDir)Irony.dll;$(TargetDir)System.IO.Packaging.dll;$(TargetDir)System.Numerics.Vectors.dll;$(TargetDir)System.Runtime.CompilerServices.Unsafe.dll;$(TargetDir)System.Buffers.dll;$(TargetDir)System.Memory.dll;$(TargetDir)System.Threading.Tasks.Extensions.dll;$(TargetDir)PdfSharp-gdi.dll;$(TargetDir)PdfSharp.Charting-gdi.dll;$(TargetDir)MigraDoc.DocumentObjectModel-gdi.dll;$(TargetDir)MigraDoc.Rendering-gdi.dll;$(TargetDir)MigraDoc.RtfRendering-gdi.dll" />
+    </ItemGroup>
+    <Copy SourceFiles="@(GuardDeps)" DestinationFolder="$(AppData)\MscrmTools\XrmToolBox\Plugins" SkipUnchangedFiles="true" Condition="Exists('%(GuardDeps.Identity)')" />
+  </Target>
+</Project>
