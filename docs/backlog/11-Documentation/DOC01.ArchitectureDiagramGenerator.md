@@ -1,6 +1,13 @@
 # Architecture Diagram Generator — User Stories (Candidate / Backlog)
 
-> **Status:** Candidate backlog — not started (no code).
+> **Status:** ✅ **SHIPPED** as `XrmToolSuite.ArchitectureDiagramGenerator`. Built as a focused MVP over the
+> same solution-component + dependency extraction the Solution Knowledge Graph uses (SDK-free `ArchModel` +
+> `ArchCollector`), classifying components into architectural layers and emitting **Mermaid, PlantUML,
+> DOT/Graphviz, Markdown, self-contained theme-aware HTML (hand-laid-out inline SVG, offline), and JSON**.
+> Layouts: **Layered** (by layer) and **Dependency graph**; direction LR/TD; hide-orphans filter. As-built
+> user stories: `docs/user-stories/DOC01.ArchitectureDiagramGenerator.md`. Deferred to future extensions:
+> per-concern diagram *types* (security-only, integration-only), swimlane/hub-and-spoke layouts, Power Pages
+> topology, and PNG/PDF raster export (Markdown/HTML cover the shareable formats today).
 > **Source:** `all` — `prompt/3.XrmToolBox_ALL_PROMPTS.txt`, Section 11 (Documentation), item 1. Not in pack file (except ERD/Doc generators relate to pack #11).
 > **Suggested tag:** `DOC01` · **Suggested project:** `XrmToolSuite.ArchitectureDiagramGenerator`
 > **Overlaps:** **Solution Knowledge Graph** (SHIPPED) — strong diagram/graph overlap; that tool already extracts the component + dependency model and renders a graph. This tool is a *format-specific renderer* (layered/swimlane/hub-and-spoke architecture views) over the same model — reuse its extraction and dependency data, don't re-scan. Also relates to **Solution Documentation Generator** (SOLN05 candidate) which embeds diagrams, and **ERD Generator** (DOC02, the table-level counterpart).

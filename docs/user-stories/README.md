@@ -50,6 +50,12 @@ took the next number in their category: `ALM07`, `ADMIN10`, `SOLN08`, `SOLN09`, 
 
 All 20 NEXT-20 tools are now built.
 
+## Additional shipped tools (beyond NEXT-20)
+
+| Tag | Tool | User stories | Backlog | Project |
+|---|---|---|---|---|
+| DOC01 | Architecture Diagram Generator | [DOC01.ArchitectureDiagramGenerator.md](DOC01.ArchitectureDiagramGenerator.md) | [DOC](../backlog/11-Documentation/DOC01.ArchitectureDiagramGenerator.md) | `XrmToolSuite.ArchitectureDiagramGenerator` |
+
 ## Scaffold
 
 | Tool | User stories | Project |

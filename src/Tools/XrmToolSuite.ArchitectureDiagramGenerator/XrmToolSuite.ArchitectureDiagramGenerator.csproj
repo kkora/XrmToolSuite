@@ -1,0 +1,9 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <!-- TargetFramework, WinForms, XrmToolBoxPackage reference, and the shared core
+       all come from src/Tools/Directory.Build.props. Keep tool csproj files minimal. -->
+  <PropertyGroup>
+    <RootNamespace>XrmToolSuite.ArchitectureDiagramGenerator</RootNamespace>
+    <AssemblyName>XrmToolSuite.ArchitectureDiagramGenerator</AssemblyName>
+    <description>Generates architecture diagrams (Mermaid, PlantUML, DOT/Graphviz, Markdown, self-contained HTML) from live Dataverse solution component and dependency metadata.</description>
+  </PropertyGroup>
+</Project>

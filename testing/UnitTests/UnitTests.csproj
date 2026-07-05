@@ -171,6 +171,10 @@
     <Compile Include="..\..\src\Tools\XrmToolSuite.CustomApiExplorer\Analysis\CustomApiModels.cs" />
     <Compile Include="..\..\src\Tools\XrmToolSuite.CustomApiExplorer\Analysis\RequestBuilder.cs" />
     <Compile Include="..\..\src\Tools\XrmToolSuite.CustomApiExplorer\Reporting\CustomApiDoc.cs" />
+
+    <!-- Architecture Diagram Generator: SDK-free diagram model + Mermaid/PlantUML/DOT/Markdown/HTML/SVG/JSON emitters. -->
+    <Compile Include="..\..\src\Tools\XrmToolSuite.ArchitectureDiagramGenerator\Diagram\ArchModel.cs" />
+    <Compile Include="..\..\src\Tools\XrmToolSuite.ArchitectureDiagramGenerator\Diagram\DiagramEmitters.cs" />
   </ItemGroup>
 
 </Project>
