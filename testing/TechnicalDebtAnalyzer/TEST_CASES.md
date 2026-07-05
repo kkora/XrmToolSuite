@@ -32,7 +32,22 @@ Executed via `dotnet test testing/CollectorTests/CollectorTests.csproj`. Sources
 | TC-TD-COL-10 | Default prefix / no description | custom table "new_widget", no description, column "new_field" | Low table prefix + Info no-description + Low column prefix | Automated | Pass |
 | TC-TD-COL-11 | Secured columns | custom table with 2 secured columns | Info "Field-level security in use" | Automated | Pass |
 
-## Manual — analyzers, UI, exports, summary (US-TD-1, US-TD-5..7)
+## Automated — debt trends store & analytics (US-TD-8)
+
+Executed via `dotnet test testing/UnitTests/UnitTests.csproj`. Source: `testing/UnitTests/TechDebtTrendsTests.cs`.
+
+| ID | Case | Input | Expected | Type | Status |
+|---|---|---|---|---|---|
+| TC-TD-TREND-01 | Append + per-env selection | DEV, PROD, DEV snapshots | per-env lists, oldest-first order | Automated | Pass |
+| TC-TD-TREND-02 | Same-run dedupe | same env + timestamp twice | second ignored; first kept | Automated | Pass |
+| TC-TD-TREND-03 | Per-env cap | 105 DEV snapshots, cap 100 | 100 kept (most recent) | Automated | Pass |
+| TC-TD-TREND-04 | Cap is per-environment | 3 DEV + 3 PROD, cap 2 | 2 each | Automated | Pass |
+| TC-TD-TREND-05 | Delta null when <2 | 0 or 1 snapshot | null | Automated | Pass |
+| TC-TD-TREND-06 | Falling score = improving | 40 → 30 with category drop | −10, Improving, category delta −3, unchanged omitted | Automated | Pass |
+| TC-TD-TREND-07 | Rising score = worsening | 20 → 35 | Worsening | Automated | Pass |
+| TC-TD-TREND-08 | Series + best/worst | 40, 22, 55 | series order preserved; best 22, worst 55 | Automated | Pass |
+
+## Manual — analyzers, UI, exports, summary, trends (US-TD-1, US-TD-5..8)
 
 Executed in XrmToolBox against a live org; capture a screenshot per case into `screenshots/` (e.g. `TC-TD-M-04-html.png`).
 
@@ -47,3 +62,6 @@ Executed in XrmToolBox against a live org; capture a screenshot per case into `s
 | TC-TD-M-07 | Selection persists | Uncheck an analyzer, reopen | Selection restored from settings | Manual | Pending |
 | TC-TD-M-08 | Exports | Export PDF/HTML/XLSX/JSON/MD | Each file opens and reflects the score/findings | Manual | Pending |
 | TC-TD-M-09 | AI consent & offline | Executive summary with/without key | Offline by default; AI shows the anonymized payload before sending; key never saved | Manual | Pending |
+| TC-TD-M-10 | Trends tab records a run | Analyze, open Trends tab | A row + chart point appears; delta banner shows after a 2nd run | Manual | Pending |
+| TC-TD-M-11 | Trends export | Export → Trend history CSV/JSON | File contains the snapshot series for the environment | Manual | Pending |
+| TC-TD-M-12 | Clear history (gated) | Trends tab → Clear history… | Confirmation names the environment; on OK the history for that env is cleared; Dataverse untouched | Manual | Pending |

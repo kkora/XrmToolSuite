@@ -1,6 +1,12 @@
 # Technical Debt Trends — User Stories (Candidate / Backlog)
 
-> **Status:** Candidate backlog — not started (no code).
+> **Status:** ✅ **Shipped as an extension** — built into the **Technical Debt Analyzer** tool as
+> **FEAT-TD-4** (a Trends tab charting the debt score run-over-run from per-machine JSON snapshots), rather
+> than as a standalone project — trends need the tool's own run history, which it already produces. See
+> [`../../user-stories/TechnicalDebtAnalyzer.md`](../../user-stories/TechnicalDebtAnalyzer.md) → FEAT-TD-4
+> and the design at [`../../design/SOLN4-RPT4-extensions.md`](../../design/SOLN4-RPT4-extensions.md).
+>
+> **(Original candidate status:** Candidate backlog — not started (no code).**)**
 > **Source:** `all` — `prompt/3.XrmToolBox_ALL_PROMPTS.txt`, Section 12 (Reporting & Analytics), item 4. Not in pack file.
 > **Suggested tag:** `RPT4` · **Suggested project:** `XrmToolSuite.TechnicalDebtTrends`
 > **Overlaps:** STRONG overlap with the SHIPPED Technical Debt Analyzer — this is NOT a new scanner. It is the snapshot/trend/comparison layer over that tool's existing UI-free analyzer engine. NOTE clearly: reuse the shipped analyzers (unused/duplicate metadata, deprecated JS, plugin risk, form/view complexity, documentation completeness, unmanaged customizations) verbatim; add only local snapshots, trend calc, and the diff engine. Strongly consider folding this into the shipped tool as a "Trends" tab instead of a separate project.

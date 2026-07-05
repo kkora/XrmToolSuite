@@ -79,8 +79,9 @@ all the highest-value "same-tool" ones.
   Dataverse SDK; low feasibility until a separate Power Automate API is wired.
 - **Solution Quality Score, Technical Debt Trends** — better built as **extensions of shipped tools**
   (Solution Complexity Score; a "Trends" tab on Technical Debt Analyzer) than as new tools.
-  **SOLN4 has now shipped** as Solution Complexity Score's **FEAT-SC-4** (build-quality score over the same
-  `ComponentCounts`); **RPT4** is the next extension (Trends tab on Technical Debt Analyzer). See
+  **Both have now shipped as extensions:** **SOLN4** as Solution Complexity Score's **FEAT-SC-4**
+  (build-quality score over the same `ComponentCounts`), and **RPT4** as Technical Debt Analyzer's
+  **FEAT-TD-4** (a Trends tab charting the debt score run-over-run from per-machine JSON snapshots). See
   [../design/SOLN4-RPT4-extensions.md](../design/SOLN4-RPT4-extensions.md).
 - **The 9 AI Assistants** — build after their deterministic tracks exist, then layer on the shipped
   AI Solution Reviewer plumbing.

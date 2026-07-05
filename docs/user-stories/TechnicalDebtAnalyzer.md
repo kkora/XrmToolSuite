@@ -9,9 +9,10 @@ debt on a 0–100 scale with a Low/Medium/High band, and lists prioritized clean
 severity-coloured grid. Read-only (queries metadata, plugin registration, web resources, processes and
 roles; never modifies anything). Findings project to the suite-shared `ReportModel` and export to Excel,
 PDF, HTML, JSON and a Markdown cleanup checklist, plus an executive summary that is offline-templated by
-default with an auditable, opt-in AI path. The SDK-free scoring/report projection and every analyzer are
-covered headlessly against a fake `IOrganizationService`; the WinForms UI, the five exporters and the
-AI/offline summary are manual-tested against a live org.
+default with an auditable, opt-in AI path. A **Trends** tab (FEAT-TD-4) charts the debt score run-over-run
+from per-machine JSON snapshots. The SDK-free scoring/report projection, the trend store/analytics and every
+analyzer are covered headlessly against a fake `IOrganizationService`; the WinForms UI, the five exporters,
+the Trends tab/chart and the AI/offline summary are manual-tested against a live org.
 
 ---
 
@@ -91,8 +92,24 @@ without writing any queries by hand.
     dialog (`ShowConsentDialog`) that shows the anonymized JSON before sending; component names in the
     payload are toggleable. *(Manual — `TC-TD-M-09`.)*
 
+## FEAT-TD-4 — Debt trends over time `[Implemented]`
+> Formerly the standalone **RPT4 Technical Debt Trends** candidate; built as a Trends tab here (trends need
+> the tool's own run-over-run history, which this tool already produces on each scan).
+- **US-TD-8** `[Implemented]` A **Trends** tab that charts the debt score run-over-run per environment, so I
+  can see whether debt is falling over successive cleanup sprints.
+  - **AC:** Each completed scan records a `DebtSnapshot` (timestamp, environment, score, band, total +
+    per-category counts) via `TrendStore.Append` — capped to the most recent 100 per environment, with a
+    same-run dedupe guard — persisted as **local per-machine JSON** (`TrendHistoryFile`, under the XrmToolBox
+    Settings folder). **No Dataverse writes** — the tool stays read-only against the org. The store/analytics
+    logic is SDK-free. **Automated** — `TC-TD-TREND-01..08` (append / per-env cap / same-run dedupe / per-env
+    isolation; run-over-run delta, improving/worsening direction, series, best/worst).
+  - **AC:** The Trends tab (a `TabControl` alongside the Dashboard) shows a runs grid, a **dependency-free
+    GDI** score-over-time line chart, a "since last run" delta banner (▼ improving / ▲ worsening), a
+    confirmation-gated **Clear history** action, and CSV/JSON export of the snapshot series. *(Tab, chart and
+    live capture: manual — `TC-TD-M-10..12`.)*
+
 ## Definition of Done
-- Follows suite conventions (BaseToolControl, RunAsync/RetrieveAll semantics, Load/SaveSettings, progress + cancellation). Read-only — no destructive ops.
+- Follows suite conventions (BaseToolControl, RunAsync/RetrieveAll semantics, Load/SaveSettings, progress + cancellation). Read-only — no destructive ops (trend history is local-only; Clear history is confirmation-gated).
 - The eight analyzers and `TechDebtContext` stay UI-free and SDK-liftable, and degrade query/permission failures to empty results or informational findings instead of throwing.
 - Export formats: Excel, PDF, HTML, JSON, Markdown; executive summary offline-templated by default with an auditable AI opt-in whose key is never persisted. — **Done.**
-- Testing under `testing/TechnicalDebtAnalyzer/`; SDK-free scoring/report logic covered by `testing/UnitTests` (`TechDebtScoreTests`) and every analyzer by `testing/CollectorTests` (`TC-TD-COL-01..11`) against a fake `IOrganizationService`. — **Done** (WinForms UI, five exporters, and offline/AI summary pending manual sign-off: `TC-TD-M-01..09`).
+- Testing under `testing/TechnicalDebtAnalyzer/`; SDK-free scoring/report logic covered by `testing/UnitTests` (`TechDebtScoreTests`), the trend store/analytics by `testing/UnitTests/TechDebtTrendsTests.cs` (`TC-TD-TREND-01..08`), and every analyzer by `testing/CollectorTests` (`TC-TD-COL-01..11`) against a fake `IOrganizationService`. — **Done** (WinForms UI, five exporters, Trends tab/chart, and offline/AI summary pending manual sign-off: `TC-TD-M-01..12`).

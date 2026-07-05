@@ -42,6 +42,10 @@
 
     <!-- Technical Debt Analyzer: SDK-free scoring/report projection (no Dataverse/ClosedXML/MigraDoc). -->
     <Compile Include="..\..\src\Tools\XrmToolSuite.TechnicalDebtAnalyzer\Reporting\TechDebtReport.cs" />
+    <!-- RPT4 Debt Trends: SDK-free snapshot list logic + analytics (JSON/file layer is Newtonsoft, excluded). -->
+    <Compile Include="..\..\src\Tools\XrmToolSuite.TechnicalDebtAnalyzer\Trends\DebtSnapshot.cs" />
+    <Compile Include="..\..\src\Tools\XrmToolSuite.TechnicalDebtAnalyzer\Trends\TrendStore.cs" />
+    <Compile Include="..\..\src\Tools\XrmToolSuite.TechnicalDebtAnalyzer\Trends\TrendAnalytics.cs" />
 
     <!-- Solution Complexity Score: SDK-free metric/effort model, quality score + report projection. -->
     <Compile Include="..\..\src\Tools\XrmToolSuite.SolutionComplexityScore\Analysis\ComponentCounts.cs" />

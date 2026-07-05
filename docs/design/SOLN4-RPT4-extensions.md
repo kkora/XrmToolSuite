@@ -1,6 +1,7 @@
 # Design — SOLN4 & RPT4 as extensions of shipped tools
 
-> **Status:** approach approved (decisions locked below); implementation not started.
+> **Status:** ✅ **implemented.** SOLN4 shipped as Solution Complexity Score **FEAT-SC-4**; RPT4 shipped as
+> Technical Debt Analyzer **FEAT-TD-4**. Decisions (locked) below were followed as-is.
 > Both are built by **extending a shipped tool**, not as new `src/Tools/` projects (per the NEXT-20
 > "deliberately deferred" note). Neither adds a Dataverse write path.
 
