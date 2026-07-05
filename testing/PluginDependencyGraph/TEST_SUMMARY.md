@@ -42,3 +42,9 @@ with screenshots captured under `screenshots/`.
 SDK-free engine is complete and green (11/11 automated). The tool builds cleanly in Release with the full
 export dependency chain. Manual Dataverse/UI verification (load, filters, focus, details, exports, settings)
 is pending a live XrmToolBox session.
+
+## Live UI smoke test (XrmToolBox)
+
+- **Command:** `dotnet test testing/UiSmokeTests/UiSmokeTests.csproj` with `XTB_EXE` set, on 2026-07-05.
+- **Result:** PASS — real XrmToolBox v1.2025.10.74 (FlaUI) confirms **Plugin Dependency Graph** loads and appears in the Tools list (24/24 suite tools verified in one run).
+- **Evidence:** `screenshots/xrmtoolbox-tools-list.png` — the Tools tab filtered to **Plugin Dependency Graph** v1.2026.7.2 (Kanchan Kora).

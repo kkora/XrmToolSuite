@@ -32,3 +32,9 @@ and activity rules). The Release build is clean (0 warnings / 0 errors) and the 
 dependency chain lands in the tool output. Manual GUI/live and export cases are **Pending** a Windows +
 XrmToolBox + Dataverse session and are not claimed as passed.
 </content>
+
+## Live UI smoke test (XrmToolBox)
+
+- **Command:** `dotnet test testing/UiSmokeTests/UiSmokeTests.csproj` with `XTB_EXE` set, on 2026-07-05.
+- **Result:** PASS — real XrmToolBox v1.2025.10.74 (FlaUI) confirms **Audit Compliance Checker** loads and appears in the Tools list (24/24 suite tools verified in one run).
+- **Evidence:** `screenshots/xrmtoolbox-tools-list.png` — the Tools tab filtered to **Audit Compliance Checker** v1.2026.7.2 (Kanchan Kora).

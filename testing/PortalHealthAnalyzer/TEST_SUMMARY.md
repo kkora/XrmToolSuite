@@ -40,3 +40,9 @@ environment with a provisioned Power Pages website. They cannot run headlessly a
 The SDK-free health-scoring engine is complete and fully covered by passing automated tests. The tool builds
 cleanly with its Excel/PDF/Word export chain in place. Live GUI + Dataverse + export cases remain Pending a
 manual Windows/XrmToolBox session against a real Power Pages site.
+
+## Live UI smoke test (XrmToolBox)
+
+- **Command:** `dotnet test testing/UiSmokeTests/UiSmokeTests.csproj` with `XTB_EXE` set, on 2026-07-05.
+- **Result:** PASS — real XrmToolBox v1.2025.10.74 (FlaUI) confirms **Portal Health Analyzer** loads and appears in the Tools list (24/24 suite tools verified in one run).
+- **Evidence:** `screenshots/xrmtoolbox-tools-list.png` — the Tools tab filtered to **Portal Health Analyzer** v1.2026.7.2 (Kanchan Kora).

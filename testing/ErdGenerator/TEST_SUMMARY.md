@@ -45,3 +45,9 @@ Dataverse session; not run in this environment).
 - PNG and PDF exporters are implemented to suite convention (System.Drawing / MigraDoc types confined to
   method bodies) and compile into the tool, but their rendered output is only verifiable in a live Windows
   session; marked `[Implemented*]` in the user stories pending manual sign-off.
+
+## Live UI smoke test (XrmToolBox)
+
+- **Command:** `dotnet test testing/UiSmokeTests/UiSmokeTests.csproj` with `XTB_EXE` set, on 2026-07-05.
+- **Result:** PASS — real XrmToolBox v1.2025.10.74 (FlaUI) confirms **ERD Generator** loads and appears in the Tools list (24/24 suite tools verified in one run).
+- **Evidence:** `screenshots/xrmtoolbox-tools-list.png` — the Tools tab filtered to **ERD Generator** v1.2026.7.2 (Kanchan Kora).

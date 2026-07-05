@@ -29,3 +29,9 @@ dependency chains in the Plugins root.
 
 **Manual GUI/Dataverse cases (TC-20…TC-26): PENDING** — to be executed in a Windows + XrmToolBox session
 against a real org, with a screenshot captured per case under `screenshots/`.
+
+## Live UI smoke test (XrmToolBox)
+
+- **Command:** `dotnet test testing/UiSmokeTests/UiSmokeTests.csproj` with `XTB_EXE` set, on 2026-07-05.
+- **Result:** PASS — real XrmToolBox v1.2025.10.74 (FlaUI) confirms **Flow Dependency Analyzer** loads and appears in the Tools list (24/24 suite tools verified in one run).
+- **Evidence:** `screenshots/xrmtoolbox-tools-list.png` — the Tools tab filtered to **Flow Dependency Analyzer** v1.2026.7.2 (Kanchan Kora).

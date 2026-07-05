@@ -27,3 +27,9 @@ and are to be executed there, with a screenshot captured per case under `screens
 **Automated: PASS.** The SDK-free rule engine, scoring/banding, and FormXML event mapper are fully covered and
 green; the tool builds clean in Release with the export chain present. **Manual/live and export cases remain
 Pending** a Windows + XrmToolBox + Dataverse session — not yet executed, not claimed as passed.
+
+## Live UI smoke test (XrmToolBox)
+
+- **Command:** `dotnet test testing/UiSmokeTests/UiSmokeTests.csproj` with `XTB_EXE` set, on 2026-07-05.
+- **Result:** PASS — real XrmToolBox v1.2025.10.74 (FlaUI) confirms **JavaScript Performance Analyzer** loads and appears in the Tools list (24/24 suite tools verified in one run).
+- **Evidence:** `screenshots/xrmtoolbox-tools-list.png` — the Tools tab filtered to **JavaScript Performance Analyzer** v1.2026.7.2 (Kanchan Kora).

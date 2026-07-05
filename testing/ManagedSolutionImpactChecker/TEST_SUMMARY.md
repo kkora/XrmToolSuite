@@ -30,3 +30,9 @@ with a screenshot saved under `screenshots/` per case.
 **Automated: PASS.** The pure layering engine is fully covered and green, and the tool builds clean with the
 export chain shipped. **Manual GUI + live-Dataverse cases (collector, dashboard, exports) are Pending** an
 XrmToolBox session against a real org — not yet executed, so not reported as passed.
+
+## Live UI smoke test (XrmToolBox)
+
+- **Command:** `dotnet test testing/UiSmokeTests/UiSmokeTests.csproj` with `XTB_EXE` set, on 2026-07-05.
+- **Result:** PASS — real XrmToolBox v1.2025.10.74 (FlaUI) confirms **Managed Solution Impact Checker** loads and appears in the Tools list (24/24 suite tools verified in one run).
+- **Evidence:** `screenshots/xrmtoolbox-tools-list.png` — the Tools tab filtered to **Managed Solution Impact Checker** v1.2026.7.2 (Kanchan Kora).
