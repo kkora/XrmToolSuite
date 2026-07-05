@@ -1,6 +1,10 @@
 # Markdown Documentation Generator — User Stories (Candidate / Backlog)
 
-> **Status:** Candidate backlog — not started (no code).
+> **Status:** ✅ **FOLDED INTO SOLN05 (Solution Documentation Generator, shipped)** — not built as a separate
+> plugin. Markdown output ships as SOLN05's SDK-free `DocRenderers.Markdown` + "Markdown (.md)" export (title,
+> per-section headers, tables, fenced Mermaid diagrams). See `US-SOLN05.5.1` / `TC-SOLN05-MD-08`. A duplicate
+> plugin over the same extracted model was rejected; multi-file folder output is an optional future SOLN05
+> extension, not a new tool.
 > **Source:** `all` — `prompt/3.XrmToolBox_ALL_PROMPTS.txt`, Section 11 (Documentation), item 3. Not in pack file (except ERD/Doc generators relate to pack #11).
 > **Suggested tag:** `DOC03` · **Suggested project:** `XrmToolSuite.MarkdownDocumentationGenerator`
 > **Overlaps:** **Solution Documentation Generator** (SOLN05 candidate) — STRONG overlap: this is the Markdown-format renderer over the same extracted solution/metadata model. **Word / HTML Documentation Generators** (DOC04/DOC05) are sibling renderers — share the extracted model + section engine. Mermaid diagram output overlaps **ERD Generator** (DOC02) and **Architecture Diagram Generator** (DOC01) — reuse their Mermaid emitters. **Deployment Risk Analyzer** / **Attribute Auditor** (SHIPPED) show export patterns (HTML/CSV) to reuse.

@@ -1,6 +1,10 @@
 # Word Documentation Generator — User Stories (Candidate / Backlog)
 
-> **Status:** Candidate backlog — not started (no code).
+> **Status:** ✅ **FOLDED INTO SOLN05 (Solution Documentation Generator, shipped)** — not built as a separate
+> plugin. Word (DOCX) + PDF output ships as SOLN05's `DocWordExporter` (OpenXML) and `DocPdfExporter`
+> (MigraDoc-GDI) via the sanctioned export dependency chain, plus "Word (.docx)" / "PDF (.pdf)" exports. See
+> `US-SOLN05.5.1`. A duplicate plugin over the same extracted model was rejected; bespoke DOCX templates are
+> an optional future SOLN05 extension, not a new tool.
 > **Source:** `all` — `prompt/3.XrmToolBox_ALL_PROMPTS.txt`, Section 11 (Documentation), item 4. Not in pack file (except ERD/Doc generators relate to pack #11).
 > **Suggested tag:** `DOC04` · **Suggested project:** `XrmToolSuite.WordDocumentationGenerator`
 > **Overlaps:** **Solution Documentation Generator** (SOLN05 candidate) — STRONG overlap: this is the DOCX/PDF renderer over the same extracted model. **Markdown / HTML Documentation Generators** (DOC03/DOC05) are sibling renderers — share the extracted model + section engine. Diagram insertion overlaps **Architecture Diagram Generator** (DOC01) / **ERD Generator** (DOC02) — embed their SVG/PNG output. **Deployment Risk Analyzer** (SHIPPED) already produces PDF/Excel via the sanctioned chains — reuse those.

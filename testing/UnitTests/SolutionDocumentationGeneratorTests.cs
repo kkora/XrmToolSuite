@@ -213,6 +213,50 @@ namespace XrmToolSuite.UnitTests
             Assert.Contains(">" + SectionKinds.Title(SectionKinds.Roles) + "<", html);
         }
 
+        // TC-SOLN05-PORTAL-11 (US-SOLN05.5.2 / DOC05 fold-in): the HTML portal is a self-contained,
+        // offline, searchable single-file site — sidebar TOC entry per section, a search input, an
+        // inline script (no external assets), and a theme toggle.
+        [Fact]
+        public void HtmlPortal_IsSelfContainedSearchablePortal()
+        {
+            var doc = DocBuilder.Build(Sample(), new DocOptions { Mode = DocMode.FullReference, BrandingHeader = "Contoso Ltd" });
+            var portal = DocRenderers.HtmlPortal(doc);
+
+            Assert.StartsWith("<!DOCTYPE html>", portal);
+            Assert.Contains("id=\"search\"", portal);                       // client-side search box
+            Assert.Contains("prefers-color-scheme:dark", portal);          // theme-aware
+            Assert.Contains("id=\"themeBtn\"", portal);                    // light/dark toggle
+            Assert.Contains("<script>", portal);                           // inline behaviour, offline
+            Assert.Contains("Contoso Ltd", portal);                        // branding header rendered
+            // Offline: no external CDN/asset fetches (ignore the DOCTYPE/namespace w3.org references).
+            Assert.DoesNotContain("http://", portal.Replace("http://www.w3", ""));
+            Assert.DoesNotContain("https://", portal);
+            // Every rendered section gets a sidebar TOC anchor and a matching section element.
+            foreach (var s in doc.Sections)
+            {
+                var id = "sec-" + new string(s.Kind.Where(char.IsLetterOrDigit).ToArray()).ToLowerInvariant();
+                Assert.Contains("href=\"#" + id + "\"", portal);           // TOC link
+                Assert.Contains("id=\"" + id + "\"", portal);              // section anchor
+            }
+        }
+
+        // TC-SOLN05-PORTAL-12 (US-SOLN05.5.2): portal HTML-escapes content so injected markup cannot break out.
+        [Fact]
+        public void HtmlPortal_EscapesContent()
+        {
+            var scan = Sample();
+            scan.Components.Add(new ScanComponent
+            {
+                Category = SectionKinds.WebResources, ComponentType = "JScript",
+                Name = "<script>alert(1)</script>", SchemaName = "new_evil"
+            });
+            var doc = DocBuilder.Build(scan, new DocOptions { Mode = DocMode.FullReference });
+            var portal = DocRenderers.HtmlPortal(doc);
+
+            Assert.Contains("&lt;script&gt;alert(1)&lt;/script&gt;", portal);
+            Assert.DoesNotContain("<script>alert(1)</script>", portal);
+        }
+
         // TC-SOLN05-JSON-10 (US-SOLN05.5.1): JSON carries the structured inventory + sections.
         [Fact]
         public void Json_CarriesStructuredInventoryAndSections()

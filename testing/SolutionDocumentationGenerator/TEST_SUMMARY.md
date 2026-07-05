@@ -7,15 +7,16 @@ Dataverse session; not run in this environment).
 
 ## Automated results
 
-- Suite: `testing/UnitTests/SolutionDocumentationGeneratorTests.cs` (10 cases: TC-SOLN05-COUNT-01,
+- Suite: `testing/UnitTests/SolutionDocumentationGeneratorTests.cs` (12 cases: TC-SOLN05-COUNT-01,
   TC-SOLN05-MODE-02/03/04, TC-SOLN05-SECT-05, TC-SOLN05-SCHEMA-06, TC-SOLN05-NA-07, TC-SOLN05-MD-08,
-  TC-SOLN05-HTML-09, TC-SOLN05-JSON-10).
-- Result: **10 passed, 0 failed** (executed against the SDK-free `Doc/DocModels.cs`, `Doc/DocBuilder.cs`,
-  `Doc/DocRenderers.cs` sources).
+  TC-SOLN05-HTML-09, TC-SOLN05-JSON-10, TC-SOLN05-PORTAL-11, TC-SOLN05-PORTAL-12).
+- Result: **12 passed, 0 failed** (executed against the SDK-free `Doc/DocModels.cs`, `Doc/DocBuilder.cs`,
+  `Doc/DocRenderers.cs` sources; full suite `dotnet test testing/UnitTests` = 412 passed).
 - Coverage: the `SolutionScanData.ComponentCount` rollup, the `DocBuilder` documentation-mode gating
   (Executive Summary / Standard Reference / Full Solution Reference), the sections checklist, per-table
   column detail at Full Reference, "not available" degradation, and the `DocRenderers` Markdown / HTML /
-  JSON output (well-formed, theme-aware, branding, structured inventory).
+  JSON output (well-formed, theme-aware, branding, structured inventory) plus the **searchable HTML portal**
+  (self-contained/offline, sidebar TOC per section, search box + theme toggle, HTML escaping — folds in DOC05).
 
 > Note: `testing/UnitTests/UnitTests.csproj` must include the three SDK-free `Doc/*.cs` sources for the
 > suite runner to compile these tests — the exact `<Compile Include=.../>` lines are listed in the
@@ -27,8 +28,8 @@ Dataverse session; not run in this environment).
 
 | Group | Cases | Executed | Pass | Fail | Pending |
 |---|---|---|---|---|---|
-| Automated | 10 | 10 | 10 | 0 | 0 |
-| Manual | 15 | 0 | 0 | 0 | 15 |
+| Automated | 12 | 12 | 12 | 0 | 0 |
+| Manual | 16 | 0 | 0 | 0 | 16 |
 
 ## Build
 

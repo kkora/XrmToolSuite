@@ -188,9 +188,9 @@ Value = my read (see each file's header for the reasoning). Legend: **H**igh · 
 |---|---|---|---|
 | DOC01.ArchitectureDiagramGenerator.md | Architecture Diagram Generator | M | overlaps Knowledge Graph |
 | DOC02.ErdGenerator.md | ERD Generator | H | |
-| DOC03.MarkdownDocumentationGenerator.md | Markdown Documentation Generator | H | Git/wiki-friendly |
-| DOC04.WordDocumentationGenerator.md | Word Documentation Generator | M-H | DOCX via OpenXml |
-| DOC05.HtmlDocumentationPortal.md | HTML Documentation Portal | M-H | |
+| DOC03.MarkdownDocumentationGenerator.md | Markdown Documentation Generator | H | ✅ folded into SOLN05 (Markdown export) |
+| DOC04.WordDocumentationGenerator.md | Word Documentation Generator | M-H | ✅ folded into SOLN05 (Word/PDF export) |
+| DOC05.HtmlDocumentationPortal.md | HTML Documentation Portal | M-H | ✅ folded into SOLN05 (searchable HTML portal) |
 | DOC06.ApiDocumentationBuilder.md | API Documentation Builder | M-H | redact secrets |
 
 > The DOC track are format-specific renderers over one shared extracted model (reuse ADMIN07

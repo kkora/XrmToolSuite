@@ -72,17 +72,28 @@ Reference) and exported to Word/PDF/Markdown/HTML/Excel/JSON.
     *(Manual — GUI/live.)*
 
 ## FEAT-SOLN05-5 — Multi-format export `[Implemented]`
+> **Folds in DOC03 (Markdown), DOC04 (Word), and DOC05 (HTML Portal)** — those candidate tools were
+> retired as separate plugins because they are format renderers over this same extracted model. Markdown =
+> DOC03, Word/PDF = DOC04, and the searchable offline HTML portal = DOC05.
 - **US-SOLN05.5.1** `[Implemented]` Export to Word, PDF, Markdown, HTML, Excel and JSON.
   - **AC:** Markdown/HTML/JSON via the SDK-free `DocRenderers`; Word via OpenXML (`DocWordExporter`); PDF via
     MigraDoc-GDI (`DocPdfExporter`); Excel via ClosedXML (`DocExcelExporter`) using the sanctioned dependency
     chain; HTML is self-contained + theme-aware; JSON carries the structured inventory; export runs off the
     UI thread. **Automated** — `TC-SOLN05-MD-08`, `TC-SOLN05-HTML-09`, `TC-SOLN05-JSON-10`; Word/PDF/Excel
     *(Manual — runtime)*.
+- **US-SOLN05.5.2** `[Implemented]` **(folds in DOC05)** Export a **searchable, offline HTML portal** — a
+  single self-contained file with a sticky sidebar table-of-contents, client-side search that filters
+  sections and table rows, collapsible sections, and a light/dark theme toggle — **so that** support,
+  training, audit, and client teams browse accurate docs in a browser with no server or CDN.
+  - **AC:** `DocRenderers.HtmlPortal` (SDK-free, BCL-only) emits one HTML file that browses from `file://`
+    with all CSS/JS inlined (no external asset fetch); search works offline; content is HTML-escaped;
+    export runs off the UI thread and is previewable ("HTML Portal source"). **Automated** —
+    `TC-SOLN05-PORTAL-11` (self-contained/searchable/TOC-per-section), `TC-SOLN05-PORTAL-12` (escaping).
 
 ## Definition of Done
 - Follows suite conventions (BaseToolControl, RunAsync/RetrieveAll, Load/SaveSettings, progress+cancel);
   reuses the sanctioned ClosedXML + PdfSharp/MigraDoc-GDI export dependency chain.
 - Read-only; the documentation/template engine (`DocBuilder`) stays UI-free and SDK-free and degrades
   unavailable component types to documented notes.
-- Export formats: Word, PDF, Markdown, HTML, Excel, JSON.
+- Export formats: Word, PDF, Markdown, HTML, searchable HTML portal, Excel, JSON.
 - Testing artifacts under `testing/SolutionDocumentationGenerator/`.

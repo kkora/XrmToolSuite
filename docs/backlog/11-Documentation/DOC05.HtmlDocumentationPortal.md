@@ -1,6 +1,11 @@
 # HTML Documentation Portal — User Stories (Candidate / Backlog)
 
-> **Status:** Candidate backlog — not started (no code).
+> **Status:** ✅ **FOLDED INTO SOLN05 (Solution Documentation Generator, shipped)** — not built as a separate
+> plugin. The searchable, offline HTML portal ships as SOLN05's `DocRenderers.HtmlPortal` renderer + "HTML
+> Portal (searchable)" export (single self-contained file: sidebar TOC, client-side search, collapsible
+> sections, light/dark toggle). See `US-SOLN05.5.2`. Building a duplicate plugin over the same extracted
+> model was rejected. Remaining backlog-only ideas (multi-file folder/ZIP site, embedded SVG diagram pages)
+> are optional future extensions of SOLN05, not a new tool.
 > **Source:** `all` — `prompt/3.XrmToolBox_ALL_PROMPTS.txt`, Section 11 (Documentation), item 5. Not in pack file (except ERD/Doc generators relate to pack #11).
 > **Suggested tag:** `DOC05` · **Suggested project:** `XrmToolSuite.HtmlDocumentationPortal`
 > **Overlaps:** **Solution Documentation Generator** (SOLN05 candidate) — STRONG overlap: this is the static-HTML-site renderer over the same extracted model. **Markdown / Word Documentation Generators** (DOC03/DOC04) are sibling renderers — share the extracted model + section engine. Diagram/dependency pages overlap **Architecture Diagram Generator** (DOC01) / **ERD Generator** (DOC02) / **Solution Knowledge Graph** (SHIPPED) — embed their SVG/Mermaid. **Deployment Risk Analyzer** / **Attribute Auditor** (SHIPPED) already emit self-contained HTML — reuse that pattern.

@@ -18,7 +18,7 @@ namespace XrmToolSuite.SolutionDocumentationGenerator
     /// Read-only tool that scans a Dataverse solution and generates a multi-section document (inventory,
     /// schema, forms/views, apps, automation, plug-ins, web resources, custom APIs, configuration, roles,
     /// diagrams, release notes, architecture summary) in a chosen documentation mode, previews it, and
-    /// exports to Word, PDF, Markdown, HTML, Excel or JSON. Follows the suite patterns (BaseToolControl,
+    /// exports to Word, PDF, Markdown, HTML, a searchable offline HTML portal, Excel or JSON. Follows the suite patterns (BaseToolControl,
     /// RunAsync, Load/SaveSettings). Ships the full ClosedXML + PdfSharp/MigraDoc-GDI export chain.
     /// </summary>
     public partial class SolutionDocumentationGeneratorControl : BaseToolControl, IGitHubPlugin, IHelpPlugin
@@ -29,6 +29,7 @@ namespace XrmToolSuite.SolutionDocumentationGenerator
 
         private const string PreviewMarkdown = "Markdown";
         private const string PreviewHtml = "HTML source";
+        private const string PreviewPortal = "HTML Portal source";
 
         private readonly DocCollector _collector = new DocCollector();
         private SolutionDocGeneratorSettings _settings = new SolutionDocGeneratorSettings();
@@ -45,7 +46,7 @@ namespace XrmToolSuite.SolutionDocumentationGenerator
             foreach (var kind in SectionKinds.All)
                 clbSections.Items.Add(SectionKinds.Title(kind), true);
 
-            tscPreview.Items.AddRange(new object[] { PreviewMarkdown, PreviewHtml });
+            tscPreview.Items.AddRange(new object[] { PreviewMarkdown, PreviewHtml, PreviewPortal });
             tscPreview.SelectedIndex = 0;
 
             tsbExport.DropDownItems.Add("Word (.docx)", null, (s, e) => Export("word"));
@@ -53,6 +54,7 @@ namespace XrmToolSuite.SolutionDocumentationGenerator
             tsbExport.DropDownItems.Add("Excel (.xlsx)", null, (s, e) => Export("excel"));
             tsbExport.DropDownItems.Add("Markdown (.md)", null, (s, e) => Export("markdown"));
             tsbExport.DropDownItems.Add("HTML (.html)", null, (s, e) => Export("html"));
+            tsbExport.DropDownItems.Add("HTML Portal (searchable) (.html)", null, (s, e) => Export("portal"));
             tsbExport.DropDownItems.Add("JSON (.json)", null, (s, e) => Export("json"));
 
             tsbLoadSolutions.Click += (s, e) => ExecuteMethod(LoadSolutions);
@@ -228,9 +230,12 @@ namespace XrmToolSuite.SolutionDocumentationGenerator
         {
             if (_doc == null) { txtPreview.Clear(); return; }
             var mode = tscPreview.SelectedItem?.ToString() ?? PreviewMarkdown;
-            txtPreview.Text = mode == PreviewHtml
-                ? DocRenderers.Html(_doc)
-                : DocRenderers.Markdown(_doc);
+            switch (mode)
+            {
+                case PreviewHtml: txtPreview.Text = DocRenderers.Html(_doc); break;
+                case PreviewPortal: txtPreview.Text = DocRenderers.HtmlPortal(_doc); break;
+                default: txtPreview.Text = DocRenderers.Markdown(_doc); break;
+            }
             txtPreview.SelectionStart = 0;
             lblStats.Text = $"{_doc.Sections.Count} section(s) · mode: {_doc.ModeLabel} · previewing {mode}.";
         }
@@ -256,15 +261,17 @@ namespace XrmToolSuite.SolutionDocumentationGenerator
                 case "excel": filter = "Excel workbook|*.xlsx"; ext = "xlsx"; break;
                 case "markdown": filter = "Markdown|*.md"; ext = "md"; break;
                 case "html": filter = "HTML|*.html"; ext = "html"; break;
+                case "portal": filter = "HTML portal|*.html"; ext = "html"; break;
                 default: filter = "JSON|*.json"; ext = "json"; break;
             }
 
             var baseName = SafeFileName(_doc.UniqueName ?? _doc.SolutionName ?? "Solution");
+            var suffix = kind == "portal" ? "portal" : "documentation";
             string path;
             using (var dlg = new SaveFileDialog
             {
                 Filter = filter,
-                FileName = $"{baseName}_documentation_{DateTime.Now:yyyyMMdd_HHmm}.{ext}"
+                FileName = $"{baseName}_{suffix}_{DateTime.Now:yyyyMMdd_HHmm}.{ext}"
             })
             {
                 if (dlg.ShowDialog(this) != DialogResult.OK) return;
@@ -282,6 +289,7 @@ namespace XrmToolSuite.SolutionDocumentationGenerator
                         case "excel": DocExcelExporter.Export(doc, path); break;
                         case "markdown": File.WriteAllText(path, DocRenderers.Markdown(doc)); break;
                         case "html": File.WriteAllText(path, DocRenderers.Html(doc)); break;
+                        case "portal": File.WriteAllText(path, DocRenderers.HtmlPortal(doc)); break;
                         default: File.WriteAllText(path, DocRenderers.Json(doc)); break;
                     }
                     return path;

@@ -14,7 +14,7 @@ namespace XrmToolSuite.SolutionDocumentationGenerator
     // silently drops the tool from the Tools list (no error). PluginIcons supplies suite defaults.
     [Export(typeof(IXrmToolBoxPlugin)),
      ExportMetadata("Name", "Solution Documentation Generator"),
-     ExportMetadata("Description", "Scans a Dataverse solution and generates multi-section technical/business documentation (schema, UI, automation, plug-ins, web resources, custom APIs, config, roles, diagrams, summaries) exported to Word/PDF/Markdown/HTML/Excel/JSON."),
+     ExportMetadata("Description", "Scans a Dataverse solution and generates multi-section technical/business documentation (schema, UI, automation, plug-ins, web resources, custom APIs, config, roles, diagrams, summaries) exported to Word/PDF/Markdown/HTML/Excel/JSON or a searchable offline HTML portal."),
      ExportMetadata("SmallImageBase64", PluginIcons.Small),
      ExportMetadata("BigImageBase64", PluginIcons.Big),
      ExportMetadata("BackgroundColor", "#1B1B2F"),
