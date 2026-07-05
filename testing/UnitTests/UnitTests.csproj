@@ -120,6 +120,18 @@
     <Compile Include="..\..\src\Tools\XrmToolSuite.AuditComplianceChecker\Analysis\AuditModels.cs" />
     <Compile Include="..\..\src\Tools\XrmToolSuite.AuditComplianceChecker\Analysis\SensitivityHeuristics.cs" />
     <Compile Include="..\..\src\Tools\XrmToolSuite.AuditComplianceChecker\Analysis\AuditComplianceRules.cs" />
+
+    <!-- Managed Solution Impact Checker: SDK-free layering models + impact rules. -->
+    <Compile Include="..\..\src\Tools\XrmToolSuite.ManagedSolutionImpactChecker\Analysis\ImpactModels.cs" />
+    <Compile Include="..\..\src\Tools\XrmToolSuite.ManagedSolutionImpactChecker\Analysis\LayerImpactRules.cs" />
+
+    <!-- Portal Health Analyzer: SDK-free adx_/mspp_ normalized model + health rules. -->
+    <Compile Include="..\..\src\Tools\XrmToolSuite.PortalHealthAnalyzer\Analysis\PortalModels.cs" />
+    <Compile Include="..\..\src\Tools\XrmToolSuite.PortalHealthAnalyzer\Analysis\PortalHealthRules.cs" />
+
+    <!-- Solution Merge Assistant: SDK-free multi-solution comparison + merge verdict. -->
+    <Compile Include="..\..\src\Tools\XrmToolSuite.SolutionMergeAssistant\Analysis\MergeModels.cs" />
+    <Compile Include="..\..\src\Tools\XrmToolSuite.SolutionMergeAssistant\Analysis\MergeRules.cs" />
   </ItemGroup>
 
 </Project>

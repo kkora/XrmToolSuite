@@ -41,6 +41,9 @@ namespace XrmToolSuite.UiSmokeTests
             "Form Performance Analyzer",
             "Sharing Analyzer",
             "Audit Compliance Checker",
+            "Managed Solution Impact Checker",
+            "Portal Health Analyzer",
+            "Solution Merge Assistant",
         };
 
         private readonly ITestOutputHelper _output;
