@@ -57,6 +57,10 @@ namespace XrmToolSuite.UiSmokeTests
         private readonly UIA3Automation _automation = new UIA3Automation();
         private Application _app;
 
+        // One timestamped run folder per execution; each tool gets its own subfolder with NN-indexed shots.
+        private static readonly string RunStamp = DateTime.Now.ToString("yyyyMMdd-HHmmss");
+        private readonly Dictionary<string, int> _toolShotIndex = new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase);
+
         public XrmToolBoxSmokeTest(ITestOutputHelper output) => _output = output;
 
         [Fact]
@@ -147,9 +151,8 @@ namespace XrmToolSuite.UiSmokeTests
                 try { window.Focus(); } catch { }
                 Thread.Sleep(800);
 
-                var dir = ScreenshotDir();
-                var stamp = DateTime.Now.ToString("yyyyMMdd-HHmmss");
-                var path = Path.Combine(dir, $"xrmtoolbox-tools_{foundCount}of{ExpectedTools.Length}_{stamp}.png");
+                // Overview shot lives at the run-folder root (not a per-tool folder).
+                var path = Path.Combine(RunDir(), $"tools-list_{foundCount}of{ExpectedTools.Length}.png");
                 try { Capture.Element(window).ToFile(path); }
                 catch { Capture.Screen().ToFile(path); } // window capture can fail if minimized/occluded
                 _output.WriteLine($"Screenshot saved: {path}");
@@ -245,7 +248,7 @@ namespace XrmToolSuite.UiSmokeTests
             try { window.SetForeground(); } catch { }
             Thread.Sleep(500);
 
-            var path = Path.Combine(ScreenshotDir(), $"tool_{Slug(tool)}_{DateTime.Now:yyyyMMdd-HHmmss}.png");
+            var path = NextToolShotPath(tool);
             try { Capture.Element(window).ToFile(path); }
             catch { Capture.Screen().ToFile(path); }
             _output.WriteLine($"Per-tool screenshot ({tool}): {path}");
@@ -300,6 +303,28 @@ namespace XrmToolSuite.UiSmokeTests
             if (string.IsNullOrWhiteSpace(dir)) dir = Path.Combine(Path.GetTempPath(), "xtb-ui-smoke");
             Directory.CreateDirectory(dir);
             return dir;
+        }
+
+        /// <summary>This run's root folder: &lt;screenshot-dir&gt;/&lt;run-timestamp&gt;/.</summary>
+        private static string RunDir()
+        {
+            var dir = Path.Combine(ScreenshotDir(), RunStamp);
+            Directory.CreateDirectory(dir);
+            return dir;
+        }
+
+        /// <summary>
+        /// Next screenshot path for a tool: &lt;run&gt;/&lt;tool-slug&gt;/&lt;tool-slug&gt;-NN.png, where NN counts
+        /// 00, 01, 02… per tool. Every tool gets its own folder inside the timestamped run folder.
+        /// </summary>
+        private string NextToolShotPath(string tool)
+        {
+            var slug = Slug(tool);
+            var toolDir = Path.Combine(RunDir(), slug);
+            Directory.CreateDirectory(toolDir);
+            _toolShotIndex.TryGetValue(slug, out var n);
+            _toolShotIndex[slug] = n + 1;
+            return Path.Combine(toolDir, $"{slug}-{n:00}.png");
         }
 
         /// <summary>Wait for a live XrmToolBox process, preferring one that already has a main window.</summary>
