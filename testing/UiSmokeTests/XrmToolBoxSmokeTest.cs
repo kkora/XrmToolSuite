@@ -34,6 +34,9 @@ namespace XrmToolSuite.UiSmokeTests
             "FetchXML Performance Analyzer",
             "Environment Inventory",
             "Privilege Gap Analyzer",
+            "View Performance Analyzer",
+            "Team Permission Explorer",
+            "ERD Generator",
         };
 
         private readonly ITestOutputHelper _output;
