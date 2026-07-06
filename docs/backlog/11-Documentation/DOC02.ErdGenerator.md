@@ -57,4 +57,4 @@
 - Follows suite conventions (BaseToolControl, RunAsync/RetrieveAll, Load/SaveSettings, progress+cancel); reuses the shared graph model/renderer and the sanctioned export dependency chains.
 - Read-only default; ERD graph/layout engine stays UI-free where possible and degrades missing metadata to documented notes.
 - Export formats: SVG, PNG, PDF, Mermaid, PlantUML, HTML, Markdown, JSON.
-- Testing skeleton under testing/ErdGenerator/ when implementation starts.
+- Testing skeleton under testing/Tools/ErdGenerator/ when implementation starts.

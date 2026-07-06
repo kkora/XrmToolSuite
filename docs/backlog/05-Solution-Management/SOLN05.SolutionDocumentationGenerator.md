@@ -55,4 +55,4 @@
 - Follows suite conventions (BaseToolControl, RunAsync/RetrieveAll, Load/SaveSettings, progress+cancel); reuses Solution Complexity Score / Knowledge Graph data and the sanctioned export dependency chains.
 - Read-only default; documentation/template engine stays UI-free where possible and degrades unavailable component types to documented notes.
 - Export formats: Word, PDF, Markdown, HTML, Excel, JSON.
-- Testing skeleton under testing/SolutionDocumentationGenerator/ when implementation starts.
+- Testing skeleton under testing/Tools/SolutionDocumentationGenerator/ when implementation starts.

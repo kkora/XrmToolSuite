@@ -61,4 +61,4 @@
 - Follows suite conventions (BaseToolControl, RunAsync/RetrieveAll, Load/SaveSettings, progress+cancel).
 - Read-only default (no import/write); comparison analyzers stay UI-free and degrade query failures to Info findings.
 - Export formats: Excel, PDF, JSON, HTML.
-- Testing skeleton under testing/SolutionMergeAssistant/ when implementation starts.
+- Testing skeleton under testing/Tools/SolutionMergeAssistant/ when implementation starts.

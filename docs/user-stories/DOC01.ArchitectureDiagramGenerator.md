@@ -2,7 +2,7 @@
 
 > **Tool:** `XrmToolSuite.ArchitectureDiagramGenerator` · **Tag:** `DOC01`
 > **Source spec:** [docs/backlog/11-Documentation/DOC01.ArchitectureDiagramGenerator.md](../backlog/11-Documentation/DOC01.ArchitectureDiagramGenerator.md)
-> **Testing:** [testing/ArchitectureDiagramGenerator/](../../testing/ArchitectureDiagramGenerator/)
+> **Testing:** [testing/Tools/ArchitectureDiagramGenerator/](../../testing/Tools/ArchitectureDiagramGenerator/)
 
 Read-only tool that turns a Dataverse solution's components + platform dependencies into an architecture
 diagram. Components are classified into architectural **layers** (Apps, UI, Automation, Code, Data, Security,
@@ -79,4 +79,4 @@ rendered in a chosen layout style and exported to Mermaid, PlantUML, DOT, Markdo
 - Read-only default; the model + emitters stay UI-free / SDK-free and degrade unavailable data to documented
   notes; HTML/SVG render offline with no external CDN. BCL-only (no export dependency chain).
 - Export formats: Mermaid, PlantUML, DOT/Graphviz, Markdown, self-contained HTML, JSON.
-- Testing artifacts under `testing/ArchitectureDiagramGenerator/`; SDK-free tests in `testing/UnitTests`.
+- Testing artifacts under `testing/Tools/ArchitectureDiagramGenerator/`; SDK-free tests in `testing/UnitTests`.

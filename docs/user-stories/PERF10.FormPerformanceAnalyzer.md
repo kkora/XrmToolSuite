@@ -97,4 +97,4 @@ chain, so it ships as a single DLL). Weights/thresholds are configurable and per
 ## Definition of Done
 - Follows suite conventions; read-only; single-DLL; CSV/HTML export only.
 - Scoring/parsing engine is UI-free and covered by `testing/UnitTests/FormPerformanceAnalyzerTests.cs`.
-- Testing artifacts under `testing/FormPerformanceAnalyzer/` kept current.
+- Testing artifacts under `testing/Tools/FormPerformanceAnalyzer/` kept current.

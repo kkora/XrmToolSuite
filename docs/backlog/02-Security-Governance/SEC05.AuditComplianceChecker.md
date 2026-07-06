@@ -51,4 +51,4 @@
 
 ## Definition of Done
 - Follows suite conventions; read-only default; sensitive values masked in exports; export formats: Excel, PDF, CSV, HTML.
-- Testing skeleton under testing/AuditComplianceChecker/ when implementation starts.
+- Testing skeleton under testing/Tools/AuditComplianceChecker/ when implementation starts.

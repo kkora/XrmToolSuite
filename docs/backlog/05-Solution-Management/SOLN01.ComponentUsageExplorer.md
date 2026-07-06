@@ -57,4 +57,4 @@
 - Follows suite conventions (BaseToolControl, RunAsync/RetrieveAll, Load/SaveSettings, progress+cancel); settings round-trip in Load/ClosingPlugin.
 - Read-only default (no write/delete); usage-detection and impact-scoring analyzers stay UI-free and degrade query failures to Info findings.
 - Export formats: Excel, PDF, JSON, HTML.
-- Testing skeleton under testing/ComponentUsageExplorer/ when implementation starts.
+- Testing skeleton under testing/Tools/ComponentUsageExplorer/ when implementation starts.

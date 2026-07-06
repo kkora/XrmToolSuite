@@ -84,4 +84,4 @@ circular-dependency detection, an interactive HTML view, and PNG/SVG/GraphML exp
 - Read-only; the graph model, algorithms (trace/impact/cycles) and GraphML/SVG/HTML exporters stay UI-free and SDK-free, and the builder degrades query failures instead of throwing.
 - Ships only its own DLL — no ClosedXML/MigraDoc; GraphML/SVG/HTML are pure strings and PNG uses the net48 System.Drawing GAC assembly. — **Done.**
 - Export formats: GraphML, SVG, PNG, interactive HTML. — **Done.**
-- Testing under `testing/SolutionKnowledgeGraph/`; SDK-free logic covered by `testing/UnitTests` (`GraphTests`, `TC-SOLN09-MODEL/TRACE/IMPACT/CYCLE/EXPORT`) and the builder by `testing/CollectorTests` (`GraphBuilderTests`, `TC-SOLN09-COL-01..09`). — **Done** (PNG/browser/WinForms UI pending manual sign-off).
+- Testing under `testing/Tools/SolutionKnowledgeGraph/`; SDK-free logic covered by `testing/UnitTests` (`GraphTests`, `TC-SOLN09-MODEL/TRACE/IMPACT/CYCLE/EXPORT`) and the builder by `testing/CollectorTests` (`GraphBuilderTests`, `TC-SOLN09-COL-01..09`). — **Done** (PNG/browser/WinForms UI pending manual sign-off).

@@ -23,15 +23,16 @@ testing/
     ReportTests.csproj          # compiles src/Shared/Reporting/*.cs with ClosedXML + PdfSharp/MigraDoc
   UiSmokeTests/                 # Tier-3 FlaUI UI smoke tests (net48) — interactive, opt-in, NOT in CI
     UiSmokeTests.csproj         # drives the real XrmToolBox host; asserts the suite tools load
-  _templates/                   # tokenized skeletons stamped into testing/<Tool>/ by New-Tool.ps1
+  _templates/                   # tokenized skeletons stamped into testing/Tools/<Tool>/ by New-Tool.ps1
     TEST_PLAN.md
     TEST_CASES.md
     TEST_SUMMARY.md
-  <ToolName>/                   # one folder per tool
-    TEST_PLAN.md                # scope, approach, environments, risks
-    TEST_CASES.md               # numbered cases: steps, expected result, type, status
-    TEST_SUMMARY.md             # execution results (automated + manual), date, verdict
-    screenshots/                # captured evidence from manual/GUI runs
+  Tools/                        # per-tool test artifacts (docs + evidence), one folder per tool
+    <ToolName>/
+      TEST_PLAN.md              # scope, approach, environments, risks
+      TEST_CASES.md             # numbered cases: steps, expected result, type, status
+      TEST_SUMMARY.md           # execution results (automated + manual), date, verdict
+      screenshots/              # captured evidence from manual/GUI runs
 ```
 
 ## The workflow (per tool, on create or update)
@@ -41,13 +42,13 @@ For each new or updated tool, produce - in this order:
 1. **Plan** - the tool's user stories in [`docs/user-stories/`](../docs/user-stories/README.md) and a
    `TEST_PLAN.md` here.
 2. **Tool** - implement/update the tool under `src/Tools/`.
-3. **Test cases** - write/refresh `testing/<Tool>/TEST_CASES.md`, tracing each case to a user story.
+3. **Test cases** - write/refresh `testing/Tools/<Tool>/TEST_CASES.md`, tracing each case to a user story.
 4. **Execute** - run automated tests (`dotnet test`) and perform manual/GUI cases; drop screenshots
-   into `testing/<Tool>/screenshots/`.
-5. **Summary** - record results and verdict in `testing/<Tool>/TEST_SUMMARY.md`.
+   into `testing/Tools/<Tool>/screenshots/`.
+5. **Summary** - record results and verdict in `testing/Tools/<Tool>/TEST_SUMMARY.md`.
 
 This convention is documented in the repo [`CLAUDE.md`](../CLAUDE.md); `New-Tool.ps1` stamps the
-`testing/<Tool>/` skeleton automatically for every new tool.
+`testing/Tools/<Tool>/` skeleton automatically for every new tool.
 
 ## Automated vs manual - what runs where
 
@@ -131,17 +132,17 @@ Anthropic/OpenAI/Google API key (used session-only; never persisted).
 2. **Launch XrmToolBox** (restart it if it was already open, so it re-scans plugins) and **connect** to
    your sandbox. Each tool appears in the Tools list by its display name.
 
-3. **Walk each tool's manual cases in order.** Open `testing/<Tool>/TEST_CASES.md` next to XrmToolBox and
+3. **Walk each tool's manual cases in order.** Open `testing/Tools/<Tool>/TEST_CASES.md` next to XrmToolBox and
    follow the "Steps" column for every `TC-*-M-*` row.
 
 4. **Capture one screenshot per case** (Win+Shift+S), saved into that tool's `screenshots/` folder named
    by the case ID, e.g.:
 
    ```
-   testing/TechnicalDebtAnalyzer/screenshots/TC-SOLN10-M-04-deprecated.png
-   testing/SolutionComplexityScore/screenshots/TC-SOLN08-M-04-html.png
-   testing/AiSolutionReviewer/screenshots/TC-AI10-M-03-review.png
-   testing/SolutionKnowledgeGraph/screenshots/TC-SOLN09-M-04-interactive.png
+   testing/Tools/TechnicalDebtAnalyzer/screenshots/TC-SOLN10-M-04-deprecated.png
+   testing/Tools/SolutionComplexityScore/screenshots/TC-SOLN08-M-04-html.png
+   testing/Tools/AiSolutionReviewer/screenshots/TC-AI10-M-03-review.png
+   testing/Tools/SolutionKnowledgeGraph/screenshots/TC-SOLN09-M-04-interactive.png
    ```
 
    Tip: for the score/report tools, running the analysis then **Export → HTML** gives one screenshot that
@@ -155,31 +156,31 @@ Anthropic/OpenAI/Google API key (used session-only; never persisted).
 
 | Tool | Plan | Cases | Summary | Automated status |
 |---|---|---|---|---|
-| Deployment Risk Analyzer | [plan](DeploymentRiskAnalyzer/TEST_PLAN.md) | [cases](DeploymentRiskAnalyzer/TEST_CASES.md) | [summary](DeploymentRiskAnalyzer/TEST_SUMMARY.md) | 84/84 passed (24 scoring + 54 analyzer + 6 report) |
-| Technical Debt Analyzer | [plan](TechnicalDebtAnalyzer/TEST_PLAN.md) | [cases](TechnicalDebtAnalyzer/TEST_CASES.md) | [summary](TechnicalDebtAnalyzer/TEST_SUMMARY.md) | 24/24 passed (5 scoring/metrics + 8 trends store/analytics + 11 analyzer); UI/export/trends manual |
-| Solution Complexity Score | [plan](SolutionComplexityScore/TEST_PLAN.md) | [cases](SolutionComplexityScore/TEST_CASES.md) | [summary](SolutionComplexityScore/TEST_SUMMARY.md) | 22/22 passed (14 metric/effort/quality model + 8 collector); UI manual |
-| AI Solution Reviewer | [plan](AiSolutionReviewer/TEST_PLAN.md) | [cases](AiSolutionReviewer/TEST_CASES.md) | [summary](AiSolutionReviewer/TEST_SUMMARY.md) | 13/13 passed (4 report/concern score + 9 collectors); AI/Word/UI manual |
-| Solution Knowledge Graph | [plan](SolutionKnowledgeGraph/TEST_PLAN.md) | [cases](SolutionKnowledgeGraph/TEST_CASES.md) | [summary](SolutionKnowledgeGraph/TEST_SUMMARY.md) | 18/18 passed (9 model/exporters + 9 builder); PNG/UI manual |
-| Attribute Auditor | [plan](AttributeAuditor/TEST_PLAN.md) | [cases](AttributeAuditor/TEST_CASES.md) | [summary](AttributeAuditor/TEST_SUMMARY.md) | 25/25 passed (13 engine + 8 collector); UI/export manual |
-| FetchXML Performance Analyzer | [plan](FetchXmlPerformanceAnalyzer/TEST_PLAN.md) | [cases](FetchXmlPerformanceAnalyzer/TEST_CASES.md) | [summary](FetchXmlPerformanceAnalyzer/TEST_SUMMARY.md) | 10/10 passed (parser + rule engine); UI/view-load/timing/export manual |
-| Environment Inventory | [plan](EnvironmentInventory/TEST_PLAN.md) | [cases](EnvironmentInventory/TEST_CASES.md) | [summary](EnvironmentInventory/TEST_SUMMARY.md) | 16/16 passed (normalization model + exporters); collector/UI/export manual |
-| Privilege Gap Analyzer | [plan](PrivilegeGapAnalyzer/TEST_PLAN.md) | [cases](PrivilegeGapAnalyzer/TEST_CASES.md) | [summary](PrivilegeGapAnalyzer/TEST_SUMMARY.md) | 10/10 passed (effective-privilege engine); collector/UI/export manual |
-| View Performance Analyzer | [plan](ViewPerformanceAnalyzer/TEST_PLAN.md) | [cases](ViewPerformanceAnalyzer/TEST_CASES.md) | [summary](ViewPerformanceAnalyzer/TEST_SUMMARY.md) | 11/11 passed (LayoutXML parser + per-view scorer, reuses FetchXML engine); collector/UI/export/timing manual |
-| Team Permission Explorer | [plan](TeamPermissionExplorer/TEST_PLAN.md) | [cases](TeamPermissionExplorer/TEST_CASES.md) | [summary](TeamPermissionExplorer/TEST_SUMMARY.md) | 11/11 passed (team risk rules, reuses shared Privilege engine); collector/UI/export manual |
-| ERD Generator | [plan](ErdGenerator/TEST_PLAN.md) | [cases](ErdGenerator/TEST_CASES.md) | [summary](ErdGenerator/TEST_SUMMARY.md) | 9/9 passed (ERD model + Mermaid/PlantUML/SVG/JSON emitters); collector/PNG/PDF/UI manual |
-| JavaScript Performance Analyzer | [plan](JavaScriptPerformanceAnalyzer/TEST_PLAN.md) | [cases](JavaScriptPerformanceAnalyzer/TEST_CASES.md) | [summary](JavaScriptPerformanceAnalyzer/TEST_SUMMARY.md) | 20/20 passed (static JS rule engine + FormXML event mapper); collector/UI/export manual |
-| Form Performance Analyzer | [plan](FormPerformanceAnalyzer/TEST_PLAN.md) | [cases](FormPerformanceAnalyzer/TEST_CASES.md) | [summary](FormPerformanceAnalyzer/TEST_SUMMARY.md) | 14/14 passed (FormXML parser + heaviness scorer); collector/UI/export manual |
-| Sharing Analyzer | [plan](SharingAnalyzer/TEST_PLAN.md) | [cases](SharingAnalyzer/TEST_CASES.md) | [summary](SharingAnalyzer/TEST_SUMMARY.md) | 15/15 passed (access-rights decode + sharing risk rules); collector/UI/export manual |
-| Audit Compliance Checker | [plan](AuditComplianceChecker/TEST_PLAN.md) | [cases](AuditComplianceChecker/TEST_CASES.md) | [summary](AuditComplianceChecker/TEST_SUMMARY.md) | 19/19 passed (sensitivity heuristics + compliance scoring); collector/UI/export manual |
-| Managed Solution Impact Checker | [plan](ManagedSolutionImpactChecker/TEST_PLAN.md) | [cases](ManagedSolutionImpactChecker/TEST_CASES.md) | [summary](ManagedSolutionImpactChecker/TEST_SUMMARY.md) | 15/15 passed (path-aware layering impact rules); collector/UI/export manual |
-| Portal Health Analyzer | [plan](PortalHealthAnalyzer/TEST_PLAN.md) | [cases](PortalHealthAnalyzer/TEST_CASES.md) | [summary](PortalHealthAnalyzer/TEST_SUMMARY.md) | 14/14 passed (adx_/mspp_ normalized model + health rules); collector/UI/export manual |
-| Solution Merge Assistant | [plan](SolutionMergeAssistant/TEST_PLAN.md) | [cases](SolutionMergeAssistant/TEST_CASES.md) | [summary](SolutionMergeAssistant/TEST_SUMMARY.md) | 14/14 passed (multi-solution conflict detection + verdict); collector/UI/export manual |
-| Flow Dependency Analyzer | [plan](FlowDependencyAnalyzer/TEST_PLAN.md) | [cases](FlowDependencyAnalyzer/TEST_CASES.md) | [summary](FlowDependencyAnalyzer/TEST_SUMMARY.md) | 17/17 passed (clientdata parser + redaction + risk rules); collector/UI/export manual |
-| Plugin Dependency Graph | [plan](PluginDependencyGraph/TEST_PLAN.md) | [cases](PluginDependencyGraph/TEST_CASES.md) | [summary](PluginDependencyGraph/TEST_SUMMARY.md) | 11/11 passed (graph model/builder/rules/emitters); collector/PNG/UI/export manual |
-| Component Usage Explorer | [plan](ComponentUsageExplorer/TEST_PLAN.md) | [cases](ComponentUsageExplorer/TEST_CASES.md) | [summary](ComponentUsageExplorer/TEST_SUMMARY.md) | 13/13 passed (usage footprint + change-safety verdict); collector/UI/export manual |
-| Environment Comparison Suite | [plan](EnvironmentComparisonSuite/TEST_PLAN.md) | [cases](EnvironmentComparisonSuite/TEST_CASES.md) | [summary](EnvironmentComparisonSuite/TEST_SUMMARY.md) | 14/14 passed (snapshot diff engine + roll-up); dual-connection/collector/UI/export manual |
-| Solution Documentation Generator | [plan](SolutionDocumentationGenerator/TEST_PLAN.md) | [cases](SolutionDocumentationGenerator/TEST_CASES.md) | [summary](SolutionDocumentationGenerator/TEST_SUMMARY.md) | 10/10 passed (document model + template engine + renderers); collector/Word/PDF/Excel/UI manual |
-| Duplicate Metadata Finder | [plan](DuplicateMetadataFinder/TEST_PLAN.md) | [cases](DuplicateMetadataFinder/TEST_CASES.md) | [summary](DuplicateMetadataFinder/TEST_SUMMARY.md) | 22/22 passed (similarity primitives + scoring/grouping + report projection); tool-load smoke Pass; collector/UI/export manual |
-| Custom API Explorer | [plan](CustomApiExplorer/TEST_PLAN.md) | [cases](CustomApiExplorer/TEST_CASES.md) | [summary](CustomApiExplorer/TEST_SUMMARY.md) | 20/20 passed (value parsing + request binding + snippet + catalog exporters); tool-load smoke Pass; collector/gated-invoke/UI manual |
-| Architecture Diagram Generator | [plan](ArchitectureDiagramGenerator/TEST_PLAN.md) | [cases](ArchitectureDiagramGenerator/TEST_CASES.md) | [summary](ArchitectureDiagramGenerator/TEST_SUMMARY.md) | 10/10 passed (arch model + Mermaid/PlantUML/DOT/Markdown/HTML/SVG/JSON emitters); collector/UI manual |
-| API Documentation Builder | [plan](ApiDocumentationBuilder/TEST_PLAN.md) | [cases](ApiDocumentationBuilder/TEST_CASES.md) | [summary](ApiDocumentationBuilder/TEST_SUMMARY.md) | 10/10 passed (redaction engine + Markdown/HTML/JSON/OpenAPI emitters); collector/UI manual |
+| Deployment Risk Analyzer | [plan](Tools/DeploymentRiskAnalyzer/TEST_PLAN.md) | [cases](Tools/DeploymentRiskAnalyzer/TEST_CASES.md) | [summary](Tools/DeploymentRiskAnalyzer/TEST_SUMMARY.md) | 84/84 passed (24 scoring + 54 analyzer + 6 report) |
+| Technical Debt Analyzer | [plan](Tools/TechnicalDebtAnalyzer/TEST_PLAN.md) | [cases](Tools/TechnicalDebtAnalyzer/TEST_CASES.md) | [summary](Tools/TechnicalDebtAnalyzer/TEST_SUMMARY.md) | 24/24 passed (5 scoring/metrics + 8 trends store/analytics + 11 analyzer); UI/export/trends manual |
+| Solution Complexity Score | [plan](Tools/SolutionComplexityScore/TEST_PLAN.md) | [cases](Tools/SolutionComplexityScore/TEST_CASES.md) | [summary](Tools/SolutionComplexityScore/TEST_SUMMARY.md) | 22/22 passed (14 metric/effort/quality model + 8 collector); UI manual |
+| AI Solution Reviewer | [plan](Tools/AiSolutionReviewer/TEST_PLAN.md) | [cases](Tools/AiSolutionReviewer/TEST_CASES.md) | [summary](Tools/AiSolutionReviewer/TEST_SUMMARY.md) | 13/13 passed (4 report/concern score + 9 collectors); AI/Word/UI manual |
+| Solution Knowledge Graph | [plan](Tools/SolutionKnowledgeGraph/TEST_PLAN.md) | [cases](Tools/SolutionKnowledgeGraph/TEST_CASES.md) | [summary](Tools/SolutionKnowledgeGraph/TEST_SUMMARY.md) | 18/18 passed (9 model/exporters + 9 builder); PNG/UI manual |
+| Attribute Auditor | [plan](Tools/AttributeAuditor/TEST_PLAN.md) | [cases](Tools/AttributeAuditor/TEST_CASES.md) | [summary](Tools/AttributeAuditor/TEST_SUMMARY.md) | 25/25 passed (13 engine + 8 collector); UI/export manual |
+| FetchXML Performance Analyzer | [plan](Tools/FetchXmlPerformanceAnalyzer/TEST_PLAN.md) | [cases](Tools/FetchXmlPerformanceAnalyzer/TEST_CASES.md) | [summary](Tools/FetchXmlPerformanceAnalyzer/TEST_SUMMARY.md) | 10/10 passed (parser + rule engine); UI/view-load/timing/export manual |
+| Environment Inventory | [plan](Tools/EnvironmentInventory/TEST_PLAN.md) | [cases](Tools/EnvironmentInventory/TEST_CASES.md) | [summary](Tools/EnvironmentInventory/TEST_SUMMARY.md) | 16/16 passed (normalization model + exporters); collector/UI/export manual |
+| Privilege Gap Analyzer | [plan](Tools/PrivilegeGapAnalyzer/TEST_PLAN.md) | [cases](Tools/PrivilegeGapAnalyzer/TEST_CASES.md) | [summary](Tools/PrivilegeGapAnalyzer/TEST_SUMMARY.md) | 10/10 passed (effective-privilege engine); collector/UI/export manual |
+| View Performance Analyzer | [plan](Tools/ViewPerformanceAnalyzer/TEST_PLAN.md) | [cases](Tools/ViewPerformanceAnalyzer/TEST_CASES.md) | [summary](Tools/ViewPerformanceAnalyzer/TEST_SUMMARY.md) | 11/11 passed (LayoutXML parser + per-view scorer, reuses FetchXML engine); collector/UI/export/timing manual |
+| Team Permission Explorer | [plan](Tools/TeamPermissionExplorer/TEST_PLAN.md) | [cases](Tools/TeamPermissionExplorer/TEST_CASES.md) | [summary](Tools/TeamPermissionExplorer/TEST_SUMMARY.md) | 11/11 passed (team risk rules, reuses shared Privilege engine); collector/UI/export manual |
+| ERD Generator | [plan](Tools/ErdGenerator/TEST_PLAN.md) | [cases](Tools/ErdGenerator/TEST_CASES.md) | [summary](Tools/ErdGenerator/TEST_SUMMARY.md) | 9/9 passed (ERD model + Mermaid/PlantUML/SVG/JSON emitters); collector/PNG/PDF/UI manual |
+| JavaScript Performance Analyzer | [plan](Tools/JavaScriptPerformanceAnalyzer/TEST_PLAN.md) | [cases](Tools/JavaScriptPerformanceAnalyzer/TEST_CASES.md) | [summary](Tools/JavaScriptPerformanceAnalyzer/TEST_SUMMARY.md) | 20/20 passed (static JS rule engine + FormXML event mapper); collector/UI/export manual |
+| Form Performance Analyzer | [plan](Tools/FormPerformanceAnalyzer/TEST_PLAN.md) | [cases](Tools/FormPerformanceAnalyzer/TEST_CASES.md) | [summary](Tools/FormPerformanceAnalyzer/TEST_SUMMARY.md) | 14/14 passed (FormXML parser + heaviness scorer); collector/UI/export manual |
+| Sharing Analyzer | [plan](Tools/SharingAnalyzer/TEST_PLAN.md) | [cases](Tools/SharingAnalyzer/TEST_CASES.md) | [summary](Tools/SharingAnalyzer/TEST_SUMMARY.md) | 15/15 passed (access-rights decode + sharing risk rules); collector/UI/export manual |
+| Audit Compliance Checker | [plan](Tools/AuditComplianceChecker/TEST_PLAN.md) | [cases](Tools/AuditComplianceChecker/TEST_CASES.md) | [summary](Tools/AuditComplianceChecker/TEST_SUMMARY.md) | 19/19 passed (sensitivity heuristics + compliance scoring); collector/UI/export manual |
+| Managed Solution Impact Checker | [plan](Tools/ManagedSolutionImpactChecker/TEST_PLAN.md) | [cases](Tools/ManagedSolutionImpactChecker/TEST_CASES.md) | [summary](Tools/ManagedSolutionImpactChecker/TEST_SUMMARY.md) | 15/15 passed (path-aware layering impact rules); collector/UI/export manual |
+| Portal Health Analyzer | [plan](Tools/PortalHealthAnalyzer/TEST_PLAN.md) | [cases](Tools/PortalHealthAnalyzer/TEST_CASES.md) | [summary](Tools/PortalHealthAnalyzer/TEST_SUMMARY.md) | 14/14 passed (adx_/mspp_ normalized model + health rules); collector/UI/export manual |
+| Solution Merge Assistant | [plan](Tools/SolutionMergeAssistant/TEST_PLAN.md) | [cases](Tools/SolutionMergeAssistant/TEST_CASES.md) | [summary](Tools/SolutionMergeAssistant/TEST_SUMMARY.md) | 14/14 passed (multi-solution conflict detection + verdict); collector/UI/export manual |
+| Flow Dependency Analyzer | [plan](Tools/FlowDependencyAnalyzer/TEST_PLAN.md) | [cases](Tools/FlowDependencyAnalyzer/TEST_CASES.md) | [summary](Tools/FlowDependencyAnalyzer/TEST_SUMMARY.md) | 17/17 passed (clientdata parser + redaction + risk rules); collector/UI/export manual |
+| Plugin Dependency Graph | [plan](Tools/PluginDependencyGraph/TEST_PLAN.md) | [cases](Tools/PluginDependencyGraph/TEST_CASES.md) | [summary](Tools/PluginDependencyGraph/TEST_SUMMARY.md) | 11/11 passed (graph model/builder/rules/emitters); collector/PNG/UI/export manual |
+| Component Usage Explorer | [plan](Tools/ComponentUsageExplorer/TEST_PLAN.md) | [cases](Tools/ComponentUsageExplorer/TEST_CASES.md) | [summary](Tools/ComponentUsageExplorer/TEST_SUMMARY.md) | 13/13 passed (usage footprint + change-safety verdict); collector/UI/export manual |
+| Environment Comparison Suite | [plan](Tools/EnvironmentComparisonSuite/TEST_PLAN.md) | [cases](Tools/EnvironmentComparisonSuite/TEST_CASES.md) | [summary](Tools/EnvironmentComparisonSuite/TEST_SUMMARY.md) | 14/14 passed (snapshot diff engine + roll-up); dual-connection/collector/UI/export manual |
+| Solution Documentation Generator | [plan](Tools/SolutionDocumentationGenerator/TEST_PLAN.md) | [cases](Tools/SolutionDocumentationGenerator/TEST_CASES.md) | [summary](Tools/SolutionDocumentationGenerator/TEST_SUMMARY.md) | 10/10 passed (document model + template engine + renderers); collector/Word/PDF/Excel/UI manual |
+| Duplicate Metadata Finder | [plan](Tools/DuplicateMetadataFinder/TEST_PLAN.md) | [cases](Tools/DuplicateMetadataFinder/TEST_CASES.md) | [summary](Tools/DuplicateMetadataFinder/TEST_SUMMARY.md) | 22/22 passed (similarity primitives + scoring/grouping + report projection); tool-load smoke Pass; collector/UI/export manual |
+| Custom API Explorer | [plan](Tools/CustomApiExplorer/TEST_PLAN.md) | [cases](Tools/CustomApiExplorer/TEST_CASES.md) | [summary](Tools/CustomApiExplorer/TEST_SUMMARY.md) | 20/20 passed (value parsing + request binding + snippet + catalog exporters); tool-load smoke Pass; collector/gated-invoke/UI manual |
+| Architecture Diagram Generator | [plan](Tools/ArchitectureDiagramGenerator/TEST_PLAN.md) | [cases](Tools/ArchitectureDiagramGenerator/TEST_CASES.md) | [summary](Tools/ArchitectureDiagramGenerator/TEST_SUMMARY.md) | 10/10 passed (arch model + Mermaid/PlantUML/DOT/Markdown/HTML/SVG/JSON emitters); collector/UI manual |
+| API Documentation Builder | [plan](Tools/ApiDocumentationBuilder/TEST_PLAN.md) | [cases](Tools/ApiDocumentationBuilder/TEST_CASES.md) | [summary](Tools/ApiDocumentationBuilder/TEST_SUMMARY.md) | 10/10 passed (redaction engine + Markdown/HTML/JSON/OpenAPI emitters); collector/UI manual |

@@ -78,5 +78,5 @@ recommended keep-candidate per group, and an exportable report — without ever 
 - Read-only (recommends only; no merge/delete); the similarity engine, scoring, clustering and report
   projection stay UI-free and SDK-free and degrade query failures to notes. — **Done.**
 - Export formats: Excel, PDF, JSON, HTML. — **Done** (Excel/PDF pending manual sign-off).
-- Testing under `testing/DuplicateMetadataFinder/`; SDK-free logic covered by
+- Testing under `testing/Tools/DuplicateMetadataFinder/`; SDK-free logic covered by
   `testing/UnitTests/DuplicateMetadataFinderTests.cs` (22 cases). — **Done** (collector/grid/Excel/PDF pending manual).

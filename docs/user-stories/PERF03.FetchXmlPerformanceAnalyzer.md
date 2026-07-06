@@ -58,4 +58,4 @@
 
 - Follows suite conventions; read-only default; optional execution opt-in; exports as listed.
 - Parser/rule engine is UI-free and lives in shared core for reuse by PERF04/PERF05; heuristic estimates labeled as estimates.
-- Testing artifacts under `testing/FetchXmlPerformanceAnalyzer/`; the shared engine is covered by `testing/UnitTests` (SDK-free).
+- Testing artifacts under `testing/Tools/FetchXmlPerformanceAnalyzer/`; the shared engine is covered by `testing/UnitTests` (SDK-free).

@@ -50,4 +50,4 @@
 - Follows suite conventions; read-only default; export formats as listed.
 - Code analyzer is UI-free (CI-liftable) and operates on decoded strings; heuristic findings labeled with confidence and code context.
 - All Dataverse access off the UI thread via `RunAsync`/`RetrieveAll`; settings round-trip.
-- Testing skeleton under `testing/JavaScriptPerformanceAnalyzer/`; the static rule engine is covered by `testing/UnitTests` (SDK-free).
+- Testing skeleton under `testing/Tools/JavaScriptPerformanceAnalyzer/`; the static rule engine is covered by `testing/UnitTests` (SDK-free).

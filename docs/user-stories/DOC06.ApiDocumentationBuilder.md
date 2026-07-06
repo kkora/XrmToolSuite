@@ -2,7 +2,7 @@
 
 > **Tool:** `XrmToolSuite.ApiDocumentationBuilder` · **Tag:** `DOC06`
 > **Source spec:** [docs/backlog/11-Documentation/DOC06.ApiDocumentationBuilder.md](../backlog/11-Documentation/DOC06.ApiDocumentationBuilder.md)
-> **Testing:** [testing/ApiDocumentationBuilder/](../../testing/ApiDocumentationBuilder/)
+> **Testing:** [testing/Tools/ApiDocumentationBuilder/](../../testing/Tools/ApiDocumentationBuilder/)
 
 Read-only tool that documents a Dataverse environment's **Custom APIs** (parameters, response properties,
 binding, backing plugin) as a redaction-safe reference and a **best-effort OpenAPI 3.0-style JSON spec**, and
@@ -75,4 +75,4 @@ exportable to Markdown, HTML, raw JSON, and OpenAPI JSON with secrets masked.
   secrets/tokens/keys/full trigger URLs never exposed and redaction is user-controlled. BCL-only.
 - Export formats: Markdown, self-contained HTML, JSON (raw model), OpenAPI-style JSON.
   *(Word/PDF via the sanctioned chains are a documented future extension.)*
-- Testing artifacts under `testing/ApiDocumentationBuilder/`; SDK-free tests in `testing/UnitTests`.
+- Testing artifacts under `testing/Tools/ApiDocumentationBuilder/`; SDK-free tests in `testing/UnitTests`.

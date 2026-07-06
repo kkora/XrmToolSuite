@@ -83,5 +83,5 @@ selected API and shows the typed response or fault — with the execute path cle
   confirmation-gated (scope named) and secret-safe. — **Done.**
 - Request-building logic is UI-free and unit-tested; live invocation is a manual case (documented, not
   claimed as headless-passed). — **Done.**
-- Testing under `testing/CustomApiExplorer/`; SDK-free logic covered by
+- Testing under `testing/Tools/CustomApiExplorer/`; SDK-free logic covered by
   `testing/UnitTests/CustomApiExplorerTests.cs` (20 cases). — **Done** (collector/console/live-invoke pending manual).

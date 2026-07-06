@@ -32,7 +32,7 @@ dotnet test testing/UnitTests/UnitTests.csproj
 
 Whenever a tool is **created or changed**, produce all of the following, in order — no tool is "done" until they exist:
 
-1. **Plan** — user stories in `docs/user-stories/<TAG>NN.<Tool>.md` and a `testing/<Tool>/TEST_PLAN.md`.
+1. **Plan** — user stories in `docs/user-stories/<TAG>NN.<Tool>.md` and a `testing/Tools/<Tool>/TEST_PLAN.md`.
    **Backlog & user-story file naming (keep the two in lock-step):** a tool's **backlog** file
    (`docs/backlog/<category>/`) and its **user-story** file (`docs/user-stories/`) share the **same**
    `<TAG>NN.<Tool>.md` name, where `<TAG>` is the category code and `NN` is the **two-digit, zero-padded**
@@ -45,14 +45,14 @@ Whenever a tool is **created or changed**, produce all of the following, in orde
    `docs/backlog/<Name>.md` at the backlog root — rename it to `<TAG>NN.<Name>.md`, move it under the correct
    `docs/backlog/<category>/` folder, and give the user-story file the matching name. When you add or rename
    either file, keep in sync: the `docs/backlog/README.md` category index, the `docs/user-stories/README.md`
-   index, the user-story "Source spec" backlink, the `testing/<Tool>/TEST_PLAN.md` "Traces to …" backlink,
+   index, the user-story "Source spec" backlink, the `testing/Tools/<Tool>/TEST_PLAN.md` "Traces to …" backlink,
    and the tool's EPIC/FEAT/US ids.
 2. **Tool** — the implementation under `src/Tools/`.
-3. **Test cases** — `testing/<Tool>/TEST_CASES.md`, each case traced to a user story.
-4. **Execute + screenshots** — run `dotnet test`, perform the manual/GUI cases, and save evidence (screenshots) under `testing/<Tool>/screenshots/`. **A "tool loads in XrmToolBox" screenshot is REQUIRED for every tool**, saved as `testing/<Tool>/screenshots/xrmtoolbox-tools-list.png` — the XrmToolBox **Tools** tab filtered to that tool, showing its name/version/description (proof MEF registration and any shipped dependency chain resolved at scan time). The `testing/UiSmokeTests` FlaUI harness generates all of these automatically: deploy with `dotnet build XrmToolSuite.sln -c Release -p:DeployToXTB=true`, then run `dotnet test testing/UiSmokeTests/UiSmokeTests.csproj` with `XTB_EXE` set — it asserts every tool in its `ExpectedTools` list appears and captures a per-tool `tool_<slug>.png` under its `screenshots/`. When adding a tool, add its exact `ExportMetadata("Name", …)` to `ExpectedTools`, run the harness, and copy its shot into `testing/<Tool>/screenshots/xrmtoolbox-tools-list.png`.
-5. **Summary** — results and verdict in `testing/<Tool>/TEST_SUMMARY.md`.
+3. **Test cases** — `testing/Tools/<Tool>/TEST_CASES.md`, each case traced to a user story.
+4. **Execute + screenshots** — run `dotnet test`, perform the manual/GUI cases, and save evidence (screenshots) under `testing/Tools/<Tool>/screenshots/`. **A "tool loads in XrmToolBox" screenshot is REQUIRED for every tool**, saved as `testing/Tools/<Tool>/screenshots/xrmtoolbox-tools-list.png` — the XrmToolBox **Tools** tab filtered to that tool, showing its name/version/description (proof MEF registration and any shipped dependency chain resolved at scan time). The `testing/UiSmokeTests` FlaUI harness generates all of these automatically: deploy with `dotnet build XrmToolSuite.sln -c Release -p:DeployToXTB=true`, then run `dotnet test testing/UiSmokeTests/UiSmokeTests.csproj` with `XTB_EXE` set — it asserts every tool in its `ExpectedTools` list appears and captures a per-tool `tool_<slug>.png` under its `screenshots/`. When adding a tool, add its exact `ExportMetadata("Name", …)` to `ExpectedTools`, run the harness, and copy its shot into `testing/Tools/<Tool>/screenshots/xrmtoolbox-tools-list.png`.
+5. **Summary** — results and verdict in `testing/Tools/<Tool>/TEST_SUMMARY.md`.
 
-All of this lives in the root **`testing/`** folder (see `testing/README.md`). `New-Tool.ps1` stamps the `testing/<Tool>/` skeleton (plan/cases/summary + `screenshots/`) and the user-story file automatically; keep them updated as the tool changes.
+All of this lives in the root **`testing/`** folder (see `testing/README.md`). `New-Tool.ps1` stamps the `testing/Tools/<Tool>/` skeleton (plan/cases/summary + `screenshots/`) and the user-story file automatically; keep them updated as the tool changes.
 
 - **Automated tests** cover **SDK-free logic only** (risk scoring, banding, pure helpers) and live in `testing/UnitTests/` (net8.0). This project is **deliberately not in `XrmToolSuite.sln`** (the tools are net48/WinForms) — it compiles the specific source files under test directly, so it runs with the plain .NET SDK and needs no Dataverse SDK, net48 pack, or connection. Run it with `dotnet test testing/UnitTests/UnitTests.csproj`.
 - **Manual tests** cover anything needing a live Dataverse connection or the WinForms host (analyzers, UI, exports). They are documented cases executed in a Windows + XrmToolBox session against a real org; capture a screenshot per case. They **cannot** run headlessly — say so in the summary rather than claiming a pass.
@@ -97,7 +97,7 @@ Builds cannot run in non-Windows environments; when a build isn't possible, say 
 4. ExportMetadata Name/Description updated (no "Template Tool" leftovers): `grep -ri "template" src/Tools/XrmToolSuite.<Name>/`.
 5. Settings round-trip: load in `*_Load`, save in `ClosingPlugin`.
 6. Nuspec id/version/description match the tool.
-7. Testing artifacts exist and are current under `testing/<Tool>/` (TEST_PLAN, TEST_CASES, TEST_SUMMARY, screenshots — **including the required `xrmtoolbox-tools-list.png` load screenshot**), the tool is listed in `testing/UiSmokeTests` `ExpectedTools`, user stories under `docs/user-stories/<TAG>N.<Tool>.md` (tagged naming — see the Tool lifecycle section), and `dotnet test testing/UnitTests/UnitTests.csproj` passes. State plainly which cases were executed vs. pending-manual — never report a manual GUI case as passed if it wasn't run.
+7. Testing artifacts exist and are current under `testing/Tools/<Tool>/` (TEST_PLAN, TEST_CASES, TEST_SUMMARY, screenshots — **including the required `xrmtoolbox-tools-list.png` load screenshot**), the tool is listed in `testing/UiSmokeTests` `ExpectedTools`, user stories under `docs/user-stories/<TAG>N.<Tool>.md` (tagged naming — see the Tool lifecycle section), and `dotnet test testing/UnitTests/UnitTests.csproj` passes. State plainly which cases were executed vs. pending-manual — never report a manual GUI case as passed if it wasn't run.
 
 ## Tool-specific notes
 

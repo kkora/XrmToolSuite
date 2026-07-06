@@ -57,4 +57,4 @@
 - Follows suite conventions (`BaseToolControl`, `RunAsync`/`RetrieveAll`, `Load`/`SaveSettings`, progress + cancel); settings round-trip in `Load`/`ClosingPlugin`; `UpdateConnection` clears `MetadataCache`.
 - Read-only (no write/delete); usage-detection and verdict rules stay UI-free and degrade query failures to Info findings.
 - Export formats: Excel, PDF, JSON, HTML.
-- Testing artifacts under `testing/ComponentUsageExplorer/`; SDK-free rules covered by `testing/UnitTests/ComponentUsageExplorerTests.cs`.
+- Testing artifacts under `testing/Tools/ComponentUsageExplorer/`; SDK-free rules covered by `testing/UnitTests/ComponentUsageExplorerTests.cs`.

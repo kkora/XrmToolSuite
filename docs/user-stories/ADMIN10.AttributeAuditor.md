@@ -114,7 +114,7 @@ Each signal marks a column "used" with human-readable evidence; a column with no
   from listed evidence. — **Done.**
 - Export formats: CSV (full inventory) + HTML dashboard. — **Done** (JSON/Excel and guarded cleanup are
   `[Planned]`).
-- Testing under `testing/AttributeAuditor/`; SDK-free logic covered by
+- Testing under `testing/Tools/AttributeAuditor/`; SDK-free logic covered by
   `testing/UnitTests/AttributeAuditTests.cs` (scanners/classification/report/CSV) and the collector by
   `testing/CollectorTests/AttributeAuditCollectorTests.cs` against a fake connection — **25 automated cases
   pass.** — **Done** (UI/run/filter/export GUI cases `TC-ADMIN10-M-01..07` pending manual sign-off).

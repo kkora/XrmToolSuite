@@ -69,4 +69,4 @@
 ## Definition of Done
 - Follows suite conventions; read-only default; CSV/HTML export as useful.
 - Scoring/parsing engine is UI-free and covered by `testing/UnitTests/` FormXML fixtures.
-- Testing skeleton under testing/FormPerformanceAnalyzer/ when implementation starts.
+- Testing skeleton under testing/Tools/FormPerformanceAnalyzer/ when implementation starts.

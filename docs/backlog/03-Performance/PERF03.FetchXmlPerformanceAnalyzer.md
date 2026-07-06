@@ -61,4 +61,4 @@
 ## Definition of Done
 - Follows suite conventions; read-only default; optional execution opt-in; export formats as listed.
 - Parser/rule engine is UI-free and lives in shared core for reuse by PERF04/PERF05; heuristic estimates labeled as estimates.
-- Testing skeleton under `testing/FetchXmlPerformanceAnalyzer/` when implementation starts; the shared rule engine is heavily covered by `testing/UnitTests` (SDK-free).
+- Testing skeleton under `testing/Tools/FetchXmlPerformanceAnalyzer/` when implementation starts; the shared rule engine is heavily covered by `testing/UnitTests` (SDK-free).

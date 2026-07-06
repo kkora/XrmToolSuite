@@ -96,4 +96,4 @@ Reference) and exported to Word/PDF/Markdown/HTML/Excel/JSON.
 - Read-only; the documentation/template engine (`DocBuilder`) stays UI-free and SDK-free and degrades
   unavailable component types to documented notes.
 - Export formats: Word, PDF, Markdown, HTML, searchable HTML portal, Excel, JSON.
-- Testing artifacts under `testing/SolutionDocumentationGenerator/`.
+- Testing artifacts under `testing/Tools/SolutionDocumentationGenerator/`.

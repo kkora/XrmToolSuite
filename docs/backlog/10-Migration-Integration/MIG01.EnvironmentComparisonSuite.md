@@ -59,4 +59,4 @@
 ## Definition of Done
 - Follows suite conventions; read-only default; row sampling limited + sensitive/secret values masked; cross-env via `TargetOrganization`; export formats Excel, PDF, JSON, HTML.
 - Comparison/diff engine is UI-free, unit-testable, and **shared with the ADMIN08 Configuration Drift Monitor candidate** rather than duplicated.
-- Testing skeleton under testing/EnvironmentComparisonSuite/ when implementation starts.
+- Testing skeleton under testing/Tools/EnvironmentComparisonSuite/ when implementation starts.

@@ -2,7 +2,7 @@
 
 > **Status:** Implemented (Phase-A). Area tag `PLUGIN01` · Project `XrmToolSuite.PluginDependencyGraph`.
 > **Read-only:** inspects plugin-registration + solution metadata; never modifies steps or assemblies.
-> Traces to [`testing/PluginDependencyGraph/`](../../testing/PluginDependencyGraph). SDK-free graph
+> Traces to [`testing/Tools/PluginDependencyGraph/`](../../testing/PluginDependencyGraph). SDK-free graph
 > model / builder / risk rules / emitters are covered by `testing/UnitTests/PluginDependencyGraphTests.cs`.
 
 ## Notes
@@ -111,4 +111,4 @@ HTML exports — from a live connection with no hand-written queries.
 - All Dataverse access off the UI thread; secure-config secrets never exposed; unresolved edges degrade
   to informational notes.
 - SDK-free graph model / builder / rules / emitters covered by `testing/UnitTests`; manual GUI/Dataverse
-  cases documented under `testing/PluginDependencyGraph/`.
+  cases documented under `testing/Tools/PluginDependencyGraph/`.

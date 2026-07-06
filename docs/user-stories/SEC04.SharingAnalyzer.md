@@ -88,4 +88,4 @@ table × principal intensity view, and preview-only cleanup recommendations — 
 - Follows suite conventions; read-only default; sensitive values limited in exports (aggregate counts and
   findings, not full share dumps); export formats Excel, PDF, JSON, HTML, CSV.
 - SDK-free logic (`AccessRights`, `SharingModels`, `SharingRiskRules`) unit-tested in `testing/UnitTests/`;
-  collector + UI + exports covered by manual cases under `testing/SharingAnalyzer/`.
+  collector + UI + exports covered by manual cases under `testing/Tools/SharingAnalyzer/`.

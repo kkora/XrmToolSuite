@@ -54,4 +54,4 @@
 - Follows suite conventions (BaseToolControl, RunAsync/RetrieveAll, Load/SaveSettings, progress+cancel).
 - Read-only; no secrets/credentials persisted or exported; normalization model UI-free and unit-testable; degrades unavailable sources to "not available" rows.
 - Export formats: Excel, CSV, JSON, HTML, Markdown, Word/PDF.
-- Testing skeleton under testing/EnvironmentInventory/ when implementation starts.
+- Testing skeleton under testing/Tools/EnvironmentInventory/ when implementation starts.

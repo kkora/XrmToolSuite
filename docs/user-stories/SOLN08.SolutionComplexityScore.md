@@ -117,6 +117,6 @@ PDF/HTML/Excel/JSON/Markdown reports plus an executive summary — all from a li
   projection stay UI-free and SDK-free; the collector is UI-free and degrades query failures to zero counts.
 - Settings round-trip (Load/ClosingPlugin); the AI API key is never persisted.
 - Export formats: PDF, HTML, Excel, JSON, Markdown, plus the offline/AI executive summary. — **Done.**
-- Testing under `testing/SolutionComplexityScore/`; SDK-free logic covered by
+- Testing under `testing/Tools/SolutionComplexityScore/`; SDK-free logic covered by
   `testing/UnitTests/ComplexityScoreTests.cs` and the collector by `testing/CollectorTests`. — **Done**
   (dashboard, exporters, live collector and AI summary pending manual sign-off, `TC-SOLN08-M-01..07`).

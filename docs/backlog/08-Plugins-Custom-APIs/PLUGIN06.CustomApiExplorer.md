@@ -65,4 +65,4 @@
 ## Definition of Done
 - Follows suite conventions; inventory/documentation read-only; the test-console execute path is the only write and is confirmation-gated (scope named) and secret-safe.
 - Request-building logic is UI-free and unit-tested; live invocation is a manual case (documented, not claimed as headless-passed).
-- Testing skeleton under testing/CustomApiExplorer/ when implementation starts.
+- Testing skeleton under testing/Tools/CustomApiExplorer/ when implementation starts.

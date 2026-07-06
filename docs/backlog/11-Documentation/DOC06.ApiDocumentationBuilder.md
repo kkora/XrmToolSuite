@@ -65,4 +65,4 @@
 - Follows suite conventions (BaseToolControl, RunAsync/RetrieveAll, Load/SaveSettings, progress+cancel); reuses the shared extracted model / Plugin Dependency Graph data and the sanctioned OpenXml (DOCX) + MigraDoc/PdfSharp (PDF) chains.
 - Read-only default; API-doc model + redaction/OpenAPI engine stays UI-free where possible and degrades unavailable metadata to documented notes; secrets/tokens/keys/full trigger URLs never exposed and redaction is user-controlled.
 - Export formats: Markdown, HTML, Word (DOCX), PDF, JSON (OpenAPI-style).
-- Testing skeleton under testing/ApiDocumentationBuilder/ when implementation starts.
+- Testing skeleton under testing/Tools/ApiDocumentationBuilder/ when implementation starts.

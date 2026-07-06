@@ -4,7 +4,7 @@
 > class, with a UI-free/SDK-free diff engine, a difference score, and Excel/PDF/JSON/HTML export.
 > **Tag:** `MIG01` · **Project:** `XrmToolSuite.EnvironmentComparisonSuite`
 > **Source backlog:** [`docs/backlog/10-Migration-Integration/MIG01.EnvironmentComparisonSuite.md`](../backlog/10-Migration-Integration/MIG01.EnvironmentComparisonSuite.md).
-> **Testing:** [`testing/EnvironmentComparisonSuite/`](../../testing/EnvironmentComparisonSuite/) — automated SDK-free tests in `testing/UnitTests/EnvironmentComparisonSuiteTests.cs`; manual GUI/live cases in `TEST_CASES.md`.
+> **Testing:** [`testing/Tools/EnvironmentComparisonSuite/`](../../testing/Tools/EnvironmentComparisonSuite/) — automated SDK-free tests in `testing/UnitTests/EnvironmentComparisonSuiteTests.cs`; manual GUI/live cases in `TEST_CASES.md`.
 
 ## Notes
 - **Source is the primary connection; the target uses the suite dual-connection pattern** (`RaiseRequestConnectionEvent` with `actionName="TargetOrganization"`, handled in `UpdateConnection` **without** replacing the primary) — copied from the Deployment Risk Analyzer.
@@ -59,4 +59,4 @@
 ## Definition of Done
 - Follows suite conventions; read-only default; secret values masked; cross-env via `TargetOrganization`; export formats Excel, PDF, JSON, HTML.
 - Comparison/diff engine is UI-free, unit-testable, and **shareable with the ADMIN08 Configuration Drift Monitor candidate** rather than duplicated.
-- Testing skeleton under `testing/EnvironmentComparisonSuite/` with automated tests in `testing/UnitTests/EnvironmentComparisonSuiteTests.cs`.
+- Testing skeleton under `testing/Tools/EnvironmentComparisonSuite/` with automated tests in `testing/UnitTests/EnvironmentComparisonSuiteTests.cs`.

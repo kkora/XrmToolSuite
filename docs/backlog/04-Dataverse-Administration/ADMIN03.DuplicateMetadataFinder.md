@@ -55,4 +55,4 @@
 - Follows suite conventions (BaseToolControl, RunAsync/RetrieveAll, Load/SaveSettings, progress+cancel).
 - Read-only (recommends only; no merge/delete); similarity engine UI-free and unit-testable; degrades query failures to Info.
 - Export formats: Excel, PDF, JSON, HTML.
-- Testing skeleton under testing/DuplicateMetadataFinder/ when implementation starts.
+- Testing skeleton under testing/Tools/DuplicateMetadataFinder/ when implementation starts.

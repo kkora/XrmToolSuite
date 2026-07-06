@@ -64,4 +64,4 @@
 - Follows suite conventions (BaseToolControl, RunAsync/RetrieveAll, Load/SaveSettings, progress+cancel); reuses the Solution Knowledge Graph extracted model and the sanctioned export dependency chains.
 - Read-only default; layout/model engine stays UI-free where possible and degrades unavailable component types to documented notes.
 - Export formats: SVG, PNG, PDF, Mermaid, PlantUML, HTML, Markdown.
-- Testing skeleton under testing/ArchitectureDiagramGenerator/ when implementation starts.
+- Testing skeleton under testing/Tools/ArchitectureDiagramGenerator/ when implementation starts.

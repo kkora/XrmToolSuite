@@ -69,4 +69,4 @@ SVG, PNG, PDF, Mermaid, PlantUML, HTML, Markdown and JSON.
 - Follows suite conventions (BaseToolControl, RunAsync/RetrieveAll semantics, Load/SaveSettings, progress + cancellation).
 - Read-only; the ERD model/emitters/filter stay UI-free and SDK-free and degrade missing metadata to notes.
 - Export formats: SVG, PNG, PDF, Mermaid, PlantUML, HTML, Markdown, JSON. — **Done.**
-- Testing under `testing/ErdGenerator/`; SDK-free logic covered by `testing/UnitTests/ErdGeneratorTests.cs`. — **Done** (PNG/PDF/GUI/collector pending manual sign-off).
+- Testing under `testing/Tools/ErdGenerator/`; SDK-free logic covered by `testing/UnitTests/ErdGeneratorTests.cs`. — **Done** (PNG/PDF/GUI/collector pending manual sign-off).

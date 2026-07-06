@@ -58,4 +58,4 @@
 - Follows suite conventions; read-only default; optional view timing opt-in; export formats as listed.
 - Reuses the shared FetchXML analyzer (PERF03) rather than reimplementing rules; scores labeled heuristic.
 - Batch analysis pages via `RetrieveAll` with progress/cancellation; settings round-trip.
-- Testing skeleton under `testing/ViewPerformanceAnalyzer/` when implementation starts; scoring covered by `testing/UnitTests`.
+- Testing skeleton under `testing/Tools/ViewPerformanceAnalyzer/` when implementation starts; scoring covered by `testing/UnitTests`.

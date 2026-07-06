@@ -57,4 +57,4 @@
 - Follows suite conventions (BaseToolControl, RunAsync/RetrieveAll, Load/SaveSettings, progress+cancel).
 - Read-only default (never imports/upgrades); layer-analysis algorithm is UI-free and degrades query failures to Info; DRA deletion/schema analyzers reused.
 - Export formats: Excel, PDF, JSON, HTML (CAB-ready).
-- Testing skeleton under testing/ManagedSolutionImpactChecker/ when implementation starts.
+- Testing skeleton under testing/Tools/ManagedSolutionImpactChecker/ when implementation starts.

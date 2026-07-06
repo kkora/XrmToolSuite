@@ -3,7 +3,7 @@
 > **Status:** Implemented (v1). Read-only inventory tool with client-side search/filter and Excel/CSV/JSON/Markdown/HTML/Word/PDF export.
 > **Tag:** `ADMIN07` · **Project:** `XrmToolSuite.EnvironmentInventory`
 > **Source backlog:** [`docs/backlog/04-Dataverse-Administration/ADMIN07.EnvironmentInventory.md`](../backlog/04-Dataverse-Administration/ADMIN07.EnvironmentInventory.md).
-> **Testing:** [`testing/EnvironmentInventory/`](../../testing/EnvironmentInventory/) — automated SDK-free tests in `testing/UnitTests/EnvironmentInventoryTests.cs`; manual GUI/live cases in `TEST_CASES.md`.
+> **Testing:** [`testing/Tools/EnvironmentInventory/`](../../testing/Tools/EnvironmentInventory/) — automated SDK-free tests in `testing/UnitTests/EnvironmentInventoryTests.cs`; manual GUI/live cases in `TEST_CASES.md`.
 
 ## Notes
 - Data sources (each in its own fail-soft try/catch; a permission gap degrades to an "unavailable source" note, never a hard error):
@@ -55,4 +55,4 @@
 - Follows suite conventions (`BaseToolControl`, `RunAsync`/`RetrieveAll`, Load/SaveSettings, progress + cancellation).
 - Read-only; no secrets/credentials persisted or exported; normalization model UI-free and unit-tested; degrades unavailable sources to a noted "unavailable source" rather than aborting.
 - Export formats: Excel, CSV, JSON, HTML, Markdown, Word, PDF.
-- Testing artifacts under `testing/EnvironmentInventory/`; automated tests in `testing/UnitTests/EnvironmentInventoryTests.cs`.
+- Testing artifacts under `testing/Tools/EnvironmentInventory/`; automated tests in `testing/UnitTests/EnvironmentInventoryTests.cs`.

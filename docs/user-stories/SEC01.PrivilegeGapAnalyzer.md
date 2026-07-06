@@ -50,4 +50,4 @@
 
 ## Definition of Done
 - Follows suite conventions; read-only default; sensitive values masked in exports; export formats: Excel, PDF, CSV, JSON, HTML.
-- Testing artifacts under `testing/PrivilegeGapAnalyzer/`; SDK-free engine covered by xUnit in `testing/UnitTests/`.
+- Testing artifacts under `testing/Tools/PrivilegeGapAnalyzer/`; SDK-free engine covered by xUnit in `testing/UnitTests/`.

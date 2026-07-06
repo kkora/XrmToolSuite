@@ -66,4 +66,4 @@
 ## Definition of Done
 - Follows suite conventions; read-only default (no registration changes); export formats as listed (PNG/SVG/PDF/Excel/JSON/GraphML/HTML).
 - All Dataverse access off the UI thread via `RunAsync`/`RetrieveAll`; secure-config secrets never exposed; unresolved flow/web-resource edges degrade to informational.
-- Testing skeleton under `testing/PluginDependencyGraph/` when implementation starts; SDK-free graph-model/impact logic covered by `testing/UnitTests`.
+- Testing skeleton under `testing/Tools/PluginDependencyGraph/` when implementation starts; SDK-free graph-model/impact logic covered by `testing/UnitTests`.

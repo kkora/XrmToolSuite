@@ -85,4 +85,4 @@ plus a risk-findings list, exportable for review.
 
 - Follows suite conventions; read-only; export formats Excel, PDF, CSV, HTML.
 - SDK-free risk rules unit-tested in `testing/UnitTests/TeamPermissionExplorerTests.cs`.
-- Testing artifacts under `testing/TeamPermissionExplorer/`.
+- Testing artifacts under `testing/Tools/TeamPermissionExplorer/`.
