@@ -12,7 +12,7 @@
     <title>Architecture Diagram Generator for XrmToolBox</title>
     <authors>Kanchan Kora</authors>
     <owners>Kanchan Kora</owners>
-    <projectUrl>https://github.com/kkora/XrmToolSuite</projectUrl>
+    <projectUrl>https://github.com/kkora/XrmToolSuite/blob/main/src/Tools/XrmToolSuite.ArchitectureDiagramGenerator/README.md</projectUrl>
     <iconUrl>https://raw.githubusercontent.com/kkora/XrmToolSuite/main/icon.png</iconUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <license type="expression">MIT</license>
