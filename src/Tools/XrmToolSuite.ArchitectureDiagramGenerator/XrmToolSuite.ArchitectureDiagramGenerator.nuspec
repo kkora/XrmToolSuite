@@ -8,7 +8,7 @@
          4) DLL goes under a "Plugins" folder
          5) iconUrl is required and must be your own icon -->
     <id>XrmToolSuite.ArchitectureDiagramGenerator</id>
-    <version>1.2026.7.2</version>
+    <version>1.2026.7.3</version>
     <title>Architecture Diagram Generator for XrmToolBox</title>
     <authors>Kanchan Kora</authors>
     <owners>Kanchan Kora</owners>
@@ -19,7 +19,7 @@
     <license type="expression">MIT</license>
     <description>Generates architecture diagrams (Mermaid, PlantUML, DOT/Graphviz, Markdown, self-contained HTML) from live Dataverse solution component and dependency metadata.</description>
     <summary>Generates architecture diagrams (Mermaid, PlantUML, DOT/Graphviz, Markdown, self-contained HTML) from live Dataverse solution component and dependency metadata.</summary>
-    <releaseNotes>1.2026.7.2: Initial release.</releaseNotes>
+    <releaseNotes>1.2026.7.3: Removed the redundant per-tool Close button; each tool now ships a README (rendered on its NuGet package page) and the package Project website points to that README.</releaseNotes>
     <tags>XrmToolBox Dataverse Dynamics365 PowerPlatform</tags>
     <dependencies>
       <dependency id="XrmToolBox" version="1.2025.10.74" />

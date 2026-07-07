@@ -8,7 +8,7 @@
          4) DLL goes under a "Plugins" folder
          5) iconUrl is required and must be your own icon -->
     <id>XrmToolSuite.SolutionKnowledgeGraph</id>
-    <version>1.2026.7.2</version>
+    <version>1.2026.7.3</version>
     <title>Solution Knowledge Graph for XrmToolBox</title>
     <authors>Kanchan Kora</authors>
     <owners>Kanchan Kora</owners>
@@ -19,7 +19,7 @@
     <license type="expression">MIT</license>
     <description>Builds an interactive dependency graph across a Dataverse solution with impact analysis, dependency tracing, circular-dependency detection, and PNG/SVG/GraphML export.</description>
     <summary>Builds an interactive dependency graph across a Dataverse solution with impact analysis, dependency tracing, circular-dependency detection, and PNG/SVG/GraphML export.</summary>
-    <releaseNotes>1.2026.7.2: Initial release.</releaseNotes>
+    <releaseNotes>1.2026.7.3: Removed the redundant per-tool Close button; each tool now ships a README (rendered on its NuGet package page) and the package Project website points to that README.</releaseNotes>
     <tags>XrmToolBox Dataverse Dynamics365 PowerPlatform DependencyGraph ALM Visualization</tags>
     <dependencies>
       <dependency id="XrmToolBox" version="1.2025.10.74" />

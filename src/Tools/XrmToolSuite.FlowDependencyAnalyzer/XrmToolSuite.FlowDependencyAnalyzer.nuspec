@@ -8,7 +8,7 @@
          4) DLL goes under a "Plugins" folder
          5) iconUrl is required and must be your own icon -->
     <id>XrmToolSuite.FlowDependencyAnalyzer</id>
-    <version>1.2026.7.2</version>
+    <version>1.2026.7.3</version>
     <title>Flow Dependency Analyzer for XrmToolBox</title>
     <authors>Kanchan Kora</authors>
     <owners>Kanchan Kora</owners>
@@ -19,7 +19,7 @@
     <license type="expression">MIT</license>
     <description>Read-only static mapper of cloud-flow dependencies from clientdata: per-flow trigger, Dataverse tables/columns, connectors, connection references, environment variables, child flows, custom APIs and HTTP actions, plus a reverse "which flows break if I change this component?" impact view, missing-metadata and hardcoded-value risk findings, and a deployment-readiness checklist. Exports Excel, PDF, JSON and HTML. HTTP endpoint URLs, SAS/trigger URLs and secrets are always redacted.</description>
     <summary>Statically maps every cloud flow's Dataverse/connector/connection-reference/environment-variable/custom-API/child-flow dependency with reverse component-impact analysis. Secrets redacted.</summary>
-    <releaseNotes>1.2026.7.2: Initial release.</releaseNotes>
+    <releaseNotes>1.2026.7.3: Removed the redundant per-tool Close button; each tool now ships a README (rendered on its NuGet package page) and the package Project website points to that README.</releaseNotes>
     <tags>XrmToolBox Dataverse Dynamics365 PowerPlatform PowerAutomate Flow Dependencies ALM</tags>
     <dependencies>
       <dependency id="XrmToolBox" version="1.2025.10.74" />
