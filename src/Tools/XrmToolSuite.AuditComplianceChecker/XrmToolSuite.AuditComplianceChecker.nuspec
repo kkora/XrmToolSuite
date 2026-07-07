@@ -8,23 +8,25 @@
          4) DLL goes under a "Plugins" folder
          5) iconUrl is required and must be your own icon -->
     <id>XrmToolSuite.AuditComplianceChecker</id>
-    <version>1.2026.7.2</version>
+    <version>1.2026.7.3</version>
     <title>Audit Compliance Checker for XrmToolBox</title>
     <authors>Kanchan Kora</authors>
     <owners>Kanchan Kora</owners>
     <projectUrl>https://github.com/kkora/XrmToolSuite/blob/main/src/Tools/XrmToolSuite.AuditComplianceChecker/README.md</projectUrl>
     <iconUrl>https://raw.githubusercontent.com/kkora/XrmToolSuite/main/icon.png</iconUrl>
+    <readme>README.md</readme>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <license type="expression">MIT</license>
     <description>Checks org/table/column audit settings and audit activity, flags coverage gaps (sensitive tables/columns without auditing) and risky changes (deletes, security-role changes, after-hours edits), and scores audit compliance readiness (0-100). Read-only; exports to Excel, PDF, JSON, HTML, and CSV with changed values masked.</description>
     <summary>Prove audit coverage: score org/table/column audit settings + activity, flag gaps and risky changes.</summary>
-    <releaseNotes>1.2026.7.2: Initial release as part of XrmToolSuite.</releaseNotes>
+    <releaseNotes>1.2026.7.3: Removed the redundant per-tool Close button; each tool now ships a README (rendered on its NuGet package page) and the package Project website points to that README.</releaseNotes>
     <tags>XrmToolBox Dataverse Dynamics365 PowerPlatform Security Audit Compliance Governance</tags>
     <dependencies>
       <dependency id="XrmToolBox" version="1.2025.10.74" />
     </dependencies>
   </metadata>
   <files>
+    <file src="README.md" target="README.md" />
     <file src="bin\Release\net48\XrmToolSuite.AuditComplianceChecker.dll" target="lib\net48\Plugins" />
     <!-- Excel-export chain in the Plugins ROOT next to the tool DLL. XrmToolBox's plugin analysis
          must resolve the tool's ClosedXML reference at scan time (before the tool's AssemblyResolve

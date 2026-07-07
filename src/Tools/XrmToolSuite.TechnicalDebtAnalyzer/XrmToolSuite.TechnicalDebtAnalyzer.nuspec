@@ -8,23 +8,25 @@
          4) DLL goes under a "Plugins" folder
          5) iconUrl is required and must be your own icon -->
     <id>XrmToolSuite.TechnicalDebtAnalyzer</id>
-    <version>1.2026.7.2</version>
+    <version>1.2026.7.3</version>
     <title>Technical Debt Analyzer for XrmToolBox</title>
     <authors>Kanchan Kora</authors>
     <owners>Kanchan Kora</owners>
     <projectUrl>https://github.com/kkora/XrmToolSuite/blob/main/src/Tools/XrmToolSuite.TechnicalDebtAnalyzer/README.md</projectUrl>
     <iconUrl>https://raw.githubusercontent.com/kkora/XrmToolSuite/main/icon.png</iconUrl>
+    <readme>README.md</readme>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <license type="expression">MIT</license>
     <description>Scans a Dataverse environment to calculate a Technical Debt Score and produce prioritized cleanup recommendations.</description>
     <summary>Scans a Dataverse environment to calculate a Technical Debt Score and produce prioritized cleanup recommendations.</summary>
-    <releaseNotes>1.2026.7.2: Initial release.</releaseNotes>
+    <releaseNotes>1.2026.7.3: Removed the redundant per-tool Close button; each tool now ships a README (rendered on its NuGet package page) and the package Project website points to that README.</releaseNotes>
     <tags>XrmToolBox Dataverse Dynamics365 PowerPlatform TechnicalDebt ALM</tags>
     <dependencies>
       <dependency id="XrmToolBox" version="1.2025.10.74" />
     </dependencies>
   </metadata>
   <files>
+    <file src="README.md" target="README.md" />
     <!-- The tool DLL plus the Excel (ClosedXML) and native-PDF (PdfSharp/MigraDoc GDI) chains. These
          go in the Plugins ROOT (next to the DLL, NOT a subfolder) so XrmToolBox can resolve the tool's
          direct ClosedXML/PdfSharp/MigraDoc references during plugin analysis. Newtonsoft and the

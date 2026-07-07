@@ -8,23 +8,25 @@
          4) DLL goes under a "Plugins" folder
          5) iconUrl is required and must be your own icon -->
     <id>XrmToolSuite.EnvironmentComparisonSuite</id>
-    <version>1.2026.7.2</version>
+    <version>1.2026.7.3</version>
     <title>Environment Comparison Suite for XrmToolBox</title>
     <authors>Kanchan Kora</authors>
     <owners>Kanchan Kora</owners>
     <projectUrl>https://github.com/kkora/XrmToolSuite/blob/main/src/Tools/XrmToolSuite.EnvironmentComparisonSuite/README.md</projectUrl>
     <iconUrl>https://raw.githubusercontent.com/kkora/XrmToolSuite/main/icon.png</iconUrl>
+    <readme>README.md</readme>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <license type="expression">MIT</license>
     <description>Read-only source-to-target Dataverse environment comparison across every component class (solutions/publishers, tables/columns/relationships/keys, forms/views/charts/dashboards, roles/teams/business units, plugin assemblies/steps/images, processes, custom APIs, environment variables, connection references, web resources). Classifies each component Missing/Extra/Changed/Managed-vs-Unmanaged, rolls a weighted difference score with severities, and exports Excel/PDF/JSON/HTML. Secret-typed values are masked. Uses the suite dual-connection pattern for the target environment. Never writes to either environment.</description>
     <summary>Read-only source-to-target environment comparison: classifies Missing/Extra/Changed/Managed-vs-Unmanaged per component, scores the difference, and exports Excel/PDF/JSON/HTML.</summary>
-    <releaseNotes>1.2026.7.2: Initial release.</releaseNotes>
+    <releaseNotes>1.2026.7.3: Removed the redundant per-tool Close button; each tool now ships a README (rendered on its NuGet package page) and the package Project website points to that README.</releaseNotes>
     <tags>XrmToolBox Dataverse Dynamics365 PowerPlatform ALM EnvironmentComparison Drift Migration</tags>
     <dependencies>
       <dependency id="XrmToolBox" version="1.2025.10.74" />
     </dependencies>
   </metadata>
   <files>
+    <file src="README.md" target="README.md" />
     <file src="bin\Release\net48\XrmToolSuite.EnvironmentComparisonSuite.dll" target="lib\net48\Plugins" />
     <!-- Excel-export chain in the Plugins ROOT next to the tool DLL. XrmToolBox's plugin
          analysis must resolve the tool's ClosedXML reference at scan time (before the tool's

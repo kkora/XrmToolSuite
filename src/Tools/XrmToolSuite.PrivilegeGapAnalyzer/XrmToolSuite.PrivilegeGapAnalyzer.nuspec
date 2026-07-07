@@ -8,23 +8,25 @@
          4) DLL goes under a "Plugins" folder
          5) iconUrl is required and must be your own icon -->
     <id>XrmToolSuite.PrivilegeGapAnalyzer</id>
-    <version>1.2026.7.2</version>
+    <version>1.2026.7.3</version>
     <title>Privilege Gap Analyzer for XrmToolBox</title>
     <authors>Kanchan Kora</authors>
     <owners>Kanchan Kora</owners>
     <projectUrl>https://github.com/kkora/XrmToolSuite/blob/main/src/Tools/XrmToolSuite.PrivilegeGapAnalyzer/README.md</projectUrl>
     <iconUrl>https://raw.githubusercontent.com/kkora/XrmToolSuite/main/icon.png</iconUrl>
+    <readme>README.md</readme>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <license type="expression">MIT</license>
     <description>Diagnoses missing Dataverse privileges (why a user/team/role cannot perform an operation) and recommends role changes. Exports the diagnosis to Excel, native PDF, JSON, CSV, and an HTML report.</description>
     <summary>Diagnoses missing Dataverse privileges (why a user/team/role cannot perform an operation) and recommends role changes. Exports Excel, PDF, JSON, CSV, HTML.</summary>
-    <releaseNotes>1.2026.7.2: Initial release.</releaseNotes>
+    <releaseNotes>1.2026.7.3: Removed the redundant per-tool Close button; each tool now ships a README (rendered on its NuGet package page) and the package Project website points to that README.</releaseNotes>
     <tags>XrmToolBox Dataverse Dynamics365 PowerPlatform</tags>
     <dependencies>
       <dependency id="XrmToolBox" version="1.2025.10.74" />
     </dependencies>
   </metadata>
   <files>
+    <file src="README.md" target="README.md" />
     <file src="bin\Release\net48\XrmToolSuite.PrivilegeGapAnalyzer.dll" target="lib\net48\Plugins" />
     <!-- Excel-export chain in the Plugins ROOT next to the tool DLL. XrmToolBox's plugin
          analysis must resolve the tool's ClosedXML reference at scan time (before the tool's

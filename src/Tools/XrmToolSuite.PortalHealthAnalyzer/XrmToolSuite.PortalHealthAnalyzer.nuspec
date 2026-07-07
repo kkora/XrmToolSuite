@@ -8,23 +8,25 @@
          4) DLL goes under a "Plugins" folder
          5) iconUrl is required and must be your own icon -->
     <id>XrmToolSuite.PortalHealthAnalyzer</id>
-    <version>1.2026.7.2</version>
+    <version>1.2026.7.3</version>
     <title>Portal Health Analyzer for XrmToolBox</title>
     <authors>Kanchan Kora</authors>
     <owners>Kanchan Kora</owners>
     <projectUrl>https://github.com/kkora/XrmToolSuite/blob/main/src/Tools/XrmToolSuite.PortalHealthAnalyzer/README.md</projectUrl>
     <iconUrl>https://raw.githubusercontent.com/kkora/XrmToolSuite/main/icon.png</iconUrl>
+    <readme>README.md</readme>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <license type="expression">MIT</license>
     <description>Read-only health scoring of a Power Pages website across the dual adx_/mspp_ schemas. Detects the provisioned schema, inventories the site (pages, templates, page templates, snippets, site settings, web roles, table permissions, forms, lists, web files, redirects), and runs structural-integrity, site-settings, and security-surface rules to produce a 0–100 health score, configuration summary cards, and a categorized issue grid with recommendations. Exports Excel/PDF/Word/JSON/HTML/CSV.</description>
     <summary>Inventories a Power Pages website (adx_/mspp_ schemas) and scores portal health with a categorized issue grid and Excel/PDF/Word/JSON/HTML/CSV export.</summary>
-    <releaseNotes>1.2026.7.2: Initial release.</releaseNotes>
+    <releaseNotes>1.2026.7.3: Removed the redundant per-tool Close button; each tool now ships a README (rendered on its NuGet package page) and the package Project website points to that README.</releaseNotes>
     <tags>XrmToolBox Dataverse Dynamics365 PowerPlatform PowerPages Portal Health</tags>
     <dependencies>
       <dependency id="XrmToolBox" version="1.2025.10.74" />
     </dependencies>
   </metadata>
   <files>
+    <file src="README.md" target="README.md" />
     <file src="bin\Release\net48\XrmToolSuite.PortalHealthAnalyzer.dll" target="lib\net48\Plugins" />
     <!-- Excel-export chain in the Plugins ROOT next to the tool DLL. XrmToolBox's plugin
          analysis must resolve the tool's ClosedXML reference at scan time (before the tool's

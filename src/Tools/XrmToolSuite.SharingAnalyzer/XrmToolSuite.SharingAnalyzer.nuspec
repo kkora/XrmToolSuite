@@ -8,23 +8,25 @@
          4) DLL goes under a "Plugins" folder
          5) iconUrl is required and must be your own icon -->
     <id>XrmToolSuite.SharingAnalyzer</id>
-    <version>1.2026.7.2</version>
+    <version>1.2026.7.3</version>
     <title>Sharing Analyzer for XrmToolBox</title>
     <authors>Kanchan Kora</authors>
     <owners>Kanchan Kora</owners>
     <projectUrl>https://github.com/kkora/XrmToolSuite/blob/main/src/Tools/XrmToolSuite.SharingAnalyzer/README.md</projectUrl>
     <iconUrl>https://raw.githubusercontent.com/kkora/XrmToolSuite/main/icon.png</iconUrl>
+    <readme>README.md</readme>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <license type="expression">MIT</license>
     <description>Analyzes PrincipalObjectAccess (record-level sharing) by table and principal: decodes access rights, flags excessive and stale shares (inactive users, disabled/empty teams, outlier records, inbound access sprawl), shows a table x principal intensity view, and previews cleanup recommendations. Read-only, with an exportable sharing report (Excel, PDF, JSON, HTML, CSV).</description>
     <summary>Find and clean up excessive and stale record-level sharing (PrincipalObjectAccess) by table and principal.</summary>
-    <releaseNotes>1.2026.7.2: Initial release as part of XrmToolSuite.</releaseNotes>
+    <releaseNotes>1.2026.7.3: Removed the redundant per-tool Close button; each tool now ships a README (rendered on its NuGet package page) and the package Project website points to that README.</releaseNotes>
     <tags>XrmToolBox Dataverse Dynamics365 PowerPlatform Security Sharing PrincipalObjectAccess Governance</tags>
     <dependencies>
       <dependency id="XrmToolBox" version="1.2025.10.74" />
     </dependencies>
   </metadata>
   <files>
+    <file src="README.md" target="README.md" />
     <file src="bin\Release\net48\XrmToolSuite.SharingAnalyzer.dll" target="lib\net48\Plugins" />
     <!-- Excel-export chain in the Plugins ROOT next to the tool DLL. XrmToolBox's plugin analysis
          must resolve the tool's ClosedXML reference at scan time (before the tool's AssemblyResolve

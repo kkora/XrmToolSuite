@@ -2,23 +2,25 @@
 <package>
   <metadata>
     <id>XrmToolSuite.DeploymentRiskAnalyzer</id>
-    <version>1.2026.7.2</version>
+    <version>1.2026.7.3</version>
     <title>Deployment Risk Analyzer for XrmToolBox</title>
     <authors>Kanchan Kora</authors>
     <owners>Kanchan Kora</owners>
     <projectUrl>https://github.com/kkora/XrmToolSuite/blob/main/src/Tools/XrmToolSuite.DeploymentRiskAnalyzer/README.md</projectUrl>
     <iconUrl>https://raw.githubusercontent.com/kkora/XrmToolSuite/main/icon.png</iconUrl>
+    <readme>README.md</readme>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <license type="expression">MIT</license>
     <description>Pre-deployment risk analysis for Dataverse solutions: dependency, environment variable, flow/plugin, security, schema conflict and Power Pages readiness checks with an exportable risk report (native PDF, HTML dashboard, Excel, CI JSON, Markdown).</description>
     <summary>Analyze a solution before deployment and get a risk-scored readiness report.</summary>
-    <releaseNotes>1.2026.7.2: Initial release as part of XrmToolSuite.</releaseNotes>
+    <releaseNotes>1.2026.7.3: Removed the redundant per-tool Close button; each tool now ships a README (rendered on its NuGet package page) and the package Project website points to that README.</releaseNotes>
     <tags>XrmToolBox Dataverse Deployment ALM RiskAnalysis PowerPages</tags>
     <dependencies>
       <dependency id="XrmToolBox" version="1.2025.10.74" />
     </dependencies>
   </metadata>
   <files>
+    <file src="README.md" target="README.md" />
     <file src="bin\Release\net48\XrmToolSuite.DeploymentRiskAnalyzer.dll" target="lib\net48\Plugins" />
     <!-- Excel-export chain in the Plugins ROOT next to the tool DLL. XrmToolBox's plugin
          analysis must resolve the tool's ClosedXML reference at scan time (before the tool's
