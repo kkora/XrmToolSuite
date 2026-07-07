@@ -72,9 +72,12 @@ namespace XrmToolSuite.Core
                     RowCount = 4
                 };
 
-                layout.Controls.Add(HelpLink("📖  Documentation",
+                // Use BMP symbols (Segoe UI / Segoe UI Symbol, present on all Windows) rather than
+                // SMP emoji like 📖/🐞 (U+1F4xx): those fall back to a tofu box in the default WinForms
+                // font on many machines, whereas ☕ (U+2615, BMP) renders — so keep all three in the BMP.
+                layout.Controls.Add(HelpLink("ℹ  Documentation",
                     "Read the suite documentation and per-tool guides.", SuiteDocsUrl));
-                layout.Controls.Add(HelpLink("🐞  Report an issue",
+                layout.Controls.Add(HelpLink("⚠  Report an issue",
                     "Found a bug or have a request? Open a GitHub issue.", SuiteIssuesUrl));
                 layout.Controls.Add(HelpLink("☕  Support the project",
                     "If these tools save you time, consider buying a coffee.", SuiteSupportUrl));
