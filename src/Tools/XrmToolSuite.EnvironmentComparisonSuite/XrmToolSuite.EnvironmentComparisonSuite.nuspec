@@ -14,6 +14,7 @@
     <owners>Kanchan Kora</owners>
     <projectUrl>https://github.com/kkora/XrmToolSuite/blob/main/src/Tools/XrmToolSuite.EnvironmentComparisonSuite/README.md</projectUrl>
     <iconUrl>https://raw.githubusercontent.com/kkora/XrmToolSuite/main/icon.png</iconUrl>
+    <readme>README.md</readme>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <license type="expression">MIT</license>
     <description>Read-only source-to-target Dataverse environment comparison across every component class (solutions/publishers, tables/columns/relationships/keys, forms/views/charts/dashboards, roles/teams/business units, plugin assemblies/steps/images, processes, custom APIs, environment variables, connection references, web resources). Classifies each component Missing/Extra/Changed/Managed-vs-Unmanaged, rolls a weighted difference score with severities, and exports Excel/PDF/JSON/HTML. Secret-typed values are masked. Uses the suite dual-connection pattern for the target environment. Never writes to either environment.</description>
@@ -25,6 +26,7 @@
     </dependencies>
   </metadata>
   <files>
+    <file src="README.md" target="README.md" />
     <file src="bin\Release\net48\XrmToolSuite.EnvironmentComparisonSuite.dll" target="lib\net48\Plugins" />
     <!-- Excel-export chain in the Plugins ROOT next to the tool DLL. XrmToolBox's plugin
          analysis must resolve the tool's ClosedXML reference at scan time (before the tool's

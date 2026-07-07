@@ -14,6 +14,7 @@
     <owners>Kanchan Kora</owners>
     <projectUrl>https://github.com/kkora/XrmToolSuite/blob/main/src/Tools/XrmToolSuite.TechnicalDebtAnalyzer/README.md</projectUrl>
     <iconUrl>https://raw.githubusercontent.com/kkora/XrmToolSuite/main/icon.png</iconUrl>
+    <readme>README.md</readme>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <license type="expression">MIT</license>
     <description>Scans a Dataverse environment to calculate a Technical Debt Score and produce prioritized cleanup recommendations.</description>
@@ -25,6 +26,7 @@
     </dependencies>
   </metadata>
   <files>
+    <file src="README.md" target="README.md" />
     <!-- The tool DLL plus the Excel (ClosedXML) and native-PDF (PdfSharp/MigraDoc GDI) chains. These
          go in the Plugins ROOT (next to the DLL, NOT a subfolder) so XrmToolBox can resolve the tool's
          direct ClosedXML/PdfSharp/MigraDoc references during plugin analysis. Newtonsoft and the

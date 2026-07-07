@@ -14,6 +14,7 @@
     <owners>Kanchan Kora</owners>
     <projectUrl>https://github.com/kkora/XrmToolSuite/blob/main/src/Tools/XrmToolSuite.SolutionDocumentationGenerator/README.md</projectUrl>
     <iconUrl>https://raw.githubusercontent.com/kkora/XrmToolSuite/main/icon.png</iconUrl>
+    <readme>README.md</readme>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <license type="expression">MIT</license>
     <description>Generates complete technical/business documentation for a Dataverse solution (schema, UI, automation, plugins, web resources, custom APIs, config, roles, diagrams, summaries) exported to Word/PDF/Markdown/HTML/Excel/JSON.</description>
@@ -25,6 +26,7 @@
     </dependencies>
   </metadata>
   <files>
+    <file src="README.md" target="README.md" />
     <file src="bin\Release\net48\XrmToolSuite.SolutionDocumentationGenerator.dll" target="lib\net48\Plugins" />
     <!-- Excel-export chain (ClosedXML + OpenXml, the latter also drives the Word .docx export) in the
          Plugins ROOT next to the tool DLL. XrmToolBox's plugin analysis must resolve the tool's ClosedXML

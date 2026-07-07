@@ -14,6 +14,7 @@
     <owners>Kanchan Kora</owners>
     <projectUrl>https://github.com/kkora/XrmToolSuite/blob/main/src/Tools/XrmToolSuite.FlowDependencyAnalyzer/README.md</projectUrl>
     <iconUrl>https://raw.githubusercontent.com/kkora/XrmToolSuite/main/icon.png</iconUrl>
+    <readme>README.md</readme>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <license type="expression">MIT</license>
     <description>Read-only static mapper of cloud-flow dependencies from clientdata: per-flow trigger, Dataverse tables/columns, connectors, connection references, environment variables, child flows, custom APIs and HTTP actions, plus a reverse "which flows break if I change this component?" impact view, missing-metadata and hardcoded-value risk findings, and a deployment-readiness checklist. Exports Excel, PDF, JSON and HTML. HTTP endpoint URLs, SAS/trigger URLs and secrets are always redacted.</description>
@@ -25,6 +26,7 @@
     </dependencies>
   </metadata>
   <files>
+    <file src="README.md" target="README.md" />
     <file src="bin\Release\net48\XrmToolSuite.FlowDependencyAnalyzer.dll" target="lib\net48\Plugins" />
     <!-- Excel-export chain in the Plugins ROOT next to the tool DLL. XrmToolBox's plugin
          analysis must resolve the tool's ClosedXML reference at scan time (before the tool's

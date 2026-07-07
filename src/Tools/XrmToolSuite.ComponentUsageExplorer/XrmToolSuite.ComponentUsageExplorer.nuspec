@@ -14,6 +14,7 @@
     <owners>Kanchan Kora</owners>
     <projectUrl>https://github.com/kkora/XrmToolSuite/blob/main/src/Tools/XrmToolSuite.ComponentUsageExplorer/README.md</projectUrl>
     <iconUrl>https://raw.githubusercontent.com/kkora/XrmToolSuite/main/icon.png</iconUrl>
+    <readme>README.md</readme>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <license type="expression">MIT</license>
     <description>Pick one Dataverse component (table, column, form, view, chart, workflow/flow, web resource, plugin step, security role, app, environment variable) and see its full "where used" footprint: the components it requires, the components that depend on it (from the platform dependency APIs), and a per-type usage tally. Emits a single change-safety verdict — Safe to change / Change with caution / High impact / Do not delete / Requires dependency review / Requires ALM review — with a banded impact score and a plain-language explanation of what would break and which review steps are required. Read-only; exports Excel/PDF/JSON/HTML.</description>
@@ -25,6 +26,7 @@
     </dependencies>
   </metadata>
   <files>
+    <file src="README.md" target="README.md" />
     <file src="bin\Release\net48\XrmToolSuite.ComponentUsageExplorer.dll" target="lib\net48\Plugins" />
     <!-- Excel-export chain in the Plugins ROOT next to the tool DLL. XrmToolBox's plugin
          analysis must resolve the tool's ClosedXML reference at scan time (before the tool's

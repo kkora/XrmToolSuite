@@ -14,6 +14,7 @@
     <owners>Kanchan Kora</owners>
     <projectUrl>https://github.com/kkora/XrmToolSuite/blob/main/src/Tools/XrmToolSuite.FetchXmlPerformanceAnalyzer/README.md</projectUrl>
     <iconUrl>https://raw.githubusercontent.com/kkora/XrmToolSuite/main/icon.png</iconUrl>
+    <readme>README.md</readme>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <license type="expression">MIT</license>
     <description>Paste or load FetchXML from a view and analyze it for performance risks — all-attributes, missing filters, excessive/outer joins, link-entity sorts, aggregation and paging issues. Produces severity-ranked findings, a heuristic cost estimate, optimization suggestions, optional read-only execution timing, and Excel/PDF/JSON/HTML/Markdown/CSV exports. Read-only.</description>
@@ -25,6 +26,7 @@
     </dependencies>
   </metadata>
   <files>
+    <file src="README.md" target="README.md" />
     <file src="bin\Release\net48\XrmToolSuite.FetchXmlPerformanceAnalyzer.dll" target="lib\net48\Plugins" />
     <!-- Excel-export chain in the Plugins ROOT next to the tool DLL. XrmToolBox's plugin
          analysis must resolve the tool's ClosedXML reference at scan time (before the tool's

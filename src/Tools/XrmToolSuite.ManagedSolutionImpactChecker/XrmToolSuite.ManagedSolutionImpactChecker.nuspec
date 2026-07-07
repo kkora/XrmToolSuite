@@ -14,6 +14,7 @@
     <owners>Kanchan Kora</owners>
     <projectUrl>https://github.com/kkora/XrmToolSuite/blob/main/src/Tools/XrmToolSuite.ManagedSolutionImpactChecker/README.md</projectUrl>
     <iconUrl>https://raw.githubusercontent.com/kkora/XrmToolSuite/main/icon.png</iconUrl>
+    <readme>README.md</readme>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <license type="expression">MIT</license>
     <description>Read-only impact analysis for importing/upgrading/patching/deleting a managed solution. Analyzes solution layering (unmanaged customizations sitting above managed layers), overwrite and deletion risk with explicit Upgrade-vs-Update/Patch semantics (an Upgrade deletes components missing from the incoming solution — and their data — while Update/Patch do not), missing dependencies, publisher prefix mismatches, and restrictive managed properties. Produces a banded impact score, a per-path risk breakdown, a pre-upgrade checklist, rollback guidance, and a CAB-ready report (Excel/PDF/JSON/HTML). Never performs the import or upgrade.</description>
@@ -25,6 +26,7 @@
     </dependencies>
   </metadata>
   <files>
+    <file src="README.md" target="README.md" />
     <file src="bin\Release\net48\XrmToolSuite.ManagedSolutionImpactChecker.dll" target="lib\net48\Plugins" />
     <!-- Excel-export chain in the Plugins ROOT next to the tool DLL. XrmToolBox's plugin
          analysis must resolve the tool's ClosedXML reference at scan time (before the tool's

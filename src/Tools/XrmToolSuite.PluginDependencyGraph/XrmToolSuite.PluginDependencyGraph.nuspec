@@ -14,6 +14,7 @@
     <owners>Kanchan Kora</owners>
     <projectUrl>https://github.com/kkora/XrmToolSuite/blob/main/src/Tools/XrmToolSuite.PluginDependencyGraph/README.md</projectUrl>
     <iconUrl>https://raw.githubusercontent.com/kkora/XrmToolSuite/main/icon.png</iconUrl>
+    <readme>README.md</readme>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <license type="expression">MIT</license>
     <description>Read-only dependency graph of Dataverse plugin registrations (assembly to type to step to image to message/table to custom API to solution/config) with high-impact, duplicate-step and unmanaged-registration detection, exportable as PNG/SVG/PDF/Excel/JSON/GraphML/HTML.</description>
@@ -25,6 +26,7 @@
     </dependencies>
   </metadata>
   <files>
+    <file src="README.md" target="README.md" />
     <file src="bin\Release\net48\XrmToolSuite.PluginDependencyGraph.dll" target="lib\net48\Plugins" />
     <!-- Excel-export chain in the Plugins ROOT next to the tool DLL. XrmToolBox's plugin analysis must
          resolve the tool's ClosedXML reference at scan time (before the tool's AssemblyResolve handler

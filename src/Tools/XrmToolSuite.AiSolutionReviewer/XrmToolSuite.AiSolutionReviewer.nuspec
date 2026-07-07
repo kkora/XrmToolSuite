@@ -14,6 +14,7 @@
     <owners>Kanchan Kora</owners>
     <projectUrl>https://github.com/kkora/XrmToolSuite/blob/main/src/Tools/XrmToolSuite.AiSolutionReviewer/README.md</projectUrl>
     <iconUrl>https://raw.githubusercontent.com/kkora/XrmToolSuite/main/icon.png</iconUrl>
+    <readme>README.md</readme>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <license type="expression">MIT</license>
     <description>AI-assisted architecture review of a Dataverse solution with recommendations, a prioritized backlog, and Word/PDF/Markdown/HTML reports.</description>
@@ -25,6 +26,7 @@
     </dependencies>
   </metadata>
   <files>
+    <file src="README.md" target="README.md" />
     <!-- The tool DLL plus the Word/Excel (OpenXML/ClosedXML) and native-PDF (PdfSharp/MigraDoc GDI)
          chains, all in the Plugins ROOT so XrmToolBox resolves the direct references during scan. -->
     <file src="bin\Release\net48\XrmToolSuite.AiSolutionReviewer.dll" target="lib\net48\Plugins" />

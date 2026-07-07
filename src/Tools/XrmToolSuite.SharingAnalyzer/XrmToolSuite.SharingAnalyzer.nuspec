@@ -14,6 +14,7 @@
     <owners>Kanchan Kora</owners>
     <projectUrl>https://github.com/kkora/XrmToolSuite/blob/main/src/Tools/XrmToolSuite.SharingAnalyzer/README.md</projectUrl>
     <iconUrl>https://raw.githubusercontent.com/kkora/XrmToolSuite/main/icon.png</iconUrl>
+    <readme>README.md</readme>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <license type="expression">MIT</license>
     <description>Analyzes PrincipalObjectAccess (record-level sharing) by table and principal: decodes access rights, flags excessive and stale shares (inactive users, disabled/empty teams, outlier records, inbound access sprawl), shows a table x principal intensity view, and previews cleanup recommendations. Read-only, with an exportable sharing report (Excel, PDF, JSON, HTML, CSV).</description>
@@ -25,6 +26,7 @@
     </dependencies>
   </metadata>
   <files>
+    <file src="README.md" target="README.md" />
     <file src="bin\Release\net48\XrmToolSuite.SharingAnalyzer.dll" target="lib\net48\Plugins" />
     <!-- Excel-export chain in the Plugins ROOT next to the tool DLL. XrmToolBox's plugin analysis
          must resolve the tool's ClosedXML reference at scan time (before the tool's AssemblyResolve

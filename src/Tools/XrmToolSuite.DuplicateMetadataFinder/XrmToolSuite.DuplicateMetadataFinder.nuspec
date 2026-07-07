@@ -14,6 +14,7 @@
     <owners>Kanchan Kora</owners>
     <projectUrl>https://github.com/kkora/XrmToolSuite/blob/main/src/Tools/XrmToolSuite.DuplicateMetadataFinder/README.md</projectUrl>
     <iconUrl>https://raw.githubusercontent.com/kkora/XrmToolSuite/main/icon.png</iconUrl>
+    <readme>README.md</readme>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <license type="expression">MIT</license>
     <description>Groups duplicate and near-duplicate Dataverse metadata (columns, option sets, tables, forms, views, business rules, web resources, plugin steps, relationships) with a 0-100 similarity score per pair and a recommended primary to keep. Read-only; recommends only, never merges or deletes. Excel/PDF/JSON/HTML export.</description>
@@ -25,6 +26,7 @@
     </dependencies>
   </metadata>
   <files>
+    <file src="README.md" target="README.md" />
     <file src="bin\Release\net48\XrmToolSuite.DuplicateMetadataFinder.dll" target="lib\net48\Plugins" />
     <!-- Excel-export chain in the Plugins ROOT next to the tool DLL. XrmToolBox's plugin analysis
          must resolve the tool's ClosedXML reference at scan time (before the tool's AssemblyResolve

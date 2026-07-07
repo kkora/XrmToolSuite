@@ -14,6 +14,7 @@
     <owners>Kanchan Kora</owners>
     <projectUrl>https://github.com/kkora/XrmToolSuite/blob/main/src/Tools/XrmToolSuite.ApiDocumentationBuilder/README.md</projectUrl>
     <iconUrl>https://raw.githubusercontent.com/kkora/XrmToolSuite/main/icon.png</iconUrl>
+    <readme>README.md</readme>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <license type="expression">MIT</license>
     <description>Documents Dataverse Custom APIs (parameters, responses, binding, plugin) as a redaction-safe reference and an OpenAPI-style JSON spec; exports Markdown, self-contained HTML, JSON, and OpenAPI JSON. Read-only; never invokes APIs; masks secrets.</description>
@@ -25,6 +26,7 @@
     </dependencies>
   </metadata>
   <files>
+    <file src="README.md" target="README.md" />
     <!-- Ship ONLY your DLL; XrmToolBox already contains the SDK and shared libs -->
     <file src="bin\Release\net48\XrmToolSuite.ApiDocumentationBuilder.dll" target="lib\net48\Plugins" />
   </files>
