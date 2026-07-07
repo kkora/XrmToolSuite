@@ -1,0 +1,39 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package>
+  <metadata>
+    <!-- Tool Library rules (xrmtoolbox.com/documentation/for-developers):
+         1) version MUST equal the assembly version of your DLL
+         2) tags MUST start with "XrmToolBox" plus extra words
+         3) dependency MUST be on "XrmToolBox" (NOT XrmToolBoxPackage)
+         4) DLL goes under a "Plugins" folder
+         5) iconUrl is required and must be your own icon -->
+    <id>XrmToolSuite.ErdGenerator</id>
+    <version>1.2026.7.2</version>
+    <title>ERD Generator for XrmToolBox</title>
+    <authors>Kanchan Kora</authors>
+    <owners>Kanchan Kora</owners>
+    <projectUrl>https://github.com/kkora/XrmToolSuite</projectUrl>
+    <iconUrl>https://raw.githubusercontent.com/kkora/XrmToolSuite/main/icon.png</iconUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <license type="expression">MIT</license>
+    <description>Generates Dataverse entity-relationship diagrams (Mermaid, PlantUML, SVG, PNG, PDF, HTML, Markdown, JSON) from live metadata.</description>
+    <summary>Generates Dataverse entity-relationship diagrams (Mermaid, PlantUML, SVG, PNG, PDF, HTML, Markdown, JSON) from live metadata.</summary>
+    <releaseNotes>1.2026.7.2: Initial release.</releaseNotes>
+    <tags>XrmToolBox Dataverse Dynamics365 PowerPlatform ERD Metadata Documentation</tags>
+    <dependencies>
+      <dependency id="XrmToolBox" version="1.2025.10.74" />
+    </dependencies>
+  </metadata>
+  <files>
+    <file src="bin\Release\net48\XrmToolSuite.ErdGenerator.dll" target="lib\net48\Plugins" />
+    <!-- Native-PDF chain (PdfSharp/MigraDoc, GDI build — assemblies carry a -gdi suffix). Pure-managed;
+         ships in the Plugins ROOT next to the tool DLL so XrmToolBox's plugin analysis can resolve the
+         tool's PdfSharp/MigraDoc references at scan time (a subfolder silently drops the tool). This tool
+         does NOT ship the ClosedXML/Excel chain or the System.* facades — the GDI PDF build is self-contained. -->
+    <file src="bin\Release\net48\PdfSharp-gdi.dll" target="lib\net48\Plugins" />
+    <file src="bin\Release\net48\PdfSharp.Charting-gdi.dll" target="lib\net48\Plugins" />
+    <file src="bin\Release\net48\MigraDoc.DocumentObjectModel-gdi.dll" target="lib\net48\Plugins" />
+    <file src="bin\Release\net48\MigraDoc.Rendering-gdi.dll" target="lib\net48\Plugins" />
+    <file src="bin\Release\net48\MigraDoc.RtfRendering-gdi.dll" target="lib\net48\Plugins" />
+  </files>
+</package>

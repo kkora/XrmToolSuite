@@ -14,7 +14,7 @@ namespace XrmToolSuite.CollectorTests
     /// Headless tests for the AI Solution Reviewer's Dataverse collectors (the AI/HTTP summarization
     /// path stays manual). Each collector implements <c>IAnalyzer&lt;ReviewContext&gt;</c> and depends only on
     /// <see cref="IOrganizationService"/>, so it runs against the shared <see cref="FakeOrganizationService"/>.
-    /// Traces to US-AR-1 (design concerns). TC-AR-COL-01..09.
+    /// Traces to US-AI10-1 (design concerns). TC-AI10-COL-01..09.
     /// </summary>
     public class ReviewCollectorTests
     {
@@ -56,7 +56,7 @@ namespace XrmToolSuite.CollectorTests
 
         // ---- PluginReviewCollector -------------------------------------------------
 
-        // TC-AR-COL-01: a synchronous step with no filtering attributes flags Medium.
+        // TC-AI10-COL-01: a synchronous step with no filtering attributes flags Medium.
         [Fact]
         public void SyncStep_NoFiltering_FlagsMedium()
         {
@@ -67,7 +67,7 @@ namespace XrmToolSuite.CollectorTests
             Assert.Equal("acct_postcreate", f.Component);
         }
 
-        // TC-AR-COL-02: an async step, or a sync step WITH filtering, produces no sync finding.
+        // TC-AI10-COL-02: an async step, or a sync step WITH filtering, produces no sync finding.
         [Fact]
         public void AsyncOrFilteredStep_NoSyncFinding()
         {
@@ -78,7 +78,7 @@ namespace XrmToolSuite.CollectorTests
                 x => x.Title == "Synchronous step without filtering attributes");
         }
 
-        // TC-AR-COL-03: 20+ steps flag a Low "Heavy plugin footprint".
+        // TC-AI10-COL-03: 20+ steps flag a Low "Heavy plugin footprint".
         [Fact]
         public void ManySteps_FlagsHeavyFootprint()
         {
@@ -88,7 +88,7 @@ namespace XrmToolSuite.CollectorTests
                 x => x.Title == "Heavy plugin footprint" && x.Severity == Severity.Low);
         }
 
-        // TC-AR-COL-04: no plugin steps yields an Info finding.
+        // TC-AI10-COL-04: no plugin steps yields an Info finding.
         [Fact]
         public void NoSteps_FlagsInfo()
         {
@@ -100,7 +100,7 @@ namespace XrmToolSuite.CollectorTests
 
         // ---- ScriptReviewCollector -------------------------------------------------
 
-        // TC-AR-COL-05: a JScript web resource using a deprecated API flags Medium; non-JScript is ignored.
+        // TC-AI10-COL-05: a JScript web resource using a deprecated API flags Medium; non-JScript is ignored.
         [Fact]
         public void DeprecatedApi_InJScript_FlagsMedium()
         {
@@ -113,7 +113,7 @@ namespace XrmToolSuite.CollectorTests
             Assert.Equal(Severity.Medium, f.Severity);
         }
 
-        // TC-AR-COL-06: 15+ JScript web resources flag Low "Heavy client-side scripting".
+        // TC-AI10-COL-06: 15+ JScript web resources flag Low "Heavy client-side scripting".
         [Fact]
         public void ManyScripts_FlagsHeavyScripting()
         {
@@ -126,7 +126,7 @@ namespace XrmToolSuite.CollectorTests
 
         // ---- AutomationReviewCollector --------------------------------------------
 
-        // TC-AR-COL-07: a classic workflow (category 0) flags Medium; 25+ processes add "Automation sprawl".
+        // TC-AI10-COL-07: a classic workflow (category 0) flags Medium; 25+ processes add "Automation sprawl".
         [Fact]
         public void ClassicWorkflows_FlagMediumAndSprawl()
         {
@@ -139,7 +139,7 @@ namespace XrmToolSuite.CollectorTests
 
         // ---- AlmGovernanceReviewCollector -----------------------------------------
 
-        // TC-AR-COL-08: an unmanaged solution flags Medium, and a Version Info finding is always emitted.
+        // TC-AI10-COL-08: an unmanaged solution flags Medium, and a Version Info finding is always emitted.
         [Fact]
         public void UnmanagedSolution_FlagsMedium_AndVersionInfo()
         {
@@ -149,7 +149,7 @@ namespace XrmToolSuite.CollectorTests
             Assert.Contains(findings, x => x.Title == "Version" && x.Severity == Severity.Info);
         }
 
-        // TC-AR-COL-09: the default 'new_' publisher prefix flags Low.
+        // TC-AI10-COL-09: the default 'new_' publisher prefix flags Low.
         [Fact]
         public void DefaultPublisherPrefix_FlagsLow()
         {

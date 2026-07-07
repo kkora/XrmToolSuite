@@ -7,7 +7,7 @@ namespace XrmToolSuite.UnitTests
     /// <summary>
     /// Executable tests for the Solution Knowledge Graph's SDK-free model and exporters: dependency
     /// tracing (forward reachability), impact analysis (reverse reachability), circular-dependency
-    /// detection (Tarjan SCC), and GraphML/SVG/HTML output. Traces to US-KG-2..4.
+    /// detection (Tarjan SCC), and GraphML/SVG/HTML output. Traces to US-SOLN09-2..4.
     /// </summary>
     public class GraphTests
     {
@@ -26,7 +26,7 @@ namespace XrmToolSuite.UnitTests
             return g;
         }
 
-        // TC-KG-MODEL-01: nodes/edges are counted and duplicate edges are ignored.
+        // TC-SOLN09-MODEL-01: nodes/edges are counted and duplicate edges are ignored.
         [Fact]
         public void AddEdge_DedupsAndCounts()
         {
@@ -36,7 +36,7 @@ namespace XrmToolSuite.UnitTests
             Assert.Equal(4, g.EdgeCount);
         }
 
-        // TC-KG-MODEL-02: AddEdge auto-creates missing endpoints.
+        // TC-SOLN09-MODEL-02: AddEdge auto-creates missing endpoints.
         [Fact]
         public void AddEdge_AutoCreatesNodes()
         {
@@ -46,7 +46,7 @@ namespace XrmToolSuite.UnitTests
             Assert.NotNull(g.Node("Y"));
         }
 
-        // TC-KG-TRACE-03: dependency trace is forward transitive reachability, excluding the node itself.
+        // TC-SOLN09-TRACE-03: dependency trace is forward transitive reachability, excluding the node itself.
         [Fact]
         public void DependencyTrace_IsForwardReachable()
         {
@@ -57,7 +57,7 @@ namespace XrmToolSuite.UnitTests
             Assert.DoesNotContain("A", trace);
         }
 
-        // TC-KG-IMPACT-04: deletion impact is reverse transitive reachability (who depends on this).
+        // TC-SOLN09-IMPACT-04: deletion impact is reverse transitive reachability (who depends on this).
         [Fact]
         public void Impact_IsReverseReachable()
         {
@@ -68,7 +68,7 @@ namespace XrmToolSuite.UnitTests
             Assert.Contains("D", impact);
         }
 
-        // TC-KG-CYCLE-05: the A→B→C→A cycle is detected as one strongly-connected component.
+        // TC-SOLN09-CYCLE-05: the A→B→C→A cycle is detected as one strongly-connected component.
         [Fact]
         public void Cycles_DetectsStronglyConnectedComponent()
         {
@@ -82,7 +82,7 @@ namespace XrmToolSuite.UnitTests
             Assert.DoesNotContain("D", cycle);
         }
 
-        // TC-KG-CYCLE-06: an acyclic graph reports no cycles.
+        // TC-SOLN09-CYCLE-06: an acyclic graph reports no cycles.
         [Fact]
         public void Cycles_AcyclicGraph_None()
         {
@@ -92,7 +92,7 @@ namespace XrmToolSuite.UnitTests
             Assert.Empty(g.Cycles());
         }
 
-        // TC-KG-EXPORT-07: GraphML is well-formed and includes every node and edge.
+        // TC-SOLN09-EXPORT-07: GraphML is well-formed and includes every node and edge.
         [Fact]
         public void GraphMl_IncludesNodesAndEdges()
         {
@@ -104,7 +104,7 @@ namespace XrmToolSuite.UnitTests
             Assert.Contains("Account", xml);
         }
 
-        // TC-KG-EXPORT-08: SVG renders a circle per node and is self-contained.
+        // TC-SOLN09-EXPORT-08: SVG renders a circle per node and is self-contained.
         [Fact]
         public void Svg_RendersNodes()
         {
@@ -113,7 +113,7 @@ namespace XrmToolSuite.UnitTests
             Assert.Equal(4, System.Text.RegularExpressions.Regex.Matches(svg, "<circle ").Count);
         }
 
-        // TC-KG-EXPORT-09: the interactive HTML embeds the data and is self-contained (no external refs).
+        // TC-SOLN09-EXPORT-09: the interactive HTML embeds the data and is self-contained (no external refs).
         [Fact]
         public void Html_IsSelfContained_WithData()
         {
@@ -122,6 +122,45 @@ namespace XrmToolSuite.UnitTests
             Assert.Contains("\"label\":\"Account\"", html);
             Assert.DoesNotContain("http://", html.Replace("http://www.w3.org", "")); // no external hosts (w3 ns only)
             Assert.DoesNotContain("cdn", html.ToLowerInvariant());
+        }
+
+        // Regression: a label containing "</script>" must not terminate the embedding <script> block early
+        // (HTML tokenizes </script literally, ignoring JS string quoting) — < and > are \u-escaped in the JSON.
+        [Fact]
+        public void Html_EscapesScriptTerminatorInLabels()
+        {
+            var g = new GraphModel();
+            g.AddNode("id1", "Form", "x</script><img src=x onerror=alert(1)>y");
+            var html = HtmlGraphBuilder.Build(g, "T");
+            Assert.DoesNotContain("</script><img", html); // no raw terminator survives inside the data block
+            Assert.Contains("const DATA=", html);
+        }
+
+        // Regression: SVG coordinates must use an invariant '.' decimal separator, or the file is invalid on
+        // comma-decimal locales (de-DE, fr-FR, …).
+        [Fact]
+        public void Svg_UsesInvariantDecimalSeparator_UnderCommaCulture()
+        {
+            var old = System.Globalization.CultureInfo.CurrentCulture;
+            try
+            {
+                System.Globalization.CultureInfo.CurrentCulture = new System.Globalization.CultureInfo("de-DE");
+                var svg = SvgExporter.Build(Sample());
+                Assert.DoesNotMatch(new System.Text.RegularExpressions.Regex(@"(cx|cy|x1|y1|x2|y2)=""\d+,\d"), svg);
+            }
+            finally { System.Globalization.CultureInfo.CurrentCulture = old; }
+        }
+
+        // Regression: a control character in a label (illegal in XML 1.0) must be stripped so the emitted
+        // GraphML stays well-formed and parseable by yEd/Gephi/an XML reader.
+        [Fact]
+        public void GraphMl_WithControlCharLabel_IsWellFormedXml()
+        {
+            var g = new GraphModel();
+            g.AddNode("A", "Table", "Orderline"); // vertical tab (0x0B) is not a valid XML char
+            var xml = GraphMlExporter.Build(g);
+            var ex = Record.Exception(() => System.Xml.Linq.XDocument.Parse(xml));
+            Assert.Null(ex);
         }
     }
 }

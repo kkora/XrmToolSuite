@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<package>
+  <metadata>
+    <!-- Tool Library rules (xrmtoolbox.com/documentation/for-developers):
+         1) version MUST equal the assembly version of your DLL
+         2) tags MUST start with "XrmToolBox" plus extra words
+         3) dependency MUST be on "XrmToolBox" (NOT XrmToolBoxPackage)
+         4) DLL goes under a "Plugins" folder
+         5) iconUrl is required and must be your own icon -->
+    <id>XrmToolSuite.JavaScriptPerformanceAnalyzer</id>
+    <version>1.2026.7.2</version>
+    <title>JavaScript Performance Analyzer for XrmToolBox</title>
+    <authors>Kanchan Kora</authors>
+    <owners>Kanchan Kora</owners>
+    <projectUrl>https://github.com/kkora/XrmToolSuite</projectUrl>
+    <iconUrl>https://raw.githubusercontent.com/kkora/XrmToolSuite/main/icon.png</iconUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <license type="expression">MIT</license>
+    <description>Statically analyzes JavaScript (JScript) web resources and their form/event usage for performance and deprecation risks — deprecated Xrm.Page, synchronous XMLHttpRequest, blocking alert(), excessive console logging, repeated retrieve/Xrm.WebApi calls, hardcoded GUIDs/URLs, unsupported DOM manipulation, and oversized scripts. Maps scripts to the forms and events that call them, flags forms with too many OnLoad handlers, produces a per-script heuristic risk score with code line context and confidence labels, and Excel/PDF/JSON/HTML/Markdown/CSV exports. Fully offline (no runtime), read-only.</description>
+    <summary>Statically analyzes JavaScript web resources and form/event usage for performance and deprecation risks with a per-script risk score, code context, and Excel/PDF/JSON/HTML/Markdown/CSV exports. Offline, read-only.</summary>
+    <releaseNotes>1.2026.7.2: Initial release.</releaseNotes>
+    <tags>XrmToolBox Dataverse Dynamics365 PowerPlatform</tags>
+    <dependencies>
+      <dependency id="XrmToolBox" version="1.2025.10.74" />
+    </dependencies>
+  </metadata>
+  <files>
+    <file src="bin\Release\net48\XrmToolSuite.JavaScriptPerformanceAnalyzer.dll" target="lib\net48\Plugins" />
+    <!-- Excel-export chain in the Plugins ROOT next to the tool DLL. XrmToolBox's plugin
+         analysis must resolve the tool's ClosedXML reference at scan time (before the tool's
+         AssemblyResolve handler exists), so these must NOT be hidden in a subfolder or the tool
+         is silently dropped from the Tools list. Current XrmToolBox binding redirects reconcile
+         SixLabors.Fonts' facade version mismatch; the handler is a scoped runtime fallback. -->
+    <file src="bin\Release\net48\ClosedXML.dll" target="lib\net48\Plugins" />
+    <file src="bin\Release\net48\DocumentFormat.OpenXml.dll" target="lib\net48\Plugins" />
+    <file src="bin\Release\net48\ExcelNumberFormat.dll" target="lib\net48\Plugins" />
+    <file src="bin\Release\net48\XLParser.dll" target="lib\net48\Plugins" />
+    <file src="bin\Release\net48\Irony.dll" target="lib\net48\Plugins" />
+    <file src="bin\Release\net48\SixLabors.Fonts.dll" target="lib\net48\Plugins" />
+    <file src="bin\Release\net48\System.IO.Packaging.dll" target="lib\net48\Plugins" />
+    <file src="bin\Release\net48\System.Numerics.Vectors.dll" target="lib\net48\Plugins" />
+    <file src="bin\Release\net48\System.Runtime.CompilerServices.Unsafe.dll" target="lib\net48\Plugins" />
+    <file src="bin\Release\net48\System.Buffers.dll" target="lib\net48\Plugins" />
+    <file src="bin\Release\net48\System.Memory.dll" target="lib\net48\Plugins" />
+    <file src="bin\Release\net48\System.Threading.Tasks.Extensions.dll" target="lib\net48\Plugins" />
+    <!-- Native-PDF chain (PdfSharp/MigraDoc, GDI build — assemblies carry a -gdi suffix).
+         Pure-managed; ships in the Plugins ROOT next to the tool DLL for the same scan-time
+         resolution reason as the Excel chain above. -->
+    <file src="bin\Release\net48\PdfSharp-gdi.dll" target="lib\net48\Plugins" />
+    <file src="bin\Release\net48\PdfSharp.Charting-gdi.dll" target="lib\net48\Plugins" />
+    <file src="bin\Release\net48\MigraDoc.DocumentObjectModel-gdi.dll" target="lib\net48\Plugins" />
+    <file src="bin\Release\net48\MigraDoc.Rendering-gdi.dll" target="lib\net48\Plugins" />
+    <file src="bin\Release\net48\MigraDoc.RtfRendering-gdi.dll" target="lib\net48\Plugins" />
+  </files>
+</package>

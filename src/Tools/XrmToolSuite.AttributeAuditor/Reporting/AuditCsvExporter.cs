@@ -38,10 +38,17 @@ namespace XrmToolSuite.AttributeAuditor.Reporting
         public static void Export(AuditResult r, string path) =>
             File.WriteAllText(path, ToCsv(r), new UTF8Encoding(true)); // BOM so Excel reads UTF-8
 
-        /// <summary>RFC-4180: quote fields containing comma, quote, CR or LF; double embedded quotes.</summary>
+        /// <summary>
+        /// RFC-4180: quote fields containing comma, quote, CR or LF; double embedded quotes. Also neutralizes
+        /// CSV formula injection: a value starting with =, +, -, @ (or tab) is executed as a formula when the
+        /// file is opened in Excel/Sheets (this exporter even writes a BOM for Excel), so prefix it with an
+        /// apostrophe to force it to be read as text.
+        /// </summary>
         private static string Escape(string value)
         {
             value = value ?? "";
+            if (value.Length > 0 && "=+-@\t".IndexOf(value[0]) >= 0)
+                value = "'" + value;
             if (value.IndexOfAny(new[] { ',', '"', '\r', '\n' }) < 0) return value;
             return "\"" + value.Replace("\"", "\"\"") + "\"";
         }

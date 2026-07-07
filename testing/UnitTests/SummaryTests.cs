@@ -9,7 +9,7 @@ namespace XrmToolSuite.UnitTests
     /// Executable tests for the SDK-free summary logic: the anonymized payload builder and the offline
     /// templated generator. Both consume the suite-shared <c>ReportModel</c> that the Deployment Risk
     /// Analyzer produces via <c>DeploymentReportModel.ToReportModel</c>. The live AiSummaryGenerator
-    /// (HTTP) is manual-tested. Traces to US-DG-8 (deployment summary).
+    /// (HTTP) is manual-tested. Traces to US-ALM07-8 (deployment summary).
     /// </summary>
     public class SummaryTests
     {
@@ -38,7 +38,7 @@ namespace XrmToolSuite.UnitTests
         private static RiskFinding F(Severity sev, string title = "t", string comp = "c") =>
             new RiskFinding(AnalyzerCategory.Dependencies, sev, title, "desc", comp, "fix");
 
-        // TC-DG-SUM-01: payload maps score/band and reflects the target connection as a boolean flag.
+        // TC-ALM07-SUM-01: payload maps score/band and reflects the target connection as a boolean flag.
         [Fact]
         public void Payload_MapsScoreBand_AndHasTargetFlag()
         {
@@ -51,7 +51,7 @@ namespace XrmToolSuite.UnitTests
             Assert.False(noTarget.HasTarget);
         }
 
-        // TC-DG-SUM-02: component redaction nulls out component names; enabled keeps them.
+        // TC-ALM07-SUM-02: component redaction nulls out component names; enabled keeps them.
         [Fact]
         public void Payload_RedactsComponents_WhenIncludeComponentsFalse()
         {
@@ -61,7 +61,7 @@ namespace XrmToolSuite.UnitTests
             Assert.Equal("SolutionDemo", Payload(r, includeComponents: true).TopFindings[0].Component);
         }
 
-        // TC-DG-SUM-03: top-N caps the finding list, sets Truncated, and keeps highest severities first.
+        // TC-ALM07-SUM-03: top-N caps the finding list, sets Truncated, and keeps highest severities first.
         [Fact]
         public void Payload_TopN_TruncatesAndOrdersBySeverity()
         {
@@ -75,7 +75,7 @@ namespace XrmToolSuite.UnitTests
             Assert.Equal("High", p.TopFindings[1].Severity);
         }
 
-        // TC-DG-SUM-04: offline generator emits the right go/no-go verdict per risk band and is not AI.
+        // TC-ALM07-SUM-04: offline generator emits the right go/no-go verdict per risk band and is not AI.
         [Theory]
         [InlineData(OverallRisk.High, "NO-GO")]
         [InlineData(OverallRisk.Medium, "GO WITH CAUTION")]
@@ -89,7 +89,7 @@ namespace XrmToolSuite.UnitTests
             Assert.Contains("score 20/100", s.Text);
         }
 
-        // TC-DG-SUM-06: the plain-text normalizer strips Markdown and isolates the recommendation line.
+        // TC-ALM07-SUM-06: the plain-text normalizer strips Markdown and isolates the recommendation line.
         [Fact]
         public void Formatting_StripsMarkdown_AndIsolatesRecommendation()
         {
@@ -103,7 +103,7 @@ namespace XrmToolSuite.UnitTests
             Assert.Contains("\n\nRECOMMENDATION: GO WITH CAUTION", clean); // own line, blank line before
         }
 
-        // TC-DG-SUM-05: offline generator lists Medium+ findings as top risks.
+        // TC-ALM07-SUM-05: offline generator lists Medium+ findings as top risks.
         [Fact]
         public void Offline_ListsTopRisks()
         {

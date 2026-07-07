@@ -6,7 +6,7 @@ using XrmToolSuite.DeploymentRiskAnalyzer.Scoring;
 namespace XrmToolSuite.UnitTests
 {
     /// <summary>
-    /// Executable tests for DeploymentRiskAnalyzer risk scoring (US-DG-8.1).
+    /// Executable tests for DeploymentRiskAnalyzer risk scoring (US-ALM07-8.1).
     /// Weights: Critical=25, High=12, Medium=5, Low=2, Info=0; capped at 100.
     /// Banding: any Critical OR score>=40 -> High; score>=15 -> Medium; else Low.
     /// </summary>
@@ -21,7 +21,7 @@ namespace XrmToolSuite.UnitTests
             return r;
         }
 
-        // TC-DG-SCORE-01: no findings -> score 0, Low risk.
+        // TC-ALM07-SCORE-01: no findings -> score 0, Low risk.
         [Fact]
         public void NoFindings_ScoreZero_Low()
         {
@@ -30,7 +30,7 @@ namespace XrmToolSuite.UnitTests
             Assert.Equal(OverallRisk.Low, r.Risk);
         }
 
-        // TC-DG-SCORE-02: per-severity weights are applied.
+        // TC-ALM07-SCORE-02: per-severity weights are applied.
         [Theory]
         [InlineData(Severity.Low, 2)]
         [InlineData(Severity.Medium, 5)]
@@ -42,7 +42,7 @@ namespace XrmToolSuite.UnitTests
             Assert.Equal(expected, ResultWith(severity).Score);
         }
 
-        // TC-DG-SCORE-03: weights sum across findings.
+        // TC-ALM07-SCORE-03: weights sum across findings.
         [Fact]
         public void MultipleFindings_WeightsSum()
         {
@@ -50,7 +50,7 @@ namespace XrmToolSuite.UnitTests
             Assert.Equal(19, ResultWith(Severity.High, Severity.Medium, Severity.Low).Score);
         }
 
-        // TC-DG-SCORE-04: score is capped at 100.
+        // TC-ALM07-SCORE-04: score is capped at 100.
         [Fact]
         public void ManyCriticals_ScoreCappedAt100()
         {
@@ -58,7 +58,7 @@ namespace XrmToolSuite.UnitTests
             Assert.Equal(100, r.Score);
         }
 
-        // TC-DG-SCORE-05: Info findings never move the score.
+        // TC-ALM07-SCORE-05: Info findings never move the score.
         [Fact]
         public void OnlyInfo_ScoreZero_Low()
         {
@@ -67,7 +67,7 @@ namespace XrmToolSuite.UnitTests
             Assert.Equal(OverallRisk.Low, r.Risk);
         }
 
-        // TC-DG-BAND-06: score below 15 bands Low.
+        // TC-ALM07-BAND-06: score below 15 bands Low.
         [Fact]
         public void ScoreBelowMediumThreshold_Low()
         {
@@ -75,7 +75,7 @@ namespace XrmToolSuite.UnitTests
             Assert.Equal(OverallRisk.Low, ResultWith(Severity.Medium, Severity.Medium, Severity.Low).Risk);
         }
 
-        // TC-DG-BAND-07: exactly 15 bands Medium (boundary).
+        // TC-ALM07-BAND-07: exactly 15 bands Medium (boundary).
         [Fact]
         public void ScoreAtMediumThreshold_Medium()
         {
@@ -85,7 +85,7 @@ namespace XrmToolSuite.UnitTests
             Assert.Equal(OverallRisk.Medium, r.Risk);
         }
 
-        // TC-DG-BAND-08: just below 40 bands Medium.
+        // TC-ALM07-BAND-08: just below 40 bands Medium.
         [Fact]
         public void ScoreJustBelowHighThreshold_Medium()
         {
@@ -95,7 +95,7 @@ namespace XrmToolSuite.UnitTests
             Assert.Equal(OverallRisk.Medium, r.Risk);
         }
 
-        // TC-DG-BAND-09: exactly 40 bands High (boundary).
+        // TC-ALM07-BAND-09: exactly 40 bands High (boundary).
         [Fact]
         public void ScoreAtHighThreshold_High()
         {
@@ -105,7 +105,7 @@ namespace XrmToolSuite.UnitTests
             Assert.Equal(OverallRisk.High, r.Risk);
         }
 
-        // TC-DG-BAND-10: a single Critical forces High even when the score would band Medium.
+        // TC-ALM07-BAND-10: a single Critical forces High even when the score would band Medium.
         [Fact]
         public void SingleCritical_ForcesHigh_EvenWhenScoreWouldBeMedium()
         {
@@ -114,7 +114,7 @@ namespace XrmToolSuite.UnitTests
             Assert.Equal(OverallRisk.High, r.Risk);
         }
 
-        // TC-DG-BAND-11: Critical forces High even at a very low score.
+        // TC-ALM07-BAND-11: Critical forces High even at a very low score.
         [Fact]
         public void CriticalPlusNothing_LowScoreButHigh_IsImpossibleToDowngrade()
         {
@@ -122,7 +122,7 @@ namespace XrmToolSuite.UnitTests
             Assert.Equal(OverallRisk.High, ResultWith(Severity.Critical).Risk);
         }
 
-        // TC-DG-EXPLAIN-12: Explain reports counts and the score/risk.
+        // TC-ALM07-EXPLAIN-12: Explain reports counts and the score/risk.
         [Fact]
         public void Explain_ReportsCountsScoreAndRisk()
         {
@@ -134,7 +134,7 @@ namespace XrmToolSuite.UnitTests
             Assert.Contains("High risk", text);     // any Critical -> High
         }
 
-        // TC-DG-SUMMARY-13: SeveritySummary / CountBySeverity tally correctly.
+        // TC-ALM07-SUMMARY-13: SeveritySummary / CountBySeverity tally correctly.
         [Fact]
         public void SeveritySummary_CountsBySeverity()
         {

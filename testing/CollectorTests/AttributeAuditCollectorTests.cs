@@ -12,7 +12,7 @@ namespace XrmToolSuite.CollectorTests
     /// usage from forms, views, processes, and field security, all over <see cref="IOrganizationService"/>,
     /// so it runs against the shared <see cref="FakeOrganizationService"/> with metadata seeded via
     /// <see cref="MetaBuilder"/>. The reference-detection scanners and classification are unit-tested SDK-free
-    /// in testing/UnitTests. Traces to US-AA-2 / US-AA-3. TC-AA-COL-01..08.
+    /// in testing/UnitTests. Traces to US-ADMIN10-2 / US-ADMIN10-3. TC-ADMIN10-COL-01..08.
     /// </summary>
     public class AttributeAuditCollectorTests
     {
@@ -36,7 +36,7 @@ namespace XrmToolSuite.CollectorTests
         private static Entity Workflow(string entity, string name, string xaml) =>
             new Entity("workflow", System.Guid.NewGuid()) { ["primaryentity"] = entity, ["name"] = name, ["xaml"] = xaml };
 
-        // TC-AA-COL-01: a custom column with no usage evidence is a retirement candidate.
+        // TC-ADMIN10-COL-01: a custom column with no usage evidence is a retirement candidate.
         [Fact]
         public void UnusedCustomColumn_IsCandidate()
         {
@@ -47,7 +47,7 @@ namespace XrmToolSuite.CollectorTests
             Assert.Equal(1, r.CandidateColumns);
         }
 
-        // TC-AA-COL-02: a column bound to a form control is used (Form evidence).
+        // TC-ADMIN10-COL-02: a column bound to a form control is used (Form evidence).
         [Fact]
         public void ColumnOnForm_IsUsed()
         {
@@ -59,7 +59,7 @@ namespace XrmToolSuite.CollectorTests
             Assert.Contains("Main", col.UsageSummary());
         }
 
-        // TC-AA-COL-03: a column in a view's fetchxml is used (View evidence).
+        // TC-ADMIN10-COL-03: a column in a view's fetchxml is used (View evidence).
         [Fact]
         public void ColumnInViewFetch_IsUsed()
         {
@@ -68,7 +68,7 @@ namespace XrmToolSuite.CollectorTests
             Assert.Contains(UsageSignal.View, Assert.Single(Run(fake).Columns).Signals);
         }
 
-        // TC-AA-COL-04: a column shown only via layoutxml (grid cell) is also detected as used.
+        // TC-ADMIN10-COL-04: a column shown only via layoutxml (grid cell) is also detected as used.
         [Fact]
         public void ColumnInViewLayout_IsUsed()
         {
@@ -77,7 +77,7 @@ namespace XrmToolSuite.CollectorTests
             Assert.False(Assert.Single(Run(fake).Columns).IsRetirementCandidate);
         }
 
-        // TC-AA-COL-05: a column referenced in a workflow/flow definition is used (Process evidence).
+        // TC-ADMIN10-COL-05: a column referenced in a workflow/flow definition is used (Process evidence).
         [Fact]
         public void ColumnInProcess_IsUsed()
         {
@@ -86,7 +86,7 @@ namespace XrmToolSuite.CollectorTests
             Assert.Contains(UsageSignal.Process, Assert.Single(Run(fake).Columns).Signals);
         }
 
-        // TC-AA-COL-06: a field-secured column is used (FieldSecurity evidence) with no query needed.
+        // TC-ADMIN10-COL-06: a field-secured column is used (FieldSecurity evidence) with no query needed.
         [Fact]
         public void FieldSecuredColumn_IsUsed()
         {
@@ -95,7 +95,7 @@ namespace XrmToolSuite.CollectorTests
             Assert.False(col.IsRetirementCandidate);
         }
 
-        // TC-AA-COL-07: a managed custom column with no usage is never a retirement candidate.
+        // TC-ADMIN10-COL-07: a managed custom column with no usage is never a retirement candidate.
         [Fact]
         public void ManagedCustomColumn_NeverCandidate()
         {
@@ -104,7 +104,7 @@ namespace XrmToolSuite.CollectorTests
             Assert.False(col.IsRetirementCandidate);
         }
 
-        // TC-AA-COL-08: a form referencing a NON-audited (system) column leaves the custom candidate untouched;
+        // TC-ADMIN10-COL-08: a form referencing a NON-audited (system) column leaves the custom candidate untouched;
         //               and the custom-entities-only scope excludes custom columns on system tables.
         [Fact]
         public void SystemColumnReference_AndScopeFilter()

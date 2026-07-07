@@ -14,7 +14,7 @@ namespace XrmToolSuite.CollectorTests
     /// <see cref="FakeOrganizationService"/> with no live org. Downstream scoring
     /// (<c>ComplexityMetrics.Compute</c>) is covered SDK-free in testing/UnitTests; these cases verify
     /// the query-driven counting that turns solution rows into a <see cref="ComponentCounts"/> tally.
-    /// Traces to US-SC-2 (component inventory). TC-SC-COL-01..08.
+    /// Traces to US-SOLN08-2 (component inventory). TC-SOLN08-COL-01..08.
     /// </summary>
     public class ComplexityCollectorTests
     {
@@ -57,7 +57,7 @@ namespace XrmToolSuite.CollectorTests
             return ComplexityCollector.Collect(ctx, _ => { });
         }
 
-        // TC-SC-COL-01: solutioncomponent type codes tally into the metadata counts.
+        // TC-SOLN08-COL-01: solutioncomponent type codes tally into the metadata counts.
         [Fact]
         public void ComponentTypes_TallyByCode()
         {
@@ -77,7 +77,7 @@ namespace XrmToolSuite.CollectorTests
             Assert.Equal(1, c.Pcfs);
         }
 
-        // TC-SC-COL-02: only JScript (type 3) web resources count as JavaScript.
+        // TC-SOLN08-COL-02: only JScript (type 3) web resources count as JavaScript.
         [Fact]
         public void WebResources_CountJScriptOnly()
         {
@@ -85,7 +85,7 @@ namespace XrmToolSuite.CollectorTests
             Assert.Equal(2, Run(fake).JavaScriptWebResources);
         }
 
-        // TC-SC-COL-03: dashboards (type 0) and forms are counted separately.
+        // TC-SOLN08-COL-03: dashboards (type 0) and forms are counted separately.
         [Fact]
         public void Forms_DashboardsSplitFromForms()
         {
@@ -98,7 +98,7 @@ namespace XrmToolSuite.CollectorTests
             Assert.Equal(1, c.Forms);
         }
 
-        // TC-SC-COL-04: the widest form is the one with the most <control> elements.
+        // TC-SOLN08-COL-04: the widest form is the one with the most <control> elements.
         [Fact]
         public void Forms_WidestByControlCount()
         {
@@ -111,7 +111,7 @@ namespace XrmToolSuite.CollectorTests
             Assert.Equal("Wide", c.WidestFormName);
         }
 
-        // TC-SC-COL-05: workflow category splits business rules / flows / classic workflows.
+        // TC-SOLN08-COL-05: workflow category splits business rules / flows / classic workflows.
         [Fact]
         public void Workflows_SplitByCategory()
         {
@@ -127,7 +127,7 @@ namespace XrmToolSuite.CollectorTests
             Assert.Equal(2, c.Workflows);
         }
 
-        // TC-SC-COL-06: Apps = model-driven (appmodule) + canvas (canvasapp).
+        // TC-SOLN08-COL-06: Apps = model-driven (appmodule) + canvas (canvasapp).
         [Fact]
         public void Apps_SumModelDrivenAndCanvas()
         {
@@ -137,7 +137,7 @@ namespace XrmToolSuite.CollectorTests
             Assert.Equal(3, Run(fake).Apps);
         }
 
-        // TC-SC-COL-07: views and charts come from savedquery / savedqueryvisualization.
+        // TC-SOLN08-COL-07: views and charts come from savedquery / savedqueryvisualization.
         [Fact]
         public void ViewsAndCharts_Counted()
         {
@@ -150,7 +150,7 @@ namespace XrmToolSuite.CollectorTests
             Assert.Equal(1, c.Charts);
         }
 
-        // TC-SC-COL-08: a form with no formxml contributes zero controls (no crash, widest stays 0).
+        // TC-SOLN08-COL-08: a form with no formxml contributes zero controls (no crash, widest stays 0).
         [Fact]
         public void Form_NullFormXml_ZeroControls()
         {

@@ -52,11 +52,23 @@ for interactive UI automation (below). It is also deliberately **not** part of `
 
    Leave the desktop alone while it runs; UI Automation drives the real mouse/keyboard focus.
 
-   **Screenshot evidence.** The test always captures a PNG of the XrmToolBox window (pass *or* fail) — it
-   brings the window to the foreground first, then grabs it. It saves to `UISMOKE_SCREENSHOT_DIR` if set,
-   otherwise `%TEMP%\xtb-ui-smoke`, and prints the full path (`[ui-smoke] Screenshot saved: …`). Files are
-   named `xrmtoolbox-tools_<found>of<total>_<timestamp>.png`, so a failure screenshot shows exactly which
-   tools were missing from the list. The images are regenerated each run and are git-ignored.
+   **Screenshot evidence.** The test always captures PNGs of the XrmToolBox window (pass *or* fail) — it
+   brings the window to the foreground first, then grabs it. It saves under `UISMOKE_SCREENSHOT_DIR` if set,
+   otherwise `%TEMP%\xtb-ui-smoke`. Each run creates a **timestamped run folder**, and inside it **one folder
+   per tool**, holding that tool's shots named `<tool-slug>-NN.png` (`NN` = `00`, `01`, …):
+
+   ```
+   <screenshot-dir>/
+     <yyyyMMdd-HHmmss>/               # one folder per run
+       tools-list_<found>of<total>.png  # overview of the Tools list (failure shot shows what's missing)
+       duplicate-metadata-finder/
+         duplicate-metadata-finder-00.png
+       custom-api-explorer/
+         custom-api-explorer-00.png
+       …one folder per expected tool
+   ```
+
+   The images are regenerated each run and are git-ignored.
 
 ## Setting it up on a self-hosted CI runner
 
@@ -87,6 +99,68 @@ To make it runnable you need a Windows machine that keeps an **interactive, unlo
 Keep it **advisory** — do NOT add `ui-smoke` to `main`'s required checks. UI tests are inherently flakier
 than the headless tiers, and a single smoke test ("do the tools load") is the right scope, not full UI
 coverage. The required gate stays `test` + `test-windows`.
+
+## Tier-3b — connected walkthrough (opt-in, LOCAL only)
+
+`ConnectedWalkthroughTest.OpenTool_ConnectsToTestEnvironment` goes one step past the load smoke: it opens a
+plugin in the real host and asserts it comes up **connected**, by waiting for the plugin's
+`"Connected to <env>"` marker (written from `UpdateConnection`) and capturing a screenshot. That exercises
+XrmToolBox's pre-seeded-connection path (Option 1): the connection selected in the host is handed to the
+opened plugin.
+
+**It does not run by default and is not in CI.** The suite's `XTS-CI-DEV` / `XTS-CI-TEST` connections are
+**interactive** (`OnlineFederation` / `AD`, `SavePassword=false`): a human must complete the OAuth/MFA, and
+XrmToolBox **does not auto-connect on startup** (it launches disconnected, on the Tool Library tab). So a
+freshly-launched host opens tools with no service. Wiring a *connected* test into CI would require a
+**service-principal** (ClientSecret/Certificate) connection instead — which your tenant may not allow. This
+tier is gated behind `XTB_CONNECTED_TEST=1`; without it the test no-ops (stays green).
+
+**Never point it at production** — the test and the pre-flight script both refuse a connection whose name
+contains `prod`.
+
+### Two modes
+
+| Mode | Env | How it connects | Use when |
+|---|---|---|---|
+| **Attach (recommended)** | `XTB_ATTACH=1` | You start XrmToolBox and connect the org **by hand**; the test attaches to that live session and never closes it. | The suite's interactive connections — the human does the un-automatable auth. |
+| Launch | (unset) | Test launches a fresh XrmToolBox and hopes it auto-reconnects. | Only if you've configured XrmToolBox to reconnect a connection on startup (not the default). |
+
+### Running it — attach mode
+
+1. **Start + connect by hand:** open XrmToolBox, connect `XTS-CI-TEST`, and confirm the status bar shows the
+   org (not "Not connected"). Leave it open.
+2. **Deploy the tools** (in a separate step, while XrmToolBox is **closed** — the DLLs are locked while it
+   runs; then reopen and reconnect):
+
+   ```powershell
+   dotnet build XrmToolSuite.sln -c Release -p:DeployToXTB=true
+   Get-ChildItem "$env:APPDATA\MscrmTools\XrmToolBox\Plugins\XrmToolSuite.*.dll" | Unblock-File
+   ```
+
+3. **Pre-flight + run** (same unlocked desktop session):
+
+   ```powershell
+   ./scripts/Setup-TestConnection.ps1 -Connection XTS-CI-TEST   # validates the connection entry
+   $env:XTB_CONNECTED_TEST   = "1"
+   $env:XTB_ATTACH           = "1"
+   $env:XTB_TEST_CONNECTION  = "XTS-CI-TEST"          # a dev/test org, never prod
+   $env:XTB_WALKTHROUGH_TOOL = "Deployment Risk Analyzer"
+   $env:UISMOKE_SCREENSHOT_DIR = "$PWD\testing\UiSmokeTests\screenshots"
+   dotnet test testing/UiSmokeTests/UiSmokeTests.csproj --filter "FullyQualifiedName~ConnectedWalkthroughTest"
+   ```
+
+Screenshots land under `UISMOKE_SCREENSHOT_DIR\connected\` (`<tool>-01-opened.png`, `<tool>-02-connected.png`).
+The screenshot grabs whatever window is frontmost, so don't run the test from a maximized IDE that keeps
+focus — minimize other windows, or watch that XrmToolBox is foreground while it runs.
+
+### Reference tool
+
+`Deployment Risk Analyzer` is the default because its `UpdateConnection` writes `"Connected to <name>"` to a
+status label the test can read. To walk a different tool, set `XTB_WALKTHROUGH_TOOL` to its exact
+`ExportMetadata("Name", …)` and make sure that tool surfaces a `"Connected to <name>"` marker (most do via the
+shared `BaseToolControl` status line). The page-object plumbing lives in
+[`Pages/XtbHost.cs`](Pages/XtbHost.cs) — launch/attach, open-a-tool, and text/button assertions — so extra
+walkthroughs are a few lines each.
 
 ## Status & caveats
 

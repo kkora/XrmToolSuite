@@ -50,7 +50,7 @@ if (Test-Path $usTemplate) {
 # Scaffold this tool's testing folder (plan / cases / summary + screenshots) from testing/_templates.
 $testTemplates = Join-Path $root 'testing/_templates'
 if (Test-Path $testTemplates) {
-    $toolTestDir = Join-Path $root "testing/$Name"
+    $toolTestDir = Join-Path $root "testing/Tools/$Name"
     New-Item -ItemType Directory -Path (Join-Path $toolTestDir 'screenshots') -Force | Out-Null
     New-Item -ItemType File -Path (Join-Path $toolTestDir 'screenshots/.gitkeep') -Force | Out-Null
     Get-ChildItem $testTemplates -File -Filter '*.md' | ForEach-Object {
@@ -73,5 +73,5 @@ Write-Host "  1. Open the solution and rename UI/logic in ${Name}Control.cs"
 Write-Host "  2. Update RepositoryName/UserName/HelpUrl in the control"
 Write-Host "  3. Review the generated DEPLOYMENT.md (single-DLL build/install guide for this tool)"
 Write-Host "  4. Fill in docs/backlog/$Name.md (Epic / Features / User Stories); move it under the right docs/backlog/<category>/ folder"
-Write-Host "  5. Fill in testing/$Name/ (TEST_PLAN / TEST_CASES / TEST_SUMMARY); add xUnit cases to testing/UnitTests"
+Write-Host "  5. Fill in testing/Tools/$Name/ (TEST_PLAN / TEST_CASES / TEST_SUMMARY); add xUnit cases to testing/UnitTests"
 Write-Host "  6. Build with: dotnet build -p:DeployToXTB=true  (auto-copies to XrmToolBox Plugins folder)"

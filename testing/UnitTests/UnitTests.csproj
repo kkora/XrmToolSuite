@@ -42,10 +42,15 @@
 
     <!-- Technical Debt Analyzer: SDK-free scoring/report projection (no Dataverse/ClosedXML/MigraDoc). -->
     <Compile Include="..\..\src\Tools\XrmToolSuite.TechnicalDebtAnalyzer\Reporting\TechDebtReport.cs" />
+    <!-- RPT4 Debt Trends: SDK-free snapshot list logic + analytics (JSON/file layer is Newtonsoft, excluded). -->
+    <Compile Include="..\..\src\Tools\XrmToolSuite.TechnicalDebtAnalyzer\Trends\DebtSnapshot.cs" />
+    <Compile Include="..\..\src\Tools\XrmToolSuite.TechnicalDebtAnalyzer\Trends\TrendStore.cs" />
+    <Compile Include="..\..\src\Tools\XrmToolSuite.TechnicalDebtAnalyzer\Trends\TrendAnalytics.cs" />
 
-    <!-- Solution Complexity Score: SDK-free metric/effort model + report projection. -->
+    <!-- Solution Complexity Score: SDK-free metric/effort model, quality score + report projection. -->
     <Compile Include="..\..\src\Tools\XrmToolSuite.SolutionComplexityScore\Analysis\ComponentCounts.cs" />
     <Compile Include="..\..\src\Tools\XrmToolSuite.SolutionComplexityScore\Analysis\ComplexityMetrics.cs" />
+    <Compile Include="..\..\src\Tools\XrmToolSuite.SolutionComplexityScore\Analysis\QualityScore.cs" />
     <Compile Include="..\..\src\Tools\XrmToolSuite.SolutionComplexityScore\Reporting\ComplexityReport.cs" />
 
     <!-- AI Solution Reviewer: SDK-free report projection (collectors + Word export are manual-tested). -->
@@ -79,9 +84,104 @@
     <Compile Include="..\..\src\Tools\XrmToolSuite.EnvironmentInventory\Inventory\InventoryExporter.cs" />
     <Compile Include="..\..\src\Tools\XrmToolSuite.EnvironmentInventory\Inventory\InventorySummary.cs" />
 
-    <!-- Privilege Gap Analyzer: SDK-free effective-privilege engine (no Dataverse/WinForms). -->
-    <Compile Include="..\..\src\Tools\XrmToolSuite.PrivilegeGapAnalyzer\Privileges\PrivilegeModels.cs" />
-    <Compile Include="..\..\src\Tools\XrmToolSuite.PrivilegeGapAnalyzer\Privileges\PrivilegeEngine.cs" />
+    <!-- Shared effective-privilege engine (promoted from the Privilege Gap Analyzer to Shared\Core for reuse). -->
+    <Compile Include="..\..\src\Shared\Core\Privileges\PrivilegeModels.cs" />
+    <Compile Include="..\..\src\Shared\Core\Privileges\PrivilegeEngine.cs" />
+
+    <!-- View Performance Analyzer: SDK-free LayoutXML parser + per-view scorer (reuses the FetchXml engine above). -->
+    <Compile Include="..\..\src\Tools\XrmToolSuite.ViewPerformanceAnalyzer\Analysis\LayoutXmlParser.cs" />
+    <Compile Include="..\..\src\Tools\XrmToolSuite.ViewPerformanceAnalyzer\Analysis\ViewModels.cs" />
+    <Compile Include="..\..\src\Tools\XrmToolSuite.ViewPerformanceAnalyzer\Analysis\ViewScorer.cs" />
+
+    <!-- Team Permission Explorer: SDK-free team profile model + risk rules (reuses the Privileges engine above). -->
+    <Compile Include="..\..\src\Tools\XrmToolSuite.TeamPermissionExplorer\Analysis\TeamModels.cs" />
+    <Compile Include="..\..\src\Tools\XrmToolSuite.TeamPermissionExplorer\Analysis\TeamRiskRules.cs" />
+
+    <!-- ERD Generator: SDK-free ERD model + emitters + filter (collector + PNG/PDF exporters are manual-tested). -->
+    <Compile Include="..\..\src\Tools\XrmToolSuite.ErdGenerator\Erd\ErdModel.cs" />
+    <Compile Include="..\..\src\Tools\XrmToolSuite.ErdGenerator\Erd\MermaidErdEmitter.cs" />
+    <Compile Include="..\..\src\Tools\XrmToolSuite.ErdGenerator\Erd\PlantUmlEmitter.cs" />
+    <Compile Include="..\..\src\Tools\XrmToolSuite.ErdGenerator\Erd\ErdJson.cs" />
+    <Compile Include="..\..\src\Tools\XrmToolSuite.ErdGenerator\Erd\ErdSvg.cs" />
+    <Compile Include="..\..\src\Tools\XrmToolSuite.ErdGenerator\Erd\ErdHtml.cs" />
+    <Compile Include="..\..\src\Tools\XrmToolSuite.ErdGenerator\Erd\ErdMarkdown.cs" />
+
+    <!-- JavaScript Performance Analyzer: SDK-free static rule engine + FormXML event mapper. -->
+    <Compile Include="..\..\src\Tools\XrmToolSuite.JavaScriptPerformanceAnalyzer\Analysis\JsModels.cs" />
+    <Compile Include="..\..\src\Tools\XrmToolSuite.JavaScriptPerformanceAnalyzer\Analysis\JsRules.cs" />
+    <Compile Include="..\..\src\Tools\XrmToolSuite.JavaScriptPerformanceAnalyzer\Analysis\FormEventMap.cs" />
+
+    <!-- Form Performance Analyzer: SDK-free FormXML parser + heaviness scorer. -->
+    <Compile Include="..\..\src\Tools\XrmToolSuite.FormPerformanceAnalyzer\Analysis\FormModels.cs" />
+    <Compile Include="..\..\src\Tools\XrmToolSuite.FormPerformanceAnalyzer\Analysis\FormXmlParser.cs" />
+    <Compile Include="..\..\src\Tools\XrmToolSuite.FormPerformanceAnalyzer\Analysis\FormScorer.cs" />
+
+    <!-- Sharing Analyzer: SDK-free access-rights decode, sharing aggregations + risk rules. -->
+    <Compile Include="..\..\src\Tools\XrmToolSuite.SharingAnalyzer\Analysis\AccessRights.cs" />
+    <Compile Include="..\..\src\Tools\XrmToolSuite.SharingAnalyzer\Analysis\SharingModels.cs" />
+    <Compile Include="..\..\src\Tools\XrmToolSuite.SharingAnalyzer\Analysis\SharingRiskRules.cs" />
+
+    <!-- Audit Compliance Checker: SDK-free sensitivity heuristics + compliance rules/scoring. -->
+    <Compile Include="..\..\src\Tools\XrmToolSuite.AuditComplianceChecker\Analysis\AuditModels.cs" />
+    <Compile Include="..\..\src\Tools\XrmToolSuite.AuditComplianceChecker\Analysis\SensitivityHeuristics.cs" />
+    <Compile Include="..\..\src\Tools\XrmToolSuite.AuditComplianceChecker\Analysis\AuditComplianceRules.cs" />
+
+    <!-- Managed Solution Impact Checker: SDK-free layering models + impact rules. -->
+    <Compile Include="..\..\src\Tools\XrmToolSuite.ManagedSolutionImpactChecker\Analysis\ImpactModels.cs" />
+    <Compile Include="..\..\src\Tools\XrmToolSuite.ManagedSolutionImpactChecker\Analysis\LayerImpactRules.cs" />
+
+    <!-- Portal Health Analyzer: SDK-free adx_/mspp_ normalized model + health rules. -->
+    <Compile Include="..\..\src\Tools\XrmToolSuite.PortalHealthAnalyzer\Analysis\PortalModels.cs" />
+    <Compile Include="..\..\src\Tools\XrmToolSuite.PortalHealthAnalyzer\Analysis\PortalHealthRules.cs" />
+
+    <!-- Solution Merge Assistant: SDK-free multi-solution comparison + merge verdict. -->
+    <Compile Include="..\..\src\Tools\XrmToolSuite.SolutionMergeAssistant\Analysis\MergeModels.cs" />
+    <Compile Include="..\..\src\Tools\XrmToolSuite.SolutionMergeAssistant\Analysis\MergeRules.cs" />
+
+    <!-- Flow Dependency Analyzer: SDK-free clientdata parser + risk rules + reverse-impact model. -->
+    <Compile Include="..\..\src\Tools\XrmToolSuite.FlowDependencyAnalyzer\Analysis\FlowModels.cs" />
+    <Compile Include="..\..\src\Tools\XrmToolSuite.FlowDependencyAnalyzer\Analysis\FlowClientDataParser.cs" />
+    <Compile Include="..\..\src\Tools\XrmToolSuite.FlowDependencyAnalyzer\Analysis\FlowRiskRules.cs" />
+
+    <!-- Plugin Dependency Graph: SDK-free graph model + builder + risk rules + emitters. -->
+    <Compile Include="..\..\src\Tools\XrmToolSuite.PluginDependencyGraph\Graph\PluginGraphModel.cs" />
+    <Compile Include="..\..\src\Tools\XrmToolSuite.PluginDependencyGraph\Graph\PluginGraphBuilder.cs" />
+    <Compile Include="..\..\src\Tools\XrmToolSuite.PluginDependencyGraph\Graph\PluginRiskRules.cs" />
+    <Compile Include="..\..\src\Tools\XrmToolSuite.PluginDependencyGraph\Graph\PluginGraphEmitters.cs" />
+
+    <!-- Component Usage Explorer: SDK-free usage footprint model + change-safety verdict. -->
+    <Compile Include="..\..\src\Tools\XrmToolSuite.ComponentUsageExplorer\Analysis\UsageModels.cs" />
+    <Compile Include="..\..\src\Tools\XrmToolSuite.ComponentUsageExplorer\Analysis\UsageVerdictRules.cs" />
+
+    <!-- Environment Comparison Suite: SDK-free diff engine (snapshot models + comparer/roll-up). -->
+    <Compile Include="..\..\src\Tools\XrmToolSuite.EnvironmentComparisonSuite\Analysis\ComparisonModels.cs" />
+    <Compile Include="..\..\src\Tools\XrmToolSuite.EnvironmentComparisonSuite\Analysis\SnapshotComparer.cs" />
+
+    <!-- Solution Documentation Generator: SDK-free document model, template engine + text renderers. -->
+    <Compile Include="..\..\src\Tools\XrmToolSuite.SolutionDocumentationGenerator\Doc\DocModels.cs" />
+    <Compile Include="..\..\src\Tools\XrmToolSuite.SolutionDocumentationGenerator\Doc\DocBuilder.cs" />
+    <Compile Include="..\..\src\Tools\XrmToolSuite.SolutionDocumentationGenerator\Doc\DocRenderers.cs" />
+
+    <!-- Duplicate Metadata Finder: SDK-free similarity primitives + scoring/grouping engine + ReportModel projection. -->
+    <Compile Include="..\..\src\Tools\XrmToolSuite.DuplicateMetadataFinder\Analysis\DuplicateModels.cs" />
+    <Compile Include="..\..\src\Tools\XrmToolSuite.DuplicateMetadataFinder\Analysis\SimilarityEngine.cs" />
+    <Compile Include="..\..\src\Tools\XrmToolSuite.DuplicateMetadataFinder\Reporting\DuplicateReport.cs" />
+
+    <!-- Custom API Explorer: SDK-free models, value parsing, request-parameter builder + catalog exporters. -->
+    <Compile Include="..\..\src\Tools\XrmToolSuite.CustomApiExplorer\Analysis\CustomApiModels.cs" />
+    <Compile Include="..\..\src\Tools\XrmToolSuite.CustomApiExplorer\Analysis\RequestBuilder.cs" />
+    <Compile Include="..\..\src\Tools\XrmToolSuite.CustomApiExplorer\Reporting\CustomApiDoc.cs" />
+
+    <!-- Architecture Diagram Generator: SDK-free diagram model + Mermaid/PlantUML/DOT/Markdown/HTML/SVG/JSON emitters. -->
+    <Compile Include="..\..\src\Tools\XrmToolSuite.ArchitectureDiagramGenerator\Diagram\ArchModel.cs" />
+    <Compile Include="..\..\src\Tools\XrmToolSuite.ArchitectureDiagramGenerator\Diagram\DiagramEmitters.cs" />
+
+    <!-- API Documentation Builder: SDK-free API model, redaction engine, doc emitters + OpenAPI-style generator. -->
+    <Compile Include="..\..\src\Tools\XrmToolSuite.ApiDocumentationBuilder\Api\ApiModels.cs" />
+    <Compile Include="..\..\src\Tools\XrmToolSuite.ApiDocumentationBuilder\Api\JsonText.cs" />
+    <Compile Include="..\..\src\Tools\XrmToolSuite.ApiDocumentationBuilder\Api\Redactor.cs" />
+    <Compile Include="..\..\src\Tools\XrmToolSuite.ApiDocumentationBuilder\Api\ApiDocEmitters.cs" />
+    <Compile Include="..\..\src\Tools\XrmToolSuite.ApiDocumentationBuilder\Api\OpenApiEmitter.cs" />
   </ItemGroup>
 
 </Project>

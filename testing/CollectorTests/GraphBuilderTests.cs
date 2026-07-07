@@ -11,7 +11,7 @@ namespace XrmToolSuite.CollectorTests
     /// static, read-only, fail-soft entry over <see cref="IOrganizationService"/>, so it runs against the
     /// shared <see cref="FakeOrganizationService"/>. The graph algorithms (traces, impact, cycles) are
     /// covered SDK-free in testing/UnitTests; these cases verify node/edge construction from solution
-    /// rows and the dependency table. Traces to US-KG-1 (build graph). TC-KG-COL-01..08.
+    /// rows and the dependency table. Traces to US-SOLN09-1 (build graph). TC-SOLN09-COL-01..08.
     /// </summary>
     public class GraphBuilderTests
     {
@@ -37,7 +37,7 @@ namespace XrmToolSuite.CollectorTests
 
         private static GraphModel Build(FakeOrganizationService fake) => GraphBuilder.Build(fake, SolId, _ => { });
 
-        // TC-KG-COL-01: a typed component resolves its friendly type + display name from the source table.
+        // TC-SOLN09-COL-01: a typed component resolves its friendly type + display name from the source table.
         [Fact]
         public void TypedComponent_ResolvesTypeAndName()
         {
@@ -53,7 +53,7 @@ namespace XrmToolSuite.CollectorTests
             Assert.Equal("Nightly Sync", n.Label);
         }
 
-        // TC-KG-COL-09: a Table (type 1) component is named from entity metadata (display name).
+        // TC-SOLN09-COL-09: a Table (type 1) component is named from entity metadata (display name).
         [Fact]
         public void TableComponent_NamedFromMetadata()
         {
@@ -67,7 +67,7 @@ namespace XrmToolSuite.CollectorTests
             Assert.Equal("Account", n.Label);
         }
 
-        // TC-KG-COL-02: an unmapped component type falls back to a "Component (code)" label.
+        // TC-SOLN09-COL-02: an unmapped component type falls back to a "Component (code)" label.
         [Fact]
         public void UnmappedType_FallsBackToComponentLabel()
         {
@@ -79,7 +79,7 @@ namespace XrmToolSuite.CollectorTests
             Assert.StartsWith("Component (999)", n.Label);
         }
 
-        // TC-KG-COL-03: a typed component whose name row is absent still produces a node (fail-soft label).
+        // TC-SOLN09-COL-03: a typed component whose name row is absent still produces a node (fail-soft label).
         [Fact]
         public void MissingNameRow_StillCreatesNodeWithFallbackLabel()
         {
@@ -91,7 +91,7 @@ namespace XrmToolSuite.CollectorTests
             Assert.StartsWith("Form ", n.Label);
         }
 
-        // TC-KG-COL-04: a dependency between two in-solution components becomes a "requires" edge.
+        // TC-SOLN09-COL-04: a dependency between two in-solution components becomes a "requires" edge.
         [Fact]
         public void Dependency_WithinSolution_AddsEdge()
         {
@@ -108,7 +108,7 @@ namespace XrmToolSuite.CollectorTests
             Assert.Equal("requires", e.Kind);
         }
 
-        // TC-KG-COL-05: a required component outside the solution is auto-created as an Unknown endpoint.
+        // TC-SOLN09-COL-05: a required component outside the solution is auto-created as an Unknown endpoint.
         [Fact]
         public void Dependency_RequiredOutsideSolution_AutoCreatesEndpoint()
         {
@@ -124,7 +124,7 @@ namespace XrmToolSuite.CollectorTests
             Assert.Equal("Unknown", ext.Type);
         }
 
-        // TC-KG-COL-06: a dependency whose dependent is not in the solution produces no edge.
+        // TC-SOLN09-COL-06: a dependency whose dependent is not in the solution produces no edge.
         [Fact]
         public void Dependency_DependentOutsideSolution_NoEdge()
         {
@@ -136,7 +136,7 @@ namespace XrmToolSuite.CollectorTests
             Assert.Equal(0, Build(fake).EdgeCount);
         }
 
-        // TC-KG-COL-07: an empty solution yields an empty graph.
+        // TC-SOLN09-COL-07: an empty solution yields an empty graph.
         [Fact]
         public void EmptySolution_EmptyGraph()
         {
@@ -145,7 +145,7 @@ namespace XrmToolSuite.CollectorTests
             Assert.Equal(0, g.EdgeCount);
         }
 
-        // TC-KG-COL-08: a component with an empty object id is skipped.
+        // TC-SOLN09-COL-08: a component with an empty object id is skipped.
         [Fact]
         public void EmptyObjectId_Skipped()
         {

@@ -181,7 +181,8 @@ namespace XrmToolSuite.Core.Reporting
                 sb.Append("<table class=\"findings\"><thead><tr><th style=\"width:86px\">Severity</th><th style=\"width:30%\">Finding</th><th>Detail &amp; recommendation</th></tr></thead><tbody>");
                 foreach (var f in group.OrderByDescending(x => x.Severity))
                 {
-                    string docs = string.IsNullOrEmpty(f.HelpUrl) ? "" : $@" <a href=""{E(f.HelpUrl)}"">docs ↗</a>";
+                    // Only emit the link for an http(s) URL — never let a javascript:/data: scheme reach href.
+                    string docs = IsSafeUrl(f.HelpUrl) ? $@" <a href=""{E(f.HelpUrl)}"">docs ↗</a>" : "";
                     sb.Append($@"<tr><td><span class=""pill {f.Severity}"">{f.Severity}</span></td><td><b>{E(f.Title)}</b><div class=""cmp""><code>{E(f.Component)}</code></div></td><td>{E(f.Description)}<div class=""rec"">→ {E(f.Recommendation)}{docs}</div></td></tr>");
                 }
                 sb.Append("</tbody></table></div></div>\n");
@@ -198,6 +199,12 @@ namespace XrmToolSuite.Core.Reporting
             sb.Append("</div>\n");
             return sb.ToString();
         }
+
+        /// <summary>True only for an absolute http/https URL — blocks javascript:/data: schemes from href.</summary>
+        private static bool IsSafeUrl(string url) =>
+            !string.IsNullOrEmpty(url) &&
+            Uri.TryCreate(url, UriKind.Absolute, out var u) &&
+            (u.Scheme == Uri.UriSchemeHttp || u.Scheme == Uri.UriSchemeHttps);
 
         private static string ScoreColor(int score) =>
             score >= 70 ? "var(--crit)" : score >= 45 ? "var(--high)" : "var(--good)";

@@ -11,7 +11,7 @@ namespace XrmToolSuite.AnalyzerTests
     /// Executable tests for the Data Model Conflicts analyzer's solution-version paths.
     /// Metadata-level comparisons (attribute type/length, option sets, relationships) need constructed
     /// EntityMetadata and stay in the manual GUI suite; here we cover the version/managed-state logic,
-    /// which is pure row data. Traces to US-DG-6 (schema conflicts).
+    /// which is pure row data. Traces to US-ALM07-6 (schema conflicts).
     /// </summary>
     public class SchemaConflictAnalyzerTests
     {
@@ -31,7 +31,7 @@ namespace XrmToolSuite.AnalyzerTests
             return new SchemaConflictAnalyzer().Analyze(ctx, _ => { });
         }
 
-        // TC-DG-SC-01: with no target connection the analyzer degrades to a single Info note.
+        // TC-ALM07-SC-01: with no target connection the analyzer degrades to a single Info note.
         [Fact]
         public void NoTarget_SkipsWithInfo()
         {
@@ -43,7 +43,7 @@ namespace XrmToolSuite.AnalyzerTests
             Assert.Equal("Schema conflict check skipped", f.Title);
         }
 
-        // TC-DG-SC-02: source version not higher than target -> High ("version not incremented").
+        // TC-ALM07-SC-02: source version not higher than target -> High ("version not incremented").
         [Fact]
         public void VersionNotIncremented_FlagsHigh()
         {
@@ -55,7 +55,7 @@ namespace XrmToolSuite.AnalyzerTests
                 x.Title == "Solution version not incremented" && x.Severity == Severity.High);
         }
 
-        // TC-DG-SC-03: source version higher than target -> Info ("managed upgrade will run").
+        // TC-ALM07-SC-03: source version higher than target -> Info ("managed upgrade will run").
         [Fact]
         public void VersionIncremented_FlagsUpgradeInfo()
         {
@@ -67,7 +67,7 @@ namespace XrmToolSuite.AnalyzerTests
                 x.Title == "Managed upgrade will run" && x.Severity == Severity.Info);
         }
 
-        // TC-DG-SC-04: managed state differs between source and target -> Critical (import will fail).
+        // TC-ALM07-SC-04: managed state differs between source and target -> Critical (import will fail).
         [Fact]
         public void ManagedStateMismatch_FlagsCritical()
         {
@@ -79,7 +79,7 @@ namespace XrmToolSuite.AnalyzerTests
                 x.Title == "Managed/unmanaged mismatch" && x.Severity == Severity.Critical);
         }
 
-        // TC-DG-SC-05: solution not present in target yet -> no version finding (nothing to compare).
+        // TC-ALM07-SC-05: solution not present in target yet -> no version finding (nothing to compare).
         [Fact]
         public void SolutionAbsentFromTarget_NoVersionFinding()
         {

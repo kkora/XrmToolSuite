@@ -1,4 +1,5 @@
-# Screenshots captured by the UI smoke test land here (or in UISMOKE_SCREENSHOT_DIR).
-# They are regenerated each run, so the images themselves are not tracked.
-*.png
+# Everything the UI tests capture or export lands here (screenshots + exported reports),
+# organized into per-date/per-tool subfolders and regenerated each run — never tracked.
+*
+!.gitignore
 !.gitkeep

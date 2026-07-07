@@ -66,12 +66,14 @@ this is already correct in the committed `.nuspec` files — verify it stays tha
 | package contains **only this suite's files** (no `Microsoft.Xrm.*`, no `Newtonsoft.Json`) | the `<files>` list |
 | `iconUrl` set to your **own** hosted icon | `<iconUrl>` |
 
-**Export tools ship their dependency chain.** `DeploymentRiskAnalyzer`,
-`FetchXmlPerformanceAnalyzer`, `EnvironmentInventory`, and `PrivilegeGapAnalyzer` export
-Excel/PDF/Word and therefore bundle the **ClosedXML + PdfSharp/MigraDoc-GDI** chains — **18 DLLs
-total** (the tool DLL + 17 dependencies), all under `lib\net48\Plugins` (the **Plugins root**, not
-a subfolder). Their nuspec `<files>` already lists them; you can [verify the count](#verify-the-package-contents)
-after packing. See `CLAUDE.md` → *Excel/PDF/Word export pattern* for the full rationale.
+**Export tools ship their dependency chain.** The Excel/PDF/Word export tools — `DeploymentRiskAnalyzer`
+and the rest of the full-export-chain tools through `DuplicateMetadataFinder` (see the **dependency-category
+table** in [`Deployment_Guide_XrmToolBox.md`](Deployment_Guide_XrmToolBox.md) for the current list) — bundle
+the **ClosedXML + PdfSharp/MigraDoc-GDI** chains: **18 DLLs total** (the tool DLL + 17 dependencies), all
+under `lib\net48\Plugins` (the **Plugins root**, not a subfolder). `ErdGenerator` ships the PDF-only subset
+(tool DLL + 5 `-gdi` DLLs). Their nuspec `<files>` already lists them; you can
+[verify the count](#verify-the-package-contents) after packing. See `CLAUDE.md` → *Excel/PDF/Word export
+pattern* for the full rationale.
 
 > **Do not publish `TemplateTool`.** It is the scaffold, not a shipping tool. Exclude
 > `XrmToolSuite.TemplateTool.nuspec` from every pack/push step.

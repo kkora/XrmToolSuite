@@ -68,8 +68,6 @@ namespace XrmToolSuite.FetchXmlPerformanceAnalyzer
             SetStatusMessage($"Connected to {detail?.ConnectionName}");
         }
 
-        private void tsbClose_Click(object sender, EventArgs e) => CloseTool();
-
         // ----------------------------------------------------------------- Analyze (pure, no connection)
 
         private void tsbAnalyze_Click(object sender, EventArgs e) => AnalyzeCurrent();

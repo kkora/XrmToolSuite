@@ -9,6 +9,15 @@ docs see [`README.md`](README.md); for the suite-wide guide see
 > tool DLL. If any of those DLLs are missing (or placed in a subfolder), XrmToolBox **silently drops
 > the tool** — it won't appear in the Tools list and there is no error. Follow Step 2 exactly.
 
+> **WARNING: This tool is NOT a single-DLL tool - it ships the Excel/PDF export dependency chain.**
+> The one-step build below (`-p:DeployToXTB=true`) copies the whole chain (the tool DLL + its 17
+> ClosedXML/PdfSharp-MigraDoc-GDI dependency DLLs) into the Plugins root automatically. For a **manual**
+> copy to another machine, copy **every** DLL from the tool's `bin\Release\net48\` folder (all flat in the
+> Plugins root, never a subfolder) - see the **"Export tools only"** section of
+> [`Deployment_Guide_XrmToolBox.md`](../../../Deployment_Guide_XrmToolBox.md). Copying only the tool DLL
+> makes XrmToolBox silently drop the tool from the Tools list. The "single DLL" wording lower down applies
+> only to non-export tools; ignore it for this one.
+
 ## Prerequisites
 
 - Windows + Visual Studio 2022 (or the .NET SDK with the **.NET Framework 4.8 Developer Pack**)

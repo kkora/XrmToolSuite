@@ -1,0 +1,9 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <!-- TargetFramework, WinForms, XrmToolBoxPackage reference, and the shared core
+       all come from src/Tools/Directory.Build.props. Keep tool csproj files minimal. -->
+  <PropertyGroup>
+    <RootNamespace>XrmToolSuite.ApiDocumentationBuilder</RootNamespace>
+    <AssemblyName>XrmToolSuite.ApiDocumentationBuilder</AssemblyName>
+    <description>Documents Dataverse Custom APIs (parameters, responses, binding, plugin) as a redaction-safe reference and an OpenAPI-style JSON spec; exports Markdown, self-contained HTML, JSON, and OpenAPI JSON. Read-only; never invokes APIs; masks secrets.</description>
+  </PropertyGroup>
+</Project>

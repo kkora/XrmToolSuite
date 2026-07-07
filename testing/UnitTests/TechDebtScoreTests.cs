@@ -9,7 +9,7 @@ namespace XrmToolSuite.UnitTests
     /// Executable tests for the Technical Debt Analyzer's SDK-free scoring/report projection
     /// (<see cref="TechDebtReport"/>). Debt weights mirror the suite default (Critical=25/High=12/
     /// Medium=5/Low=2) but — unlike deployment risk — a single Critical does NOT force a High band;
-    /// debt accumulates. Traces to US-TD-3 (debt score) and US-TD-4 (dashboard metrics).
+    /// debt accumulates. Traces to US-SOLN10-3 (debt score) and US-SOLN10-4 (dashboard metrics).
     /// </summary>
     public class TechDebtScoreTests
     {
@@ -22,7 +22,7 @@ namespace XrmToolSuite.UnitTests
             return run;
         }
 
-        // TC-TD-SCORE-01: no findings -> score 0, Low band, and the score word is "technical debt".
+        // TC-SOLN10-SCORE-01: no findings -> score 0, Low band, and the score word is "technical debt".
         [Fact]
         public void NoFindings_ScoreZero_Low()
         {
@@ -32,7 +32,7 @@ namespace XrmToolSuite.UnitTests
             Assert.Equal("technical debt", m.ScoreWord);
         }
 
-        // TC-TD-SCORE-02: weights sum across findings (12 + 5 + 2 = 19 -> Medium).
+        // TC-SOLN10-SCORE-02: weights sum across findings (12 + 5 + 2 = 19 -> Medium).
         [Fact]
         public void Weights_SumAcrossFindings()
         {
@@ -41,7 +41,7 @@ namespace XrmToolSuite.UnitTests
             Assert.Equal(ScoreBand.Medium, m.Band);
         }
 
-        // TC-TD-SCORE-03: a single Critical does NOT force High (debt accrues; 25 -> Medium band).
+        // TC-SOLN10-SCORE-03: a single Critical does NOT force High (debt accrues; 25 -> Medium band).
         [Fact]
         public void SingleCritical_DoesNotForceHigh()
         {
@@ -50,7 +50,7 @@ namespace XrmToolSuite.UnitTests
             Assert.Equal(ScoreBand.Medium, m.Band); // 15 <= 25 < 40
         }
 
-        // TC-TD-SCORE-04: accumulated debt reaches the High band (>= 40) and caps at 100.
+        // TC-SOLN10-SCORE-04: accumulated debt reaches the High band (>= 40) and caps at 100.
         [Fact]
         public void AccumulatedDebt_BandsHigh_AndCaps()
         {
@@ -61,7 +61,7 @@ namespace XrmToolSuite.UnitTests
             Assert.Equal(100, capped.Score);
         }
 
-        // TC-TD-DASH-05: the dashboard metrics carry the total and a per-category breakdown.
+        // TC-SOLN10-DASH-05: the dashboard metrics carry the total and a per-category breakdown.
         [Fact]
         public void Build_PopulatesMetrics_TotalAndPerCategory()
         {

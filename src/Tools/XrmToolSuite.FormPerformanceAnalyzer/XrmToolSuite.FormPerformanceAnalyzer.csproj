@@ -1,0 +1,9 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <!-- TargetFramework, WinForms, XrmToolBoxPackage reference, and the shared core
+       all come from src/Tools/Directory.Build.props. Keep tool csproj files minimal. -->
+  <PropertyGroup>
+    <RootNamespace>XrmToolSuite.FormPerformanceAnalyzer</RootNamespace>
+    <AssemblyName>XrmToolSuite.FormPerformanceAnalyzer</AssemblyName>
+    <description>Scores model-driven main forms by static load 'heaviness' (tabs, sections, fields, controls, subgrids, scripts, business rules) with bands and optimization recommendations.</description>
+  </PropertyGroup>
+</Project>

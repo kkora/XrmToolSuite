@@ -32,8 +32,6 @@ namespace XrmToolSuite.EnvironmentInventory
             this.tsmiExportExcel = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiExportWord = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiExportPdf = new System.Windows.Forms.ToolStripMenuItem();
-            this.tss3 = new System.Windows.Forms.ToolStripSeparator();
-            this.tsbClose = new System.Windows.Forms.ToolStripButton();
             this.split = new System.Windows.Forms.SplitContainer();
             this.grdInventory = new System.Windows.Forms.DataGridView();
             this.colCategory = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -64,9 +62,7 @@ namespace XrmToolSuite.EnvironmentInventory
                 this.tslSearch,
                 this.txtSearch,
                 this.tss2,
-                this.tsdExport,
-                this.tss3,
-                this.tsbClose});
+                this.tsdExport});
             this.toolStrip.Location = new System.Drawing.Point(0, 0);
             this.toolStrip.Name = "toolStrip";
             this.toolStrip.Size = new System.Drawing.Size(900, 25);
@@ -171,14 +167,6 @@ namespace XrmToolSuite.EnvironmentInventory
             this.tsmiExportPdf.Name = "tsmiExportPdf";
             this.tsmiExportPdf.Text = "PDF (*.pdf)…";
             this.tsmiExportPdf.Click += new System.EventHandler(this.tsmiExportPdf_Click);
-            //
-            // tsbClose
-            //
-            this.tsbClose.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
-            this.tsbClose.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-            this.tsbClose.Name = "tsbClose";
-            this.tsbClose.Text = "Close";
-            this.tsbClose.Click += new System.EventHandler(this.tsbClose_Click);
             //
             // split
             //
@@ -287,8 +275,6 @@ namespace XrmToolSuite.EnvironmentInventory
         private System.Windows.Forms.ToolStripMenuItem tsmiExportExcel;
         private System.Windows.Forms.ToolStripMenuItem tsmiExportWord;
         private System.Windows.Forms.ToolStripMenuItem tsmiExportPdf;
-        private System.Windows.Forms.ToolStripSeparator tss3;
-        private System.Windows.Forms.ToolStripButton tsbClose;
         private System.Windows.Forms.SplitContainer split;
         private System.Windows.Forms.DataGridView grdInventory;
         private System.Windows.Forms.DataGridViewTextBoxColumn colCategory;

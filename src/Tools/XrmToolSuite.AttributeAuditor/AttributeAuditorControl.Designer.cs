@@ -21,8 +21,6 @@ namespace XrmToolSuite.AttributeAuditor
             this.tssSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.tsbExportCsv = new System.Windows.Forms.ToolStripButton();
             this.tsbExportHtml = new System.Windows.Forms.ToolStripButton();
-            this.tssSeparator2 = new System.Windows.Forms.ToolStripSeparator();
-            this.tsbClose = new System.Windows.Forms.ToolStripButton();
             this.lvResults = new System.Windows.Forms.ListView();
             this.colTable = new System.Windows.Forms.ColumnHeader();
             this.colColumn = new System.Windows.Forms.ColumnHeader();
@@ -43,9 +41,7 @@ namespace XrmToolSuite.AttributeAuditor
                 this.tsbCandidatesOnly,
                 this.tssSeparator1,
                 this.tsbExportCsv,
-                this.tsbExportHtml,
-                this.tssSeparator2,
-                this.tsbClose});
+                this.tsbExportHtml});
             this.toolStrip.Location = new System.Drawing.Point(0, 0);
             this.toolStrip.Name = "toolStrip";
             this.toolStrip.Size = new System.Drawing.Size(900, 25);
@@ -96,18 +92,6 @@ namespace XrmToolSuite.AttributeAuditor
             this.tsbExportHtml.Name = "tsbExportHtml";
             this.tsbExportHtml.Text = "Export report (HTML)";
             this.tsbExportHtml.Click += new System.EventHandler(this.tsbExportHtml_Click);
-            //
-            // tssSeparator2
-            //
-            this.tssSeparator2.Name = "tssSeparator2";
-            //
-            // tsbClose
-            //
-            this.tsbClose.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
-            this.tsbClose.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-            this.tsbClose.Name = "tsbClose";
-            this.tsbClose.Text = "Close";
-            this.tsbClose.Click += new System.EventHandler(this.tsbClose_Click);
             //
             // lvResults
             //
@@ -170,8 +154,6 @@ namespace XrmToolSuite.AttributeAuditor
         private System.Windows.Forms.ToolStripSeparator tssSeparator1;
         private System.Windows.Forms.ToolStripButton tsbExportCsv;
         private System.Windows.Forms.ToolStripButton tsbExportHtml;
-        private System.Windows.Forms.ToolStripSeparator tssSeparator2;
-        private System.Windows.Forms.ToolStripButton tsbClose;
         private System.Windows.Forms.ListView lvResults;
         private System.Windows.Forms.ColumnHeader colTable;
         private System.Windows.Forms.ColumnHeader colColumn;

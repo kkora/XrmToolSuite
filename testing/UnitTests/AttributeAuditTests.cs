@@ -9,11 +9,11 @@ namespace XrmToolSuite.UnitTests
     /// <summary>
     /// SDK-free tests for the Attribute Auditor engine: usage scanners, retirement-candidate
     /// classification, the shared-ReportModel projection, and the CSV export. The Dataverse collector
-    /// that feeds these is covered separately in CollectorTests. Traces to US-AA-2 / US-AA-3 / US-AA-4.
+    /// that feeds these is covered separately in CollectorTests. Traces to US-ADMIN10-2 / US-ADMIN10-3 / US-ADMIN10-4.
     /// </summary>
     public class AttributeAuditTests
     {
-        // ---- usage scanners (US-AA-2) ----
+        // ---- usage scanners (US-ADMIN10-2) ----
 
         [Fact]
         public void FormColumns_ExtractsDataFieldNames()
@@ -57,7 +57,7 @@ namespace XrmToolSuite.UnitTests
             Assert.Equal(expected, UsageScanners.ReferencesToken(body, name));
         }
 
-        // ---- classification (US-AA-3) ----
+        // ---- classification (US-ADMIN10-3) ----
 
         private static ColumnAudit Col(bool custom = true, bool managed = false) =>
             new ColumnAudit { Table = "account", LogicalName = "new_x", DisplayName = "X", AttributeType = "String", IsCustom = custom, IsManaged = managed };
@@ -111,7 +111,7 @@ namespace XrmToolSuite.UnitTests
             Assert.Equal(2, r.CandidatesByTable().Count());
         }
 
-        // ---- report projection (US-AA-4) ----
+        // ---- report projection (US-ADMIN10-4) ----
 
         [Fact]
         public void ToReportModel_ProjectsCandidatesAndMetrics()
@@ -143,7 +143,7 @@ namespace XrmToolSuite.UnitTests
             Assert.Empty(m.Findings);
         }
 
-        // ---- CSV export (US-AA-4.1) ----
+        // ---- CSV export (US-ADMIN10-4.1) ----
 
         [Fact]
         public void Csv_HasHeaderAndRow()
@@ -163,6 +163,22 @@ namespace XrmToolSuite.UnitTests
             r.Columns.Add(c);
             var csv = AuditCsvExporter.ToCsv(r);
             Assert.Contains("\"View: Active, Open\"", csv);
+        }
+
+        // Regression: a display name Excel would read as a formula (leading =, +, -, @ or tab) is neutralized
+        // with a leading apostrophe (this exporter even writes a BOM for Excel).
+        [Fact]
+        public void Csv_NeutralizesFormulaInjection()
+        {
+            var r = new AuditResult { EnvironmentName = "DEV" };
+            r.Columns.Add(new ColumnAudit
+            {
+                Table = "account", LogicalName = "new_x",
+                DisplayName = "=HYPERLINK(\"http://evil\")", AttributeType = "String", IsCustom = true
+            });
+            var csv = AuditCsvExporter.ToCsv(r);
+            Assert.Contains("'=HYPERLINK", csv);       // apostrophe-prefixed => read as text
+            Assert.DoesNotContain(",=HYPERLINK", csv); // never starts a cell with '='
         }
     }
 }

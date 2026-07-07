@@ -8,7 +8,7 @@ namespace XrmToolSuite.UnitTests
     /// <summary>
     /// Executable tests for the AI Solution Reviewer's SDK-free report projection
     /// (<see cref="ReviewReport"/>). The collector findings feed a concern score and per-area metrics;
-    /// the AI narrative is manual-tested (live HTTP). Traces to US-AR-2 (concern score) and US-AR-3 (metrics).
+    /// the AI narrative is manual-tested (live HTTP). Traces to US-AI10-2 (concern score) and US-AI10-3 (metrics).
     /// </summary>
     public class ReviewReportTests
     {
@@ -20,7 +20,7 @@ namespace XrmToolSuite.UnitTests
             return run;
         }
 
-        // TC-AR-REPORT-01: an empty review is zero-concern, Low band, and labelled "concern".
+        // TC-AI10-REPORT-01: an empty review is zero-concern, Low band, and labelled "concern".
         [Fact]
         public void Empty_ScoreZero_Low()
         {
@@ -31,7 +31,7 @@ namespace XrmToolSuite.UnitTests
             Assert.Equal("AI Solution Reviewer", m.ToolName);
         }
 
-        // TC-AR-REPORT-02: concern score weights severities (High=12, Medium=5 -> 17 -> Medium band).
+        // TC-AI10-REPORT-02: concern score weights severities (High=12, Medium=5 -> 17 -> Medium band).
         [Fact]
         public void ConcernScore_WeightsSeverities()
         {
@@ -41,7 +41,7 @@ namespace XrmToolSuite.UnitTests
             Assert.Equal(ScoreBand.Medium, m.Band);
         }
 
-        // TC-AR-REPORT-03: metrics carry the observation total and a per-area breakdown.
+        // TC-AI10-REPORT-03: metrics carry the observation total and a per-area breakdown.
         [Fact]
         public void Metrics_TotalAndPerArea()
         {
@@ -51,7 +51,7 @@ namespace XrmToolSuite.UnitTests
             Assert.Contains(m.Metrics, x => x.Label == "Plugins" && x.Value == "2");
         }
 
-        // TC-AR-REPORT-04: the reviewer supplies an architecture-review AI prompt covering the required sections.
+        // TC-AI10-REPORT-04: the reviewer supplies an architecture-review AI prompt covering the required sections.
         [Fact]
         public void AiPrompt_CoversReviewSections()
         {

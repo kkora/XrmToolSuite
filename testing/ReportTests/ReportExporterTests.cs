@@ -16,7 +16,7 @@ namespace XrmToolSuite.ReportTests
     /// consumes the suite-shared <see cref="ReportModel"/>; here we drive them through the deployment
     /// tool's <see cref="DeploymentReportModel"/> projection so the real adapter is exercised too.
     /// The PDF path renders through MigraDoc/PdfSharp (GDI) and is asserted to be a real PDF; the
-    /// others are checked for a well-formed payload. Traces to US-DG-9 (exportable reports).
+    /// others are checked for a well-formed payload. Traces to US-ALM07-9 (exportable reports).
     /// </summary>
     public class ReportExporterTests : IDisposable
     {
@@ -69,7 +69,7 @@ namespace XrmToolSuite.ReportTests
 
         private string Path_(string name) => Path.Combine(_dir, name);
 
-        // TC-DG-RPT-01: the PDF exporter renders a valid, non-trivial PDF (MigraDoc/PdfSharp GDI).
+        // TC-ALM07-RPT-01: the PDF exporter renders a valid, non-trivial PDF (MigraDoc/PdfSharp GDI).
         [Fact]
         public void Pdf_RendersValidPdf()
         {
@@ -81,7 +81,7 @@ namespace XrmToolSuite.ReportTests
             Assert.Equal("%PDF-", Encoding.ASCII.GetString(bytes, 0, 5));
         }
 
-        // TC-DG-RPT-02: the HTML dashboard writes a standalone document containing the findings.
+        // TC-ALM07-RPT-02: the HTML dashboard writes a standalone document containing the findings.
         [Fact]
         public void Html_WritesDocumentWithFindings()
         {
@@ -94,7 +94,7 @@ namespace XrmToolSuite.ReportTests
             Assert.Contains("Duplicate SDK step registration", html);  // a finding title is rendered
         }
 
-        // TC-DG-RPT-03: the JSON exporter emits parseable CI output with the score and pass flag.
+        // TC-ALM07-RPT-03: the JSON exporter emits parseable CI output with the score and pass flag.
         [Fact]
         public void Json_EmitsParseableCiPayload()
         {
@@ -107,7 +107,7 @@ namespace XrmToolSuite.ReportTests
             Assert.Equal(1, (int)json["ci"]["suggestedExitCode"]);
         }
 
-        // TC-DG-RPT-04: the Markdown checklist includes the guidance section with rollback steps.
+        // TC-ALM07-RPT-04: the Markdown checklist includes the guidance section with rollback steps.
         [Fact]
         public void Markdown_IncludesRollbackGuidance()
         {
@@ -120,7 +120,7 @@ namespace XrmToolSuite.ReportTests
             Assert.Contains("rollback", md, StringComparison.OrdinalIgnoreCase);
         }
 
-        // TC-DG-RPT-06: an executive summary, when present, is embedded in PDF/HTML/JSON exports.
+        // TC-ALM07-RPT-06: an executive summary, when present, is embedded in PDF/HTML/JSON exports.
         [Fact]
         public void Summary_EmbeddedInExports()
         {
@@ -143,7 +143,7 @@ namespace XrmToolSuite.ReportTests
             Assert.Equal(result.AiSummary, (string)JObject.Parse(File.ReadAllText(jsonPath))["aiSummary"]);
         }
 
-        // TC-DG-RPT-05: the Excel exporter writes a valid .xlsx (ZIP/OOXML) file.
+        // TC-ALM07-RPT-05: the Excel exporter writes a valid .xlsx (ZIP/OOXML) file.
         [Fact]
         public void Excel_WritesXlsxPackage()
         {

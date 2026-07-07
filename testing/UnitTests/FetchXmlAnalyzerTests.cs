@@ -6,7 +6,7 @@ using XrmToolSuite.Core.FetchXml;
 namespace XrmToolSuite.UnitTests
 {
     /// <summary>
-    /// SDK-free tests for the shared FetchXML parser + rule engine (US-PERF3.2.x / 3.3.x / 3.4.1).
+    /// SDK-free tests for the shared FetchXML parser + rule engine (US-PERF03.2.x / 3.3.x / 3.4.1).
     /// Pure logic — no Dataverse, no WinForms.
     /// </summary>
     public class FetchXmlAnalyzerTests
@@ -17,7 +17,7 @@ namespace XrmToolSuite.UnitTests
             "<filter><condition attribute='statecode' operator='eq' value='0' /></filter>" +
             "</entity></fetch>";
 
-        // US-PERF3.2.1 — parser breaks the query into shape with counts.
+        // US-PERF03.2.1 — parser breaks the query into shape with counts.
         [Fact]
         public void Parse_Success_PopulatesSummaryCounts()
         {
@@ -50,7 +50,7 @@ namespace XrmToolSuite.UnitTests
             Assert.Equal(10, q.Top);
         }
 
-        // US-PERF3.2.1 — nested link-entities are counted at every depth.
+        // US-PERF03.2.1 — nested link-entities are counted at every depth.
         [Fact]
         public void Parse_NestedLinks_CountsAllDepths()
         {
@@ -64,7 +64,7 @@ namespace XrmToolSuite.UnitTests
             Assert.Equal(2, q.LinkCount);
         }
 
-        // US-PERF3.1.1 — invalid FetchXML yields a clear parse error, not an exception.
+        // US-PERF03.1.1 — invalid FetchXML yields a clear parse error, not an exception.
         [Fact]
         public void Parse_MalformedXml_ReturnsError()
         {
@@ -73,7 +73,7 @@ namespace XrmToolSuite.UnitTests
             Assert.False(string.IsNullOrWhiteSpace(result.Error));
         }
 
-        // US-PERF3.1.1 — non-fetch root is rejected.
+        // US-PERF03.1.1 — non-fetch root is rejected.
         [Fact]
         public void Parse_MissingFetchRoot_ReturnsError()
         {
@@ -82,7 +82,7 @@ namespace XrmToolSuite.UnitTests
             Assert.Contains("fetch", result.Error);
         }
 
-        // US-PERF3.3.1 — <all-attributes/> is High.
+        // US-PERF03.3.1 — <all-attributes/> is High.
         [Fact]
         public void Analyze_AllAttributes_IsHigh()
         {
@@ -96,7 +96,7 @@ namespace XrmToolSuite.UnitTests
             Assert.Contains(a.Suggestions, s => s.Contains("all-attributes"));
         }
 
-        // US-PERF3.3.2 — missing root filter is High.
+        // US-PERF03.3.2 — missing root filter is High.
         [Fact]
         public void Analyze_MissingFilter_IsHigh()
         {
@@ -107,7 +107,7 @@ namespace XrmToolSuite.UnitTests
             Assert.Contains(a.Findings, f => f.Severity == Severity.High && f.Title.Contains("No filter"));
         }
 
-        // US-PERF3.3.3 — link-entity count over MaxLinkEntities is High.
+        // US-PERF03.3.3 — link-entity count over MaxLinkEntities is High.
         [Fact]
         public void Analyze_ExcessiveLinks_IsHigh()
         {
@@ -123,7 +123,7 @@ namespace XrmToolSuite.UnitTests
             Assert.Contains(a.Findings, f => f.Severity == Severity.High && f.Title.Contains("Excessive"));
         }
 
-        // US-PERF3.3.3 — several (but not excessive) links is Medium.
+        // US-PERF03.3.3 — several (but not excessive) links is Medium.
         [Fact]
         public void Analyze_SeveralLinks_IsMedium()
         {
@@ -138,7 +138,7 @@ namespace XrmToolSuite.UnitTests
             Assert.Contains(a.Findings, f => f.Severity == Severity.Medium && f.Title.Contains("Several"));
         }
 
-        // US-PERF3.4.1 — cost estimate accumulates and bands High; multiple High findings exceed 40.
+        // US-PERF03.4.1 — cost estimate accumulates and bands High; multiple High findings exceed 40.
         [Fact]
         public void Analyze_CostAndBand_ComputedFromFindings()
         {
@@ -155,7 +155,7 @@ namespace XrmToolSuite.UnitTests
             Assert.Equal(ScoreCalculator.BandFor(a.CostEstimate, 15, 40), a.Band);
         }
 
-        // US-PERF3.4.1 — a clean, bounded query has no risks and lands in the Low band.
+        // US-PERF03.4.1 — a clean, bounded query has no risks and lands in the Low band.
         [Fact]
         public void Analyze_NoIssues_IsInfoAndLowBand()
         {

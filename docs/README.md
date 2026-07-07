@@ -19,12 +19,17 @@ Epic** for the shared foundation (both below).
 
 | Tool | Now at | Status |
 |---|---|---|
-| Deployment Risk Analyzer | [backlog/01-ALM-DevOps/DeploymentRiskAnalyzer.md](backlog/01-ALM-DevOps/DeploymentRiskAnalyzer.md) | ✅ Done |
-| Attribute Auditor | [backlog/04-Dataverse-Administration/AttributeAuditor.md](backlog/04-Dataverse-Administration/AttributeAuditor.md) | ✅ Done |
-| Solution Complexity Score | [backlog/05-Solution-Management/SolutionComplexityScore.md](backlog/05-Solution-Management/SolutionComplexityScore.md) | ✅ Done |
-| Solution Knowledge Graph | [backlog/05-Solution-Management/SolutionKnowledgeGraph.md](backlog/05-Solution-Management/SolutionKnowledgeGraph.md) | ✅ Done |
-| Technical Debt Analyzer | [backlog/05-Solution-Management/TechnicalDebtAnalyzer.md](backlog/05-Solution-Management/TechnicalDebtAnalyzer.md) | ✅ Done |
-| AI Solution Reviewer | [backlog/09-AI-Assistants/AiSolutionReviewer.md](backlog/09-AI-Assistants/AiSolutionReviewer.md) | ✅ Done |
+| Deployment Risk Analyzer | [backlog/01-ALM-DevOps/ALM07.DeploymentRiskAnalyzer.md](backlog/01-ALM-DevOps/ALM07.DeploymentRiskAnalyzer.md) | ✅ Done |
+| Attribute Auditor | [backlog/04-Dataverse-Administration/ADMIN10.AttributeAuditor.md](backlog/04-Dataverse-Administration/ADMIN10.AttributeAuditor.md) | ✅ Done |
+| Solution Complexity Score | [backlog/05-Solution-Management/SOLN08.SolutionComplexityScore.md](backlog/05-Solution-Management/SOLN08.SolutionComplexityScore.md) | ✅ Done |
+| Solution Knowledge Graph | [backlog/05-Solution-Management/SOLN09.SolutionKnowledgeGraph.md](backlog/05-Solution-Management/SOLN09.SolutionKnowledgeGraph.md) | ✅ Done |
+| Technical Debt Analyzer | [backlog/05-Solution-Management/SOLN10.TechnicalDebtAnalyzer.md](backlog/05-Solution-Management/SOLN10.TechnicalDebtAnalyzer.md) | ✅ Done |
+| AI Solution Reviewer | [backlog/09-AI-Assistants/AI10.AiSolutionReviewer.md](backlog/09-AI-Assistants/AI10.AiSolutionReviewer.md) | ✅ Done |
+
+> These six shipped **before** the tagging convention. Since then all 20 of the ranked
+> [NEXT-20](backlog/NEXT-20.md) tools have also shipped — the suite now has **26 tools total**. The
+> full as-built user-story index (shipped tools + the tagged NEXT-20 tools) lives at
+> [`user-stories/README.md`](user-stories/README.md).
 
 ## Hierarchy & conventions
 
@@ -37,10 +42,11 @@ Portfolio Epic  (the suite as a product)
 Each **Epic** contains **Features**; each Feature contains **User Stories** written as
 `As a <persona>, I want <capability>, so that <benefit>`, with **Acceptance Criteria (AC)**.
 
-**ID scheme:** `EPIC-<area>`, `FEAT-<area>-<n>`, `US-<area>-<n>.<m>`.
-Areas: `XTS` (portfolio), `PLAT` (platform), `DG` (Deployment Risk Analyzer), `TD` (Technical Debt
-Analyzer), `SC` (Solution Complexity Score), `AR` (AI Solution Reviewer), `KG` (Solution Knowledge
-Graph), `AA` (Attribute Auditor), and a short tag per new tool.
+**ID scheme:** `EPIC-<area>`, `FEAT-<area>-<n>`, `US-<area>-<n>.<m>`, where `<area>` is the tool's
+category tag + item number — the **same** `<TAG><n>` used for its backlog/user-story filename. Besides
+`XTS` (portfolio) and `PLAT` (platform), each tool's area is its filename tag, e.g. `ALM07` (Deployment Risk
+Analyzer), `SOLN10` (Technical Debt Analyzer), `SOLN08` (Solution Complexity Score), `AI10` (AI Solution
+Reviewer), `SOLN09` (Solution Knowledge Graph), `ADMIN10` (Attribute Auditor), `SEC04` (Sharing Analyzer), …
 
 **Status legend:** `[Done]` shipped - `[WIP]` in progress - `[Planned]` not started.
 

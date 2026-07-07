@@ -9,7 +9,7 @@ namespace XrmToolSuite.AnalyzerTests
     /// <summary>
     /// Executable tests for the Environment Variables &amp; Connection References analyzer.
     /// Exercises the query-driven paths with a fake IOrganizationService (no live org).
-    /// Traces to US-DG-4 (environment variables / connection references).
+    /// Traces to US-ALM07-4 (environment variables / connection references).
     /// </summary>
     public class EnvironmentVariableAnalyzerTests
     {
@@ -22,7 +22,7 @@ namespace XrmToolSuite.AnalyzerTests
             return new EnvironmentVariableAnalyzer().Analyze(ctx, _ => { });
         }
 
-        // TC-DG-EV-01: a Secret-type variable always flags High (secrets never transport).
+        // TC-ALM07-EV-01: a Secret-type variable always flags High (secrets never transport).
         [Fact]
         public void SecretVariable_FlagsHigh()
         {
@@ -34,7 +34,7 @@ namespace XrmToolSuite.AnalyzerTests
             Assert.Equal("contoso_ApiKey", f.AffectedComponent);
         }
 
-        // TC-DG-EV-02: a value row packaged inside the solution flags Medium (overwrites target on import).
+        // TC-ALM07-EV-02: a value row packaged inside the solution flags Medium (overwrites target on import).
         [Fact]
         public void PackagedValue_FlagsMedium()
         {
@@ -48,7 +48,7 @@ namespace XrmToolSuite.AnalyzerTests
                 x.Title == "Environment variable VALUE packaged in solution" && x.Severity == Severity.Medium);
         }
 
-        // TC-DG-EV-03: no default + no current value + no target -> Medium ("configure it somewhere").
+        // TC-ALM07-EV-03: no default + no current value + no target -> Medium ("configure it somewhere").
         [Fact]
         public void NoDefaultNoValue_NoTarget_FlagsMedium()
         {
@@ -59,7 +59,7 @@ namespace XrmToolSuite.AnalyzerTests
             Assert.Equal(Severity.Medium, f.Severity);
         }
 
-        // TC-DG-EV-04: a variable with a default value and no target produces no finding.
+        // TC-ALM07-EV-04: a variable with a default value and no target produces no finding.
         [Fact]
         public void HasDefault_NoTarget_NoFinding()
         {
@@ -70,7 +70,7 @@ namespace XrmToolSuite.AnalyzerTests
                                                     && x.Severity != Severity.Info);
         }
 
-        // TC-DG-EV-05: variable absent from target with no default -> High.
+        // TC-ALM07-EV-05: variable absent from target with no default -> High.
         [Fact]
         public void NewToTarget_NoDefault_FlagsHigh()
         {
@@ -84,7 +84,7 @@ namespace XrmToolSuite.AnalyzerTests
             Assert.Equal(Severity.High, f.Severity);
         }
 
-        // TC-DG-EV-06: variable present in target but unset (no value, no default) -> High.
+        // TC-ALM07-EV-06: variable present in target but unset (no value, no default) -> High.
         [Fact]
         public void ExistsInTargetButUnset_FlagsHigh()
         {
@@ -98,7 +98,7 @@ namespace XrmToolSuite.AnalyzerTests
                 x.Title == "Environment variable unset in target" && x.Severity == Severity.High);
         }
 
-        // TC-DG-EV-07: data-source variable with no target binding -> Medium.
+        // TC-ALM07-EV-07: data-source variable with no target binding -> Medium.
         [Fact]
         public void DataSourceVariable_UnboundInTarget_FlagsMedium()
         {
@@ -112,7 +112,7 @@ namespace XrmToolSuite.AnalyzerTests
                 x.Title == "Data source variable unbound in target" && x.Severity == Severity.Medium);
         }
 
-        // TC-DG-EV-08: connection reference with no target -> Info (bind-at-import reminder).
+        // TC-ALM07-EV-08: connection reference with no target -> Info (bind-at-import reminder).
         [Fact]
         public void ConnectionReference_NoTarget_FlagsInfo()
         {
@@ -126,7 +126,7 @@ namespace XrmToolSuite.AnalyzerTests
             Assert.Equal(Severity.Info, f.Severity);
         }
 
-        // TC-DG-EV-09: connection reference present in target but with no connection bound -> High.
+        // TC-ALM07-EV-09: connection reference present in target but with no connection bound -> High.
         [Fact]
         public void ConnectionReference_UnboundInTarget_FlagsHigh()
         {

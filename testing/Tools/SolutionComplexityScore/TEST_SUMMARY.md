@@ -1,0 +1,39 @@
+# Solution Complexity Score - Test Summary
+
+## Automated run
+
+- **Command:** `dotnet test testing/UnitTests/UnitTests.csproj -c Release`
+- **Framework:** xUnit (net8.0)
+- **Result:** 14 Complexity cases passed, 0 failed, 0 skipped (402 total across the suite).
+- **Coverage:** TC-SOLN08-METRIC-01..04 (weighted points, exact score/maintainability/effort/cost values, cap, per-dimension breakdown), TC-SOLN08-REPORT-05..06 (report projection, band, hotspot findings), and TC-SOLN08-QUALITY-07..11 (build-quality score: empty=100/High, band cutoffs, exact multi-violation deduction, projection metric + clean note, quality findings), tracing to US-SOLN08-3/4/5/8. The effort/cost and quality formulas are asserted to exact values, so a change to any weight is caught.
+- **Collector (headless):** `dotnet test testing/CollectorTests/CollectorTests.csproj` — TC-SOLN08-COL-01..08 drive `ComplexityCollector` against the shared fake `IOrganizationService` (component-type tallies, JScript web resources, dashboards vs forms, widest form, workflow categories, apps, views/charts). 8 passed.
+
+```
+Passed! - Failed: 0, Passed: 402, Skipped: 0, Total: 402 (whole suite)
+```
+
+## Manual run
+
+Not executed in this environment (headless — no XrmToolBox host or Dataverse connection). The solution
+picker, component collector, WinForms dashboard, five exporters, and the AI/offline summary must be
+exercised in a Windows + XrmToolBox session against a real org; capture a screenshot per case.
+
+| Group | Cases | Executed | Pass | Fail | Pending |
+|---|---|---|---|---|---|
+| Automated (metrics/report/quality) | 14 | 14 | 14 | 0 | 0 |
+| Automated (collector, headless) | 8 | 8 | 8 | 0 | 0 |
+| Manual (UI/exports/summary) | 7 | 0 | 0 | 0 | 7 |
+
+## Verdict
+
+The SDK-free complexity/effort model passes with exact-value assertions and the tool builds `Release`
+with zero warnings. The component collector is now covered headlessly (TC-SOLN08-COL-01..08, `CollectorTests`);
+only the WinForms UI, exporters, and offline/AI summary remain manual. Manual GUI/Dataverse cases
+(TC-SOLN08-M-01..07) are **pending a live org** and must be run before release — no manual case is claimed as
+passed here.
+
+## Live UI smoke test (XrmToolBox)
+
+- **Command:** `dotnet test testing/UiSmokeTests/UiSmokeTests.csproj` with `XTB_EXE` set, on 2026-07-04.
+- **Result:** PASS — real XrmToolBox v1.2025.10.74 (FlaUI) confirms **Solution Complexity Score** loads and appears in the Tools list.
+- **Evidence:** `screenshots/xrmtoolbox-tools-list.png` — the Tools tab filtered to **Solution Complexity Score** v1.2026.7.1 (Kanchan Kora).

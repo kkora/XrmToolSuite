@@ -7,7 +7,7 @@ namespace XrmToolSuite.AnalyzerTests
 {
     /// <summary>
     /// Executable tests for the Ribbon Changes analyzer: command handlers referencing a web resource
-    /// missing from the source are flagged. Traces to US-DG-12 (ribbon changes).
+    /// missing from the source are flagged. Traces to US-ALM07-12 (ribbon changes).
     /// </summary>
     public class RibbonAnalyzerTests
     {
@@ -17,7 +17,7 @@ namespace XrmToolSuite.AnalyzerTests
             return new RibbonAnalyzer().Analyze(TestData.Context(source), _ => { });
         }
 
-        // TC-DG-RB-01: a ribbon command whose $webresource library is missing from the source is flagged High.
+        // TC-ALM07-RB-01: a ribbon command whose $webresource library is missing from the source is flagged High.
         [Fact]
         public void Ribbon_MissingWebResource_FlagsHigh()
         {
@@ -33,7 +33,7 @@ namespace XrmToolSuite.AnalyzerTests
             Assert.Contains("cc_ribbon.js", f.Description);
         }
 
-        // TC-DG-RB-02: when the referenced library exists in the source, there is no finding.
+        // TC-ALM07-RB-02: when the referenced library exists in the source, there is no finding.
         [Fact]
         public void Ribbon_KnownWebResource_NoFinding()
         {
@@ -47,7 +47,7 @@ namespace XrmToolSuite.AnalyzerTests
             Assert.DoesNotContain(Run(source), x => x.Title == "Ribbon command references missing web resource");
         }
 
-        // TC-DG-RB-03: an empty solution (no ribbon customizations) reports a single informational finding.
+        // TC-ALM07-RB-03: an empty solution (no ribbon customizations) reports a single informational finding.
         [Fact]
         public void NoRibbons_ReportsInfo()
         {
