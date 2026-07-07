@@ -298,8 +298,6 @@ namespace XrmToolSuite.EnvironmentInventory
                 catch (Exception ex) { ShowError(ex, "Export failed"); }
             }
         }
-
-        private void tsbClose_Click(object sender, EventArgs e) => CloseTool();
     }
 
     /// <summary>Persisted automatically via SettingsManager (see Load/ClosingPlugin). No credentials or secrets.</summary>

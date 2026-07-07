@@ -71,8 +71,6 @@ namespace XrmToolSuite.ViewPerformanceAnalyzer
             SetStatusMessage($"Connected to {detail?.ConnectionName}. Click 'Refresh tables'.");
         }
 
-        private void tsbClose_Click(object sender, EventArgs e) => CloseTool();
-
         // ----------------------------------------------------------------- Table picker (needs connection)
 
         private void tsbRefreshTables_Click(object sender, EventArgs e) => ExecuteMethod(LoadTables);

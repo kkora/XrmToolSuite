@@ -55,8 +55,6 @@ namespace XrmToolSuite.CustomApiExplorer
             SetStatusMessage($"Connected to {detail?.ConnectionName}");
         }
 
-        private void tsbClose_Click(object sender, EventArgs e) => CloseTool();
-
         // ---- inventory (US-PLUGIN6.1) ----
 
         private void tsbLoad_Click(object sender, EventArgs e) => ExecuteMethod(LoadCatalog);

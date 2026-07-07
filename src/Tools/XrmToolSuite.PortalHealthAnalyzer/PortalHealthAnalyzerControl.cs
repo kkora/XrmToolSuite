@@ -69,8 +69,6 @@ namespace XrmToolSuite.PortalHealthAnalyzer
             SetStatusMessage($"Connected to {detail?.ConnectionName}. Click 'Load websites'.");
         }
 
-        private void tsbClose_Click(object sender, EventArgs e) => CloseTool();
-
         // ----------------------------------------------------------------- Website discovery
 
         private void tsbLoadWebsites_Click(object sender, EventArgs e) => ExecuteMethod(LoadWebsites);

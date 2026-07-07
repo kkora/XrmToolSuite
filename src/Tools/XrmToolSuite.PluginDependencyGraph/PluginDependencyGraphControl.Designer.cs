@@ -15,8 +15,6 @@ namespace XrmToolSuite.PluginDependencyGraph
         private void InitializeComponent()
         {
             this.toolStrip = new System.Windows.Forms.ToolStrip();
-            this.tsbClose = new System.Windows.Forms.ToolStripButton();
-            this.tss1 = new System.Windows.Forms.ToolStripSeparator();
             this.tsbLoad = new System.Windows.Forms.ToolStripButton();
             this.tss2 = new System.Windows.Forms.ToolStripSeparator();
             this.tslTable = new System.Windows.Forms.ToolStripLabel();
@@ -82,8 +80,6 @@ namespace XrmToolSuite.PluginDependencyGraph
             //
             this.toolStrip.ImageScalingSize = new System.Drawing.Size(24, 24);
             this.toolStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-                this.tsbClose,
-                this.tss1,
                 this.tsbLoad,
                 this.tss2,
                 this.tslTable,
@@ -105,12 +101,6 @@ namespace XrmToolSuite.PluginDependencyGraph
             this.toolStrip.Name = "toolStrip";
             this.toolStrip.Size = new System.Drawing.Size(1000, 27);
             this.toolStrip.TabIndex = 0;
-            //
-            // tsbClose
-            //
-            this.tsbClose.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-            this.tsbClose.Name = "tsbClose";
-            this.tsbClose.Text = "Close";
             //
             // tsbLoad
             //
@@ -389,8 +379,6 @@ namespace XrmToolSuite.PluginDependencyGraph
         #endregion
 
         private System.Windows.Forms.ToolStrip toolStrip;
-        private System.Windows.Forms.ToolStripButton tsbClose;
-        private System.Windows.Forms.ToolStripSeparator tss1;
         private System.Windows.Forms.ToolStripButton tsbLoad;
         private System.Windows.Forms.ToolStripSeparator tss2;
         private System.Windows.Forms.ToolStripLabel tslTable;

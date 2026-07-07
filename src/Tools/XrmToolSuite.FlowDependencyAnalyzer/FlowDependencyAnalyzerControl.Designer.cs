@@ -22,7 +22,6 @@ namespace XrmToolSuite.FlowDependencyAnalyzer
             this.tsmExportPdf = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmExportJson = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmExportHtml = new System.Windows.Forms.ToolStripMenuItem();
-            this.tsbClose = new System.Windows.Forms.ToolStripButton();
 
             this.filterStrip = new System.Windows.Forms.ToolStrip();
             this.tslStatus = new System.Windows.Forms.ToolStripLabel();
@@ -94,8 +93,7 @@ namespace XrmToolSuite.FlowDependencyAnalyzer
             this.toolStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
                 this.tsbAnalyze,
                 this.tssSep1,
-                this.tsbExport,
-                this.tsbClose});
+                this.tsbExport});
             this.toolStrip.Location = new System.Drawing.Point(0, 0);
             this.toolStrip.Name = "toolStrip";
             this.toolStrip.Size = new System.Drawing.Size(1000, 25);
@@ -128,14 +126,6 @@ namespace XrmToolSuite.FlowDependencyAnalyzer
             this.tsmExportJson.Click += new System.EventHandler(this.tsmExportJson_Click);
             this.tsmExportHtml.Text = "HTML (.html)";
             this.tsmExportHtml.Click += new System.EventHandler(this.tsmExportHtml_Click);
-            //
-            // tsbClose
-            //
-            this.tsbClose.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
-            this.tsbClose.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-            this.tsbClose.Name = "tsbClose";
-            this.tsbClose.Text = "Close";
-            this.tsbClose.Click += new System.EventHandler(this.tsbClose_Click);
             //
             // filterStrip
             //
@@ -446,7 +436,6 @@ namespace XrmToolSuite.FlowDependencyAnalyzer
         private System.Windows.Forms.ToolStripMenuItem tsmExportPdf;
         private System.Windows.Forms.ToolStripMenuItem tsmExportJson;
         private System.Windows.Forms.ToolStripMenuItem tsmExportHtml;
-        private System.Windows.Forms.ToolStripButton tsbClose;
 
         private System.Windows.Forms.ToolStrip filterStrip;
         private System.Windows.Forms.ToolStripLabel tslStatus;

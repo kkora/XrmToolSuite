@@ -27,7 +27,6 @@ namespace XrmToolSuite.ArchitectureDiagramGenerator
             this.tsbExport = new System.Windows.Forms.ToolStripDropDownButton();
             this.tslPreview = new System.Windows.Forms.ToolStripLabel();
             this.tscPreview = new System.Windows.Forms.ToolStripComboBox();
-            this.tsbClose = new System.Windows.Forms.ToolStripButton();
             this.txtPreview = new System.Windows.Forms.TextBox();
             this.toolStrip.SuspendLayout();
             this.SuspendLayout();
@@ -47,8 +46,7 @@ namespace XrmToolSuite.ArchitectureDiagramGenerator
                 this.tssSeparator2,
                 this.tsbExport,
                 this.tslPreview,
-                this.tscPreview,
-                this.tsbClose});
+                this.tscPreview});
             this.toolStrip.Location = new System.Drawing.Point(0, 0);
             this.toolStrip.Name = "toolStrip";
             this.toolStrip.Size = new System.Drawing.Size(1000, 25);
@@ -114,13 +112,6 @@ namespace XrmToolSuite.ArchitectureDiagramGenerator
             this.tscPreview.Name = "tscPreview";
             this.tscPreview.Size = new System.Drawing.Size(120, 25);
             //
-            // tsbClose
-            //
-            this.tsbClose.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
-            this.tsbClose.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-            this.tsbClose.Name = "tsbClose";
-            this.tsbClose.Text = "Close";
-            //
             // txtPreview
             //
             this.txtPreview.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -164,7 +155,6 @@ namespace XrmToolSuite.ArchitectureDiagramGenerator
         private System.Windows.Forms.ToolStripDropDownButton tsbExport;
         private System.Windows.Forms.ToolStripLabel tslPreview;
         private System.Windows.Forms.ToolStripComboBox tscPreview;
-        private System.Windows.Forms.ToolStripButton tsbClose;
         private System.Windows.Forms.TextBox txtPreview;
     }
 }

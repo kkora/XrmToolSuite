@@ -27,8 +27,6 @@ namespace XrmToolSuite.JavaScriptPerformanceAnalyzer
             this.tsmExportHtml = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmExportMarkdown = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmExportCsv = new System.Windows.Forms.ToolStripMenuItem();
-            this.tssSeparator3 = new System.Windows.Forms.ToolStripSeparator();
-            this.tsbClose = new System.Windows.Forms.ToolStripButton();
             this.splitMain = new System.Windows.Forms.SplitContainer();
             this.pnlTop = new System.Windows.Forms.Panel();
             this.grdScripts = new System.Windows.Forms.DataGridView();
@@ -86,9 +84,7 @@ namespace XrmToolSuite.JavaScriptPerformanceAnalyzer
                 this.tslSearch,
                 this.txtSearch,
                 this.tssSeparator2,
-                this.tsbExport,
-                this.tssSeparator3,
-                this.tsbClose});
+                this.tsbExport});
             this.toolStrip.Location = new System.Drawing.Point(0, 0);
             this.toolStrip.Name = "toolStrip";
             this.toolStrip.Size = new System.Drawing.Size(960, 25);
@@ -171,18 +167,6 @@ namespace XrmToolSuite.JavaScriptPerformanceAnalyzer
             this.tsmExportCsv.Name = "tsmExportCsv";
             this.tsmExportCsv.Text = "CSV (scripts)";
             this.tsmExportCsv.Click += new System.EventHandler(this.tsmExportCsv_Click);
-            //
-            // tssSeparator3
-            //
-            this.tssSeparator3.Name = "tssSeparator3";
-            //
-            // tsbClose
-            //
-            this.tsbClose.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
-            this.tsbClose.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-            this.tsbClose.Name = "tsbClose";
-            this.tsbClose.Text = "Close";
-            this.tsbClose.Click += new System.EventHandler(this.tsbClose_Click);
             //
             // splitMain
             //
@@ -470,8 +454,6 @@ namespace XrmToolSuite.JavaScriptPerformanceAnalyzer
         private System.Windows.Forms.ToolStripMenuItem tsmExportHtml;
         private System.Windows.Forms.ToolStripMenuItem tsmExportMarkdown;
         private System.Windows.Forms.ToolStripMenuItem tsmExportCsv;
-        private System.Windows.Forms.ToolStripSeparator tssSeparator3;
-        private System.Windows.Forms.ToolStripButton tsbClose;
         private System.Windows.Forms.SplitContainer splitMain;
         private System.Windows.Forms.Panel pnlTop;
         private System.Windows.Forms.DataGridView grdScripts;

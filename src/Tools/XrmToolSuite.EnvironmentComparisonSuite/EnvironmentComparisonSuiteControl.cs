@@ -32,7 +32,7 @@ namespace XrmToolSuite.EnvironmentComparisonSuite
 
         // UI
         private ToolStrip _toolbar;
-        private ToolStripButton _btnConnectTarget, _btnCompare, _btnClose;
+        private ToolStripButton _btnConnectTarget, _btnCompare;
         private ToolStripLabel _lblTarget;
         private ToolStripDropDownButton _btnExport;
         private CheckedListBox _lstCategories;
@@ -79,9 +79,6 @@ namespace XrmToolSuite.EnvironmentComparisonSuite
 
             _toolbar = new ToolStrip { GripStyle = ToolStripGripStyle.Hidden, ImageScalingSize = new Size(20, 20) };
 
-            _btnClose = new ToolStripButton("Close") { DisplayStyle = ToolStripItemDisplayStyle.Text };
-            _btnClose.Click += (s, e) => CloseTool();
-
             _btnConnectTarget = new ToolStripButton("Connect target env…") { DisplayStyle = ToolStripItemDisplayStyle.Text };
             _btnConnectTarget.Click += (s, e) => AddAdditionalOrganization();
 
@@ -98,7 +95,6 @@ namespace XrmToolSuite.EnvironmentComparisonSuite
 
             _toolbar.Items.AddRange(new ToolStripItem[]
             {
-                _btnClose, new ToolStripSeparator(),
                 _btnConnectTarget, _lblTarget,
                 new ToolStripSeparator(), _btnCompare, _btnExport,
                 CreateHelpButton("Environment Comparison Suite")

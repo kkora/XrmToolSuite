@@ -66,7 +66,6 @@ namespace XrmToolSuite.JavaScriptPerformanceAnalyzer
             SetStatusMessage($"Connected to {detail?.ConnectionName}. Click 'Analyze web resources'.");
         }
 
-        private void tsbClose_Click(object sender, EventArgs e) => CloseTool();
 
         // ----------------------------------------------------------------- Analyze (needs connection)
 

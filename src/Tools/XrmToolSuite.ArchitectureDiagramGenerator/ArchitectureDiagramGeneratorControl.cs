@@ -62,7 +62,6 @@ namespace XrmToolSuite.ArchitectureDiagramGenerator
 
             tsbLoadSolutions.Click += (s, e) => ExecuteMethod(LoadSolutions);
             tsbGenerate.Click += (s, e) => ExecuteMethod(Generate);
-            tsbClose.Click += (s, e) => CloseTool();
             tscLayout.SelectedIndexChanged += (s, e) => RefreshPreview();
             tscDirection.SelectedIndexChanged += (s, e) => RefreshPreview();
             tsbHideOrphans.CheckedChanged += (s, e) => RefreshPreview();

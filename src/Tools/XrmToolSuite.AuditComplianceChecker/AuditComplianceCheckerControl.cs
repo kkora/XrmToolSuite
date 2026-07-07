@@ -455,8 +455,6 @@ namespace XrmToolSuite.AuditComplianceChecker
 
         #region Helpers
 
-        private void tsbClose_Click(object sender, EventArgs e) => CloseTool();
-
         private void Warn(string message) =>
             MessageBox.Show(this, message, "Audit Compliance Checker", MessageBoxButtons.OK, MessageBoxIcon.Information);
 

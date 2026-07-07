@@ -47,7 +47,6 @@ namespace XrmToolSuite.ApiDocumentationBuilder
             tsbExport.DropDownItems.Add("OpenAPI-style spec (.json)", null, (s, e) => Export("openapi"));
 
             tsbLoad.Click += (s, e) => ExecuteMethod(LoadApis);
-            tsbClose.Click += (s, e) => CloseTool();
             tsbIncludeExamples.CheckedChanged += (s, e) => RefreshPreview();
             tstRedact.TextChanged += (s, e) => RefreshPreview();
             tscPreview.SelectedIndexChanged += (s, e) => RefreshPreview();

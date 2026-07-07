@@ -59,7 +59,6 @@ namespace XrmToolSuite.ErdGenerator
             tsbExport.DropDownItems.Add("Markdown (.md)", null, (s, e) => Export("markdown"));
             tsbExport.DropDownItems.Add("JSON (.json)", null, (s, e) => Export("json"));
 
-            tsbClose.Click += (s, e) => CloseTool();
             tsbLoadTables.Click += (s, e) => ExecuteMethod(LoadTables);
             tsbGenerate.Click += (s, e) => ExecuteMethod(Generate);
             cboScope.SelectedIndexChanged += (s, e) => ExecuteMethod(OnScopeChanged);

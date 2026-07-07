@@ -28,7 +28,6 @@ namespace XrmToolSuite.SharingAnalyzer
             this.miExportJson = new System.Windows.Forms.ToolStripMenuItem();
             this.miExportHtml = new System.Windows.Forms.ToolStripMenuItem();
             this.miExportCsv = new System.Windows.Forms.ToolStripMenuItem();
-            this.tsbClose = new System.Windows.Forms.ToolStripButton();
 
             this.scMain = new System.Windows.Forms.SplitContainer();
             this.grdShares = new System.Windows.Forms.DataGridView();
@@ -87,8 +86,7 @@ namespace XrmToolSuite.SharingAnalyzer
                 this.tsbFullScan,
                 this.tsbScan,
                 this.tssSeparator2,
-                this.tsbExport,
-                this.tsbClose});
+                this.tsbExport});
             this.toolStrip.Location = new System.Drawing.Point(0, 0);
             this.toolStrip.Name = "toolStrip";
             this.toolStrip.Size = new System.Drawing.Size(1000, 25);
@@ -157,14 +155,6 @@ namespace XrmToolSuite.SharingAnalyzer
             this.miExportCsv.Name = "miExportCsv";
             this.miExportCsv.Text = "CSV (.csv)";
             this.miExportCsv.Click += new System.EventHandler(this.miExportCsv_Click);
-            //
-            // tsbClose
-            //
-            this.tsbClose.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
-            this.tsbClose.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-            this.tsbClose.Name = "tsbClose";
-            this.tsbClose.Text = "Close";
-            this.tsbClose.Click += new System.EventHandler(this.tsbClose_Click);
             //
             // scMain
             //
@@ -375,7 +365,6 @@ namespace XrmToolSuite.SharingAnalyzer
         private System.Windows.Forms.ToolStripMenuItem miExportJson;
         private System.Windows.Forms.ToolStripMenuItem miExportHtml;
         private System.Windows.Forms.ToolStripMenuItem miExportCsv;
-        private System.Windows.Forms.ToolStripButton tsbClose;
 
         private System.Windows.Forms.SplitContainer scMain;
         private System.Windows.Forms.DataGridView grdShares;

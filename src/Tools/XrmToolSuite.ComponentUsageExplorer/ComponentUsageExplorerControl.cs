@@ -99,8 +99,6 @@ namespace XrmToolSuite.ComponentUsageExplorer
             SetStatusMessage($"Connected to {detail?.ConnectionName}. Search for a component and click 'Find'.");
         }
 
-        private void tsbClose_Click(object sender, EventArgs e) => CloseTool();
-
         #endregion
 
         #region Find components (needs connection)

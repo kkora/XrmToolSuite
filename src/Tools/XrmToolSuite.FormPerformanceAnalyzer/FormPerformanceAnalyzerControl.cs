@@ -72,7 +72,6 @@ namespace XrmToolSuite.FormPerformanceAnalyzer
             SetStatusMessage($"Connected to {detail?.ConnectionName}. Click 'Analyze forms'.");
         }
 
-        private void tsbClose_Click(object sender, EventArgs e) => CloseTool();
 
         // ----------------------------------------------------------------- Table scope (needs connection)
 

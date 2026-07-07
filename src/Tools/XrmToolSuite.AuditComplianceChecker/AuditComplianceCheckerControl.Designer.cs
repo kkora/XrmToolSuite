@@ -33,8 +33,6 @@ namespace XrmToolSuite.AuditComplianceChecker
             this.miExportJson = new System.Windows.Forms.ToolStripMenuItem();
             this.miExportHtml = new System.Windows.Forms.ToolStripMenuItem();
             this.miExportCsv = new System.Windows.Forms.ToolStripMenuItem();
-            this.tss3 = new System.Windows.Forms.ToolStripSeparator();
-            this.tsbClose = new System.Windows.Forms.ToolStripButton();
 
             this.tabControl = new System.Windows.Forms.TabControl();
             this.tabCoverage = new System.Windows.Forms.TabPage();
@@ -87,9 +85,7 @@ namespace XrmToolSuite.AuditComplianceChecker
                 this.tstScope,
                 this.tsbAnalyzeActivity,
                 this.tss2,
-                this.tsddExport,
-                this.tss3,
-                this.tsbClose});
+                this.tsddExport});
             this.toolStrip.Location = new System.Drawing.Point(0, 0);
             this.toolStrip.Name = "toolStrip";
             this.toolStrip.Size = new System.Drawing.Size(1000, 27);
@@ -191,14 +187,6 @@ namespace XrmToolSuite.AuditComplianceChecker
             this.miExportCsv.Name = "miExportCsv";
             this.miExportCsv.Text = "CSV (.csv)";
             this.miExportCsv.Click += new System.EventHandler(this.miExportCsv_Click);
-            //
-            // tsbClose
-            //
-            this.tsbClose.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
-            this.tsbClose.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-            this.tsbClose.Name = "tsbClose";
-            this.tsbClose.Text = "Close";
-            this.tsbClose.Click += new System.EventHandler(this.tsbClose_Click);
             //
             // tabControl
             //
@@ -423,8 +411,6 @@ namespace XrmToolSuite.AuditComplianceChecker
         private System.Windows.Forms.ToolStripMenuItem miExportJson;
         private System.Windows.Forms.ToolStripMenuItem miExportHtml;
         private System.Windows.Forms.ToolStripMenuItem miExportCsv;
-        private System.Windows.Forms.ToolStripSeparator tss3;
-        private System.Windows.Forms.ToolStripButton tsbClose;
 
         private System.Windows.Forms.TabControl tabControl;
         private System.Windows.Forms.TabPage tabCoverage;

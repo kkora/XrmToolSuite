@@ -86,9 +86,6 @@ namespace XrmToolSuite.TechnicalDebtAnalyzer
             Dock = DockStyle.Fill;
 
             var toolbar = new ToolStrip { GripStyle = ToolStripGripStyle.Hidden };
-            var btnClose = new ToolStripButton("Close") { DisplayStyle = ToolStripItemDisplayStyle.Text };
-            btnClose.Click += (s, e) => CloseTool();
-
             _btnAnalyze = new ToolStripButton("▶ Analyze environment") { DisplayStyle = ToolStripItemDisplayStyle.Text };
             _btnAnalyze.Click += (s, e) => ExecuteMethod(RunAnalysis);
 
@@ -112,7 +109,7 @@ namespace XrmToolSuite.TechnicalDebtAnalyzer
 
             toolbar.Items.AddRange(new ToolStripItem[]
             {
-                btnClose, new ToolStripSeparator(), _btnAnalyze, new ToolStripSeparator(),
+                _btnAnalyze, new ToolStripSeparator(),
                 _btnExport, new ToolStripSeparator(), _btnAiSummary, btnAiOptions,
                 CreateHelpButton("Technical Debt Analyzer")
             });

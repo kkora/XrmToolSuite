@@ -499,8 +499,6 @@ namespace XrmToolSuite.TeamPermissionExplorer
 
         #region Helpers
 
-        private void tsbClose_Click(object sender, EventArgs e) => CloseTool();
-
         private void Warn(string message) =>
             MessageBox.Show(this, message, "Team Permission Explorer", MessageBoxButtons.OK, MessageBoxIcon.Information);
 

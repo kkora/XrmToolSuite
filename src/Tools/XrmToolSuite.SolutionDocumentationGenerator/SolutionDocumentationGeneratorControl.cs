@@ -59,7 +59,6 @@ namespace XrmToolSuite.SolutionDocumentationGenerator
 
             tsbLoadSolutions.Click += (s, e) => ExecuteMethod(LoadSolutions);
             tsbGenerate.Click += (s, e) => ExecuteMethod(Generate);
-            tsbClose.Click += (s, e) => CloseTool();
             tscPreview.SelectedIndexChanged += (s, e) => RefreshPreview();
 
             // Suite convention: every tool carries a right-aligned Help button (shared dialog).

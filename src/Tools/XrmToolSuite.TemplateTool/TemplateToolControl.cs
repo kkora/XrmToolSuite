@@ -51,8 +51,6 @@ namespace XrmToolSuite.TemplateTool
             SetStatusMessage($"Connected to {detail?.ConnectionName}");
         }
 
-        private void tsbClose_Click(object sender, EventArgs e) => CloseTool();
-
         // ExecuteMethod ensures a connection exists (prompts to connect if not)
         private void tsbLoadSample_Click(object sender, EventArgs e) => ExecuteMethod(LoadSampleData);
 

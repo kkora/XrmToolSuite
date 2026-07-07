@@ -15,8 +15,6 @@ namespace XrmToolSuite.ErdGenerator
         private void InitializeComponent()
         {
             this.toolStrip = new System.Windows.Forms.ToolStrip();
-            this.tsbClose = new System.Windows.Forms.ToolStripButton();
-            this.tss1 = new System.Windows.Forms.ToolStripSeparator();
             this.tslScope = new System.Windows.Forms.ToolStripLabel();
             this.cboScope = new System.Windows.Forms.ToolStripComboBox();
             this.cboScopeValue = new System.Windows.Forms.ToolStripComboBox();
@@ -46,8 +44,6 @@ namespace XrmToolSuite.ErdGenerator
             //
             this.toolStrip.ImageScalingSize = new System.Drawing.Size(24, 24);
             this.toolStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-                this.tsbClose,
-                this.tss1,
                 this.tslScope,
                 this.cboScope,
                 this.cboScopeValue,
@@ -64,12 +60,6 @@ namespace XrmToolSuite.ErdGenerator
             this.toolStrip.Name = "toolStrip";
             this.toolStrip.Size = new System.Drawing.Size(900, 27);
             this.toolStrip.TabIndex = 0;
-            //
-            // tsbClose
-            //
-            this.tsbClose.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-            this.tsbClose.Name = "tsbClose";
-            this.tsbClose.Text = "Close";
             //
             // tslScope
             //
@@ -216,8 +206,6 @@ namespace XrmToolSuite.ErdGenerator
         #endregion
 
         private System.Windows.Forms.ToolStrip toolStrip;
-        private System.Windows.Forms.ToolStripButton tsbClose;
-        private System.Windows.Forms.ToolStripSeparator tss1;
         private System.Windows.Forms.ToolStripLabel tslScope;
         private System.Windows.Forms.ToolStripComboBox cboScope;
         private System.Windows.Forms.ToolStripComboBox cboScopeValue;

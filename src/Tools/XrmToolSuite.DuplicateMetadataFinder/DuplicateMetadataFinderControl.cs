@@ -81,8 +81,6 @@ namespace XrmToolSuite.DuplicateMetadataFinder
             SetStatusMessage($"Connected to {detail?.ConnectionName}");
         }
 
-        private void tsbClose_Click(object sender, EventArgs e) => CloseTool();
-
         // ExecuteMethod ensures a connection exists (prompts to connect if not).
         private void tsbScan_Click(object sender, EventArgs e) => ExecuteMethod(ScanForDuplicates);
 

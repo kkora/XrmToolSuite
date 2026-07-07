@@ -71,8 +71,6 @@ namespace XrmToolSuite.AiSolutionReviewer
             Dock = DockStyle.Fill;
 
             var toolbar = new ToolStrip { GripStyle = ToolStripGripStyle.Hidden };
-            var btnClose = new ToolStripButton("Close") { DisplayStyle = ToolStripItemDisplayStyle.Text };
-            btnClose.Click += (s, e) => CloseTool();
 
             var btnLoad = new ToolStripButton("Load solutions") { DisplayStyle = ToolStripItemDisplayStyle.Text };
             btnLoad.Click += (s, e) => ExecuteMethod(LoadSolutions);
@@ -99,7 +97,7 @@ namespace XrmToolSuite.AiSolutionReviewer
 
             toolbar.Items.AddRange(new ToolStripItem[]
             {
-                btnClose, new ToolStripSeparator(), btnLoad, new ToolStripLabel("Solution:"),
+                btnLoad, new ToolStripLabel("Solution:"),
                 new ToolStripControlHost(_cboSolution), _btnReview, _btnAiSummary, new ToolStripSeparator(),
                 _btnExport, btnAiOptions, CreateHelpButton("AI Solution Reviewer")
             });

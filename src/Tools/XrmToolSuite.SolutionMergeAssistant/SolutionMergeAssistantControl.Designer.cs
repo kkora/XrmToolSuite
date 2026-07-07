@@ -24,8 +24,6 @@ namespace XrmToolSuite.SolutionMergeAssistant
             this.tsmExportPdf = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmExportJson = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmExportHtml = new System.Windows.Forms.ToolStripMenuItem();
-            this.tssSeparator3 = new System.Windows.Forms.ToolStripSeparator();
-            this.tsbClose = new System.Windows.Forms.ToolStripButton();
             this.splitOuter = new System.Windows.Forms.SplitContainer();
             this.lstSolutions = new System.Windows.Forms.CheckedListBox();
             this.lblSolutions = new System.Windows.Forms.Label();
@@ -72,9 +70,7 @@ namespace XrmToolSuite.SolutionMergeAssistant
                 this.tssSeparator1,
                 this.tsbCompare,
                 this.tssSeparator2,
-                this.tsbExport,
-                this.tssSeparator3,
-                this.tsbClose});
+                this.tsbExport});
             this.toolStrip.Location = new System.Drawing.Point(0, 0);
             this.toolStrip.Name = "toolStrip";
             this.toolStrip.Size = new System.Drawing.Size(960, 25);
@@ -139,18 +135,6 @@ namespace XrmToolSuite.SolutionMergeAssistant
             this.tsmExportHtml.Name = "tsmExportHtml";
             this.tsmExportHtml.Text = "HTML report";
             this.tsmExportHtml.Click += new System.EventHandler(this.tsmExportHtml_Click);
-            //
-            // tssSeparator3
-            //
-            this.tssSeparator3.Name = "tssSeparator3";
-            //
-            // tsbClose
-            //
-            this.tsbClose.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
-            this.tsbClose.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-            this.tsbClose.Name = "tsbClose";
-            this.tsbClose.Text = "Close";
-            this.tsbClose.Click += new System.EventHandler(this.tsbClose_Click);
             //
             // splitOuter
             //
@@ -371,8 +355,6 @@ namespace XrmToolSuite.SolutionMergeAssistant
         private System.Windows.Forms.ToolStripMenuItem tsmExportPdf;
         private System.Windows.Forms.ToolStripMenuItem tsmExportJson;
         private System.Windows.Forms.ToolStripMenuItem tsmExportHtml;
-        private System.Windows.Forms.ToolStripSeparator tssSeparator3;
-        private System.Windows.Forms.ToolStripButton tsbClose;
         private System.Windows.Forms.SplitContainer splitOuter;
         private System.Windows.Forms.CheckedListBox lstSolutions;
         private System.Windows.Forms.Label lblSolutions;

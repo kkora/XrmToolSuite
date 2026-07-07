@@ -28,9 +28,6 @@ namespace XrmToolSuite.TeamPermissionExplorer
             this.miExportPdf = new System.Windows.Forms.ToolStripMenuItem();
             this.miExportCsv = new System.Windows.Forms.ToolStripMenuItem();
             this.miExportHtml = new System.Windows.Forms.ToolStripMenuItem();
-            this.tssSeparator3 = new System.Windows.Forms.ToolStripSeparator();
-            this.tsbClose = new System.Windows.Forms.ToolStripButton();
-
             this.scMain = new System.Windows.Forms.SplitContainer();
             this.grdTeams = new System.Windows.Forms.DataGridView();
             this.colTeamName = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -96,9 +93,7 @@ namespace XrmToolSuite.TeamPermissionExplorer
                 this.tstSearch,
                 this.tssSeparator2,
                 this.tsbCompare,
-                this.tsbExport,
-                this.tssSeparator3,
-                this.tsbClose});
+                this.tsbExport});
             this.toolStrip.Location = new System.Drawing.Point(0, 0);
             this.toolStrip.Name = "toolStrip";
             this.toolStrip.Size = new System.Drawing.Size(1000, 25);
@@ -175,14 +170,6 @@ namespace XrmToolSuite.TeamPermissionExplorer
             this.miExportHtml.Name = "miExportHtml";
             this.miExportHtml.Text = "HTML (.html)";
             this.miExportHtml.Click += new System.EventHandler(this.miExportHtml_Click);
-            //
-            // tsbClose
-            //
-            this.tsbClose.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
-            this.tsbClose.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-            this.tsbClose.Name = "tsbClose";
-            this.tsbClose.Text = "Close";
-            this.tsbClose.Click += new System.EventHandler(this.tsbClose_Click);
             //
             // scMain
             //
@@ -420,8 +407,6 @@ namespace XrmToolSuite.TeamPermissionExplorer
         private System.Windows.Forms.ToolStripMenuItem miExportPdf;
         private System.Windows.Forms.ToolStripMenuItem miExportCsv;
         private System.Windows.Forms.ToolStripMenuItem miExportHtml;
-        private System.Windows.Forms.ToolStripSeparator tssSeparator3;
-        private System.Windows.Forms.ToolStripButton tsbClose;
 
         private System.Windows.Forms.SplitContainer scMain;
         private System.Windows.Forms.DataGridView grdTeams;

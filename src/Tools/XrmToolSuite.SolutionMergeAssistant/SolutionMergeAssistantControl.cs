@@ -69,8 +69,6 @@ namespace XrmToolSuite.SolutionMergeAssistant
             SetStatusMessage($"Connected to {detail?.ConnectionName}. Click 'Load solutions'.");
         }
 
-        private void tsbClose_Click(object sender, EventArgs e) => CloseTool();
-
         // ----------------------------------------------------------------- Load solutions (needs connection)
 
         private void tsbLoadSolutions_Click(object sender, EventArgs e) => ExecuteMethod(LoadSolutions);

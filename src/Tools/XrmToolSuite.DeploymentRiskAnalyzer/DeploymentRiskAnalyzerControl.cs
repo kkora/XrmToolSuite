@@ -52,7 +52,7 @@ namespace XrmToolSuite.DeploymentRiskAnalyzer
 
         // UI
         private ToolStrip _toolbar;
-        private ToolStripButton _btnLoadSolutions, _btnAnalyze, _btnConnectTarget, _btnClose;
+        private ToolStripButton _btnLoadSolutions, _btnAnalyze, _btnConnectTarget;
         private ToolStripComboBox _cmbSolutions;
         private ToolStripLabel _lblTarget;
         private ToolStripDropDownButton _btnExport;
@@ -112,9 +112,6 @@ namespace XrmToolSuite.DeploymentRiskAnalyzer
 
             _toolbar = new ToolStrip { GripStyle = ToolStripGripStyle.Hidden, ImageScalingSize = new Size(20, 20) };
 
-            _btnClose = new ToolStripButton("Close") { DisplayStyle = ToolStripItemDisplayStyle.Text };
-            _btnClose.Click += (s, e) => CloseTool();
-
             _btnLoadSolutions = new ToolStripButton("Load solutions") { DisplayStyle = ToolStripItemDisplayStyle.Text };
             _btnLoadSolutions.Click += (s, e) => ExecuteMethod(LoadSolutions);
 
@@ -154,7 +151,6 @@ namespace XrmToolSuite.DeploymentRiskAnalyzer
 
             _toolbar.Items.AddRange(new ToolStripItem[]
             {
-                _btnClose, new ToolStripSeparator(),
                 _btnLoadSolutions, new ToolStripLabel("Solution:"), _cmbSolutions,
                 new ToolStripSeparator(), _btnConnectTarget, _lblTarget,
                 new ToolStripSeparator(), _btnAnalyze, _btnExport,

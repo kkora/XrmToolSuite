@@ -22,8 +22,6 @@ namespace XrmToolSuite.SolutionDocumentationGenerator
             this.tssSep2 = new System.Windows.Forms.ToolStripSeparator();
             this.tslPreview = new System.Windows.Forms.ToolStripLabel();
             this.tscPreview = new System.Windows.Forms.ToolStripComboBox();
-            this.tssSep3 = new System.Windows.Forms.ToolStripSeparator();
-            this.tsbClose = new System.Windows.Forms.ToolStripButton();
             this.split = new System.Windows.Forms.SplitContainer();
             this.pnlConfig = new System.Windows.Forms.Panel();
             this.grpBranding = new System.Windows.Forms.GroupBox();
@@ -62,9 +60,7 @@ namespace XrmToolSuite.SolutionDocumentationGenerator
                 this.tsbExport,
                 this.tssSep2,
                 this.tslPreview,
-                this.tscPreview,
-                this.tssSep3,
-                this.tsbClose});
+                this.tscPreview});
             this.toolStrip.Location = new System.Drawing.Point(0, 0);
             this.toolStrip.Name = "toolStrip";
             this.toolStrip.Size = new System.Drawing.Size(960, 25);
@@ -103,13 +99,6 @@ namespace XrmToolSuite.SolutionDocumentationGenerator
             this.tscPreview.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.tscPreview.Name = "tscPreview";
             this.tscPreview.Size = new System.Drawing.Size(140, 25);
-            //
-            // tsbClose
-            //
-            this.tsbClose.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-            this.tsbClose.Name = "tsbClose";
-            this.tsbClose.Size = new System.Drawing.Size(45, 22);
-            this.tsbClose.Text = "Close";
             //
             // split
             //
@@ -318,8 +307,6 @@ namespace XrmToolSuite.SolutionDocumentationGenerator
         private System.Windows.Forms.ToolStripSeparator tssSep2;
         private System.Windows.Forms.ToolStripLabel tslPreview;
         private System.Windows.Forms.ToolStripComboBox tscPreview;
-        private System.Windows.Forms.ToolStripSeparator tssSep3;
-        private System.Windows.Forms.ToolStripButton tsbClose;
         private System.Windows.Forms.SplitContainer split;
         private System.Windows.Forms.Panel pnlConfig;
         private System.Windows.Forms.GroupBox grpBranding;

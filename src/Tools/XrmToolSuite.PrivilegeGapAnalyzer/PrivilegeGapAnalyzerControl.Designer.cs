@@ -26,8 +26,6 @@ namespace XrmToolSuite.PrivilegeGapAnalyzer
             this.miExportCsv = new System.Windows.Forms.ToolStripMenuItem();
             this.miExportJson = new System.Windows.Forms.ToolStripMenuItem();
             this.miExportHtml = new System.Windows.Forms.ToolStripMenuItem();
-            this.tssSeparator3 = new System.Windows.Forms.ToolStripSeparator();
-            this.tsbClose = new System.Windows.Forms.ToolStripButton();
 
             this.pnlSelectors = new System.Windows.Forms.TableLayoutPanel();
             this.lblPrincipalType = new System.Windows.Forms.Label();
@@ -80,9 +78,7 @@ namespace XrmToolSuite.PrivilegeGapAnalyzer
                 this.tsbAnalyze,
                 this.tsbCompare,
                 this.tssSeparator2,
-                this.tsbExport,
-                this.tssSeparator3,
-                this.tsbClose});
+                this.tsbExport});
             this.toolStrip.Location = new System.Drawing.Point(0, 0);
             this.toolStrip.Name = "toolStrip";
             this.toolStrip.Size = new System.Drawing.Size(900, 25);
@@ -152,19 +148,10 @@ namespace XrmToolSuite.PrivilegeGapAnalyzer
             this.miExportHtml.Text = "HTML…";
             this.miExportHtml.Click += new System.EventHandler(this.miExportHtml_Click);
             //
-            // tsbClose
-            //
-            this.tsbClose.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-            this.tsbClose.Name = "tsbClose";
-            this.tsbClose.Text = "Close this tool";
-            this.tsbClose.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
-            this.tsbClose.Click += new System.EventHandler(this.tsbClose_Click);
-            //
             // tssSeparators
             //
             this.tssSeparator1.Name = "tssSeparator1";
             this.tssSeparator2.Name = "tssSeparator2";
-            this.tssSeparator3.Name = "tssSeparator3";
             //
             // pnlSelectors
             //
@@ -385,8 +372,6 @@ namespace XrmToolSuite.PrivilegeGapAnalyzer
         private System.Windows.Forms.ToolStripMenuItem miExportCsv;
         private System.Windows.Forms.ToolStripMenuItem miExportJson;
         private System.Windows.Forms.ToolStripMenuItem miExportHtml;
-        private System.Windows.Forms.ToolStripSeparator tssSeparator3;
-        private System.Windows.Forms.ToolStripButton tsbClose;
 
         private System.Windows.Forms.TableLayoutPanel pnlSelectors;
         private System.Windows.Forms.Label lblPrincipalType;

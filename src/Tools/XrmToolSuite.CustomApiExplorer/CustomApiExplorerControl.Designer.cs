@@ -23,8 +23,6 @@ namespace XrmToolSuite.CustomApiExplorer
             this.tsmiExportHtml = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiExportMarkdown = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiExportCsv = new System.Windows.Forms.ToolStripMenuItem();
-            this.tssSep2 = new System.Windows.Forms.ToolStripSeparator();
-            this.tsbClose = new System.Windows.Forms.ToolStripButton();
             this.split = new System.Windows.Forms.SplitContainer();
             this.grdApis = new System.Windows.Forms.DataGridView();
             this.colApiName = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -68,9 +66,7 @@ namespace XrmToolSuite.CustomApiExplorer
                 this.tslSearch,
                 this.tstSearch,
                 this.tssSep1,
-                this.tsddExport,
-                this.tssSep2,
-                this.tsbClose});
+                this.tsddExport});
             this.toolStrip.Location = new System.Drawing.Point(0, 0);
             this.toolStrip.Name = "toolStrip";
             this.toolStrip.Size = new System.Drawing.Size(950, 25);
@@ -126,14 +122,6 @@ namespace XrmToolSuite.CustomApiExplorer
             this.tsmiExportCsv.Name = "tsmiExportCsv";
             this.tsmiExportCsv.Text = "CSV (.csv)";
             this.tsmiExportCsv.Click += new System.EventHandler(this.tsmiExportCsv_Click);
-            //
-            // tsbClose
-            //
-            this.tsbClose.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
-            this.tsbClose.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-            this.tsbClose.Name = "tsbClose";
-            this.tsbClose.Text = "Close";
-            this.tsbClose.Click += new System.EventHandler(this.tsbClose_Click);
             //
             // split
             //
@@ -337,8 +325,6 @@ namespace XrmToolSuite.CustomApiExplorer
         private System.Windows.Forms.ToolStripMenuItem tsmiExportHtml;
         private System.Windows.Forms.ToolStripMenuItem tsmiExportMarkdown;
         private System.Windows.Forms.ToolStripMenuItem tsmiExportCsv;
-        private System.Windows.Forms.ToolStripSeparator tssSep2;
-        private System.Windows.Forms.ToolStripButton tsbClose;
         private System.Windows.Forms.SplitContainer split;
         private System.Windows.Forms.DataGridView grdApis;
         private System.Windows.Forms.DataGridViewTextBoxColumn colApiName;

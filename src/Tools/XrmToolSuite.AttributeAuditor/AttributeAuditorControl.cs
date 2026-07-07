@@ -59,8 +59,6 @@ namespace XrmToolSuite.AttributeAuditor
             SetStatusMessage($"Connected to {_envName}");
         }
 
-        private void tsbClose_Click(object sender, EventArgs e) => CloseTool();
-
         // ExecuteMethod ensures a connection exists (prompts to connect if not).
         private void tsbRun_Click(object sender, EventArgs e) => ExecuteMethod(RunAudit);
 

@@ -15,8 +15,6 @@ namespace XrmToolSuite.TemplateTool
         private void InitializeComponent()
         {
             this.toolStrip = new System.Windows.Forms.ToolStrip();
-            this.tsbClose = new System.Windows.Forms.ToolStripButton();
-            this.tssSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.tsbLoadSample = new System.Windows.Forms.ToolStripButton();
             this.lvResults = new System.Windows.Forms.ListView();
             this.colName = new System.Windows.Forms.ColumnHeader();
@@ -29,21 +27,11 @@ namespace XrmToolSuite.TemplateTool
             //
             this.toolStrip.ImageScalingSize = new System.Drawing.Size(24, 24);
             this.toolStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-                this.tsbClose,
-                this.tssSeparator1,
                 this.tsbLoadSample});
             this.toolStrip.Location = new System.Drawing.Point(0, 0);
             this.toolStrip.Name = "toolStrip";
             this.toolStrip.Size = new System.Drawing.Size(800, 25);
             this.toolStrip.TabIndex = 0;
-            //
-            // tsbClose
-            //
-            this.tsbClose.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-            this.tsbClose.Name = "tsbClose";
-            this.tsbClose.Size = new System.Drawing.Size(86, 22);
-            this.tsbClose.Text = "Close this tool";
-            this.tsbClose.Click += new System.EventHandler(this.tsbClose_Click);
             //
             // tsbLoadSample
             //
@@ -52,11 +40,6 @@ namespace XrmToolSuite.TemplateTool
             this.tsbLoadSample.Size = new System.Drawing.Size(120, 22);
             this.tsbLoadSample.Text = "Load sample data";
             this.tsbLoadSample.Click += new System.EventHandler(this.tsbLoadSample_Click);
-            //
-            // tssSeparator1
-            //
-            this.tssSeparator1.Name = "tssSeparator1";
-            this.tssSeparator1.Size = new System.Drawing.Size(6, 25);
             //
             // lvResults
             //
@@ -100,8 +83,6 @@ namespace XrmToolSuite.TemplateTool
         #endregion
 
         private System.Windows.Forms.ToolStrip toolStrip;
-        private System.Windows.Forms.ToolStripButton tsbClose;
-        private System.Windows.Forms.ToolStripSeparator tssSeparator1;
         private System.Windows.Forms.ToolStripButton tsbLoadSample;
         private System.Windows.Forms.ListView lvResults;
         private System.Windows.Forms.ColumnHeader colName;

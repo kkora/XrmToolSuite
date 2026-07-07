@@ -75,7 +75,6 @@ namespace XrmToolSuite.ManagedSolutionImpactChecker
             SetStatusMessage($"Connected to {detail?.ConnectionName}. Click 'Refresh solutions'.");
         }
 
-        private void tsbClose_Click(object sender, EventArgs e) => CloseTool();
 
         // ----------------------------------------------------------------- Solution picker (needs connection)
 

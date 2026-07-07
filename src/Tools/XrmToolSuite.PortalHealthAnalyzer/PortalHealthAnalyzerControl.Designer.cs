@@ -27,7 +27,6 @@ namespace XrmToolSuite.PortalHealthAnalyzer
             this.tsmExportJson = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmExportHtml = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmExportCsv = new System.Windows.Forms.ToolStripMenuItem();
-            this.tsbClose = new System.Windows.Forms.ToolStripButton();
             this.split = new System.Windows.Forms.SplitContainer();
             this.lblScore = new System.Windows.Forms.Label();
             this.txtSummary = new System.Windows.Forms.TextBox();
@@ -54,8 +53,7 @@ namespace XrmToolSuite.PortalHealthAnalyzer
                 this.cboWebsite,
                 this.tsbAnalyze,
                 this.tss1,
-                this.tsbExport,
-                this.tsbClose});
+                this.tsbExport});
             this.toolStrip.Location = new System.Drawing.Point(0, 0);
             this.toolStrip.Name = "toolStrip";
             this.toolStrip.Size = new System.Drawing.Size(900, 25);
@@ -139,14 +137,6 @@ namespace XrmToolSuite.PortalHealthAnalyzer
             this.tsmExportCsv.Name = "tsmExportCsv";
             this.tsmExportCsv.Text = "CSV (*.csv)…";
             this.tsmExportCsv.Click += new System.EventHandler(this.tsmExportCsv_Click);
-            //
-            // tsbClose
-            //
-            this.tsbClose.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
-            this.tsbClose.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-            this.tsbClose.Name = "tsbClose";
-            this.tsbClose.Text = "Close";
-            this.tsbClose.Click += new System.EventHandler(this.tsbClose_Click);
             //
             // split
             //
@@ -262,7 +252,6 @@ namespace XrmToolSuite.PortalHealthAnalyzer
         private System.Windows.Forms.ToolStripMenuItem tsmExportJson;
         private System.Windows.Forms.ToolStripMenuItem tsmExportHtml;
         private System.Windows.Forms.ToolStripMenuItem tsmExportCsv;
-        private System.Windows.Forms.ToolStripButton tsbClose;
         private System.Windows.Forms.SplitContainer split;
         private System.Windows.Forms.Label lblScore;
         private System.Windows.Forms.TextBox txtSummary;

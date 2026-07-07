@@ -69,7 +69,6 @@ namespace XrmToolSuite.FlowDependencyAnalyzer
             Status($"Connected to {detail?.ConnectionName}. Click 'Analyze flows'.");
         }
 
-        private void tsbClose_Click(object sender, EventArgs e) => CloseTool();
 
         // ----------------------------------------------------------------- Analyze (needs connection)
 

@@ -54,8 +54,6 @@ namespace XrmToolSuite.SolutionKnowledgeGraph
             Dock = DockStyle.Fill;
 
             var toolbar = new ToolStrip { GripStyle = ToolStripGripStyle.Hidden };
-            var btnClose = new ToolStripButton("Close") { DisplayStyle = ToolStripItemDisplayStyle.Text };
-            btnClose.Click += (s, e) => CloseTool();
             var btnLoad = new ToolStripButton("Load solutions") { DisplayStyle = ToolStripItemDisplayStyle.Text };
             btnLoad.Click += (s, e) => ExecuteMethod(LoadSolutions);
             _cboSolution = new ComboBox { DropDownStyle = ComboBoxStyle.DropDownList, Width = 280 };
@@ -75,7 +73,7 @@ namespace XrmToolSuite.SolutionKnowledgeGraph
 
             toolbar.Items.AddRange(new ToolStripItem[]
             {
-                btnClose, new ToolStripSeparator(), btnLoad, new ToolStripLabel("Solution:"),
+                btnLoad, new ToolStripLabel("Solution:"),
                 new ToolStripControlHost(_cboSolution), btnBuild, new ToolStripSeparator(),
                 _btnInteractive, _btnCycles, _btnExport, CreateHelpButton("Solution Knowledge Graph")
             });

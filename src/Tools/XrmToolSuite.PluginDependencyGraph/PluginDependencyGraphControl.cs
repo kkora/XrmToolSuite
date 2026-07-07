@@ -54,7 +54,6 @@ namespace XrmToolSuite.PluginDependencyGraph
             tsbExport.DropDownItems.Add("HTML (.html)", null, (s, e) => Export("html"));
             tsbExport.DropDownItems.Add("Mermaid (.mmd)", null, (s, e) => Export("mmd"));
 
-            tsbClose.Click += (s, e) => CloseTool();
             tsbLoad.Click += (s, e) => ExecuteMethod(LoadPipeline);
             cboTable.SelectedIndexChanged += (s, e) => OnFilterChanged();
             cboMessage.SelectedIndexChanged += (s, e) => OnFilterChanged();

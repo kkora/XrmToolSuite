@@ -611,8 +611,6 @@ namespace XrmToolSuite.PrivilegeGapAnalyzer
 
         #region Helpers
 
-        private void tsbClose_Click(object sender, EventArgs e) => CloseTool();
-
         private void ResetResults()
         {
             _lastSet = null; _lastVerdict = null; _lastEffective = null;
