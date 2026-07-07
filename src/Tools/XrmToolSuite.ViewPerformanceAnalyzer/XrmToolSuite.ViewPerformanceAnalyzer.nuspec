@@ -8,7 +8,7 @@
          4) DLL goes under a "Plugins" folder
          5) iconUrl is required and must be your own icon -->
     <id>XrmToolSuite.ViewPerformanceAnalyzer</id>
-    <version>1.2026.7.3</version>
+    <version>1.2026.7.4</version>
     <title>View Performance Analyzer for XrmToolBox</title>
     <authors>Kanchan Kora</authors>
     <owners>Kanchan Kora</owners>
@@ -19,7 +19,7 @@
     <license type="expression">MIT</license>
     <description>Batch-analyzes every system and personal view (savedquery / userquery) in a table: runs each view's FetchXML through the shared performance rule engine (all-attributes, missing filters, excessive/outer joins, link-entity sorts, aggregation/paging) and adds LayoutXML column analysis to flag over-wide grids. Ranks the slowest/riskiest views by a labeled heuristic cost score, shows per-view FetchXML, layout columns and findings, offers opt-in read-only execution timing, and exports Excel/PDF/JSON/HTML/Markdown/CSV. Reuses the FetchXML Performance Analyzer engine. Read-only.</description>
     <summary>Batch-scores every system and personal view's FetchXML and layout for performance risks, ranks the slowest/riskiest views, and exports Excel/PDF/JSON/HTML/Markdown/CSV.</summary>
-    <releaseNotes>1.2026.7.3: Removed the redundant per-tool Close button; each tool now ships a README (rendered on its NuGet package page) and the package Project website points to that README.</releaseNotes>
+    <releaseNotes>1.2026.7.4: Help dialog icons now render on all Windows (the Documentation and Report-an-issue glyphs previously showed as empty boxes on some machines).</releaseNotes>
     <tags>XrmToolBox Dataverse Dynamics365 PowerPlatform Performance Views FetchXML</tags>
     <dependencies>
       <dependency id="XrmToolBox" version="1.2025.10.74" />
