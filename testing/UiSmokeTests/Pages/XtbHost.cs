@@ -1366,6 +1366,26 @@ namespace XrmToolSuite.UiSmokeTests.Pages
         /// <summary>Click the tool's own "Close" button (tears down the tool tab). Do this last.</summary>
         public bool ClickToolClose() => ClickByName("Close");
 
+        /// <summary>
+        /// Close the ACTIVE tool tab via the host's own tab-close (Ctrl+F4 on the focused DockPanelSuite
+        /// document), independent of any per-tool "Close" button. Use this to tear a tool down at the end of
+        /// an E2E walkthrough. Best-effort: focuses XrmToolBox first and never throws.
+        /// </summary>
+        public bool CloseActiveToolTab()
+        {
+            try
+            {
+                ForceForeground();
+                Thread.Sleep(400);
+                FlaUI.Core.Input.Keyboard.Press(FlaUI.Core.WindowsAPI.VirtualKeyShort.CONTROL);
+                FlaUI.Core.Input.Keyboard.Type(FlaUI.Core.WindowsAPI.VirtualKeyShort.F4);
+                FlaUI.Core.Input.Keyboard.Release(FlaUI.Core.WindowsAPI.VirtualKeyShort.CONTROL);
+                Thread.Sleep(800);
+                return true;
+            }
+            catch { return false; }
+        }
+
         /// <summary>Click the tool's right-aligned Help button (opens the Help &amp; Support dialog).</summary>
         public bool ClickHelp() => ClickByName("Help") || ClickByPartialName("Help");
 

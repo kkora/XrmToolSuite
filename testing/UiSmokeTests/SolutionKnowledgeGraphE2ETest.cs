@@ -10,20 +10,22 @@ using Xunit.Abstractions;
 namespace XrmToolSuite.UiSmokeTests
 {
     /// <summary>
-    /// TIER-3c — full END-TO-END walkthrough of the Deployment Risk Analyzer (opt-in, LOCAL only), following
+    /// TIER-3c — full END-TO-END walkthrough of the Solution Knowledge Graph (opt-in, LOCAL only), following
     /// the exact operator script: launch XrmToolBox if needed, connect DEV, open the tool, Load solutions,
-    /// pick the "test1" solution, connect the TEST target env, Analyze, export EACH format to Downloads and
-    /// open it, then open Help. A screenshot of the XrmToolBox window ONLY is captured after every step
-    /// (via PrintWindow, so the IDE/desktop never appear), under
-    /// screenshots/&lt;yyyyMMdd-HHmmss&gt;/deployment-risk-analyzer/NN-step.png.
+    /// pick the first solution, Build graph, Detect cycles, Open the interactive HTML graph, then export EACH
+    /// format to the screenshots folder and open it, and finally open Help. A screenshot of the XrmToolBox
+    /// window ONLY is captured after every step (via PrintWindow, so the IDE/desktop never appear), under
+    /// screenshots/&lt;yyyyMMdd-HHmmss&gt;/solution-knowledge-graph/NN-step.png.
+    ///
+    /// The tool needs a SOLUTION (Load solutions -> first) but NO target env; "Open interactive graph" and
+    /// "Detect cycles" stay disabled until a graph is built.
     ///
     /// Constraints (see README Tier-3b): interactive connections can't authenticate unattended, so DEV must
     /// have a warm token; desktop must stay UNLOCKED. Gated behind XTB_E2E=1.
     ///
-    /// Env vars: XTB_E2E=1 to run; XTB_EXE; XTB_SOURCE (default "DEV"); XTB_TARGET (default "TEST");
-    ///           XTB_SOLUTION (default "test1"); UISMOKE_SCREENSHOT_DIR.
+    /// Env vars: XTB_E2E=1 to run; XTB_EXE; XTB_SOURCE (default "XTS-CI-DEV"); UISMOKE_SCREENSHOT_DIR.
     /// </summary>
-    public sealed class DeploymentRiskAnalyzerE2ETest : IDisposable
+    public sealed class SolutionKnowledgeGraphE2ETest : IDisposable
     {
         private readonly ITestOutputHelper _output;
         private readonly XtbHost _host = new XtbHost();
@@ -32,82 +34,18 @@ namespace XrmToolSuite.UiSmokeTests
         private int _shot;
         private string _round = "TR-001";   // test-round tag, prefixed on every screenshot + exported file
 
-        private const string Tool = "Deployment Risk Analyzer";
+        private const string Tool = "Solution Knowledge Graph";
 
-        // The 9 analyzers in the left checklist (all checked by default) — for toggle + validation coverage.
-        private static readonly string[] Analyzers =
-        {
-            "Solution Dependencies", "Environment Variables", "Flows & Plugins", "Security Impact",
-            "Data Model Conflicts", "Deleted Components", "Form Changes", "Ribbon Changes", "Power Pages Readiness",
-        };
-
-        // Export menu items (popup text fragment, 1-based position in the dropdown) -> Downloads file extension.
+        // Export menu items (popup text fragment, 1-based position in the dropdown) -> exported file extension.
         private static readonly (string Menu, int Index, string Ext)[] Exports =
         {
-            ("PDF report", 1, "pdf"),
-            ("HTML report", 2, "html"),
-            ("Excel workbook", 3, "xlsx"),
-            ("JSON", 4, "json"),
-            ("Fix checklist", 5, "md"),
+            ("GraphML", 1, "graphml"),
+            ("SVG", 2, "svg"),
+            ("PNG", 3, "png"),
+            ("Interactive HTML", 4, "html"),
         };
 
-        public DeploymentRiskAnalyzerE2ETest(ITestOutputHelper output) => _output = output;
-
-        [Fact]
-        public void ConnectDiagnostic()
-        {
-            if (!string.Equals(Environment.GetEnvironmentVariable("XTB_DIAG"), "1", StringComparison.Ordinal))
-            { _output.WriteLine("Skipped: set XTB_DIAG=1."); return; }
-
-            var exe = ResolveXtbExe();
-            _host.LaunchOrAttach(exe, TimeSpan.FromSeconds(60));
-            _host.Maximize();
-            Thread.Sleep(8000); // let the fresh host settle (plugin scan / update check)
-            _host.CloseToolLibraryTab();
-            _host.DismissOpenDialog();
-            _host.HardReset();
-            Shot("diag-00-before");
-            _output.WriteLine("MAIN clickables: " + string.Join(" | ", _host.DumpClickableNames()));
-
-            _output.WriteLine("ClickByName(Connect)=" + _host.ClickByName("Connect") + " / partial=" + _host.ClickByPartialName("Connect"));
-            Thread.Sleep(2500);
-            _host.HardReset();
-            Shot("diag-01-after-connect-click");
-            _output.WriteLine("AFTER-CLICK clickables (dialog contents): " + string.Join(" | ", _host.DumpClickableNames()));
-            _output.WriteLine("names containing DEV: " + string.Join(" | ", _host.DumpNames("DEV")));
-            _output.WriteLine("names containing OK: " + string.Join(" | ", _host.DumpNames("OK")));
-        }
-
-        [Fact]
-        public void ExportDiagnostic()
-        {
-            if (!string.Equals(Environment.GetEnvironmentVariable("XTB_DIAG_EXPORT"), "1", StringComparison.Ordinal))
-            { _output.WriteLine("Skipped: set XTB_DIAG_EXPORT=1 (tool must be open + analyzed)."); return; }
-
-            _host.LaunchOrAttach(ResolveXtbExe(), TimeSpan.FromSeconds(60));
-            _host.Maximize();
-            Thread.Sleep(4000);
-            _host.HardReset();
-            Shot("edia-00-tool");
-
-            var downloads = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "Downloads");
-            _output.WriteLine("OpenExportMenu=" + _host.OpenExportMenu());
-            ShotHwnd("edia-01b-menu", _host.PopupHwnd());
-            _output.WriteLine("SelectExportItem(PDF report)=" + _host.SelectExportItem("PDF report", 1));
-            Thread.Sleep(1500);
-            var dlg = _host.DialogHwnd();
-            _output.WriteLine("Save dialog hwnd=" + dlg);
-            ShotHwnd("edia-02-savedialog", dlg);
-            _output.WriteLine("save dialog elements: " + string.Join(" | ", _host.DumpHwndElements(dlg)));
-            var before = System.IO.Directory.GetFiles(downloads, "DeploymentRiskAnalyzer_*.pdf").Length;
-            _output.WriteLine("SelectDownloads=" + _host.SelectDownloadsInSaveDialog(TimeSpan.FromSeconds(20)));
-            _output.WriteLine("Save=" + _host.ClickSaveInDialog());
-            _output.WriteLine("Yes=" + _host.ClickProcessDialogButton("Yes", TimeSpan.FromSeconds(15)));
-            Thread.Sleep(2500);
-            var after = System.IO.Directory.GetFiles(downloads, "DeploymentRiskAnalyzer_*.pdf").Length;
-            _output.WriteLine($"pdf files in Downloads before={before} after={after}");
-            Shot("edia-03-after-export");
-        }
+        public SolutionKnowledgeGraphE2ETest(ITestOutputHelper output) => _output = output;
 
         [Fact]
         public void FullOperatorWalkthrough()
@@ -122,13 +60,11 @@ namespace XrmToolSuite.UiSmokeTests
             _output.WriteLine($"Test round: {_round}");
             var exe = ResolveXtbExe();
             var source = EnvOr("XTB_SOURCE", "XTS-CI-DEV");
-            var target = EnvOr("XTB_TARGET", "XTS-CI-TEST");
-            var solution = EnvOr("XTB_SOLUTION", "test1");
             // Exports are saved alongside the screenshots, in the same per-date tool folder:
-            // …\UiSmokeTests\screenshots\<yyyymmdd>\deployment-risk-analyzer\  (created if missing).
+            // …\UiSmokeTests\screenshots\<yyyymmdd>\solution-knowledge-graph\  (created if missing).
             var exportDir = Path.GetFullPath(RunDir());
             Directory.CreateDirectory(exportDir);
-            AssertNotProd(source, "source"); AssertNotProd(target, "target");
+            AssertNotProd(source, "source");
 
             // 1) Launch XrmToolBox if not open
             _host.LaunchOrAttach(exe, TimeSpan.FromSeconds(60));
@@ -160,15 +96,6 @@ namespace XrmToolSuite.UiSmokeTests
             Shot("03-tool-open");
             Check(toolOpen, $"'{Tool}' did not open (no 'Load solutions' toolbar after retries).");
 
-            // 3b) VALIDATION GUARD — Analyze with no solution loaded must show "Load and select a solution first".
-            _host.ClickByPartialName("Analyze");
-            Thread.Sleep(1200);
-            var noSolHwnd = _host.DialogHwnd();
-            ShotHwnd("03b-guard-no-solution", noSolHwnd);
-            Check(noSolHwnd != IntPtr.Zero, "Analyze without a solution did not show the validation dialog.");
-            _host.ClickProcessDialogButton("OK", TimeSpan.FromSeconds(5));
-            _host.HardReset();
-
             // 4) Click Load solutions — retry: the click or the async load can transiently no-op on this flaky host.
             string loaded = null;
             for (var i = 0; i < 3 && string.IsNullOrWhiteSpace(loaded); i++)
@@ -181,89 +108,42 @@ namespace XrmToolSuite.UiSmokeTests
             Shot("04-solutions-loaded");
             Check(!string.IsNullOrWhiteSpace(loaded), "Solutions dropdown never populated (after retries).");
 
-            // 5) Select the first solution. "Load solutions" already auto-selects index 0; the 86-item list is
+            // 5) Confirm the first solution. "Load solutions" already auto-selects index 0; the list is
             // UIA-virtualized so we confirm the auto-selection rather than driving the dropdown (which, left
-            // open, blocks every later click). See notes: the user opted for "first solution".
+            // open, blocks every later click). The operator opted for "first solution".
             var chosen = _host.ReadComboValue();
             Shot("05-solution-selected");
             Check(!string.IsNullOrWhiteSpace(chosen), "No solution is selected after Load solutions.");
             _output.WriteLine($"Step 5 - using first solution: \"{chosen}\".");
 
-            // 6) Click Connect target env… (best-effort: the real verification is step 7's Target label — the
-            // click's return can be a UIA false-negative even when the selector opens fine).
-            if (!_host.ClickByPartialName("Connect target env"))
-                _output.WriteLine("Note: 'Connect target env' click reported false; verifying via the Target label.");
-            Thread.Sleep(800);
-            ShotDialogOrMain("06-target-dialog");
-
-            // 7) Select the TEST connection and double-click it
-            _host.PickConnectionInSelector(target, TimeSpan.FromSeconds(30));
-            var targetLabel = _host.WaitForLabel("Target:", "Target: (none)", TimeSpan.FromSeconds(30));
-            Shot("07-target-connected");
-            Check(targetLabel != null, $"Target env '{target}' was not connected (label stayed '(none)').");
-
-            // 7b) Dual-connection: connecting the target must NOT drop the SOURCE connection (status bar still live).
-            Check(_host.IsConnectedTo(""), "Source connection was lost after connecting the target env.");
-            _host.HardReset();
-
-            // 8) Click Analyze
-            Check(_host.ClickByPartialName("Analyze"), "Could not find 'Analyze'.");
-            Thread.Sleep(6000);   // let the async analysis run
+            // 6) Build graph. The graph may render as a visual (not a UIA grid), so rows are informational only —
+            //    do not hard-fail on them; the real proof is the enabled "Detect cycles"/"Open interactive graph".
+            Check(_host.ClickByPartialName("Build graph"), "Could not find 'Build graph'.");
+            Thread.Sleep(6000);   // let the async build run
             _host.HardReset();    // it mutates the tree heavily
             var hasRows = _host.WaitForGridRows(TimeSpan.FromSeconds(120));
-            Shot("08-analysis-complete");
-            _output.WriteLine(hasRows ? "Analysis produced findings." : "Analysis grid rows not detected via UIA (still exportable).");
+            Shot("06-graph-built");
+            _output.WriteLine(hasRows ? "Graph produced node rows." : "Graph node rows not detected via UIA (graph may be a visual).");
             _host.HardReset();
 
-            // 8b) Risk score / band is shown in the summary banner.
-            var risk = _host.ReadRiskSummary();
-            Shot("08b-risk-band");
-            Check(!string.IsNullOrWhiteSpace(risk), "Risk summary banner (score/band) was not found.");
-            _output.WriteLine($"Risk summary: \"{risk}\".");
-
-            // 8c) Select a finding row -> the detail pane shows its recommendation.
-            _host.SelectFirstFinding();
-            Thread.Sleep(800);
-            var detail = _host.ReadDetailPane();
-            Shot("08c-finding-detail");
-            Check(!string.IsNullOrWhiteSpace(detail), "Selecting a finding did not populate the detail pane.");
+            // 7) Detect cycles — captures the detail/result as evidence. A "no cycles" result is fine (don't
+            //    hard-fail on content); only fail if the button itself is missing.
+            Check(_host.ClickByPartialName("Detect cycles"), "Could not find 'Detect cycles'.");
+            Thread.Sleep(2500);
             _host.HardReset();
+            Shot("07-cycles");
 
-            // 8d) Toggle an analyzer in the left checklist (uncheck, screenshot, re-check to restore).
-            var toggled = _host.ToggleAnalyzer("Security Impact");
-            Shot("08d-analyzer-toggled");
-            Check(toggled, "Could not toggle an analyzer in the checklist.");
-            _host.ToggleAnalyzer("Security Impact");   // restore
-            _host.HardReset();
-
-            // 8e) AI summary -> offline summary dialog (no API key configured -> deterministic offline summary).
-            _host.ClickAiSummary();
-            Thread.Sleep(3500);
-            var aiHwnd = _host.DialogHwnd();
-            ShotHwnd("08e-ai-summary", aiHwnd);
-            Check(aiHwnd != IntPtr.Zero, "AI summary did not open a summary dialog.");
-            _host.ClickProcessDialogButton("Close", TimeSpan.FromSeconds(5));
-            _host.HardReset();
-
-            // 8f) AI options -> "Set API key…" dialog (open, screenshot, cancel).
-            _host.ClickAiOption("Set API key");
-            Thread.Sleep(1500);
-            var keyHwnd = _host.DialogHwnd();
-            ShotHwnd("08f-ai-set-key", keyHwnd);
-            Check(keyHwnd != IntPtr.Zero, "AI options 'Set API key…' did not open a dialog.");
-            _host.ClickProcessDialogButton("Cancel", TimeSpan.FromSeconds(5));
-            _host.HardReset();
-
-            // 8g) VALIDATION GUARD — uncheck ALL analyzers, Analyze -> "Select at least one analyzer" dialog. Exports
-            //     below still use the earlier _lastResult (unchecking doesn't re-run), so this doesn't disturb them.
-            foreach (var a in Analyzers) _host.ToggleAnalyzer(a);   // all start checked -> unchecks them
-            _host.ClickByPartialName("Analyze");
-            Thread.Sleep(1200);
-            var noAnHwnd = _host.DialogHwnd();
-            ShotHwnd("08g-guard-no-analyzers", noAnHwnd);
-            Check(noAnHwnd != IntPtr.Zero, "Analyze with no analyzers did not show the validation dialog.");
-            _host.ClickProcessDialogButton("OK", TimeSpan.FromSeconds(5));
-            foreach (var a in Analyzers) _host.ToggleAnalyzer(a);   // re-check to restore
+            // 8) Open interactive graph — opens a self-contained HTML in the default browser (best-effort: don't
+            //    hard-fail if the browser window can't be grabbed).
+            _host.ForceForeground();
+            var beforeHwnd = _host.ForegroundHwnd();
+            Check(_host.ClickByPartialName("Open interactive graph"), "Could not find 'Open interactive graph'.");
+            Thread.Sleep(4000);
+            var reportHwnd = _host.ForegroundReportHwnd();
+            if (reportHwnd != IntPtr.Zero) { _host.MaximizeWindow(reportHwnd); Thread.Sleep(1200); }
+            ShotHwnd("08-interactive-html", reportHwnd != IntPtr.Zero ? reportHwnd : _host.ForegroundHwnd());
+            if (reportHwnd != IntPtr.Zero) { _host.CloseWindow(reportHwnd); Thread.Sleep(800); }
+            _host.ForceForeground();
             _host.HardReset();
 
             // 9) Export each option -> menu shot -> Save dialog shot -> save to the screenshots folder -> Yes -> report shot.
@@ -306,9 +186,9 @@ namespace XrmToolSuite.UiSmokeTests
         }
 
         /// <summary>
-        /// Open the Export dropdown, pick the format, drive the Save As dialog to Downloads + Save, then click
-        /// Yes on the "Open it now?" prompt. Verifies a new <c>DeploymentRiskAnalyzer_*.ext</c> file landed in
-        /// Downloads (the tool supplies the default name). Returns true on success.
+        /// Open the Export dropdown, pick the format, drive the Save As dialog to the screenshots folder + Save,
+        /// then click Yes on the "Open it now?" prompt. Verifies a new <c>*.ext</c> file landed in the save dir
+        /// (the tool supplies the default name). Returns true on success.
         /// </summary>
         private bool ExportOne(string menuText, int index, string ext, string saveDir)
         {
@@ -402,12 +282,9 @@ namespace XrmToolSuite.UiSmokeTests
         /// <summary>Capture a specific window (dialog/report) by HWND; falls back to the main window if Zero.</summary>
         private void ShotHwnd(string label, IntPtr hwnd) => _host.Screenshot(ShotPath(label), hwnd);
 
-        /// <summary>Capture the open connection dialog if there is one (it's XrmToolBox's), else the main window.</summary>
-        private void ShotDialogOrMain(string label) => _host.Screenshot(ShotPath(label), _host.DialogHwnd());
-
         // One folder per DATE (yyyymmdd); multiple runs the same day share it (files are time-stamped).
         private string RunDir() =>
-            Path.Combine(ScreenshotRoot(), _dateStamp, "deployment-risk-analyzer");
+            Path.Combine(ScreenshotRoot(), _dateStamp, "solution-knowledge-graph");
 
         private static string ScreenshotRoot()
         {
