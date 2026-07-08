@@ -110,6 +110,14 @@ namespace XrmToolSuite.UiSmokeTests
             _host.ToggleAnalyzer("Unused Metadata");   // restore
             _host.HardReset();
 
+            // 5b) Select the first finding row and confirm its detail pane populates.
+            _host.SelectFirstFinding();
+            Thread.Sleep(800);
+            var detail = _host.ReadDetailPane();
+            Shot("05b-finding-detail");
+            Check(!string.IsNullOrWhiteSpace(detail), "Selecting a finding did not populate the detail pane.");
+            _host.HardReset();
+
             // 6) Executive summary -> offline summary dialog (no API key configured -> deterministic offline summary).
             _host.ClickByPartialName("Executive summary");
             Thread.Sleep(3500);
@@ -130,6 +138,26 @@ namespace XrmToolSuite.UiSmokeTests
             _host.ClickProcessDialogButton("Cancel", TimeSpan.FromSeconds(5));
             _host.HardReset();
 
+            // 7b) Toggle "Include component names in AI payload" on the AI options menu, then restore it.
+            _host.ClickByPartialName("AI options");
+            Thread.Sleep(1000);
+            var tog = _host.ClickPopupItem("Include component names");
+            Thread.Sleep(500);
+            Shot("07b-include-components-toggled");
+            Check(tog, "Could not toggle 'Include component names in AI payload'.");
+            _host.ClickByPartialName("AI options");   // reopen the menu to toggle back
+            Thread.Sleep(800);
+            _host.ClickPopupItem("Include component names");
+            _host.HardReset();
+
+            // 7c) Switch to the Trends tab, screenshot it, then switch back to the Dashboard tab.
+            Check(_host.ClickByName("Trends"), "Could not switch to the Trends tab.");
+            Thread.Sleep(1500);
+            Shot("07c-trends-tab");
+            _host.ClickByName("Dashboard");
+            Thread.Sleep(800);
+            _host.HardReset();
+
             // 8) Export each option -> menu shot -> Save dialog shot -> save to the screenshots folder -> Yes -> report shot.
             //    Retry once per format: the menu-item selection can transiently miss on this flaky host.
             foreach (var (menu, index, ext) in Exports)
@@ -143,6 +171,62 @@ namespace XrmToolSuite.UiSmokeTests
                 Check(ok, $"Export '{menu}' (.{ext}) to '{exportDir}' did not complete.");
                 _host.HardReset(); // the Save dialog + open prompt churn the tree
             }
+
+            // 8b) Trend-history exports — the two items below the Export separator (Trend history .csv / .json).
+            //     Trend export raises a "No trend history to export…" info dialog when no history exists yet; handle
+            //     that best-effort (screenshot + OK) and never HARD-fail the test on trend exports (log instead).
+            foreach (var (menuText, ext) in new[] { ("Trend history (.csv)", "csv"), ("Trend history (.json)", "json") })
+            {
+                _host.ForceForeground();
+                _host.HardReset();
+                if (_host.OpenExportMenu())
+                {
+                    ShotHwnd($"08b-trend-export-{ext}-menu", _host.PopupHwnd());
+                    _host.SelectExportItem(menuText, 0);   // match by text fragment; the trend items live past the separator
+                    var saveHwnd = _host.WaitForSaveDialog(TimeSpan.FromSeconds(10));
+                    if (saveHwnd != IntPtr.Zero)
+                    {
+                        Thread.Sleep(1200);   // let the shell dialog render
+                        var defaultName = _host.ReadSaveFileName();
+                        if (string.IsNullOrWhiteSpace(defaultName)) defaultName = $"TechnicalDebtTrends.{ext}";
+                        _host.SetSaveFileName(Path.Combine(exportDir, $"{_round}-{Path.GetFileName(defaultName)}"));
+                        ShotHwnd($"08b-trend-export-{ext}-savedialog", _host.SaveDialogHwnd());
+                        _host.ClickSaveInDialog();
+                        _host.ClickProcessDialogButton("Yes", TimeSpan.FromSeconds(8)); // best-effort "Open it now?"
+                        _output.WriteLine($"Trend export ({ext}): saved to {exportDir}.");
+                    }
+                    else
+                    {
+                        // No Save dialog appeared -> most likely the "No trend history to export…" info dialog.
+                        var info = _host.DialogHwnd();
+                        ShotHwnd($"08b-trend-export-{ext}-nohistory", info);
+                        _host.ClickProcessDialogButton("OK", TimeSpan.FromSeconds(5));
+                        _output.WriteLine($"Trend export ({ext}): no trend history yet (info dialog handled).");
+                    }
+                }
+                else
+                {
+                    _output.WriteLine($"Trend export ({ext}): could not open the Export menu (skipped).");
+                }
+                _host.HardReset();
+            }
+
+            // 8c) Validation guard — analyzing with NO analyzers selected must raise the validation dialog.
+            //     Uncheck every analyzer, Analyze, assert the dialog, dismiss, then re-check all to restore state.
+            string[] Analyzers =
+            {
+                "Unused Metadata", "Duplicate Artifacts", "Deprecated APIs", "Orphaned Components",
+                "Dead Plugins", "Performance Bottlenecks", "Naming Violations", "Security Issues",
+            };
+            foreach (var a in Analyzers) _host.ToggleAnalyzer(a);   // uncheck all
+            _host.ClickByPartialName("Analyze environment");
+            Thread.Sleep(1200);
+            var guard = _host.DialogHwnd();
+            ShotHwnd("08c-guard-no-analyzers", guard);
+            Check(guard != IntPtr.Zero, "Analyze with no analyzers did not show the validation dialog.");
+            _host.ClickProcessDialogButton("OK", TimeSpan.FromSeconds(5));
+            foreach (var a in Analyzers) _host.ToggleAnalyzer(a);   // re-check all to restore
+            _host.HardReset();
 
             // 9) Click Help. The button opens a MODAL Help & Support dialog; the UIA Invoke can report false
             // because the modal blocks the UI thread mid-handshake — so verify by the dialog APPEARING (which we

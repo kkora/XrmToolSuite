@@ -94,6 +94,16 @@ namespace XrmToolSuite.UiSmokeTests
             Shot("03-tool-open");
             Check(toolOpen, $"'{Tool}' did not open (no 'Load solutions' toolbar after retries).");
 
+            // 3b) Validation guard — Score complexity with NO solution loaded must pop the "Load and select a
+            //     solution first." dialog rather than analyze. Do this before any solution is loaded.
+            _host.ClickByPartialName("Score complexity");
+            Thread.Sleep(1200);
+            var g = _host.DialogHwnd();
+            ShotHwnd("03b-guard-no-solution", g);
+            Check(g != IntPtr.Zero, "Score with no solution did not show the validation dialog.");
+            _host.ClickProcessDialogButton("OK", TimeSpan.FromSeconds(5));
+            _host.HardReset();
+
             // 4) Click Load solutions — retry: the click or the async load can transiently no-op on this flaky host.
             string loaded = null;
             for (var i = 0; i < 3 && string.IsNullOrWhiteSpace(loaded); i++)
@@ -141,6 +151,26 @@ namespace XrmToolSuite.UiSmokeTests
             ShotHwnd("08-ai-settings", keyHwnd);
             Check(keyHwnd != IntPtr.Zero, "AI options 'AI settings…' did not open a dialog.");
             _host.ClickProcessDialogButton("Cancel", TimeSpan.FromSeconds(5));
+            _host.HardReset();
+
+            // 8b) Hotspot row -> detail pane: select the first hotspot finding and confirm the detail pane fills.
+            _host.SelectFirstFinding();
+            Thread.Sleep(800);
+            var detail = _host.ReadDetailPane();
+            Shot("08b-hotspot-detail");
+            Check(!string.IsNullOrWhiteSpace(detail), "Selecting a hotspot did not populate the detail pane.");
+            _host.HardReset();
+
+            // 8c) "Include component names in AI payload" toggle: flip the AI-options checkbox, screenshot, restore.
+            _host.ClickByPartialName("AI options");
+            Thread.Sleep(1000);
+            var tog = _host.ClickPopupItem("Include component names");
+            Thread.Sleep(500);
+            Shot("08c-include-components-toggled");
+            Check(tog, "Could not toggle 'Include component names in AI payload'.");
+            _host.ClickByPartialName("AI options");
+            Thread.Sleep(800);
+            _host.ClickPopupItem("Include component names");
             _host.HardReset();
 
             // 9) Export each option -> menu shot -> Save dialog shot -> save to the screenshots folder -> Yes -> report shot.

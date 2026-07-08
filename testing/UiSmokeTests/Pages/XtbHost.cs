@@ -1389,6 +1389,14 @@ namespace XrmToolSuite.UiSmokeTests.Pages
         /// <summary>Click the tool's right-aligned Help button (opens the Help &amp; Support dialog).</summary>
         public bool ClickHelp() => ClickByName("Help") || ClickByPartialName("Help");
 
+        /// <summary>
+        /// Type <paramref name="text"/> into the ACTIVE tool's topmost text box (e.g. a plugin's own search
+        /// filter, like the Solution Knowledge Graph search) via the Value pattern. Best-effort — returns false
+        /// if no editable box is found. This is NOT the XrmToolBox Tools filter (that lives on the Tools tab,
+        /// which is not active while a tool tab is open).
+        /// </summary>
+        public bool SetToolTextBox(string text) => SetSearchText(FindSearchBox(), text);
+
         public void Dispose()
         {
             // If we ATTACHED to the user's already-running session, leave it alone — never close/kill it.

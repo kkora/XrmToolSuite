@@ -96,6 +96,16 @@ namespace XrmToolSuite.UiSmokeTests
             Shot("03-tool-open");
             Check(toolOpen, $"'{Tool}' did not open (no 'Load solutions' toolbar after retries).");
 
+            // 3b) Validation guard — Build graph with NO solution loaded must pop the "Load and select a
+            //     solution first." dialog. Do this before Load solutions so nothing is selected yet.
+            _host.ClickByPartialName("Build graph");
+            Thread.Sleep(1200);
+            var g = _host.DialogHwnd();
+            ShotHwnd("03b-guard-no-solution", g);
+            Check(g != IntPtr.Zero, "Build graph with no solution did not show the validation dialog.");
+            _host.ClickProcessDialogButton("OK", TimeSpan.FromSeconds(5));
+            _host.HardReset();
+
             // 4) Click Load solutions — retry: the click or the async load can transiently no-op on this flaky host.
             string loaded = null;
             for (var i = 0; i < 3 && string.IsNullOrWhiteSpace(loaded); i++)
@@ -124,6 +134,42 @@ namespace XrmToolSuite.UiSmokeTests
             var hasRows = _host.WaitForGridRows(TimeSpan.FromSeconds(120));
             Shot("06-graph-built");
             _output.WriteLine(hasRows ? "Graph produced node rows." : "Graph node rows not detected via UIA (graph may be a visual).");
+            _host.HardReset();
+
+            // 6b) Node row -> detail pane. Selecting a node populates the detail text box with its dependency
+            //     trace ("DEPENDS ON …") and deletion impact ("IMPACT OF DELETING THIS …").
+            _host.SelectFirstFinding();
+            Thread.Sleep(1000);
+            var detail = _host.ReadDetailPane();
+            Shot("06b-node-detail");
+            Check(!string.IsNullOrWhiteSpace(detail),
+                "Selecting a node did not populate the detail pane (dependency trace / deletion impact).");
+            // Informational only — the control writes "DEPENDS ON" / "IMPACT OF DELETING THIS" markers.
+            var d = detail ?? "";
+            _output.WriteLine("Detail pane markers present: DEPENDS ON=" +
+                d.IndexOf("DEPENDS ON", StringComparison.OrdinalIgnoreCase).ToString() +
+                ", IMPACT=" + d.IndexOf("IMPACT", StringComparison.OrdinalIgnoreCase).ToString());
+            _host.HardReset();
+
+            // 6c) Search filter — type into the tool's top text box (the search box). Best-effort: the
+            //     topmost-edit heuristic may target the wrong box, so log the outcome, never hard-fail.
+            var typed = _host.SetToolTextBox("a");
+            Thread.Sleep(1200);
+            Shot("06c-search-filter");
+            _output.WriteLine("Search filter typed (best-effort, non-fatal): " + typed);
+            _host.SetToolTextBox("");   // clear so it doesn't filter out the rows the later steps rely on
+            Thread.Sleep(600);
+            _host.HardReset();
+
+            // 6d) Node-type filter — the _lstTypes CheckedListBox is populated with the node types present in
+            //     the built graph (fixed labels from GraphBuilder.TypeLabels: Table, Column, Form, …). Toggling
+            //     by exact name is uncertain (the runtime type set depends on the solution), so this is
+            //     best-effort and non-fatal; "Table" is the most likely present type.
+            var tf = _host.ToggleAnalyzer("Table");
+            Thread.Sleep(800);
+            Shot("06d-type-filter");
+            _output.WriteLine("Node-type filter toggle 'Table' (best-effort, non-fatal): " + tf);
+            if (tf) { _host.ToggleAnalyzer("Table"); Thread.Sleep(600); }   // restore
             _host.HardReset();
 
             // 7) Detect cycles — captures the detail/result as evidence. A "no cycles" result is fine (don't

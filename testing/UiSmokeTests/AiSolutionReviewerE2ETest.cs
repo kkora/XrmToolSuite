@@ -95,6 +95,16 @@ namespace XrmToolSuite.UiSmokeTests
             Shot("03-tool-open");
             Check(toolOpen, $"'{Tool}' did not open (no 'Load solutions' toolbar after retries).");
 
+            // 3b) Validation guard — "Collect facts" with no solution loaded must pop the "Load and select a
+            //     solution first." info dialog rather than proceed. Verify by the dialog appearing, then dismiss.
+            _host.ClickByPartialName("Collect facts");
+            Thread.Sleep(1200);
+            var g = _host.DialogHwnd();
+            ShotHwnd("03b-guard-no-solution", g);
+            Check(g != IntPtr.Zero, "Collect facts with no solution did not show the validation dialog.");
+            _host.ClickProcessDialogButton("OK", TimeSpan.FromSeconds(5));
+            _host.HardReset();
+
             // 4) Click Load solutions — retry: the click or the async load can transiently no-op on this flaky host.
             string loaded = null;
             for (var i = 0; i < 3 && string.IsNullOrWhiteSpace(loaded); i++)
@@ -123,13 +133,24 @@ namespace XrmToolSuite.UiSmokeTests
             Shot("06-facts-collected");
             _output.WriteLine(hasRows ? "Fact collection produced observations." : "Observation grid rows not detected via UIA (still reviewable).");
 
-            // 7) Generate AI review — phase two. With no API key configured this produces a deterministic offline
-            //    review; it may render inline in the review pane rather than pop a modal, so don't hard-fail on a
-            //    missing dialog — capture the screenshot as evidence either way.
-            Check(_host.ClickByPartialName("Generate AI review"), "Could not find 'Generate AI review'.");
-            Thread.Sleep(4000);   // let the async review generate
+            // 6b) Select the first finding row and confirm the detail pane populates from it.
+            _host.SelectFirstFinding();
+            Thread.Sleep(800);
+            var detail = _host.ReadDetailPane();
+            Shot("06b-finding-detail");
+            Check(!string.IsNullOrWhiteSpace(detail), "Selecting a finding did not populate the detail pane.");
             _host.HardReset();
-            Shot("07-ai-review");
+
+            // 7) Generate AI review — phase two. With no API key configured this produces a deterministic offline
+            //    review; ProduceSummary(interactive:true) then hands off to ShowSummary, which opens a read-only
+            //    modal review dialog with a "Close" button. Assert the dialog appears, screenshot it, then close it.
+            Check(_host.ClickByPartialName("Generate AI review"), "Could not find 'Generate AI review'.");
+            Thread.Sleep(4000);   // let the async review generate + the summary dialog open
+            var rev = _host.DialogHwnd();
+            ShotHwnd("07-ai-review-result", rev);
+            Check(rev != IntPtr.Zero, "Generate AI review did not open a review/summary dialog.");
+            _host.ClickProcessDialogButton("Close", TimeSpan.FromSeconds(5));
+            _host.HardReset();
 
             // 8) AI options -> "AI settings…" dialog (open, screenshot, cancel).
             _host.ClickByPartialName("AI options");
@@ -140,6 +161,20 @@ namespace XrmToolSuite.UiSmokeTests
             ShotHwnd("08-ai-settings", keyHwnd);
             Check(keyHwnd != IntPtr.Zero, "AI options 'AI settings…' did not open a dialog.");
             _host.ClickProcessDialogButton("Cancel", TimeSpan.FromSeconds(5));
+            _host.HardReset();
+
+            // 8b) AI options -> "Include component names in AI payload" checkable item — toggle it once, screenshot,
+            //     then toggle back so the persisted setting is unchanged for the next run.
+            _host.ClickByPartialName("AI options");
+            Thread.Sleep(1000);
+            var tog = _host.ClickPopupItem("Include component names");
+            Thread.Sleep(500);
+            Shot("08b-include-components-toggled");
+            Check(tog, "Could not toggle 'Include component names in AI payload'.");
+            _host.ClickByPartialName("AI options");
+            Thread.Sleep(1000);
+            _host.ClickPopupItem("Include component names");
+            Thread.Sleep(500);
             _host.HardReset();
 
             // 9) Export each option -> menu shot -> Save dialog shot -> save to the screenshots folder -> Yes -> report shot.
@@ -183,7 +218,7 @@ namespace XrmToolSuite.UiSmokeTests
 
         /// <summary>
         /// Open the Export dropdown, pick the format, drive the Save As dialog to Downloads + Save, then click
-        /// Yes on the "Open it now?" prompt. Verifies a new <c>DeploymentRiskAnalyzer_*.ext</c> file landed in
+        /// Yes on the "Open it now?" prompt. Verifies a new <c>SolutionReview_*.ext</c> file landed in
         /// Downloads (the tool supplies the default name). Returns true on success.
         /// </summary>
         private bool ExportOne(string menuText, int index, string ext, string saveDir)
@@ -205,7 +240,7 @@ namespace XrmToolSuite.UiSmokeTests
             if (saveHwnd == IntPtr.Zero) return false;
             Thread.Sleep(1500);   // let the shell dialog finish rendering
             var defaultName = _host.ReadSaveFileName();
-            if (string.IsNullOrWhiteSpace(defaultName)) defaultName = $"DeploymentRiskAnalyzer.{ext}";
+            if (string.IsNullOrWhiteSpace(defaultName)) defaultName = $"SolutionReview.{ext}";
             _host.SetSaveFileName(Path.Combine(saveDir, $"{_round}-{Path.GetFileName(defaultName)}"));
             ShotHwnd($"09-export-{ext}-2-savedialog", _host.SaveDialogHwnd());
 
