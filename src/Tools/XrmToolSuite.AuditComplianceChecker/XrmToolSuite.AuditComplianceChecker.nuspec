@@ -8,7 +8,7 @@
          4) DLL goes under a "Plugins" folder
          5) iconUrl is required and must be your own icon -->
     <id>XrmToolSuite.AuditComplianceChecker</id>
-    <version>1.2026.7.3</version>
+    <version>1.2026.7.4</version>
     <title>Audit Compliance Checker for XrmToolBox</title>
     <authors>Kanchan Kora</authors>
     <owners>Kanchan Kora</owners>
@@ -19,7 +19,7 @@
     <license type="expression">MIT</license>
     <description>Checks org/table/column audit settings and audit activity, flags coverage gaps (sensitive tables/columns without auditing) and risky changes (deletes, security-role changes, after-hours edits), and scores audit compliance readiness (0-100). Read-only; exports to Excel, PDF, JSON, HTML, and CSV with changed values masked.</description>
     <summary>Prove audit coverage: score org/table/column audit settings + activity, flag gaps and risky changes.</summary>
-    <releaseNotes>1.2026.7.3: Removed the redundant per-tool Close button; each tool now ships a README (rendered on its NuGet package page) and the package Project website points to that README.</releaseNotes>
+    <releaseNotes>1.2026.7.4: Help dialog icons now render on all Windows (the Documentation and Report-an-issue glyphs previously showed as empty boxes on some machines).</releaseNotes>
     <tags>XrmToolBox Dataverse Dynamics365 PowerPlatform Security Audit Compliance Governance</tags>
     <dependencies>
       <dependency id="XrmToolBox" version="1.2025.10.74" />

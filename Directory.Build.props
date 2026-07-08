@@ -6,7 +6,7 @@
     <Product>XrmToolSuite</Product>
     <!-- Bump this once per release; New-Tool.ps1 stamps it into every tool.
          XrmToolBox Tool Library requires AssemblyVersion == nupkg version. -->
-    <Version>1.2026.7.3</Version>
+    <Version>1.2026.7.4</Version>
     <AssemblyVersion>$(Version)</AssemblyVersion>
     <FileVersion>$(Version)</FileVersion>
     <Deterministic>true</Deterministic>

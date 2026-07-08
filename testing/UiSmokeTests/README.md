@@ -162,6 +162,37 @@ shared `BaseToolControl` status line). The page-object plumbing lives in
 [`Pages/XtbHost.cs`](Pages/XtbHost.cs) — launch/attach, open-a-tool, and text/button assertions — so extra
 walkthroughs are a few lines each.
 
+## Tier-3c — full E2E operator walkthroughs (opt-in, LOCAL only)
+
+Per-tool, end-to-end walkthroughs that drive a tool through its whole operator flow in the real host —
+connect DEV, open the tool, run its primary action, exercise its features, **export every format**, open
+**Help**, and close the tab — capturing a window-only screenshot (`PrintWindow`) after every step. Each is a
+separate `*E2ETest` class modeled on `DeploymentRiskAnalyzerE2ETest`, gated behind **`XTB_E2E=1`** (no flag →
+the test no-ops/stays green). Screenshots land under `UISMOKE_SCREENSHOT_DIR\<yyyymmdd>\<tool-slug>\`,
+prefixed with a per-run round tag (`TR-001`, `TR-002`, …).
+
+| Test class | Tool | Primary flow (after connect DEV + open) |
+|---|---|---|
+| `DeploymentRiskAnalyzerE2ETest` | Deployment Risk Analyzer | Load solutions → connect TEST target → Analyze → findings/risk/AI → export 5 formats |
+| `TechnicalDebtAnalyzerE2ETest` | Technical Debt Analyzer | Analyze environment (no solution) → toggle analyzer → Executive summary → export 5 formats |
+| `SolutionComplexityScoreE2ETest` | Solution Complexity Score | Load solutions → Score complexity → Executive summary → export 5 formats |
+| `AiSolutionReviewerE2ETest` | AI Solution Reviewer | Load solutions → Collect facts → Generate AI review → export 5 formats (incl. Word) |
+| `SolutionKnowledgeGraphE2ETest` | Solution Knowledge Graph | Load solutions → Build graph → Detect cycles → Open interactive HTML → export 4 formats |
+
+They require a **warm DEV connection** (same constraints as Tier-3b — interactive auth, unlocked desktop) and
+**never point at production** (the tests refuse a connection whose name contains `prod`). The tool tab is torn
+down via the host's own tab-close (`Ctrl+F4`, `XtbHost.CloseActiveToolTab`), since the suite's per-tool
+"Close" button was removed.
+
+```powershell
+# deploy first (XrmToolBox closed), then run one tool's walkthrough:
+$env:XTB_EXE = "C:\devtools\XrmToolbox\XrmToolBox.exe"
+$env:XTB_E2E = "1"
+$env:XTB_SOURCE = "XTS-CI-DEV"                       # a dev org, never prod
+$env:UISMOKE_SCREENSHOT_DIR = "$PWD\testing\UiSmokeTests\screenshots"
+dotnet test testing/UiSmokeTests/UiSmokeTests.csproj --filter "FullyQualifiedName~TechnicalDebtAnalyzerE2ETest"
+```
+
 ## Status & caveats
 
 - **Executed and green.** Run against a real XrmToolBox (portable install at `C:\devtools\XrmToolbox`) it

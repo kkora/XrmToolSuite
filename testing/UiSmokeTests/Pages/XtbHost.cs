@@ -1249,6 +1249,12 @@ namespace XrmToolSuite.UiSmokeTests.Pages
         /// <summary>Click a button (Yes/No/OK) on the active process dialog (found via EnumWindows + FromHandle).</summary>
         public bool ClickProcessDialogButton(string buttonLabel, TimeSpan timeout)
         {
+            // Escape closes Cancel/Close/No dialogs; Enter activates the default (OK/Yes/Send) — used as a
+            // reliable fallback for native modal MessageBoxes whose button the UIA Invoke can silently no-op on.
+            var useEscape = buttonLabel.IndexOf("cancel", StringComparison.OrdinalIgnoreCase) >= 0
+                            || buttonLabel.IndexOf("close", StringComparison.OrdinalIgnoreCase) >= 0
+                            || string.Equals(buttonLabel.Trim(), "No", StringComparison.OrdinalIgnoreCase);
+
             var deadline = DateTime.UtcNow.Add(timeout);
             while (DateTime.UtcNow < deadline)
             {
@@ -1258,14 +1264,40 @@ namespace XrmToolSuite.UiSmokeTests.Pages
                     if (h != IntPtr.Zero)
                     {
                         var dlg = _automation.FromHandle(h);
+
+                        // 1) Try the named button via UIA.
                         var btn = dlg.FindAllDescendants(cf => cf.ByControlType(ControlType.Button))
                             .FirstOrDefault(e => { try { return string.Equals((e.Name ?? "").Trim(), buttonLabel, StringComparison.OrdinalIgnoreCase); } catch { return false; } });
                         if (btn != null)
                         {
                             try { btn.AsButton().Invoke(); } catch { try { btn.Click(); } catch { } }
                             Thread.Sleep(700);
-                            return true;
+                            // Verify the dialog actually closed — the Invoke can no-op on a native MessageBox.
+                            if (WindowCapture.FindProcessWindow(_app.ProcessId, MainHwnd, 200, 100) != h) return true;
                         }
+
+                        // 2) Keyboard fallback: focus the dialog and press Enter/Escape (dismisses native MessageBoxes).
+                        try
+                        {
+                            dlg.SetForeground();
+                            Thread.Sleep(200);
+                            FlaUI.Core.Input.Keyboard.Type(useEscape
+                                ? FlaUI.Core.WindowsAPI.VirtualKeyShort.ESCAPE
+                                : FlaUI.Core.WindowsAPI.VirtualKeyShort.RETURN);
+                            Thread.Sleep(700);
+                            if (WindowCapture.FindProcessWindow(_app.ProcessId, MainHwnd, 200, 100) != h) return true;
+                        }
+                        catch { }
+
+                        // 3) Last resort: WM_CLOSE via PostMessage — reliably dismisses a native modal MessageBox
+                        //    (OK/Cancel) without needing the foreground, which SetForeground can't always win.
+                        try
+                        {
+                            WindowCapture.Close(h);
+                            Thread.Sleep(800);
+                            if (WindowCapture.FindProcessWindow(_app.ProcessId, MainHwnd, 200, 100) != h) return true;
+                        }
+                        catch { }
                     }
                 }
                 catch { }
@@ -1366,8 +1398,36 @@ namespace XrmToolSuite.UiSmokeTests.Pages
         /// <summary>Click the tool's own "Close" button (tears down the tool tab). Do this last.</summary>
         public bool ClickToolClose() => ClickByName("Close");
 
+        /// <summary>
+        /// Close the ACTIVE tool tab via the host's own tab-close (Ctrl+F4 on the focused DockPanelSuite
+        /// document), independent of any per-tool "Close" button. Use this to tear a tool down at the end of
+        /// an E2E walkthrough. Best-effort: focuses XrmToolBox first and never throws.
+        /// </summary>
+        public bool CloseActiveToolTab()
+        {
+            try
+            {
+                ForceForeground();
+                Thread.Sleep(400);
+                FlaUI.Core.Input.Keyboard.Press(FlaUI.Core.WindowsAPI.VirtualKeyShort.CONTROL);
+                FlaUI.Core.Input.Keyboard.Type(FlaUI.Core.WindowsAPI.VirtualKeyShort.F4);
+                FlaUI.Core.Input.Keyboard.Release(FlaUI.Core.WindowsAPI.VirtualKeyShort.CONTROL);
+                Thread.Sleep(800);
+                return true;
+            }
+            catch { return false; }
+        }
+
         /// <summary>Click the tool's right-aligned Help button (opens the Help &amp; Support dialog).</summary>
         public bool ClickHelp() => ClickByName("Help") || ClickByPartialName("Help");
+
+        /// <summary>
+        /// Type <paramref name="text"/> into the ACTIVE tool's topmost text box (e.g. a plugin's own search
+        /// filter, like the Solution Knowledge Graph search) via the Value pattern. Best-effort — returns false
+        /// if no editable box is found. This is NOT the XrmToolBox Tools filter (that lives on the Tools tab,
+        /// which is not active while a tool tab is open).
+        /// </summary>
+        public bool SetToolTextBox(string text) => SetSearchText(FindSearchBox(), text);
 
         public void Dispose()
         {
