@@ -189,7 +189,7 @@ namespace XrmToolSuite.UiSmokeTests
                         Thread.Sleep(1200);   // let the shell dialog render
                         var defaultName = _host.ReadSaveFileName();
                         if (string.IsNullOrWhiteSpace(defaultName)) defaultName = $"TechnicalDebtTrends.{ext}";
-                        _host.SetSaveFileName(Path.Combine(exportDir, $"{_round}-{Path.GetFileName(defaultName)}"));
+                        _host.SetSaveFileName(Path.Combine(exportDir, $"{_round}-{Path.GetFileName(new string(defaultName.Where(ch => !Path.GetInvalidPathChars().Contains(ch)).ToArray()))}"));
                         ShotHwnd($"08b-trend-export-{ext}-savedialog", _host.SaveDialogHwnd());
                         _host.ClickSaveInDialog();
                         _host.ClickProcessDialogButton("Yes", TimeSpan.FromSeconds(8)); // best-effort "Open it now?"
@@ -278,7 +278,7 @@ namespace XrmToolSuite.UiSmokeTests
             Thread.Sleep(1500);   // let the shell dialog finish rendering
             var defaultName = _host.ReadSaveFileName();
             if (string.IsNullOrWhiteSpace(defaultName)) defaultName = $"TechnicalDebt.{ext}";
-            _host.SetSaveFileName(Path.Combine(saveDir, $"{_round}-{Path.GetFileName(defaultName)}"));
+            _host.SetSaveFileName(Path.Combine(saveDir, $"{_round}-{Path.GetFileName(new string(defaultName.Where(ch => !Path.GetInvalidPathChars().Contains(ch)).ToArray()))}"));
             ShotHwnd($"09-export-{ext}-2-savedialog", _host.SaveDialogHwnd());
 
             // (c) Save, then "Open it now?" -> Yes, then MAXIMIZE the opened report and screenshot it. Guard the
