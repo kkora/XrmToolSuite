@@ -21,6 +21,8 @@ src/
     XrmToolSuite.AttributeAuditor/ # audit unused custom columns (usage detection + CSV/HTML export)
 scripts/
   New-Tool.ps1                   # stamp out a new tool project
+  Deploy-Tool.ps1                # build + deploy ONE (or a few) tools to local XrmToolBox
+  Pack-All.ps1                   # build Release + pack every non-template nuspec, verify layout
 ```
 
 ## Create a new tool
@@ -35,7 +37,7 @@ This clones the template, renames everything, and adds it to the solution. A too
 
 ## Develop & debug
 
-1. Build with local deploy: `dotnet build -p:DeployToXTB=true` — copies the DLL to `%AppData%\MscrmTools\XrmToolBox\Plugins`.
+1. Build with local deploy: `dotnet build -p:DeployToXTB=true` — copies the DLL to `%AppData%\MscrmTools\XrmToolBox\Plugins` (export tools also copy their dependency chain to the per-tool subfolder `Plugins\XrmToolSuite.<Tool>\`). To deploy **one** tool after changing it (instead of rebuilding the whole suite), use `./scripts/Deploy-Tool.ps1 <ToolName>` (`-List` to see names). Close XrmToolBox first — it locks loaded plugin DLLs.
 2. In VS, set the project's debug launch to your `XrmToolBox.exe` and F5.
 3. Key patterns already wired in `BaseToolControl`:
    - `ExecuteMethod(MyMethod)` — ensures a Dataverse connection before running
@@ -54,10 +56,18 @@ Each tool has a `.nuspec`. Rules enforced by the Tool Library (see xrmtoolbox.co
 - nupkg `version` must equal your DLL's assembly version (both flow from `Version` in the root `Directory.Build.props`)
 - `tags` must start with `XrmToolBox` plus extra words
 - dependency must be on **`XrmToolBox`** (not `XrmToolBoxPackage`)
-- your DLL must sit under a `Plugins` folder in the package; ship only this suite's files (single DLL for most tools; the tool DLL **plus its 17-DLL ClosedXML/PdfSharp-MigraDoc-GDI chain** for the Excel/PDF/Word export tools)
+- your tool DLL must sit in the `Plugins` folder root of the package; ship only this suite's files. Most tools are a single DLL. Export tools (Excel/PDF/Word) additionally ship their dependency chain — the 17-DLL ClosedXML/PdfSharp-MigraDoc-GDI chain, or ERD Generator's 5-DLL PDF-only subset — in a **per-tool subfolder** `lib\net48\Plugins\<AssemblyName>\` (the XrmToolBox store convention; isolates each tool's dep versions). The tool DLL itself stays in the root.
 - `iconUrl` is required and must be your own icon
 
-Pack with: `nuget pack src/Tools/XrmToolSuite.MyTool/XrmToolSuite.MyTool.nuspec`
+Pack **all** tools (build Release → pack every non-template nuspec → verify the subfolder layout):
+
+```powershell
+./scripts/Pack-All.ps1                       # -> .\artifacts\*.nupkg
+./scripts/Pack-All.ps1 -NuGet C:\tools\nuget.exe -SkipBuild   # use a specific nuget, skip rebuild
+```
+
+Or pack one: `nuget pack src/Tools/XrmToolSuite.MyTool/XrmToolSuite.MyTool.nuspec`.
+**Requires `nuget.exe` 5.10+** — the nuspecs use the `<readme>` element (embeds each tool's README); older nuget rejects it with *"invalid child element 'readme'"*. Get the latest from <https://dist.nuget.org/win-x86-commandline/latest/nuget.exe>.
 
 **Full publishing flow (package → push to nuget.org → Tool Library), manual and CI:** see
 [`Publishing_Guide_XrmToolBox.md`](Publishing_Guide_XrmToolBox.md). Automated releases run via
