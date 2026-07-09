@@ -21,17 +21,32 @@ namespace XrmToolSuite.PluginDependencyGraph
      ExportMetadata("SecondaryFontColor", "#BBBBBB")]
     public class PluginDependencyGraphPlugin : PluginBase
     {
-        // The Excel-export (ClosedXML) and native-PDF (PdfSharp/MigraDoc) chains ship in the Plugins
-        // ROOT alongside this DLL (NOT a subfolder): XrmToolBox's plugin analysis must be able to resolve
-        // this tool's direct ClosedXML / PdfSharp / MigraDoc references at scan time, and this handler
-        // isn't registered until the plugin is first instantiated. If those references aren't resolvable
-        // during that scan, XrmToolBox silently drops the tool from the Tools list. So the deps must sit
-        // next to us where normal probing finds them. This handler is a scoped runtime fallback for hosts
-        // whose binding redirects don't cover SixLabors.Fonts' facade version mismatch; it does nothing
-        // for any assembly outside OUR shipped set, so it never interferes with the other tools in the
-        // shared AppDomain. (System.Drawing is a GAC assembly — referenced, never shipped, not owned here.)
-        private static readonly string DependencyDirectory =
+        // The Excel-export (ClosedXML) and native-PDF (PdfSharp/MigraDoc) chains ship in a per-tool
+        // SUBFOLDER named after this assembly (Plugins\XrmToolSuite.PluginDependencyGraph\), the
+        // XrmToolBox store convention, so our dep versions stay isolated from every other tool's copy
+        // in the shared AppDomain. This is safe for the Tools-list scan: we keep ClosedXML/PdfSharp/
+        // MigraDoc types out of all signatures (method-body locals only), so MEF composition never
+        // loads them while reading our metadata — the tool lists fine whether or not they're on the
+        // probe path. They're only needed at runtime (export), which this handler satisfies below.
+        //
+        // SixLabors.Fonts 1.0.0 is mispackaged (compiled against System.Numerics.Vectors 4.1.3.0 /
+        // System.Memory 4.0.1.1 but its NuGet deps demand higher, assembly 4.1.4.0 / 4.0.1.2).
+        // Current XrmToolBox ships those facades in its app dir with binding redirects that cover
+        // the range, so the mismatch resolves for free at runtime. This handler is a scoped safety
+        // net for hosts whose redirects don't cover the range: for OUR shipped dependencies only,
+        // it satisfies a failed bind with whatever compatible version sits next to us (ignoring the
+        // requested version = a runtime binding redirect). It deliberately does nothing for any
+        // other assembly so it can never interfere with the ~70 other tools in the same AppDomain.
+        private static readonly string PluginDirectory =
             Path.GetDirectoryName(typeof(PluginDependencyGraphPlugin).Assembly.Location) ?? string.Empty;
+
+        // Probe the per-tool subfolder first, then fall back to the plugin dir (root) so the same
+        // handler resolves deps whether they ship in the subfolder (current) or the root (legacy).
+        private static readonly string[] DependencyDirectories =
+        {
+            Path.Combine(PluginDirectory, typeof(PluginDependencyGraphPlugin).Assembly.GetName().Name),
+            PluginDirectory,
+        };
 
         private static readonly HashSet<string> OwnedDependencies = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
         {
@@ -74,8 +89,13 @@ namespace XrmToolSuite.PluginDependencyGraph
                 return null;
             try
             {
-                var candidate = Path.Combine(DependencyDirectory, simpleName + ".dll");
-                return File.Exists(candidate) ? Assembly.LoadFrom(candidate) : null;
+                foreach (var dir in DependencyDirectories)
+                {
+                    if (string.IsNullOrEmpty(dir)) continue;
+                    var candidate = Path.Combine(dir, simpleName + ".dll");
+                    if (File.Exists(candidate)) return Assembly.LoadFrom(candidate);
+                }
+                return null;
             }
             finally
             {

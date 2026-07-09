@@ -28,11 +28,11 @@
 
   <!-- Extends the suite's DeployToXTB with the Excel + PDF dependency chain. These go in the Plugins
        ROOT (next to the tool DLL) so XrmToolBox can resolve the tool's ClosedXML/PdfSharp references
-       during plugin analysis; a subfolder makes the tool silently fail to load. -->
+       during plugin analysis; isolated per tool, resolved at runtime by the AssemblyResolve handler (dep types stay out of signatures, so plugin analysis never needs them). -->
   <Target Name="DeployDebtDependencies" AfterTargets="DeployToXrmToolBox" Condition="'$(DeployToXTB)' == 'true'">
     <ItemGroup>
       <DebtDeps Include="$(TargetDir)ClosedXML.dll;$(TargetDir)DocumentFormat.OpenXml.dll;$(TargetDir)ExcelNumberFormat.dll;$(TargetDir)SixLabors.Fonts.dll;$(TargetDir)XLParser.dll;$(TargetDir)Irony.dll;$(TargetDir)System.IO.Packaging.dll;$(TargetDir)System.Numerics.Vectors.dll;$(TargetDir)System.Runtime.CompilerServices.Unsafe.dll;$(TargetDir)System.Buffers.dll;$(TargetDir)System.Memory.dll;$(TargetDir)System.Threading.Tasks.Extensions.dll;$(TargetDir)PdfSharp-gdi.dll;$(TargetDir)PdfSharp.Charting-gdi.dll;$(TargetDir)MigraDoc.DocumentObjectModel-gdi.dll;$(TargetDir)MigraDoc.Rendering-gdi.dll;$(TargetDir)MigraDoc.RtfRendering-gdi.dll" />
     </ItemGroup>
-    <Copy SourceFiles="@(DebtDeps)" DestinationFolder="$(AppData)\MscrmTools\XrmToolBox\Plugins" SkipUnchangedFiles="true" Condition="Exists('%(DebtDeps.Identity)')" />
+    <Copy SourceFiles="@(DebtDeps)" DestinationFolder="$(AppData)\MscrmTools\XrmToolBox\Plugins\$(AssemblyName)" SkipUnchangedFiles="true" Condition="Exists('%(DebtDeps.Identity)')" />
   </Target>
 </Project>

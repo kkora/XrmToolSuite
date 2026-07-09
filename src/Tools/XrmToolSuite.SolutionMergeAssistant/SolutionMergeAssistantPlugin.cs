@@ -21,19 +21,28 @@ namespace XrmToolSuite.SolutionMergeAssistant
      ExportMetadata("SecondaryFontColor", "#BBBBBB")]
     public class SolutionMergeAssistantPlugin : PluginBase
     {
-        // The Excel-export (ClosedXML) and native-PDF (PdfSharp/MigraDoc) chains ship in the Plugins
-        // ROOT alongside this DLL (NOT a subfolder): XrmToolBox's plugin analysis must be able to
-        // resolve this tool's direct ClosedXML / PdfSharp / MigraDoc references at scan time, and our
-        // AssemblyResolve handler isn't registered until the plugin is first instantiated. If those
-        // references aren't resolvable during that scan, XrmToolBox silently drops the tool from the
-        // Tools list. So the deps must sit next to us where normal probing finds them.
+        // The Excel-export (ClosedXML) and native-PDF (PdfSharp/MigraDoc) chains ship in a per-tool
+        // SUBFOLDER named after this assembly (Plugins\XrmToolSuite.SolutionMergeAssistant\), the
+        // XrmToolBox store convention, so our dep versions stay isolated from every other tool's copy
+        // in the shared AppDomain. This is safe for the Tools-list scan: we keep ClosedXML/PdfSharp/
+        // MigraDoc types out of all signatures (method-body locals only), so MEF composition never
+        // loads them while reading our metadata — the tool lists fine whether or not they're on the
+        // probe path. They're only needed at runtime (export), which this handler satisfies below.
         //
         // This handler is a scoped runtime fallback (for hosts whose binding redirects don't cover the
         // SixLabors.Fonts facade mismatch): for OUR shipped dependencies only, it satisfies a failed
         // bind with whatever compatible version sits next to us. It deliberately does nothing for any
         // other assembly so it can never interfere with the other tools in the same AppDomain.
-        private static readonly string DependencyDirectory =
+        private static readonly string PluginDirectory =
             Path.GetDirectoryName(typeof(SolutionMergeAssistantPlugin).Assembly.Location) ?? string.Empty;
+
+        // Probe the per-tool subfolder first, then fall back to the plugin dir (root) so the same
+        // handler resolves deps whether they ship in the subfolder (current) or the root (legacy).
+        private static readonly string[] DependencyDirectories =
+        {
+            Path.Combine(PluginDirectory, typeof(SolutionMergeAssistantPlugin).Assembly.GetName().Name),
+            PluginDirectory,
+        };
 
         private static readonly HashSet<string> OwnedDependencies = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
         {
@@ -76,8 +85,13 @@ namespace XrmToolSuite.SolutionMergeAssistant
                 return null;
             try
             {
-                var candidate = Path.Combine(DependencyDirectory, simpleName + ".dll");
-                return File.Exists(candidate) ? Assembly.LoadFrom(candidate) : null;
+                foreach (var dir in DependencyDirectories)
+                {
+                    if (string.IsNullOrEmpty(dir)) continue;
+                    var candidate = Path.Combine(dir, simpleName + ".dll");
+                    if (File.Exists(candidate)) return Assembly.LoadFrom(candidate);
+                }
+                return null;
             }
             finally
             {

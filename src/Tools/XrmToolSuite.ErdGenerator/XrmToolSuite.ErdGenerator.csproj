@@ -20,12 +20,12 @@
   </ItemGroup>
 
   <!-- Extends the suite's DeployToXTB with ONLY the native-PDF (MigraDoc-GDI) dependency chain. These
-       go in the Plugins ROOT (next to the tool DLL) so XrmToolBox can resolve the tool's PdfSharp/MigraDoc
-       references during plugin analysis; a subfolder makes the tool silently fail to load. -->
+       go in the a per-tool subfolder (Plugins\<AssemblyName>) so XrmToolBox can resolve the tool's PdfSharp/MigraDoc
+       references during plugin analysis; isolated per tool, resolved at runtime by the AssemblyResolve handler (dep types stay out of signatures, so plugin analysis never needs them). -->
   <Target Name="DeployGuardDependencies" AfterTargets="DeployToXrmToolBox" Condition="'$(DeployToXTB)' == 'true'">
     <ItemGroup>
       <GuardDeps Include="$(TargetDir)PdfSharp-gdi.dll;$(TargetDir)PdfSharp.Charting-gdi.dll;$(TargetDir)MigraDoc.DocumentObjectModel-gdi.dll;$(TargetDir)MigraDoc.Rendering-gdi.dll;$(TargetDir)MigraDoc.RtfRendering-gdi.dll" />
     </ItemGroup>
-    <Copy SourceFiles="@(GuardDeps)" DestinationFolder="$(AppData)\MscrmTools\XrmToolBox\Plugins" SkipUnchangedFiles="true" Condition="Exists('%(GuardDeps.Identity)')" />
+    <Copy SourceFiles="@(GuardDeps)" DestinationFolder="$(AppData)\MscrmTools\XrmToolBox\Plugins\$(AssemblyName)" SkipUnchangedFiles="true" Condition="Exists('%(GuardDeps.Identity)')" />
   </Target>
 </Project>

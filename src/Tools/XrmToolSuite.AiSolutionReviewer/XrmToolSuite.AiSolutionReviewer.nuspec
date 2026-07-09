@@ -27,25 +27,31 @@
   </metadata>
   <files>
     <file src="README.md" target="README.md" />
-    <!-- The tool DLL plus the Word/Excel (OpenXML/ClosedXML) and native-PDF (PdfSharp/MigraDoc GDI)
-         chains, all in the Plugins ROOT so XrmToolBox resolves the direct references during scan. -->
     <file src="bin\Release\net48\XrmToolSuite.AiSolutionReviewer.dll" target="lib\net48\Plugins" />
-    <file src="bin\Release\net48\ClosedXML.dll" target="lib\net48\Plugins" />
-    <file src="bin\Release\net48\DocumentFormat.OpenXml.dll" target="lib\net48\Plugins" />
-    <file src="bin\Release\net48\ExcelNumberFormat.dll" target="lib\net48\Plugins" />
-    <file src="bin\Release\net48\SixLabors.Fonts.dll" target="lib\net48\Plugins" />
-    <file src="bin\Release\net48\XLParser.dll" target="lib\net48\Plugins" />
-    <file src="bin\Release\net48\Irony.dll" target="lib\net48\Plugins" />
-    <file src="bin\Release\net48\System.IO.Packaging.dll" target="lib\net48\Plugins" />
-    <file src="bin\Release\net48\System.Numerics.Vectors.dll" target="lib\net48\Plugins" />
-    <file src="bin\Release\net48\System.Runtime.CompilerServices.Unsafe.dll" target="lib\net48\Plugins" />
-    <file src="bin\Release\net48\System.Buffers.dll" target="lib\net48\Plugins" />
-    <file src="bin\Release\net48\System.Memory.dll" target="lib\net48\Plugins" />
-    <file src="bin\Release\net48\System.Threading.Tasks.Extensions.dll" target="lib\net48\Plugins" />
-    <file src="bin\Release\net48\PdfSharp-gdi.dll" target="lib\net48\Plugins" />
-    <file src="bin\Release\net48\PdfSharp.Charting-gdi.dll" target="lib\net48\Plugins" />
-    <file src="bin\Release\net48\MigraDoc.DocumentObjectModel-gdi.dll" target="lib\net48\Plugins" />
-    <file src="bin\Release\net48\MigraDoc.Rendering-gdi.dll" target="lib\net48\Plugins" />
-    <file src="bin\Release\net48\MigraDoc.RtfRendering-gdi.dll" target="lib\net48\Plugins" />
+    <!-- Excel-export (ClosedXML) + native-PDF (PdfSharp/MigraDoc-GDI) chains ship in a per-tool
+         SUBFOLDER named after this tool's assembly (lib\net48\Plugins\XrmToolSuite.AiSolutionReviewer),
+         NOT the shared Plugins root — this is the XrmToolBox store convention (cf. Ryr.ExcelExport,
+         Maverick.PCF.Builder) and it isolates our dep versions so they can never collide with another
+         tool's copy in the shared AppDomain. The tool keeps ClosedXML/PdfSharp/MigraDoc types out of
+         all signatures (method-body locals only), so MEF composition never loads them at scan time and
+         the tool lists fine without them on the probe path; at runtime the scoped AssemblyResolve handler
+         in AiSolutionReviewerPlugin loads them from this subfolder (with a root fallback). -->
+    <file src="bin\Release\net48\ClosedXML.dll" target="lib\net48\Plugins\XrmToolSuite.AiSolutionReviewer" />
+    <file src="bin\Release\net48\DocumentFormat.OpenXml.dll" target="lib\net48\Plugins\XrmToolSuite.AiSolutionReviewer" />
+    <file src="bin\Release\net48\ExcelNumberFormat.dll" target="lib\net48\Plugins\XrmToolSuite.AiSolutionReviewer" />
+    <file src="bin\Release\net48\SixLabors.Fonts.dll" target="lib\net48\Plugins\XrmToolSuite.AiSolutionReviewer" />
+    <file src="bin\Release\net48\XLParser.dll" target="lib\net48\Plugins\XrmToolSuite.AiSolutionReviewer" />
+    <file src="bin\Release\net48\Irony.dll" target="lib\net48\Plugins\XrmToolSuite.AiSolutionReviewer" />
+    <file src="bin\Release\net48\System.IO.Packaging.dll" target="lib\net48\Plugins\XrmToolSuite.AiSolutionReviewer" />
+    <file src="bin\Release\net48\System.Numerics.Vectors.dll" target="lib\net48\Plugins\XrmToolSuite.AiSolutionReviewer" />
+    <file src="bin\Release\net48\System.Runtime.CompilerServices.Unsafe.dll" target="lib\net48\Plugins\XrmToolSuite.AiSolutionReviewer" />
+    <file src="bin\Release\net48\System.Buffers.dll" target="lib\net48\Plugins\XrmToolSuite.AiSolutionReviewer" />
+    <file src="bin\Release\net48\System.Memory.dll" target="lib\net48\Plugins\XrmToolSuite.AiSolutionReviewer" />
+    <file src="bin\Release\net48\System.Threading.Tasks.Extensions.dll" target="lib\net48\Plugins\XrmToolSuite.AiSolutionReviewer" />
+    <file src="bin\Release\net48\PdfSharp-gdi.dll" target="lib\net48\Plugins\XrmToolSuite.AiSolutionReviewer" />
+    <file src="bin\Release\net48\PdfSharp.Charting-gdi.dll" target="lib\net48\Plugins\XrmToolSuite.AiSolutionReviewer" />
+    <file src="bin\Release\net48\MigraDoc.DocumentObjectModel-gdi.dll" target="lib\net48\Plugins\XrmToolSuite.AiSolutionReviewer" />
+    <file src="bin\Release\net48\MigraDoc.Rendering-gdi.dll" target="lib\net48\Plugins\XrmToolSuite.AiSolutionReviewer" />
+    <file src="bin\Release\net48\MigraDoc.RtfRendering-gdi.dll" target="lib\net48\Plugins\XrmToolSuite.AiSolutionReviewer" />
   </files>
 </package>
