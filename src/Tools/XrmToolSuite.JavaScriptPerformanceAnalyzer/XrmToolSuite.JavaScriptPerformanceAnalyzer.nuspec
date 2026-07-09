@@ -8,7 +8,7 @@
          4) DLL goes under a "Plugins" folder
          5) iconUrl is required and must be your own icon -->
     <id>XrmToolSuite.JavaScriptPerformanceAnalyzer</id>
-    <version>1.2026.7.4</version>
+    <version>1.2026.7.5</version>
     <title>JavaScript Performance Analyzer for XrmToolBox</title>
     <authors>Kanchan Kora</authors>
     <owners>Kanchan Kora</owners>
@@ -19,7 +19,7 @@
     <license type="expression">MIT</license>
     <description>Statically analyzes JavaScript (JScript) web resources and their form/event usage for performance and deprecation risks — deprecated Xrm.Page, synchronous XMLHttpRequest, blocking alert(), excessive console logging, repeated retrieve/Xrm.WebApi calls, hardcoded GUIDs/URLs, unsupported DOM manipulation, and oversized scripts. Maps scripts to the forms and events that call them, flags forms with too many OnLoad handlers, produces a per-script heuristic risk score with code line context and confidence labels, and Excel/PDF/JSON/HTML/Markdown/CSV exports. Fully offline (no runtime), read-only.</description>
     <summary>Statically analyzes JavaScript web resources and form/event usage for performance and deprecation risks with a per-script risk score, code context, and Excel/PDF/JSON/HTML/Markdown/CSV exports. Offline, read-only.</summary>
-    <releaseNotes>1.2026.7.4: Help dialog icons now render on all Windows (the Documentation and Report-an-issue glyphs previously showed as empty boxes on some machines).</releaseNotes>
+    <releaseNotes>1.2026.7.5: Export tools now ship their Excel/PDF/Word dependency chain in a per-tool Plugins subfolder (named after each tool's assembly) instead of the shared Plugins root, isolating each tool's dependency versions. No functional change to any tool.</releaseNotes>
     <tags>XrmToolBox Dataverse Dynamics365 PowerPlatform</tags>
     <dependencies>
       <dependency id="XrmToolBox" version="1.2025.10.74" />

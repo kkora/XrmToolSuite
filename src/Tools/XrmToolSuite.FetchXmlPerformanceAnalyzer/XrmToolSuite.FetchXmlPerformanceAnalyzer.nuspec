@@ -8,7 +8,7 @@
          4) DLL goes under a "Plugins" folder
          5) iconUrl is required and must be your own icon -->
     <id>XrmToolSuite.FetchXmlPerformanceAnalyzer</id>
-    <version>1.2026.7.4</version>
+    <version>1.2026.7.5</version>
     <title>FetchXML Performance Analyzer for XrmToolBox</title>
     <authors>Kanchan Kora</authors>
     <owners>Kanchan Kora</owners>
@@ -19,7 +19,7 @@
     <license type="expression">MIT</license>
     <description>Paste or load FetchXML from a view and analyze it for performance risks — all-attributes, missing filters, excessive/outer joins, link-entity sorts, aggregation and paging issues. Produces severity-ranked findings, a heuristic cost estimate, optimization suggestions, optional read-only execution timing, and Excel/PDF/JSON/HTML/Markdown/CSV exports. Read-only.</description>
     <summary>Analyzes FetchXML for performance risks (all-attributes, missing filters, excessive joins, sort/aggregation cost) with a heuristic cost estimate, optional timing, and Excel/PDF/JSON/HTML/Markdown/CSV exports.</summary>
-    <releaseNotes>1.2026.7.4: Help dialog icons now render on all Windows (the Documentation and Report-an-issue glyphs previously showed as empty boxes on some machines).</releaseNotes>
+    <releaseNotes>1.2026.7.5: Export tools now ship their Excel/PDF/Word dependency chain in a per-tool Plugins subfolder (named after each tool's assembly) instead of the shared Plugins root, isolating each tool's dependency versions. No functional change to any tool.</releaseNotes>
     <tags>XrmToolBox Dataverse Dynamics365 PowerPlatform</tags>
     <dependencies>
       <dependency id="XrmToolBox" version="1.2025.10.74" />
