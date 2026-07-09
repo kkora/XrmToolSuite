@@ -19,11 +19,14 @@ src/
     XrmToolSuite.TemplateTool/     # the template every new tool is cloned from
     XrmToolSuite.DeploymentRiskAnalyzer/  # pre-deployment risk analysis tool (see its own README)
     XrmToolSuite.AttributeAuditor/ # audit unused custom columns (usage detection + CSV/HTML export)
-scripts/
+scripts/                         # dev/deploy/packaging helpers — see scripts/README.md
   New-Tool.ps1                   # stamp out a new tool project
   Deploy-Tool.ps1                # build + deploy ONE (or a few) tools to local XrmToolBox
   Pack-All.ps1                   # build Release + pack every non-template nuspec, verify layout
+  Setup-TestConnection.ps1       # pre-flight for the connected UI walkthroughs
 ```
+
+See [`scripts/README.md`](scripts/README.md) for full usage of each helper.
 
 ## Create a new tool
 
