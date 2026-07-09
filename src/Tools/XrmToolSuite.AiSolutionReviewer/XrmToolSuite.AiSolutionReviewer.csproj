@@ -28,6 +28,6 @@
     <ItemGroup>
       <ReviewerDeps Include="$(TargetDir)ClosedXML.dll;$(TargetDir)DocumentFormat.OpenXml.dll;$(TargetDir)ExcelNumberFormat.dll;$(TargetDir)SixLabors.Fonts.dll;$(TargetDir)XLParser.dll;$(TargetDir)Irony.dll;$(TargetDir)System.IO.Packaging.dll;$(TargetDir)System.Numerics.Vectors.dll;$(TargetDir)System.Runtime.CompilerServices.Unsafe.dll;$(TargetDir)System.Buffers.dll;$(TargetDir)System.Memory.dll;$(TargetDir)System.Threading.Tasks.Extensions.dll;$(TargetDir)PdfSharp-gdi.dll;$(TargetDir)PdfSharp.Charting-gdi.dll;$(TargetDir)MigraDoc.DocumentObjectModel-gdi.dll;$(TargetDir)MigraDoc.Rendering-gdi.dll;$(TargetDir)MigraDoc.RtfRendering-gdi.dll" />
     </ItemGroup>
-    <Copy SourceFiles="@(ReviewerDeps)" DestinationFolder="$(AppData)\MscrmTools\XrmToolBox\Plugins" SkipUnchangedFiles="true" Condition="Exists('%(ReviewerDeps.Identity)')" />
+    <Copy SourceFiles="@(ReviewerDeps)" DestinationFolder="$(AppData)\MscrmTools\XrmToolBox\Plugins\$(AssemblyName)" SkipUnchangedFiles="true" Condition="Exists('%(ReviewerDeps.Identity)')" />
   </Target>
 </Project>

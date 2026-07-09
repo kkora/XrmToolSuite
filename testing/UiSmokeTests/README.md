@@ -169,7 +169,9 @@ connect DEV, open the tool, run its primary action, exercise its features, **exp
 **Help**, and close the tab — capturing a window-only screenshot (`PrintWindow`) after every step. Each is a
 separate `*E2ETest` class modeled on `DeploymentRiskAnalyzerE2ETest`, gated behind **`XTB_E2E=1`** (no flag →
 the test no-ops/stays green). Screenshots land under `UISMOKE_SCREENSHOT_DIR\<yyyymmdd>\<tool-slug>\`,
-prefixed with a per-run round tag (`TR-001`, `TR-002`, …).
+prefixed with a per-run round tag (`TR-001`, `TR-002`, …). There is **one walkthrough per implemented tool
+(28 total)**; the read-only tools (Custom API Explorer, Solution Merge Assistant) exercise discovery/preview
+only — they never invoke an API or apply a merge.
 
 | Test class | Tool | Primary flow (after connect DEV + open) |
 |---|---|---|
@@ -178,6 +180,29 @@ prefixed with a per-run round tag (`TR-001`, `TR-002`, …).
 | `SolutionComplexityScoreE2ETest` | Solution Complexity Score | Load solutions → Score complexity → Executive summary → export 5 formats |
 | `AiSolutionReviewerE2ETest` | AI Solution Reviewer | Load solutions → Collect facts → Generate AI review → export 5 formats (incl. Word) |
 | `SolutionKnowledgeGraphE2ETest` | Solution Knowledge Graph | Load solutions → Build graph → Detect cycles → Open interactive HTML → export 4 formats |
+| `ApiDocumentationBuilderE2ETest` | API Documentation Builder | Load Custom APIs → build docs (read-only) → export Markdown/HTML/JSON/OpenAPI |
+| `ArchitectureDiagramGeneratorE2ETest` | Architecture Diagram Generator | Load solutions → Generate → export Mermaid/PlantUML/DOT/Markdown/HTML/JSON |
+| `AttributeAuditorE2ETest` | Attribute Auditor | Run audit → toggle "Candidates only" → export CSV/HTML |
+| `AuditComplianceCheckerE2ETest` | Audit Compliance Checker | Check audit settings → Analyze activity → export Excel/PDF/JSON/HTML/CSV |
+| `ComponentUsageExplorerE2ETest` | Component Usage Explorer | Find (search) → select → Analyze usage → export Excel/PDF/JSON/HTML |
+| `CustomApiExplorerE2ETest` | Custom API Explorer | Load Custom APIs → view detail (read-only; no invoke) → export HTML/Markdown/CSV |
+| `DuplicateMetadataFinderE2ETest` | Duplicate Metadata Finder | Scan for duplicates → detail → export Excel/PDF/JSON/HTML |
+| `EnvironmentComparisonSuiteE2ETest` | Environment Comparison Suite | Connect TEST target → Compare → export Excel/PDF/JSON/HTML |
+| `EnvironmentInventoryE2ETest` | Environment Inventory | Collect inventory → export Excel/CSV/JSON/Markdown/HTML/Word/PDF |
+| `ErdGeneratorE2ETest` | ERD Generator | Load tables → check table → Generate → export Mermaid/PlantUML/SVG/PNG/PDF/HTML/Markdown/JSON |
+| `FetchXmlPerformanceAnalyzerE2ETest` | FetchXML Performance Analyzer | Supply FetchXML → Analyze → export Excel/PDF/JSON/HTML/Markdown/CSV |
+| `FlowDependencyAnalyzerE2ETest` | Flow Dependency Analyzer | Analyze flows → detail tree → export Excel/PDF/JSON/HTML |
+| `FormPerformanceAnalyzerE2ETest` | Form Performance Analyzer | Analyze forms → Score settings → export CSV/HTML |
+| `JavaScriptPerformanceAnalyzerE2ETest` | JavaScript Performance Analyzer | Analyze web resources → detail → export Excel/PDF/JSON/HTML/Markdown/CSV |
+| `ManagedSolutionImpactCheckerE2ETest` | Managed Solution Impact Checker | Refresh solutions → Analyze impact → export Excel/PDF/JSON/HTML |
+| `PluginDependencyGraphE2ETest` | Plugin Dependency Graph | Load pipeline → export PNG/SVG/PDF/Excel/JSON/GraphML/HTML/Mermaid |
+| `PortalHealthAnalyzerE2ETest` | Portal Health Analyzer | Load websites → Analyze → export Excel/PDF/Word/JSON/HTML/CSV |
+| `PrivilegeGapAnalyzerE2ETest` | Privilege Gap Analyzer | Load principals → Analyze → detail → export Excel/PDF/CSV/JSON/HTML |
+| `SharingAnalyzerE2ETest` | Sharing Analyzer | Enable full-environment scan → Scan sharing → export Excel/PDF/JSON/HTML/CSV |
+| `SolutionDocumentationGeneratorE2ETest` | Solution Documentation Generator | Load solutions → Generate → export Word/PDF/Excel/Markdown/HTML/Portal-HTML/JSON |
+| `SolutionMergeAssistantE2ETest` | Solution Merge Assistant | Load solutions → check two → Compare (read-only preview) → export Excel/PDF/JSON/HTML |
+| `TeamPermissionExplorerE2ETest` | Team Permission Explorer | Load teams → select → export Excel/PDF/CSV/HTML |
+| `ViewPerformanceAnalyzerE2ETest` | View Performance Analyzer | Refresh tables → select table → Analyze views → export Excel/PDF/JSON/HTML/Markdown/CSV |
 
 They require a **warm DEV connection** (same constraints as Tier-3b — interactive auth, unlocked desktop) and
 **never point at production** (the tests refuse a connection whose name contains `prod`). The tool tab is torn

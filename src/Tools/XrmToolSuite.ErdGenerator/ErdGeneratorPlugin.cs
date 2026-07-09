@@ -23,16 +23,28 @@ namespace XrmToolSuite.ErdGenerator
     public class ErdGeneratorPlugin : PluginBase
     {
         // This tool ships only the native-PDF chain (PdfSharp/MigraDoc, GDI build — assemblies carry a
-        // -gdi suffix). Those DLLs sit in the Plugins ROOT next to this DLL (NOT a subfolder): XrmToolBox's
-        // plugin analysis must resolve the tool's direct PdfSharp/MigraDoc references at scan time, before
-        // this handler is registered; hide them in a subfolder and the tool is silently dropped.
+        // -gdi suffix). Those DLLs ship in a per-tool SUBFOLDER named after this assembly
+        // (Plugins\XrmToolSuite.ErdGenerator\), the XrmToolBox store convention, so our dep versions stay
+        // isolated from every other tool's copy in the shared AppDomain. This is safe for the Tools-list
+        // scan: we keep PdfSharp/MigraDoc types out of all signatures (method-body locals only), so MEF
+        // composition never loads them while reading our metadata — the tool lists fine whether or not
+        // they're on the probe path. They're only needed at runtime (export), which this handler satisfies
+        // below.
         //
         // This handler is a scoped safety net for hosts whose binding redirects don't cover a requested
         // version: for OUR shipped dependencies ONLY, it satisfies a failed bind with the compatible
         // version sitting next to us. It does nothing for any other assembly, so it can never interfere
         // with the other tools in the shared AppDomain.
-        private static readonly string DependencyDirectory =
+        private static readonly string PluginDirectory =
             Path.GetDirectoryName(typeof(ErdGeneratorPlugin).Assembly.Location) ?? string.Empty;
+
+        // Probe the per-tool subfolder first, then fall back to the plugin dir (root) so the same
+        // handler resolves deps whether they ship in the subfolder (current) or the root (legacy).
+        private static readonly string[] DependencyDirectories =
+        {
+            Path.Combine(PluginDirectory, typeof(ErdGeneratorPlugin).Assembly.GetName().Name),
+            PluginDirectory,
+        };
 
         private static readonly HashSet<string> OwnedDependencies = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
         {
@@ -70,8 +82,13 @@ namespace XrmToolSuite.ErdGenerator
                 return null;
             try
             {
-                var candidate = Path.Combine(DependencyDirectory, simpleName + ".dll");
-                return File.Exists(candidate) ? Assembly.LoadFrom(candidate) : null;
+                foreach (var dir in DependencyDirectories)
+                {
+                    if (string.IsNullOrEmpty(dir)) continue;
+                    var candidate = Path.Combine(dir, simpleName + ".dll");
+                    if (File.Exists(candidate)) return Assembly.LoadFrom(candidate);
+                }
+                return null;
             }
             finally
             {

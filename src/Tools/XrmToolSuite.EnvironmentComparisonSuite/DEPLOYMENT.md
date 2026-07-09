@@ -6,11 +6,9 @@ Deployment guide for the **Environment Comparison Suite** XrmToolBox plugin. For
 
 > **WARNING: This tool is NOT a single-DLL tool - it ships the Excel/PDF export dependency chain.**
 > The one-step build below (`-p:DeployToXTB=true`) copies the whole chain (the tool DLL + its 17
-> ClosedXML/PdfSharp-MigraDoc-GDI dependency DLLs) into the Plugins root automatically. For a **manual**
-> copy to another machine, copy **every** DLL from the tool's `bin\Release\net48\` folder (all flat in the
-> Plugins root, never a subfolder) - see the **"Export tools only"** section of
-> [`Deployment_Guide_XrmToolBox.md`](../../../Deployment_Guide_XrmToolBox.md). Copying only the tool DLL
-> makes XrmToolBox silently drop the tool from the Tools list. The "single DLL" wording lower down applies
+> ClosedXML/PdfSharp-MigraDoc-GDI dependency DLLs) into that tool's per-tool subfolder (Plugins\XrmToolSuite.EnvironmentComparisonSuite\) automatically; the tool DLL itself sits in the Plugins root. For a **manual**
+> copy to another machine, copy **every** DLL from the tool's `bin\Release\net48\` folder (the tool DLL into the Plugins root, its dependency DLLs into the subfolder Plugins\XrmToolSuite.EnvironmentComparisonSuite\) - see the **"Export tools only"** section of
+> [`Deployment_Guide_XrmToolBox.md`](../../../Deployment_Guide_XrmToolBox.md). Copying only the tool DLL leaves exports broken at runtime, though the tool still loads and appears in the Tools list. The "single DLL" wording lower down applies
 > only to non-export tools; ignore it for this one.
 
 ## Prerequisites

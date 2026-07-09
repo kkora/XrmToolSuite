@@ -21,12 +21,24 @@ namespace XrmToolSuite.SolutionComplexityScore
      ExportMetadata("SecondaryFontColor", "#BBBBBB")]
     public class SolutionComplexityScorePlugin : PluginBase
     {
-        // Ships the Excel (ClosedXML) and native-PDF (PdfSharp/MigraDoc GDI) chains in the Plugins ROOT
-        // next to this DLL so XrmToolBox can resolve the tool's direct references at scan time. This
-        // scoped AssemblyResolve handler is a safety net for the mispackaged SixLabors.Fonts facades and
-        // touches ONLY our shipped assemblies. Keep this set in sync with the csproj/nuspec lists.
-        private static readonly string DependencyDirectory =
+        // Ships the Excel (ClosedXML) and native-PDF (PdfSharp/MigraDoc GDI) chains in a per-tool
+        // SUBFOLDER named after this assembly (Plugins\XrmToolSuite.SolutionComplexityScore\), the
+        // XrmToolBox store convention, so our dep versions stay isolated from every other tool's copy
+        // in the shared AppDomain. This is safe for the Tools-list scan: we keep ClosedXML/PdfSharp/
+        // MigraDoc types out of all signatures (method-body locals only), so MEF composition never
+        // loads them while reading our metadata. This scoped AssemblyResolve handler is a safety net
+        // for the mispackaged SixLabors.Fonts facades and touches ONLY our shipped assemblies. Keep
+        // this set in sync with the csproj/nuspec lists.
+        private static readonly string PluginDirectory =
             Path.GetDirectoryName(typeof(SolutionComplexityScorePlugin).Assembly.Location) ?? string.Empty;
+
+        // Probe the per-tool subfolder first, then fall back to the plugin dir (root) so the same
+        // handler resolves deps whether they ship in the subfolder (current) or the root (legacy).
+        private static readonly string[] DependencyDirectories =
+        {
+            Path.Combine(PluginDirectory, typeof(SolutionComplexityScorePlugin).Assembly.GetName().Name),
+            PluginDirectory,
+        };
 
         private static readonly HashSet<string> OwnedDependencies = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
         {
@@ -60,8 +72,13 @@ namespace XrmToolSuite.SolutionComplexityScore
                 return null;
             try
             {
-                var candidate = Path.Combine(DependencyDirectory, simpleName + ".dll");
-                return File.Exists(candidate) ? Assembly.LoadFrom(candidate) : null;
+                foreach (var dir in DependencyDirectories)
+                {
+                    if (string.IsNullOrEmpty(dir)) continue;
+                    var candidate = Path.Combine(dir, simpleName + ".dll");
+                    if (File.Exists(candidate)) return Assembly.LoadFrom(candidate);
+                }
+                return null;
             }
             finally
             {

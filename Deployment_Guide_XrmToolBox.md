@@ -124,18 +124,21 @@ ship extra libraries for **Excel** and **native PDF/Word** export. In addition t
 | `MigraDoc.Rendering-gdi.dll` | Native PDF rendering |
 | `MigraDoc.RtfRendering-gdi.dll` | MigraDoc dependency |
 
-> **All in the Plugins root — do not put the dependencies in a subfolder.** XrmToolBox's
-> plugin analysis must be able to resolve the tool's `ClosedXML` and `PdfSharp`/`MigraDoc` references
-> when it scans the folder; if the dependencies aren't found next to the tool DLL, XrmToolBox
-> **silently drops the tool** (it won't appear in the Tools list, with no error). The PDF assemblies
-> carry the **`-gdi`** suffix (the GDI build — pure-managed on net48, no SkiaSharp natives). Current
-> XrmToolBox ships the `System.*` facades with binding redirects, so `SixLabors.Fonts`' version
-> mismatch resolves without a "Tools not loaded" warning.
+> **Dependencies go in a per-tool subfolder named after the tool assembly** — e.g.
+> `Plugins\XrmToolSuite.DeploymentRiskAnalyzer\` — while the **tool DLL itself stays in the Plugins
+> root**. This is the XrmToolBox store convention (cf. `Ryr.ExcelExport`, `Maverick.PCF.Builder`) and
+> keeps each tool's dependency versions isolated from every other tool. The tool still appears in the
+> Tools list even before its deps resolve (the tool keeps `ClosedXML`/`PdfSharp`/`MigraDoc` types out
+> of all signatures, so XrmToolBox's scan never loads them); the deps are pulled from the subfolder at
+> runtime (export) by the tool's `AssemblyResolve` handler, which probes the subfolder first, then the
+> Plugins root as a fallback. The PDF assemblies carry the **`-gdi`** suffix (the GDI build —
+> pure-managed on net48, no SkiaSharp natives). Current XrmToolBox ships the `System.*` facades with
+> binding redirects, so `SixLabors.Fonts`' version mismatch resolves without a "Tools not loaded" warning.
 
-> **ERD Generator (PDF-only chain):** it exports PDF but not Excel, so it ships **only** the five
-> `-gdi` PdfSharp/MigraDoc DLLs (the last five rows above) alongside `XrmToolSuite.ErdGenerator.dll` —
-> **not** ClosedXML or the `System.*` facades. (Its PNG export uses the net48 `System.Drawing` GAC
-> assembly, which is not shipped.)
+> **ERD Generator (PDF-only chain):** it exports PDF but not Excel, so its subfolder
+> `Plugins\XrmToolSuite.ErdGenerator\` ships **only** the five `-gdi` PdfSharp/MigraDoc DLLs (the last
+> five rows above) — **not** ClosedXML or the `System.*` facades. (Its PNG export uses the net48
+> `System.Drawing` GAC assembly, which is not shipped.)
 
 ---
 
@@ -148,23 +151,25 @@ ship extra libraries for **Excel** and **native PDF/Word** export. In addition t
    %AppData%\MscrmTools\XrmToolBox\Plugins
    ```
 
-3. Copy the DLL(s) from Step 2 into that folder (flat — no subfolder):
+3. Copy the tool DLL from Step 2 into that folder (the tool DLL always sits in the Plugins root):
 
    ```
    Plugins\
      XrmToolSuite.<ToolName>.dll
    ```
 
-   *Export tools* — the folder also contains that tool's dependency chain, all flat (all 17 DLLs for
-   a full-export-chain tool, or just the five `-gdi` DLLs for ERD Generator):
+   *Export tools* — put that tool's dependency chain in a **subfolder named after the tool assembly**
+   (`Plugins\XrmToolSuite.<ToolName>\`): all 17 DLLs for a full-export-chain tool, or just the five
+   `-gdi` DLLs for ERD Generator. The tool DLL stays in the root:
 
    ```
    Plugins\
      XrmToolSuite.<ToolName>.dll
-     ClosedXML.dll            (full-export-chain tools only)
-     SixLabors.Fonts.dll      (full-export-chain tools only)
-     PdfSharp-gdi.dll
-     ... (the rest of the Step 2 list)
+     XrmToolSuite.<ToolName>\
+       ClosedXML.dll            (full-export-chain tools only)
+       SixLabors.Fonts.dll      (full-export-chain tools only)
+       PdfSharp-gdi.dll
+       ... (the rest of the Step 2 list)
    ```
 
 ---
@@ -245,9 +250,9 @@ if (-not $r.ci.pass) {
 | Symptom | Fix |
 |---|---|
 | Tool doesn't appear in XrmToolBox | 1) DLL still blocked — redo Step 4. 2) Version mismatch — align `XrmToolBoxPackage` in `Directory.Build.props` with your installed XrmToolBox, rebuild, re-copy. |
-| An **export tool** doesn't appear | As above, plus: a dependency is missing — copy the **entire** Step 2 list into the Plugins root (all in one folder, no subfolder). XrmToolBox silently drops a tool whose `ClosedXML`/`PdfSharp`/`MigraDoc` reference it can't resolve during its scan. (ERD Generator needs only its five `-gdi` DLLs.) |
+| An **export tool** doesn't appear | Almost always the tool DLL itself is blocked (redo Step 4) or a version mismatch — the tool lists even if its export deps are absent, since it keeps their types out of all signatures. If the tool loads but **export fails**, see the Excel/PDF rows below. Put the deps in the tool's subfolder `Plugins\XrmToolSuite.<ToolName>\` (ERD Generator needs only its five `-gdi` DLLs). |
 | "Tools not loaded" listing `System.Numerics.Vectors` / `SixLabors.Fonts` (a full-export-chain tool) | Your XrmToolBox is older than ~1.2025.10 and lacks the facade binding redirects. Update XrmToolBox to the current version. |
-| Crash / no output when exporting to **Excel** | A ClosedXML dependency from Step 2 is missing from the Plugins root — copy the **entire** list (including `System.IO.Packaging.dll` and `Irony.dll`). |
+| Crash / no output when exporting to **Excel** | A ClosedXML dependency from Step 2 is missing from the tool's subfolder `Plugins\XrmToolSuite.<ToolName>\` — copy the **entire** list (including `System.IO.Packaging.dll` and `Irony.dll`) into it. |
 | Crash / no output when exporting to **PDF** | A PDF dependency from Step 2 is missing — copy all five `-gdi` DLLs (`PdfSharp-gdi`, `PdfSharp.Charting-gdi`, `MigraDoc.DocumentObjectModel-gdi`, `MigraDoc.Rendering-gdi`, `MigraDoc.RtfRendering-gdi`). |
 | "Could not load file or assembly" for `Microsoft.Xrm.*` or `Newtonsoft.Json` | You copied a DLL XrmToolBox already ships — delete it (keep only your tool DLL, plus the Step 2 dependency list if it's an export tool). |
 | Analyzers/queries return "skipped" findings | Usually insufficient privileges — verify System Customizer or higher in both environments. |
@@ -258,7 +263,8 @@ if (-not $r.ci.pass) {
 
 Build with `-p:DeployToXTB=true` (see *Easiest path* above). For a single-DLL tool that copies the
 tool DLL into the Plugins root; **for an export tool** it also copies that tool's dependency chain
-(the full Excel + native-PDF chain, or ERD Generator's PDF-only chain). After the first deploy your
+into the per-tool subfolder `Plugins\XrmToolSuite.<ToolName>\` (the full Excel + native-PDF chain, or
+ERD Generator's PDF-only chain). After the first deploy your
 loop is just: **rebuild with `-p:DeployToXTB=true` → restart XrmToolBox**.
 
 (XrmToolBox locks the tool DLL while running, so close XrmToolBox before rebuilding with the

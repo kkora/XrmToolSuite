@@ -5,11 +5,9 @@ Deployment guide for the **ERD Generator** XrmToolBox plugin. For the suite-wide
 [`Deployment_Guide_XrmToolBox.md`](../../../Deployment_Guide_XrmToolBox.md).
 
 > **WARNING: This tool is NOT a single-DLL tool - it ships the native-PDF (PdfSharp/MigraDoc-GDI) export dependency chain.**
-> The one-step build below (`-p:DeployToXTB=true`) copies the whole chain (the tool DLL + its five `-gdi` PdfSharp/MigraDoc DLLs) into the Plugins root automatically. For a **manual**
-> copy to another machine, copy **every** DLL from the tool's `bin\Release\net48\` folder (all flat in the
-> Plugins root, never a subfolder) - see the **"Export tools only"** section of
-> [`Deployment_Guide_XrmToolBox.md`](../../../Deployment_Guide_XrmToolBox.md). Copying only the tool DLL
-> makes XrmToolBox silently drop the tool from the Tools list. The "single DLL" wording lower down applies
+> The one-step build below (`-p:DeployToXTB=true`) copies the whole chain (the tool DLL + its five `-gdi` PdfSharp/MigraDoc DLLs) into that tool's per-tool subfolder (Plugins\XrmToolSuite.ErdGenerator\) automatically; the tool DLL itself sits in the Plugins root. For a **manual**
+> copy to another machine, copy **every** DLL from the tool's `bin\Release\net48\` folder (the tool DLL into the Plugins root, its dependency DLLs into the subfolder Plugins\XrmToolSuite.ErdGenerator\) - see the **"Export tools only"** section of
+> [`Deployment_Guide_XrmToolBox.md`](../../../Deployment_Guide_XrmToolBox.md). Copying only the tool DLL leaves exports broken at runtime, though the tool still loads and appears in the Tools list. The "single DLL" wording lower down applies
 > only to non-export tools; ignore it for this one.
 
 ## Prerequisites
