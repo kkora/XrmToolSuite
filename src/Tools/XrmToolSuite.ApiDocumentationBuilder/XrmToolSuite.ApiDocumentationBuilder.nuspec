@@ -8,7 +8,7 @@
          4) DLL goes under a "Plugins" folder
          5) iconUrl is required and must be your own icon -->
     <id>XrmToolSuite.ApiDocumentationBuilder</id>
-    <version>1.2026.7.5</version>
+    <version>1.2026.7.6</version>
     <title>API Documentation Builder for XrmToolBox</title>
     <authors>Kanchan Kora</authors>
     <owners>Kanchan Kora</owners>
@@ -19,7 +19,7 @@
     <license type="expression">MIT</license>
     <description>Documents Dataverse Custom APIs (parameters, responses, binding, plugin) as a redaction-safe reference and an OpenAPI-style JSON spec; exports Markdown, self-contained HTML, JSON, and OpenAPI JSON. Read-only; never invokes APIs; masks secrets.</description>
     <summary>Documents Dataverse Custom APIs (parameters, responses, binding, plugin) as a redaction-safe reference and an OpenAPI-style JSON spec; exports Markdown, self-contained HTML, JSON, and OpenAPI JSON. Read-only; never invokes APIs; masks secrets.</summary>
-    <releaseNotes>1.2026.7.5: Export tools now ship their Excel/PDF/Word dependency chain in a per-tool Plugins subfolder (named after each tool's assembly) instead of the shared Plugins root, isolating each tool's dependency versions. No functional change to any tool.</releaseNotes>
+    <releaseNotes>1.2026.7.6: Help > Documentation now opens each tool's own README (instead of the suite readme).</releaseNotes>
     <tags>XrmToolBox Dataverse Dynamics365 PowerPlatform</tags>
     <dependencies>
       <dependency id="XrmToolBox" version="1.2025.10.74" />

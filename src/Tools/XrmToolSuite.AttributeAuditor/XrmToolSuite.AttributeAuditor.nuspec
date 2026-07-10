@@ -8,7 +8,7 @@
          4) DLL goes under a "Plugins" folder
          5) iconUrl is required and must be your own icon -->
     <id>XrmToolSuite.AttributeAuditor</id>
-    <version>1.2026.7.5</version>
+    <version>1.2026.7.6</version>
     <title>Attribute Auditor for XrmToolBox</title>
     <authors>Kanchan Kora</authors>
     <owners>Kanchan Kora</owners>
@@ -19,7 +19,7 @@
     <license type="expression">MIT</license>
     <description>Audits unused attributes across entities</description>
     <summary>Audits unused attributes across entities</summary>
-    <releaseNotes>1.2026.7.5: Export tools now ship their Excel/PDF/Word dependency chain in a per-tool Plugins subfolder (named after each tool's assembly) instead of the shared Plugins root, isolating each tool's dependency versions. No functional change to any tool.</releaseNotes>
+    <releaseNotes>1.2026.7.6: Attribute Auditor - exclude tables/columns by logical-name prefix (live filter, also applied to CSV/HTML export); sortable, virtualized results grid that stays responsive on large audits; status bar shows active filters plus table/column counts; auto-generated companion (name/type) columns are hidden; prompts to open the file after export. Help > Documentation opens this tool's README.</releaseNotes>
     <tags>XrmToolBox Dataverse Dynamics365 PowerPlatform</tags>
     <dependencies>
       <dependency id="XrmToolBox" version="1.2025.10.74" />

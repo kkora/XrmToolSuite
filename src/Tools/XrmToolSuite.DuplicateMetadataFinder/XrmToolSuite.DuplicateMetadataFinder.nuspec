@@ -8,7 +8,7 @@
          4) DLL goes under a "Plugins" folder
          5) iconUrl is required and must be your own icon -->
     <id>XrmToolSuite.DuplicateMetadataFinder</id>
-    <version>1.2026.7.5</version>
+    <version>1.2026.7.6</version>
     <title>Duplicate Metadata Finder for XrmToolBox</title>
     <authors>Kanchan Kora</authors>
     <owners>Kanchan Kora</owners>
@@ -19,7 +19,7 @@
     <license type="expression">MIT</license>
     <description>Groups duplicate and near-duplicate Dataverse metadata (columns, option sets, tables, forms, views, business rules, web resources, plugin steps, relationships) with a 0-100 similarity score per pair and a recommended primary to keep. Read-only; recommends only, never merges or deletes. Excel/PDF/JSON/HTML export.</description>
     <summary>Groups duplicate and near-duplicate Dataverse metadata with similarity scores and a recommended primary to keep. Read-only. Excel/PDF/JSON/HTML export.</summary>
-    <releaseNotes>1.2026.7.5: Export tools now ship their Excel/PDF/Word dependency chain in a per-tool Plugins subfolder (named after each tool's assembly) instead of the shared Plugins root, isolating each tool's dependency versions. No functional change to any tool.</releaseNotes>
+    <releaseNotes>1.2026.7.6: Help > Documentation now opens each tool's own README (instead of the suite readme).</releaseNotes>
     <tags>XrmToolBox Dataverse Dynamics365 PowerPlatform</tags>
     <dependencies>
       <dependency id="XrmToolBox" version="1.2025.10.74" />

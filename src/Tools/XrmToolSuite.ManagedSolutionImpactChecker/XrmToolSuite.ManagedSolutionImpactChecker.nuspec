@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <package>
   <metadata>
     <!-- Tool Library rules (xrmtoolbox.com/documentation/for-developers):
@@ -8,7 +8,7 @@
          4) DLL goes under a "Plugins" folder
          5) iconUrl is required and must be your own icon -->
     <id>XrmToolSuite.ManagedSolutionImpactChecker</id>
-    <version>1.2026.7.5</version>
+    <version>1.2026.7.6</version>
     <title>Managed Solution Impact Checker for XrmToolBox</title>
     <authors>Kanchan Kora</authors>
     <owners>Kanchan Kora</owners>
@@ -19,7 +19,7 @@
     <license type="expression">MIT</license>
     <description>Read-only impact analysis for importing/upgrading/patching/deleting a managed solution. Analyzes solution layering (unmanaged customizations sitting above managed layers), overwrite and deletion risk with explicit Upgrade-vs-Update/Patch semantics (an Upgrade deletes components missing from the incoming solution — and their data — while Update/Patch do not), missing dependencies, publisher prefix mismatches, and restrictive managed properties. Produces a banded impact score, a per-path risk breakdown, a pre-upgrade checklist, rollback guidance, and a CAB-ready report (Excel/PDF/JSON/HTML). Never performs the import or upgrade.</description>
     <summary>Read-only managed-solution layering / upgrade / patch / delete impact analysis with an impact score, pre-upgrade checklist, rollback guidance, and CAB-ready Excel/PDF/JSON/HTML report.</summary>
-    <releaseNotes>1.2026.7.5: Export tools now ship their Excel/PDF/Word dependency chain in a per-tool Plugins subfolder (named after each tool's assembly) instead of the shared Plugins root, isolating each tool's dependency versions. No functional change to any tool.</releaseNotes>
+    <releaseNotes>1.2026.7.6: Help > Documentation now opens each tool's own README (instead of the suite readme).</releaseNotes>
     <tags>XrmToolBox Dataverse Dynamics365 PowerPlatform ALM Solutions ManagedSolution Upgrade</tags>
     <dependencies>
       <dependency id="XrmToolBox" version="1.2025.10.74" />
