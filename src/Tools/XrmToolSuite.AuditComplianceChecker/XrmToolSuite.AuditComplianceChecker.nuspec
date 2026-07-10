@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <package>
   <metadata>
     <!-- Tool Library rules (xrmtoolbox.com/documentation/for-developers):
@@ -8,7 +8,7 @@
          4) DLL goes under a "Plugins" folder
          5) iconUrl is required and must be your own icon -->
     <id>XrmToolSuite.AuditComplianceChecker</id>
-    <version>1.2026.7.5</version>
+    <version>1.2026.7.6</version>
     <title>Audit Compliance Checker for XrmToolBox</title>
     <authors>Kanchan Kora</authors>
     <owners>Kanchan Kora</owners>
@@ -19,7 +19,7 @@
     <license type="expression">MIT</license>
     <description>Checks org/table/column audit settings and audit activity, flags coverage gaps (sensitive tables/columns without auditing) and risky changes (deletes, security-role changes, after-hours edits), and scores audit compliance readiness (0-100). Read-only; exports to Excel, PDF, JSON, HTML, and CSV with changed values masked.</description>
     <summary>Prove audit coverage: score org/table/column audit settings + activity, flag gaps and risky changes.</summary>
-    <releaseNotes>1.2026.7.5: Export tools now ship their Excel/PDF/Word dependency chain in a per-tool Plugins subfolder (named after each tool's assembly) instead of the shared Plugins root, isolating each tool's dependency versions. No functional change to any tool.</releaseNotes>
+    <releaseNotes>1.2026.7.6: Help > Documentation now opens each tool's own README (instead of the suite readme).</releaseNotes>
     <tags>XrmToolBox Dataverse Dynamics365 PowerPlatform Security Audit Compliance Governance</tags>
     <dependencies>
       <dependency id="XrmToolBox" version="1.2025.10.74" />
