@@ -28,7 +28,7 @@ namespace XrmToolSuite.FetchXmlPerformanceAnalyzer
         // Report a bug / help links surfaced in XrmToolBox.
         public string RepositoryName => "XrmToolSuite";
         public string UserName => "kkora";
-        public string HelpUrl => "https://github.com/kkora/XrmToolSuite";
+        public string HelpUrl => ToolDocsUrl; // per-tool README (BaseToolControl.ToolDocsUrl)
 
         private const string SampleFetchXml =
             "<fetch>\r\n  <entity name=\"account\">\r\n    <attribute name=\"name\" />\r\n    <attribute name=\"createdon\" />\r\n  </entity>\r\n</fetch>";

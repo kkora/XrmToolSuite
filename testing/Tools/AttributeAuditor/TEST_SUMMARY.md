@@ -7,10 +7,11 @@
     TC-ADMIN10-CSV-12..13). Covers the usage scanners (form / fetch / layout / whole-token), retirement-candidate
     classification, the shared-`ReportModel` projection, and the CSV export. Traces to US-ADMIN10-2/3/4.
 - **Collector against a fake connection** — `dotnet test testing/CollectorTests/CollectorTests.csproj`
-  - **Result:** 8 cases passed (TC-ADMIN10-COL-01..08). Drives `AttributeUsageCollector` over a fake
+  - **Result:** 10 cases passed (TC-ADMIN10-COL-01..10). Drives `AttributeUsageCollector` over a fake
     `IOrganizationService` (metadata seeded via `MetaBuilder`): forms, views (fetch + layout), processes,
-    field security, the managed/system guards, and the custom-only scope filter.
-- **Total automated: 25 passed, 0 failed, 0 skipped.** The tool also builds `Release` (net48) with zero warnings.
+    field security, the managed/system guards, the custom-only scope filter, and the table/column
+    prefix-exclusion filters.
+- **Total automated: 27 passed, 0 failed, 0 skipped.** The tool also builds `Release` (net48) with zero warnings.
 
 ## Manual run
 
@@ -21,15 +22,17 @@ exercised in a Windows + XrmToolBox session; capture a screenshot per case into 
 | Group | Cases | Executed | Pass | Fail | Pending |
 |---|---|---|---|---|---|
 | Automated (scanners/classification/report/CSV) | 13 | 13 | 13 | 0 | 0 |
-| Automated (collector, headless) | 8 | 8 | 8 | 0 | 0 |
-| Manual (UI/run/filter/export/settings) | 7 | 0 | 0 | 0 | 7 |
+| Automated (collector, headless) | 10 | 10 | 10 | 0 | 0 |
+| Manual (UI/run/filter/export/settings) | 11 | 0 | 0 | 0 | 11 |
 
 ## Verdict
 
 The v1 audit engine — usage detection (forms, views, processes, field security), retirement-candidate
-classification, report projection, and CSV export — is **verified and green** (25 automated cases) and the
-tool builds `Release` with zero warnings. Manual GUI/Dataverse cases (TC-ADMIN10-M-01..07) are **pending a live
-org** and must be run before release — no manual case is claimed as passed here. Deferred features
+classification, report projection, CSV export, and the table/column prefix-exclusion filters — is **verified
+and green** (27 automated cases) and the tool builds `Release` with zero warnings. Manual GUI/Dataverse cases
+(TC-ADMIN10-M-01..11 — including the sortable grid, exclusions dialog, open-after-export prompt, and the
+per-tool Documentation link) are **pending a live org** and must be run before release — no manual case is
+claimed as passed here. Deferred features
 (chart/dashboard & data-population signals, table/solution scoping, JSON/Excel export, guarded cleanup)
 remain `[Planned]` and are out of this pass.
 

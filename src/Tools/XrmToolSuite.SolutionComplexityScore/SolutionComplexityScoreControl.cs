@@ -30,7 +30,7 @@ namespace XrmToolSuite.SolutionComplexityScore
     {
         public string RepositoryName => "XrmToolSuite";
         public string UserName => "kkora";
-        public string HelpUrl => SuiteDocsUrl;
+        public string HelpUrl => ToolDocsUrl; // per-tool README (BaseToolControl.ToolDocsUrl)
 
         private ComplexitySettings _settings = new ComplexitySettings();
         private ReportModel _lastModel;

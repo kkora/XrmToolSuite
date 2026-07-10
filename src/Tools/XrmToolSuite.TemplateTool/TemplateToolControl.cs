@@ -18,7 +18,7 @@ namespace XrmToolSuite.TemplateTool
         // Update these for your repo — powers "Report a bug" / help links in XrmToolBox
         public string RepositoryName => "XrmToolSuite";
         public string UserName => "your-github-username";
-        public string HelpUrl => "https://github.com/your-github-username/XrmToolSuite";
+        public string HelpUrl => ToolDocsUrl; // per-tool README (BaseToolControl.ToolDocsUrl)
 
         public TemplateToolControl()
         {

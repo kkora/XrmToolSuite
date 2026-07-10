@@ -31,7 +31,7 @@ namespace XrmToolSuite.TeamPermissionExplorer
         // Powers "Report a bug" / help links in XrmToolBox
         public string RepositoryName => "XrmToolSuite";
         public string UserName => "kkora";
-        public string HelpUrl => "https://github.com/kkora/XrmToolSuite";
+        public string HelpUrl => ToolDocsUrl; // per-tool README (BaseToolControl.ToolDocsUrl)
 
         // (display label, TeamType filter value or null for "All")
         private static readonly (string Label, string Value)[] TypeFilters =

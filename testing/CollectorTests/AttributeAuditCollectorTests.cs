@@ -36,6 +36,33 @@ namespace XrmToolSuite.CollectorTests
         private static Entity Workflow(string entity, string name, string xaml) =>
             new Entity("workflow", System.Guid.NewGuid()) { ["primaryentity"] = entity, ["name"] = name, ["xaml"] = xaml };
 
+        // TC-ADMIN10-COL-12: auto-generated companion attributes (a picklist/lookup's "…name"/"…type" shadow,
+        // marked by AttributeOf) are skipped — only the real attribute is audited.
+        [Fact]
+        public void CompanionShadowAttributes_AreSkipped()
+        {
+            var fake = WithEntity(
+                MetaBuilder.Attribute("new_choice"),                                   // real picklist/lookup column
+                MetaBuilder.Attribute("new_choicename", attributeOf: "new_choice"),    // virtual label shadow
+                MetaBuilder.Attribute("new_lookuptype", attributeOf: "new_lookup"));   // lookup EntityName shadow
+            var col = Assert.Single(Run(fake).Columns);
+            Assert.Equal("new_choice", col.LogicalName);
+        }
+
+        // TC-ADMIN10-COL-11: environment table counts (total + non-custom) are reported for the status bar,
+        // independent of the custom-only scope.
+        [Fact]
+        public void TableCounts_TotalAndNonCustom()
+        {
+            var fake = new FakeOrganizationService().SeedAllEntities(
+                MetaBuilder.Entity("new_widget", isCustom: true, attributes: new[] { MetaBuilder.Attribute("new_a") }),
+                MetaBuilder.Entity("account", isCustom: false, attributes: new[] { MetaBuilder.Attribute("new_b") }));
+            var r = Run(fake, customOnly: false);
+            Assert.Equal(2, r.TotalTables);
+            Assert.Equal(1, r.NonCustomTables);
+            Assert.Equal(2, r.AuditedTables);
+        }
+
         // TC-ADMIN10-COL-01: a custom column with no usage evidence is a retirement candidate.
         [Fact]
         public void UnusedCustomColumn_IsCandidate()
@@ -102,6 +129,26 @@ namespace XrmToolSuite.CollectorTests
             var col = Assert.Single(Run(WithEntity(MetaBuilder.Attribute("new_managed", isManaged: true))).Columns);
             Assert.True(col.IsManaged);
             Assert.False(col.IsRetirementCandidate);
+        }
+
+        // TC-ADMIN10-COL-09: a column whose logical name starts with an excluded prefix is dropped from the audit.
+        [Fact]
+        public void ExcludedColumnPrefix_IsSkipped()
+        {
+            var fake = WithEntity(MetaBuilder.Attribute("new_keep"), MetaBuilder.Attribute("sys_drop"));
+            var r = AttributeUsageCollector.Collect(
+                new AttributeAuditContext(fake, "DEV"), true, null, new[] { "sys_" }, _ => { });
+            Assert.Equal("new_keep", Assert.Single(r.Columns).LogicalName);
+        }
+
+        // TC-ADMIN10-COL-10: a table whose logical name starts with an excluded prefix is dropped entirely.
+        [Fact]
+        public void ExcludedTablePrefix_IsSkipped()
+        {
+            var fake = WithEntity(MetaBuilder.Attribute("new_col"));
+            var r = AttributeUsageCollector.Collect(
+                new AttributeAuditContext(fake, "DEV"), true, new[] { "new_wid" }, null, _ => { });
+            Assert.Empty(r.Columns);
         }
 
         // TC-ADMIN10-COL-08: a form referencing a NON-audited (system) column leaves the custom candidate untouched;

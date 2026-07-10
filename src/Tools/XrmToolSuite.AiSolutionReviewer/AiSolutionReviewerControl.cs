@@ -31,7 +31,7 @@ namespace XrmToolSuite.AiSolutionReviewer
     {
         public string RepositoryName => "XrmToolSuite";
         public string UserName => "kkora";
-        public string HelpUrl => SuiteDocsUrl;
+        public string HelpUrl => ToolDocsUrl; // per-tool README (BaseToolControl.ToolDocsUrl)
 
         private readonly List<IAnalyzer<ReviewContext>> _collectors = new List<IAnalyzer<ReviewContext>>
         {

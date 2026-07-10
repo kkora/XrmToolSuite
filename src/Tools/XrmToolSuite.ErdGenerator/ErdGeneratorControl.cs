@@ -25,7 +25,7 @@ namespace XrmToolSuite.ErdGenerator
     {
         public string RepositoryName => "XrmToolSuite";
         public string UserName => "kkora";
-        public string HelpUrl => "https://github.com/kkora/XrmToolSuite";
+        public string HelpUrl => ToolDocsUrl; // per-tool README (BaseToolControl.ToolDocsUrl)
 
         private const string ScopeAll = "All tables";
         private const string ScopeSolution = "By solution";

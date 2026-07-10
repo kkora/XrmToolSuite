@@ -19,6 +19,8 @@ namespace XrmToolSuite.AttributeAuditor
             this.tsbCustomOnly = new System.Windows.Forms.ToolStripButton();
             this.tsbCandidatesOnly = new System.Windows.Forms.ToolStripButton();
             this.tssSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+            this.tsbSettings = new System.Windows.Forms.ToolStripButton();
+            this.tssSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.tsbExportCsv = new System.Windows.Forms.ToolStripButton();
             this.tsbExportHtml = new System.Windows.Forms.ToolStripButton();
             this.lvResults = new System.Windows.Forms.ListView();
@@ -40,6 +42,8 @@ namespace XrmToolSuite.AttributeAuditor
                 this.tsbCustomOnly,
                 this.tsbCandidatesOnly,
                 this.tssSeparator1,
+                this.tsbSettings,
+                this.tssSeparator2,
                 this.tsbExportCsv,
                 this.tsbExportHtml});
             this.toolStrip.Location = new System.Drawing.Point(0, 0);
@@ -77,6 +81,18 @@ namespace XrmToolSuite.AttributeAuditor
             //
             this.tssSeparator1.Name = "tssSeparator1";
             //
+            // tsbSettings
+            //
+            this.tsbSettings.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.tsbSettings.Name = "tsbSettings";
+            this.tsbSettings.Text = "Exclusions…";
+            this.tsbSettings.ToolTipText = "Exclude tables/columns whose logical name starts with the given prefixes";
+            this.tsbSettings.Click += new System.EventHandler(this.tsbSettings_Click);
+            //
+            // tssSeparator2
+            //
+            this.tssSeparator2.Name = "tssSeparator2";
+            //
             // tsbExportCsv
             //
             this.tsbExportCsv.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
@@ -112,6 +128,9 @@ namespace XrmToolSuite.AttributeAuditor
             this.lvResults.TabIndex = 1;
             this.lvResults.UseCompatibleStateImageBehavior = false;
             this.lvResults.View = System.Windows.Forms.View.Details;
+            this.lvResults.VirtualMode = true; // render only visible rows — keeps large audits responsive
+            this.lvResults.ColumnClick += new System.Windows.Forms.ColumnClickEventHandler(this.lvResults_ColumnClick);
+            this.lvResults.RetrieveVirtualItem += new System.Windows.Forms.RetrieveVirtualItemEventHandler(this.lvResults_RetrieveVirtualItem);
             //
             // columns
             //
@@ -152,6 +171,8 @@ namespace XrmToolSuite.AttributeAuditor
         private System.Windows.Forms.ToolStripButton tsbCustomOnly;
         private System.Windows.Forms.ToolStripButton tsbCandidatesOnly;
         private System.Windows.Forms.ToolStripSeparator tssSeparator1;
+        private System.Windows.Forms.ToolStripButton tsbSettings;
+        private System.Windows.Forms.ToolStripSeparator tssSeparator2;
         private System.Windows.Forms.ToolStripButton tsbExportCsv;
         private System.Windows.Forms.ToolStripButton tsbExportHtml;
         private System.Windows.Forms.ListView lvResults;

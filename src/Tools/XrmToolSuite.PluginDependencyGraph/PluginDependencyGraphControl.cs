@@ -29,7 +29,7 @@ namespace XrmToolSuite.PluginDependencyGraph
 
         public string RepositoryName => "XrmToolSuite";
         public string UserName => "kkora";
-        public string HelpUrl => "https://github.com/kkora/XrmToolSuite";
+        public string HelpUrl => ToolDocsUrl; // per-tool README (BaseToolControl.ToolDocsUrl)
 
         private readonly PluginCollector _collector = new PluginCollector();
         private ToolSettings _settings = new ToolSettings();

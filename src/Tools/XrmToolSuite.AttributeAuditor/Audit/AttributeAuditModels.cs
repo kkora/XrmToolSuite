@@ -66,6 +66,16 @@ namespace XrmToolSuite.AttributeAuditor.Audit
         public DateTime AuditedOnUtc { get; set; } = DateTime.UtcNow;
         public List<ColumnAudit> Columns { get; } = new List<ColumnAudit>();
 
+        /// <summary>Total tables in the environment (excluding N:N intersect tables).</summary>
+        public int TotalTables { get; set; }
+
+        /// <summary>Tables that are not custom (system tables) — a subset of <see cref="TotalTables"/>.</summary>
+        public int NonCustomTables { get; set; }
+
+        /// <summary>Distinct tables represented in the audited columns.</summary>
+        public int AuditedTables =>
+            Columns.Select(c => c.Table).Distinct(StringComparer.OrdinalIgnoreCase).Count();
+
         public int TotalColumns => Columns.Count;
         public int UsedColumns => Columns.Count(c => c.IsUsed);
         public int CandidateColumns => Columns.Count(c => c.IsRetirementCandidate);
