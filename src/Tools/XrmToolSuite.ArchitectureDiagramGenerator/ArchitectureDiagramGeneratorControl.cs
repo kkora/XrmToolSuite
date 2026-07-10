@@ -25,7 +25,7 @@ namespace XrmToolSuite.ArchitectureDiagramGenerator
     {
         public string RepositoryName => "XrmToolSuite";
         public string UserName => "kkora";
-        public string HelpUrl => "https://github.com/kkora/XrmToolSuite";
+        public string HelpUrl => ToolDocsUrl; // per-tool README (BaseToolControl.ToolDocsUrl)
 
         private const string PreviewMermaid = "Mermaid";
         private const string PreviewPlantUml = "PlantUML";

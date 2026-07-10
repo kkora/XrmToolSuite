@@ -26,7 +26,7 @@ namespace XrmToolSuite.DuplicateMetadataFinder
         // Suite GitHub identity — powers the Help dialog's "Report a bug" / documentation links.
         public string RepositoryName => "XrmToolSuite";
         public string UserName => "kkora";
-        public string HelpUrl => "https://github.com/kkora/XrmToolSuite";
+        public string HelpUrl => ToolDocsUrl; // per-tool README (BaseToolControl.ToolDocsUrl)
 
         // One checkable menu item per component kind (all on by default).
         private readonly Dictionary<ComponentKind, ToolStripMenuItem> _kindItems =

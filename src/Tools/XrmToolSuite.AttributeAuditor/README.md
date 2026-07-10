@@ -19,8 +19,20 @@ signal is a retirement candidate.
 
 - **Scope:** a "Custom tables only" toggle targets the audit; intersect (N:N) tables are always excluded.
 - **Results grid:** each column with its table, logical/display name, type, managed flag, used flag and a
-  usage summary of which signals fired. A "Candidates only" toggle focuses the grid on unused custom
-  columns; rows are ordered by table then logical name, with candidates highlighted.
+  usage summary of which signals fired. Candidates are highlighted, and:
+  - **Sortable** — click any column header to sort; click again to reverse.
+  - **Responsive on large environments** — the grid is virtual (renders only visible rows), so a full audit
+    of thousands of columns loads, scrolls, sorts and re-filters without freezing.
+  - A "Candidates only" toggle focuses the grid on unused custom columns.
+- **Exclusions:** an "Exclusions…" dialog excludes whole **tables** whose logical name starts with any of a
+  comma-separated prefix list, and any **column** whose logical name starts with any of a second list — to
+  drop ISV/managed noise (e.g. `adx_`, `msdyn_`). Exclusions apply as a **live view filter** (they re-filter
+  the loaded grid instantly, no re-run) and are honoured by the exports; both lists persist in settings.
+- **Companion columns hidden:** auto-generated shadow attributes are never listed — a picklist/boolean/status
+  column's virtual `…name` label, and a lookup's `…name` (primary name) and `…type` (EntityName). These carry
+  `AttributeOf` and are not independently retirable.
+- **Status bar:** shows the active filters and counts, e.g.
+  `Filters: custom tables only, exclusions • Tables: 512 total, 486 non-custom, 12 excluded, 34 shown • Columns: 1204 shown (89 used, 1115 candidate(s))`.
 - **Classification:** a column is a retirement candidate only when it is custom, unmanaged and unused —
   managed and system columns are marked and never flagged.
 
@@ -30,11 +42,15 @@ signal is a retirement candidate.
   formula-injection neutralisation
 - **HTML dashboard** — gauge, metric strip and candidate findings, via the shared report projection
 
+Both exports honour the current exclusions, and after a successful export you're offered to open the file in
+its default application.
+
 ## Help & Support
 
 A right-aligned **Help** button on the toolbar opens a Help & Support dialog (Documentation, Report an
-issue, and a support link, each opened in the browser). The tool implements `IHelpPlugin` and
-`IGitHubPlugin` pointing at repository [`kkora/XrmToolSuite`](https://github.com/kkora/XrmToolSuite).
+issue, and a support link, each opened in the browser). The **Documentation** link opens this tool's own
+guide (this README). The tool implements `IHelpPlugin` and `IGitHubPlugin` pointing at repository
+[`kkora/XrmToolSuite`](https://github.com/kkora/XrmToolSuite).
 
 ## Build & install
 
@@ -54,10 +70,12 @@ output DLL into `%AppData%\MscrmTools\XrmToolBox\Plugins` (flat in the Plugins r
 
 1. Connect to your Dataverse environment.
 2. Open **Attribute Auditor**; optionally enable "Custom tables only".
-3. Run the audit — it runs on a background worker.
-4. Review the grid; toggle "Candidates only" to focus on unused custom columns (highlighted), and read
-   each column's usage summary to see which signals fired.
-5. Export the full inventory to CSV, or produce the HTML dashboard.
+3. Optionally open **Exclusions…** to drop noisy table/column prefixes (e.g. `adx_`, `msdyn_`).
+4. Run the audit — it runs on a background worker.
+5. Review the grid; sort by any column header, toggle "Candidates only" to focus on unused custom columns
+   (highlighted), and read each column's usage summary to see which signals fired. The status bar shows the
+   active filters and table/column counts.
+6. Export the full inventory to CSV, or produce the HTML dashboard — then optionally open the file.
 
 ## Notes & limitations
 

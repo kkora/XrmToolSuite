@@ -28,7 +28,7 @@ namespace XrmToolSuite.PortalHealthAnalyzer
         // Report a bug / help links surfaced in XrmToolBox.
         public string RepositoryName => "XrmToolSuite";
         public string UserName => "kkora";
-        public string HelpUrl => "https://github.com/kkora/XrmToolSuite";
+        public string HelpUrl => ToolDocsUrl; // per-tool README (BaseToolControl.ToolDocsUrl)
 
         public PortalHealthAnalyzerControl()
         {

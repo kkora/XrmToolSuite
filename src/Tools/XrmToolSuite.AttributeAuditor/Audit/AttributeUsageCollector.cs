@@ -16,13 +16,32 @@ namespace XrmToolSuite.AttributeAuditor.Audit
     public static class AttributeUsageCollector
     {
         public static AuditResult Collect(AttributeAuditContext ctx, bool customEntitiesOnly, Action<string> progress)
+            => Collect(ctx, customEntitiesOnly, null, null, progress);
+
+        /// <summary>
+        /// Audits custom columns, optionally excluding whole tables whose logical name starts with any of
+        /// <paramref name="excludeTablePrefixes"/> and any column whose logical name starts with any of
+        /// <paramref name="excludeColumnPrefixes"/> (both case-insensitive; empty/blank entries ignored).
+        /// </summary>
+        public static AuditResult Collect(
+            AttributeAuditContext ctx, bool customEntitiesOnly,
+            IEnumerable<string> excludeTablePrefixes, IEnumerable<string> excludeColumnPrefixes,
+            Action<string> progress)
         {
             var result = new AuditResult { EnvironmentName = ctx.EnvironmentName };
+            var tablePrefixes = CleanPrefixes(excludeTablePrefixes);
+            var columnPrefixes = CleanPrefixes(excludeColumnPrefixes);
 
             progress?.Invoke("Loading tables and columns…");
-            var entities = ctx.Entities()
+            var allTables = ctx.Entities()
                 .Where(e => e.IsIntersect != true)
+                .ToList();
+            result.TotalTables = allTables.Count;
+            result.NonCustomTables = allTables.Count(e => e.IsCustomEntity != true);
+
+            var entities = allTables
                 .Where(e => !customEntitiesOnly || e.IsCustomEntity == true)
+                .Where(e => !StartsWithAny(e.LogicalName, tablePrefixes))
                 .ToList();
 
             // Retrieve the reference sources once and index by their owning entity's logical name.
@@ -35,6 +54,11 @@ namespace XrmToolSuite.AttributeAuditor.Audit
             {
                 var custom = (e.Attributes ?? Array.Empty<AttributeMetadata>())
                     .Where(a => a.IsCustomAttribute == true && !string.IsNullOrEmpty(a.LogicalName))
+                    // Skip auto-generated companion attributes: the virtual "…name" label of a picklist/boolean/
+                    // status column, and a lookup's "…name" (primary name) / "…type" (EntityName) shadows. These
+                    // all carry AttributeOf (the parent they derive from) and are never independently retirable.
+                    .Where(a => string.IsNullOrEmpty(a.AttributeOf))
+                    .Where(a => !StartsWithAny(a.LogicalName, columnPrefixes))
                     .ToList();
                 if (custom.Count == 0) continue;
 
@@ -98,6 +122,20 @@ namespace XrmToolSuite.AttributeAuditor.Audit
                 foreach (var ca in byName.Values)
                     if (UsageScanners.ReferencesToken(body, ca.LogicalName)) ca.Add(UsageSignal.Process, $"Process: {name}");
             }
+        }
+
+        private static List<string> CleanPrefixes(IEnumerable<string> prefixes) =>
+            (prefixes ?? Enumerable.Empty<string>())
+                .Where(p => !string.IsNullOrWhiteSpace(p))
+                .Select(p => p.Trim())
+                .ToList();
+
+        private static bool StartsWithAny(string value, List<string> prefixes)
+        {
+            if (string.IsNullOrEmpty(value) || prefixes.Count == 0) return false;
+            foreach (var p in prefixes)
+                if (value.StartsWith(p, StringComparison.OrdinalIgnoreCase)) return true;
+            return false;
         }
 
         private static Dictionary<string, List<Entity>> GroupBy(List<Entity> rows, string keyAttr)

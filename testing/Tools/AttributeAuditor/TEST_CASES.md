@@ -36,6 +36,10 @@ Executed via `dotnet test testing/CollectorTests/CollectorTests.csproj`. Source:
 | TC-ADMIN10-COL-06 | Field secured | attribute IsSecured | used (FieldSecurity), no query | Automated | Pass |
 | TC-ADMIN10-COL-07 | Managed column | managed custom column, unused | never a candidate | Automated | Pass |
 | TC-ADMIN10-COL-08 | System-column ref + scope | form binds a system column; custom col on a system table | candidate untouched; excluded under custom-only, included otherwise | Automated | Pass |
+| TC-ADMIN10-COL-09 | Column-prefix exclusion | two columns, exclude prefix `sys_` | only the non-matching column audited | Automated | Pass |
+| TC-ADMIN10-COL-10 | Table-prefix exclusion | table, exclude prefix matching its name | no columns audited (table dropped) | Automated | Pass |
+| TC-ADMIN10-COL-11 | Environment table counts | 1 custom + 1 system table | TotalTables 2, NonCustomTables 1, AuditedTables 2 | Automated | Pass |
+| TC-ADMIN10-COL-12 | Companion shadow attrs skipped | real column + `…name`/`…type` shadows (AttributeOf set) | only the real column audited | Automated | Pass |
 
 ## Manual — UI, run, filter, export (US-ADMIN10-0/1/3/4)
 
@@ -49,7 +53,13 @@ Executed in XrmToolBox against a live org; screenshot per case into `screenshots
 | TC-ADMIN10-M-04 | Candidates-only filter | Toggle "Candidates only" | Grid shows only unused custom columns; candidates shown in red | Manual | Pending |
 | TC-ADMIN10-M-05 | CSV export | Export CSV, open in Excel | All audited columns with Used/Usage columns; UTF-8, commas quoted | Manual | Pending |
 | TC-ADMIN10-M-06 | HTML report | Export report (HTML), open in browser | Dashboard: gauge, metric strip (audited/used/candidates), candidate findings; light/dark aware | Manual | Pending |
-| TC-ADMIN10-M-07 | Settings persist | Change toggles, close, reopen | "Custom tables only" / "Candidates only" restored from settings | Manual | Pending |
+| TC-ADMIN10-M-07 | Settings persist | Change toggles, close, reopen | "Custom tables only" / "Candidates only" / exclusion prefixes restored from settings | Manual | Pending |
+| TC-ADMIN10-M-08 | Sortable grid | Click each column header, click again | Rows sort by that column ascending, then descending on second click (virtual mode) | Manual | Pending |
+| TC-ADMIN10-M-09 | Exclusion dialog (live) | Click "Exclusions…", enter table/column prefixes, OK | Matching tables/columns leave the grid immediately (no re-run) and are absent from exports | Manual | Pending |
+| TC-ADMIN10-M-12 | Large audit responsive | Run with "Custom tables only" off (thousands of columns) | Grid loads without "Not responding"; scrolling/sorting/exclusions stay responsive (virtual mode) | Manual | Pending |
+| TC-ADMIN10-M-13 | Status-bar counts | Run audit; then apply an exclusion | Status shows "Tables: N total, M non-custom, X excluded, S shown • Columns: …"; counts update on exclusion | Manual | Pending |
+| TC-ADMIN10-M-10 | Open after export | Export CSV/HTML, answer Yes on the prompt | Exported file opens in its default app | Manual | Pending |
+| TC-ADMIN10-M-11 | Help → Documentation | Click Help, click Documentation | Opens this tool's guide (ADMIN10.AttributeAuditor), not the suite readme | Manual | Pending |
 
 > Deferred (still planned, no case executed): chart/dashboard signals & data population (US-ADMIN10-2.4/2.5),
 > table multi-select / solution scoping (US-ADMIN10-1.1/1.2), JSON/Excel export (US-ADMIN10-4), guarded cleanup (US-ADMIN10-5).

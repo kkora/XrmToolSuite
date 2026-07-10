@@ -23,7 +23,7 @@ namespace XrmToolSuite.ApiDocumentationBuilder
     {
         public string RepositoryName => "XrmToolSuite";
         public string UserName => "kkora";
-        public string HelpUrl => "https://github.com/kkora/XrmToolSuite";
+        public string HelpUrl => ToolDocsUrl; // per-tool README (BaseToolControl.ToolDocsUrl)
 
         private const string PreviewMarkdown = "Markdown";
         private const string PreviewHtml = "HTML source";

@@ -44,7 +44,7 @@ namespace XrmToolSuite.EnvironmentComparisonSuite
 
         public string RepositoryName => "XrmToolSuite";
         public string UserName => "kkora";
-        public string HelpUrl => SuiteDocsUrl;
+        public string HelpUrl => ToolDocsUrl; // per-tool README (BaseToolControl.ToolDocsUrl)
 
         public EnvironmentComparisonSuiteControl()
         {

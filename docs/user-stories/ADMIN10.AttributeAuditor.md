@@ -39,6 +39,11 @@ delete plan/solution) remains planned.
   the scaffold placeholders.
   - **AC:** `UserName`/`RepositoryName`/`HelpUrl` point at `kkora/XrmToolSuite`; no `your-github-username`
     and no "Load sample" command remain. **Automated** — MEF/name load asserted by `testing/UiSmokeTests`.
+- **US-ADMIN10-0.3** `[Implemented*]` The Help dialog's **Documentation** link opens this tool's own guide
+  (not the suite readme).
+  - **AC:** `CreateHelpButton("Attribute Auditor", ToolDocsUrl)` passes a per-tool docs URL through the shared
+    `ShowHelpDialog`, which uses it for the Documentation link; `HelpUrl` points at the same page. *(Manual —
+    GUI, `TC-ADMIN10-M-11`.)*
 
 ## FEAT-ADMIN10-1 — Select audit scope `[Implemented*]`
 - **US-ADMIN10-1.1** `[Implemented*]` A "Custom tables only" toggle targets the audit; intersect (N:N) tables
@@ -48,6 +53,22 @@ delete plan/solution) remains planned.
     **Automated** for the scope filter (`TC-ADMIN10-COL-08`); the toggle/persistence is *manual* (GUI).
 - **US-ADMIN10-1.2** `[Planned]` Multi-table select and solution scoping, and choosing which usage signals
   count, are not yet built — the audit runs across the whole environment (optionally custom-only).
+- **US-ADMIN10-1.3** `[Implemented]` An "Exclusions…" dialog lets me exclude whole **tables** whose logical
+  name starts with any of a comma-separated list of prefixes, and any **column** whose logical name starts
+  with any of a second comma-separated list — to drop noise (e.g. ISV `adx_`/`msdyn_` prefixes) from the audit.
+  Exclusions apply as a **live view filter**: clicking OK re-filters the loaded grid (and exports) immediately,
+  no re-run required.
+  - **AC:** The control filters the loaded `AuditResult` by the prefixes in `PopulateGrid`/`ApplyExclusions`
+    (case-insensitive `StartsWith`, blank entries ignored); both lists round-trip via
+    `AuditSettings.ExcludeTablePrefixes`/`ExcludeColumnPrefixes`. The `AttributeUsageCollector.Collect(...,
+    excludeTablePrefixes, excludeColumnPrefixes, ...)` overload applies the same filter server-side and is
+    **Automated** (`TC-ADMIN10-COL-09/10`); the dialog + live re-filter is *manual* (`TC-ADMIN10-M-09`).
+- **US-ADMIN10-1.4** `[Implemented*]` The status bar reports table-level scope: total tables, non-custom
+  (system) tables, excluded tables, and tables currently shown — plus the shown column counts.
+  - **AC:** `AttributeUsageCollector` records `AuditResult.TotalTables`/`NonCustomTables` (env totals, minus
+    N:N intersect tables); `UpdateStatusCounts` renders "Tables: … total, … non-custom, … excluded, … shown
+    • Columns: …". **Automated** for the counts (`TC-ADMIN10-COL-11`); the status render is *manual*
+    (`TC-ADMIN10-M-13`).
 
 ## FEAT-ADMIN10-2 — Detect column usage signals `[Implemented]`
 Each signal marks a column "used" with human-readable evidence; a column with no signals is a candidate.
@@ -69,6 +90,12 @@ Each signal marks a column "used" with human-readable evidence; a column with no
     membership beyond `IsSecured` remain `[Planned]`.)*
 - **US-ADMIN10-2.5** `[Planned]` An optional **data-population** check (fraction of non-null values via a
   sampled/aggregate query) is not yet built.
+- **US-ADMIN10-2.6** `[Implemented]` Auto-generated companion attributes are excluded so each real column
+  appears once: a picklist/boolean/status column's virtual `…name` label, and a lookup's `…name` (primary
+  name) and `…type` (EntityName) shadows.
+  - **AC:** The collector skips any attribute with a non-empty `AttributeOf` (the parent it derives from),
+    which marks exactly these system-generated shadows — they are never independently retirable. **Automated**
+    — `TC-ADMIN10-COL-12`.
 
 ## FEAT-ADMIN10-3 — Results & classification `[Implemented]`
 - **US-ADMIN10-3.1** `[Implemented]` A grid lists each column with table, logical/display name, type,
@@ -83,6 +110,16 @@ Each signal marks a column "used" with human-readable evidence; a column with no
 - **US-ADMIN10-3.3** `[Implemented]` Managed and system columns are marked and never flagged as candidates.
   - **AC:** `IsRetirementCandidate => IsCustom && !IsManaged && !IsUsed`; the grid shows the managed flag.
     **Automated** — `TC-ADMIN10-CLASS-07`, `TC-ADMIN10-COL-07`.
+- **US-ADMIN10-3.4** `[Implemented*]` The results grid is sortable — clicking a column header sorts by that
+  column, clicking again reverses the direction.
+  - **AC:** `ColumnClick` toggles `_sortColumn`/`_sortAscending` and re-sorts the virtual-mode backing list
+    (`SortView`) with a table+column tie-break. *(Manual — GUI, `TC-ADMIN10-M-08`.)*
+- **US-ADMIN10-3.5** `[Implemented*]` The grid stays responsive on large environments (thousands of custom
+  columns, e.g. "Custom tables only" off) instead of freezing / "Not responding".
+  - **AC:** `lvResults` runs in **virtual mode** (`VirtualMode = true`, `RetrieveVirtualItem`); `PopulateGrid`
+    filters/sorts a backing `List<ColumnAudit>` and sets `VirtualListSize` rather than creating a
+    `ListViewItem` per row, so filtering/sorting/exclusions are O(visible-rows). *(Manual — GUI,
+    `TC-ADMIN10-M-12`.)*
 
 ## FEAT-ADMIN10-4 — Export `[Implemented*]`
 - **US-ADMIN10-4.1** `[Implemented]` Export the full audit grid to **CSV** (every audited column, used and
@@ -95,6 +132,10 @@ Each signal marks a column "used" with human-readable evidence; a column with no
     metrics/verdict; `HtmlDashboardBuilder.Export` writes the page. **Automated** for the projection
     (`TC-ADMIN10-RPT-10/11`); the rendered HTML is *manual* (`TC-ADMIN10-M-06`). JSON/Excel export remain `[Planned]`
     (the `ReportModel` projection already makes them a small step).
+- **US-ADMIN10-4.3** `[Implemented*]` After a successful CSV/HTML export I'm asked whether to open the file,
+  and answering Yes opens it in its default application.
+  - **AC:** Both export handlers call `BaseToolControl.PromptOpenExportedFile(path)` (Yes/No prompt →
+    `Process.Start`, shell failures swallowed). *(Manual — GUI, `TC-ADMIN10-M-10`.)*
 
 ## FEAT-ADMIN10-5 — Guarded cleanup `[Planned]`
 - **US-ADMIN10-5.1** `[Planned]` Selecting confirmed-unused columns and generating a preview-only cleanup
@@ -116,5 +157,5 @@ Each signal marks a column "used" with human-readable evidence; a column with no
   `[Planned]`).
 - Testing under `testing/Tools/AttributeAuditor/`; SDK-free logic covered by
   `testing/UnitTests/AttributeAuditTests.cs` (scanners/classification/report/CSV) and the collector by
-  `testing/CollectorTests/AttributeAuditCollectorTests.cs` against a fake connection — **25 automated cases
-  pass.** — **Done** (UI/run/filter/export GUI cases `TC-ADMIN10-M-01..07` pending manual sign-off).
+  `testing/CollectorTests/AttributeAuditCollectorTests.cs` against a fake connection — **27 automated cases
+  pass.** — **Done** (UI/run/filter/export GUI cases `TC-ADMIN10-M-01..11` pending manual sign-off).

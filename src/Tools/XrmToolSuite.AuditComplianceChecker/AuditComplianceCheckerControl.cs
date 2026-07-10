@@ -32,7 +32,7 @@ namespace XrmToolSuite.AuditComplianceChecker
         // Powers "Report a bug" / help links in XrmToolBox
         public string RepositoryName => "XrmToolSuite";
         public string UserName => "kkora";
-        public string HelpUrl => "https://github.com/kkora/XrmToolSuite";
+        public string HelpUrl => ToolDocsUrl; // per-tool README (BaseToolControl.ToolDocsUrl)
 
         private static readonly string[] ActivityViews = { "By table", "By user", "By date" };
 

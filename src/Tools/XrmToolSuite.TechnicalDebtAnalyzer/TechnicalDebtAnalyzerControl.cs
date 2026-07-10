@@ -34,7 +34,7 @@ namespace XrmToolSuite.TechnicalDebtAnalyzer
     {
         public string RepositoryName => "XrmToolSuite";
         public string UserName => "kkora";
-        public string HelpUrl => SuiteDocsUrl;
+        public string HelpUrl => ToolDocsUrl; // per-tool README (BaseToolControl.ToolDocsUrl)
 
         // Every analyzer in the suite, in display order. Drives the picker and the run loop.
         private readonly List<IAnalyzer<TechDebtContext>> _allAnalyzers = new List<IAnalyzer<TechDebtContext>>

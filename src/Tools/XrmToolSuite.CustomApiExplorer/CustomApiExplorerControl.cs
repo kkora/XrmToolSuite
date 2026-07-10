@@ -25,7 +25,7 @@ namespace XrmToolSuite.CustomApiExplorer
         // Suite GitHub identity — powers the Help dialog's documentation / "Report a bug" links.
         public string RepositoryName => "XrmToolSuite";
         public string UserName => "kkora";
-        public string HelpUrl => "https://github.com/kkora/XrmToolSuite";
+        public string HelpUrl => ToolDocsUrl; // per-tool README (BaseToolControl.ToolDocsUrl)
 
         public CustomApiExplorerControl()
         {
