@@ -5,7 +5,7 @@
     <RootNamespace>XrmToolSuite.SolutionKnowledgeGraph</RootNamespace>
     <AssemblyName>XrmToolSuite.SolutionKnowledgeGraph</AssemblyName>
     <!-- Per-tool version: bump when THIS tool changes (scripts/Bump-Tool.ps1). Must equal the nuspec <version>. -->
-    <Version>1.2026.7.9</Version>
+    <Version>1.2026.7.10</Version>
     <description>Builds an interactive dependency graph across a Dataverse solution with impact analysis, dependency tracing, circular-dependency detection, and PNG/SVG/GraphML export.</description>
   </PropertyGroup>
 </Project>

@@ -45,8 +45,11 @@ jobs:
       - name: Setup NuGet
         uses: NuGet/setup-nuget@v2
 
+      # ContinuousIntegrationBuild=true -> deterministic source paths, so shipped DLLs pass the
+      # NuGet Package Explorer "Deterministic" health check (SourceLink + embedded PDBs come from
+      # the SDK + src/Tools/Directory.Build.props).
       - name: Build (Release)
-        run: dotnet build XrmToolSuite.sln -c Release --nologo
+        run: dotnet build XrmToolSuite.sln -c Release --nologo -p:ContinuousIntegrationBuild=true
 
       # PER-TOOL VERSIONING: each tool's csproj <Version> must equal its nuspec <version>
       # (Tool Library rule: nupkg version == assembly version). Verify every pair; the tag

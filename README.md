@@ -61,6 +61,12 @@ Each tool has a `.nuspec`. Rules enforced by the Tool Library (see xrmtoolbox.co
 - dependency must be on **`XrmToolBox`** (not `XrmToolBoxPackage`)
 - your tool DLL must sit in the `Plugins` folder root of the package; ship only this suite's files. Most tools are a single DLL. Export tools (Excel/PDF/Word) additionally ship their dependency chain — the 17-DLL ClosedXML/PdfSharp-MigraDoc-GDI chain, or ERD Generator's 5-DLL PDF-only subset — in a **per-tool subfolder** `lib\net48\Plugins\<AssemblyName>\` (the XrmToolBox store convention; isolates each tool's dep versions). The tool DLL itself stays in the root.
 - `iconUrl` is required and must be your own icon
+- every nuspec also sets `<repository type="git" url="…kkora/XrmToolSuite" />` so nuget.org shows a **Source repository** link (note: the "Used By → GitHub repositories" tab is a *reverse-dependency* index — always empty for XrmToolBox plugins, since users install via the Tool Library rather than `PackageReference`)
+
+Package health (NuGet Package Explorer checks): tools build with **embedded portable PDBs**
+(symbols + compiler flags inside the single plugin DLL — no `.snupkg`), the .NET 8 SDK adds
+**GitHub SourceLink** automatically, and the publish workflow builds with
+`-p:ContinuousIntegrationBuild=true` for **deterministic** source paths.
 
 Pack **all** tools (build Release → pack every non-template nuspec → verify the subfolder layout):
 

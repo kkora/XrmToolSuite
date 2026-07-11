@@ -5,7 +5,7 @@
     <RootNamespace>XrmToolSuite.EnvironmentComparisonSuite</RootNamespace>
     <AssemblyName>XrmToolSuite.EnvironmentComparisonSuite</AssemblyName>
     <!-- Per-tool version: bump when THIS tool changes (scripts/Bump-Tool.ps1). Must equal the nuspec <version>. -->
-    <Version>1.2026.7.9</Version>
+    <Version>1.2026.7.10</Version>
     <description>Read-only source-to-target environment comparison across every component class (solutions, schema, UI, security, automation, code), classifying Missing/Extra/Changed/Managed-vs-Unmanaged with a difference score and report.</description>
     <!-- Ships the ClosedXML (Excel) + PdfSharp/MigraDoc-GDI (native PDF) chains with its nupkg, so deps must land in the output. -->
     <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>

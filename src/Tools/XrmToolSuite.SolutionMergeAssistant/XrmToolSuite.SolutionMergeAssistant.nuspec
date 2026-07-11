@@ -8,7 +8,7 @@
          4) DLL goes under a "Plugins" folder
          5) iconUrl is required and must be your own icon -->
     <id>XrmToolSuite.SolutionMergeAssistant</id>
-    <version>1.2026.7.9</version>
+    <version>1.2026.7.10</version>
     <title>Solution Merge Assistant for XrmToolBox</title>
     <authors>Kanchan Kora</authors>
     <owners>Kanchan Kora</owners>
@@ -19,7 +19,8 @@
     <license type="expression">MIT</license>
     <description>Read-only comparison of two or more solutions from one environment: duplicate/overlapping components, publisher/version/managed-state conflicts, and environment-variable/connection-reference conflicts rolled into a pre-merge verdict (Safe / Merge-with-warnings / Manual-review / High-risk / Do-not-merge), a recommended merge strategy, and a merged-component checklist. Exportable to Excel, PDF, JSON, and HTML.</description>
     <summary>Compare two or more solutions before merging and get a pre-merge verdict, strategy, and conflict checklist.</summary>
-    <releaseNotes>1.2026.7.9: Every export now offers to open the saved file. FetchXML Performance Analyzer: 'Load from view' pretty-prints the FetchXML. Internal: per-tool versioning - future releases update only the tools that changed.</releaseNotes>
+    <releaseNotes>1.2026.7.10: Package health - deterministic CI builds with SourceLink and embedded symbols (PDB inside the DLL), and the package now links its GitHub source repository. No functional change to any tool.</releaseNotes>
+    <repository type="git" url="https://github.com/kkora/XrmToolSuite" />
     <tags>XrmToolBox Dataverse Dynamics365 ALM SolutionMerge PowerPlatform</tags>
     <dependencies>
       <dependency id="XrmToolBox" version="1.2025.10.74" />
