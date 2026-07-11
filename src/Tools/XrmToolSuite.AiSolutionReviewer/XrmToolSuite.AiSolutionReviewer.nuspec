@@ -8,7 +8,7 @@
          4) DLL goes under a "Plugins" folder
          5) iconUrl is required and must be your own icon -->
     <id>XrmToolSuite.AiSolutionReviewer</id>
-    <version>1.2026.7.10</version>
+    <version>1.2026.7.11</version>
     <title>AI Solution Reviewer for XrmToolBox</title>
     <authors>Kanchan Kora</authors>
     <owners>Kanchan Kora</owners>
@@ -19,7 +19,7 @@
     <license type="expression">MIT</license>
     <description>AI-assisted architecture review of a Dataverse solution with recommendations, a prioritized backlog, and Word/PDF/Markdown/HTML reports.</description>
     <summary>AI-assisted architecture review of a Dataverse solution with recommendations, a prioritized backlog, and Word/PDF/Markdown/HTML reports.</summary>
-    <releaseNotes>1.2026.7.10: Package health - deterministic CI builds with SourceLink and embedded symbols (PDB inside the DLL), and the package now links its GitHub source repository. No functional change to any tool.</releaseNotes>
+    <releaseNotes>1.2026.7.11: Local models via Ollama (no API key). Shared AI settings dialog with model suggestions; Export moved to the end of the toolbar.</releaseNotes>
     <repository type="git" url="https://github.com/kkora/XrmToolSuite" />
     <tags>XrmToolBox Dataverse Dynamics365 PowerPlatform AI ArchitectureReview ALM</tags>
     <dependencies>

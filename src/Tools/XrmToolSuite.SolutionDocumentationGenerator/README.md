@@ -21,7 +21,8 @@ values or secrets.
 Three **documentation modes** — Executive Summary, Standard Reference, Full Solution Reference —
 plus a per-section checklist control the depth and scope of a run. Generation runs off the UI thread
 with per-section progress and cancellation, and the preview pane shows the rendered Markdown or HTML
-source before final export. The SDK-free document pipeline (`SolutionScanData`, the `DocBuilder`
+source (HTML pretty-printed for readability; exported files are unchanged) before final export — an
+**Open in browser** button renders the actual HTML (or HTML Portal) document in your default browser. The SDK-free document pipeline (`SolutionScanData`, the `DocBuilder`
 template engine, and the Markdown/HTML/JSON `DocRenderers`) is unit-tested; unavailable component
 types degrade to documented "not available" notes.
 
@@ -37,7 +38,7 @@ Export runs off the UI thread.
 | **HTML** | Self-contained + theme-aware. |
 | **Searchable HTML portal** | A single self-contained file with a sticky sidebar table-of-contents, offline client-side search that filters sections and table rows, collapsible sections, and a light/dark toggle — all CSS/JS inlined, browses from `file://` with no server or CDN. Folds in the retired Markdown/Word/HTML-Portal doc-format tools. |
 | **Excel** | Via ClosedXML. |
-| **JSON** | Carries the structured inventory. |
+| **JSON** | Carries the structured inventory; written indented (pretty-printed). |
 
 ## Help & Support
 

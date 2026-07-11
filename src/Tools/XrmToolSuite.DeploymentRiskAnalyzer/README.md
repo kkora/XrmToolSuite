@@ -137,7 +137,7 @@ Models/RiskModels.cs                 Finding, severity, result types
 Shared source (compiled in from src/Shared/, reused by every score/report tool in the suite):
   Core/Analysis/*      Finding, Severity/ScoreBand, IAnalyzer<T>, ScoreCalculator, ReportModel
   Reporting/*          JSON (+CI block) / Markdown / HTML dashboard / ClosedXML Excel / MigraDoc PDF / OpenXML Word exporters
-  Summarization/*      offline templated + AI (Anthropic/OpenAI/Google) executive-summary generators
+  Summarization/*      offline templated + AI (Anthropic/OpenAI/Google/Ollama) executive-summary generators
 ```
 
 Adding an analyzer = implement `IAnalyzer`, add one line to `_allAnalyzers` in the control.
@@ -146,6 +146,16 @@ rather than aborting the run.
 
 ## Notes & limitations
 
+- The AI executive summary is opt-in behind a consent preview; cloud providers (Anthropic/OpenAI/Google)
+  use a **session-only** API key that is never persisted. **Local models (Ollama):** run it locally — no
+  API key, nothing leaves the machine.
+  1. **Install:** `winget install Ollama.Ollama` (or [ollama.com/download](https://ollama.com/download)).
+     Ollama serves `http://localhost:11434` automatically; start it manually with `ollama serve` if needed.
+  2. **Pull a model:** `ollama pull qwen2.5:7b` (also `gemma3:4b`, `llama3.2:3b`, `qwen2.5-coder:7b`).
+     `ollama list` shows installed models, `ollama ps` shows loaded ones, `ollama run <model> "hi"` warms one up.
+  3. **AI options ▸ Set API key… ▸ Provider = `Ollama (local)`**, **Model = `qwen2.5:7b`**, leave **API key** blank.
+  The first request loads the model (waits up to 5 min); if Ollama isn't running it falls back to the
+  offline summary. `nomic-embed-text` is an embedding model — use a chat model (`qwen2.5`/`gemma3`/`llama3.2`).
 - **PDF export** is now **native** — rendered directly with the MigraDoc/PdfSharp **GDI** build
   (pure-managed, net48, no SkiaSharp natives), so no browser is required. The signature radial gauge
   is drawn as a PdfSharp `XGraphics` overlay (MigraDoc has no charting) and is decorative-only: any

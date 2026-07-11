@@ -114,5 +114,26 @@ namespace XrmToolSuite.UnitTests
             Assert.Contains("Attribute type mismatch", s.Text);
             Assert.DoesNotContain("minor", s.Text); // Low is below the Medium+ cutoff
         }
+
+        // TC-CORE-AI-06: Ollama is a registered LOCAL provider — no API key required.
+        [Fact]
+        public void OllamaProvider_IsLocal_NoKeyRequired()
+        {
+            var info = AiProviderCatalog.Get(AiProvider.Ollama);
+            Assert.Equal("Ollama (local)", info.DisplayName);
+            Assert.False(info.RequiresApiKey);
+            Assert.Equal(AiProvider.Ollama, AiProviderCatalog.Parse("Ollama"));
+            // Cloud providers still require a key.
+            Assert.True(AiProviderCatalog.Get(AiProvider.OpenAI).RequiresApiKey);
+        }
+
+        // TC-CORE-AI-07: the key hint is tailored per provider (local mentions Ollama; cloud says "session only").
+        [Fact]
+        public void KeyHint_DiffersForLocalVsCloud()
+        {
+            Assert.Contains("Ollama", AiProviderCatalog.KeyHint(AiProvider.Ollama));
+            Assert.Contains("no API key", AiProviderCatalog.KeyHint(AiProvider.Ollama));
+            Assert.Contains("session only", AiProviderCatalog.KeyHint(AiProvider.Anthropic));
+        }
     }
 }

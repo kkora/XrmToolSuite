@@ -16,7 +16,7 @@ keeps its model + emitters UI-free and SDK-free so they stay unit-tested and por
 | **Dependency edges** | `ArchCollector` reads `solutioncomponent` + the platform `dependency` table fail-soft — a query gap degrades to a documented note rather than crashing; self-loops and duplicate edges are removed. |
 | **Layout styles** | Choose **Layered** (grouped by layer) or flat **Dependency graph** layout and **LR/TD** flow direction; re-layout happens from the in-memory model without re-querying Dataverse. Layers return in canonical Apps→…→Other order. |
 | **Orphan filtering** | Optionally hide unconnected (orphan) nodes to declutter large diagrams down to just the dependency structure; emitters and JSON honour the filter and all node text is escaped. |
-| **Preview** | A preview combo re-renders the current model/layout in the chosen format (Mermaid / PlantUML / DOT / HTML) before export; generation reports progress and node/edge counts. |
+| **Preview** | A preview combo re-renders the current model/layout in the chosen format (Mermaid / PlantUML / DOT / HTML) before export; the HTML source preview is pretty-printed for readability (exported files are unchanged), and an **Open in browser** button renders the actual HTML diagram (SVG) in your default browser; generation reports progress and node/edge counts. |
 
 ## Exports
 
@@ -30,7 +30,7 @@ are produced as plain strings using the base class library, so the tool ships as
 | **DOT / Graphviz** | A clustered `digraph` for Graphviz and diagram tooling. |
 | **Markdown** | A fenced Mermaid block plus a per-layer legend, for formatted docs. |
 | **HTML** | A self-contained, theme-aware (light/dark) page that renders a hand-laid-out **inline SVG** offline — no external engine or CDN — with the Mermaid source embedded for re-rendering. |
-| **JSON** | Nodes + edges honouring the orphan filter, for programmatic use. |
+| **JSON** | Nodes + edges honouring the orphan filter, for programmatic use; written indented (pretty-printed). |
 
 ## Help & Support
 

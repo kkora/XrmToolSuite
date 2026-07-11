@@ -153,8 +153,8 @@ namespace XrmToolSuite.DeploymentRiskAnalyzer
             {
                 _btnLoadSolutions, new ToolStripLabel("Solution:"), _cmbSolutions,
                 new ToolStripSeparator(), _btnConnectTarget, _lblTarget,
-                new ToolStripSeparator(), _btnAnalyze, _btnExport,
-                new ToolStripSeparator(), _btnAiSummary, _btnAiOptions,
+                new ToolStripSeparator(), _btnAnalyze,
+                new ToolStripSeparator(), _btnAiSummary, _btnAiOptions, _btnExport,
                 CreateHelpButton("Deployment Risk Analyzer")
             });
 
@@ -533,14 +533,16 @@ namespace XrmToolSuite.DeploymentRiskAnalyzer
         private SummaryOptions TryBuildAiOptions(bool interactive, ReportModel model)
         {
             var provider = AiProviderCatalog.Parse(_settings.AiProvider);
+            bool needsKey = AiProviderCatalog.Get(provider).RequiresApiKey; // Ollama (local) needs none
             var key = ResolveKey(provider);
-            if (string.IsNullOrWhiteSpace(key))
+            if (needsKey && string.IsNullOrWhiteSpace(key))
             {
                 if (!interactive) return null;          // auto-run without a key → offline, no prompt
                 ShowAiSettingsDialog();                 // asks for provider/model/key/auto
                 provider = AiProviderCatalog.Parse(_settings.AiProvider); // may have changed
+                needsKey = AiProviderCatalog.Get(provider).RequiresApiKey;
                 key = ResolveKey(provider);
-                if (string.IsNullOrWhiteSpace(key)) return null; // still none → offline
+                if (needsKey && string.IsNullOrWhiteSpace(key)) return null; // still none → offline
             }
 
             bool includeComponents = _miAiIncludeComponents.Checked;
@@ -582,62 +584,13 @@ namespace XrmToolSuite.DeploymentRiskAnalyzer
         /// </summary>
         private void ShowAiSettingsDialog()
         {
-            var providers = AiProviderCatalog.All;
-            using (var f = new Form
-            {
-                Text = "AI settings", Width = 660, Height = 340,
-                FormBorderStyle = FormBorderStyle.FixedDialog, StartPosition = FormStartPosition.CenterParent,
-                MinimizeBox = false, MaximizeBox = false
-            })
-            {
-                var lblP = new Label { Text = "AI provider:", Location = new Point(14, 18), AutoSize = true };
-                var cmb = new ComboBox { DropDownStyle = ComboBoxStyle.DropDownList, Location = new Point(150, 14), Width = 476 };
-                foreach (var p in providers) cmb.Items.Add(p.DisplayName);
-                cmb.SelectedIndex = Math.Max(0, Array.FindIndex(providers, x => x.Provider == AiProviderCatalog.Parse(_settings.AiProvider)));
-
-                var lblM = new Label { Text = "Model:", Location = new Point(14, 54), AutoSize = true };
-                var txtModel = new TextBox { Location = new Point(150, 50), Width = 476, Text = _settings.AiModelId ?? "" };
-                var lblSug = new Label { Text = "Suggested (click to use):", Location = new Point(150, 78), AutoSize = true, ForeColor = Color.DimGray };
-                var bLow = new Button { Location = new Point(150, 98), Width = 154, Height = 26, TextAlign = ContentAlignment.MiddleLeft, AutoEllipsis = true };
-                var bMid = new Button { Location = new Point(311, 98), Width = 154, Height = 26, TextAlign = ContentAlignment.MiddleLeft, AutoEllipsis = true };
-                var bHigh = new Button { Location = new Point(472, 98), Width = 154, Height = 26, TextAlign = ContentAlignment.MiddleLeft, AutoEllipsis = true };
-
-                void RefreshSuggestions()
-                {
-                    var info = providers[cmb.SelectedIndex];
-                    bLow.Text = "Low: " + info.Low; bLow.Tag = info.Low;
-                    bMid.Text = "Mid: " + info.Mid; bMid.Tag = info.Mid;
-                    bHigh.Text = "High: " + info.High; bHigh.Tag = info.High;
-                }
-                bLow.Click += (s, e) => txtModel.Text = (string)bLow.Tag;
-                bMid.Click += (s, e) => txtModel.Text = (string)bMid.Tag;
-                bHigh.Click += (s, e) => txtModel.Text = (string)bHigh.Tag;
-                cmb.SelectedIndexChanged += (s, e) => { RefreshSuggestions(); txtModel.Text = providers[cmb.SelectedIndex].Mid; };
-                RefreshSuggestions();
-                if (string.IsNullOrWhiteSpace(txtModel.Text)) txtModel.Text = providers[cmb.SelectedIndex].Mid;
-
-                var lblK = new Label { Text = "API key:", Location = new Point(14, 146), AutoSize = true };
-                var txtKey = new TextBox { UseSystemPasswordChar = true, Location = new Point(150, 142), Width = 476, Text = _sessionApiKey ?? "" };
-                var lblKn = new Label { Text = "Session only — never saved to disk; sent only to the selected provider.",
-                    Location = new Point(150, 168), AutoSize = true, ForeColor = Color.DimGray };
-
-                var chkAuto = new CheckBox { Text = "Auto-generate summary after each analysis",
-                    Location = new Point(150, 196), AutoSize = true, Checked = _settings.AiSummaryAutoRun };
-
-                var ok = new Button { Text = "OK", DialogResult = DialogResult.OK, Location = new Point(446, 254), Size = new Size(90, 28) };
-                var cancel = new Button { Text = "Cancel", DialogResult = DialogResult.Cancel, Location = new Point(546, 254), Size = new Size(90, 28) };
-                f.Controls.AddRange(new Control[] { lblP, cmb, lblM, txtModel, lblSug, bLow, bMid, bHigh, lblK, txtKey, lblKn, chkAuto, ok, cancel });
-                f.AcceptButton = ok;
-                f.CancelButton = cancel;
-
-                if (f.ShowDialog(this) == DialogResult.OK)
-                {
-                    _settings.AiProvider = providers[cmb.SelectedIndex].Provider.ToString();
-                    _settings.AiModelId = txtModel.Text.Trim();
-                    _settings.AiSummaryAutoRun = chkAuto.Checked;
-                    if (!string.IsNullOrWhiteSpace(txtKey.Text)) _sessionApiKey = txtKey.Text.Trim();
-                }
-            }
+            var r = AiSettingsDialog.Show(this, _settings.AiProvider, _settings.AiModelId, _sessionApiKey,
+                _settings.AiSummaryAutoRun, showAutoRun: true);
+            if (!r.Ok) return;
+            _settings.AiProvider = r.Provider.ToString();
+            _settings.AiModelId = r.ModelId;
+            _settings.AiSummaryAutoRun = r.AutoRun;
+            if (!string.IsNullOrWhiteSpace(r.ApiKey)) _sessionApiKey = r.ApiKey;
         }
 
         /// <summary>Shows the exact JSON that will be sent (and the provider/host/model) for approval before the first AI call.</summary>

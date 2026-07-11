@@ -336,7 +336,7 @@ namespace XrmToolSuite.ErdGenerator
                         case "pdf": ErdPdfExporter.Export(model, display, path); break;
                         case "html": ErdHtml.Export(model, path); break;
                         case "markdown": ErdMarkdown.Export(model, path); break;
-                        default: File.WriteAllText(path, ErdJson.Emit(model)); break;
+                        default: File.WriteAllText(path, JsonFormat.Pretty(ErdJson.Emit(model))); break;
                     }
                     return path;
                 },

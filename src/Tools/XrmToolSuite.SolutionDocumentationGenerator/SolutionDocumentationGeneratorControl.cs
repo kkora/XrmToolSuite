@@ -60,6 +60,7 @@ namespace XrmToolSuite.SolutionDocumentationGenerator
             tsbLoadSolutions.Click += (s, e) => ExecuteMethod(LoadSolutions);
             tsbGenerate.Click += (s, e) => ExecuteMethod(Generate);
             tscPreview.SelectedIndexChanged += (s, e) => RefreshPreview();
+            tsbOpenBrowser.Click += (s, e) => OpenRenderedHtml();
 
             // Suite convention: every tool carries a right-aligned Help button (shared dialog).
             toolStrip.Items.Add(CreateHelpButton("Solution Documentation Generator"));
@@ -227,16 +228,26 @@ namespace XrmToolSuite.SolutionDocumentationGenerator
 
         private void RefreshPreview()
         {
-            if (_doc == null) { txtPreview.Clear(); return; }
+            if (_doc == null) { txtPreview.Clear(); tsbOpenBrowser.Enabled = false; return; }
             var mode = tscPreview.SelectedItem?.ToString() ?? PreviewMarkdown;
             switch (mode)
             {
-                case PreviewHtml: txtPreview.Text = DocRenderers.Html(_doc); break;
-                case PreviewPortal: txtPreview.Text = DocRenderers.HtmlPortal(_doc); break;
+                case PreviewHtml: txtPreview.Text = HtmlFormat.Pretty(DocRenderers.Html(_doc)); break;
+                case PreviewPortal: txtPreview.Text = HtmlFormat.Pretty(DocRenderers.HtmlPortal(_doc)); break;
                 default: txtPreview.Text = DocRenderers.Markdown(_doc); break;
             }
             txtPreview.SelectionStart = 0;
+            // "Open in browser" renders the real HTML — only meaningful in an HTML preview mode.
+            tsbOpenBrowser.Enabled = _doc != null && (PreviewHtml.Equals(mode) || PreviewPortal.Equals(mode));
             lblStats.Text = $"{_doc.Sections.Count} section(s) · mode: {_doc.ModeLabel} · previewing {mode}.";
+        }
+
+        private void OpenRenderedHtml()
+        {
+            if (_doc == null) return;
+            var mode = tscPreview.SelectedItem?.ToString() ?? PreviewMarkdown;
+            var html = PreviewPortal.Equals(mode) ? DocRenderers.HtmlPortal(_doc) : DocRenderers.Html(_doc);
+            OpenHtmlInBrowser(html, "solution-documentation");
         }
 
         #endregion
@@ -289,7 +300,7 @@ namespace XrmToolSuite.SolutionDocumentationGenerator
                         case "markdown": File.WriteAllText(path, DocRenderers.Markdown(doc)); break;
                         case "html": File.WriteAllText(path, DocRenderers.Html(doc)); break;
                         case "portal": File.WriteAllText(path, DocRenderers.HtmlPortal(doc)); break;
-                        default: File.WriteAllText(path, DocRenderers.Json(doc)); break;
+                        default: File.WriteAllText(path, JsonFormat.Pretty(DocRenderers.Json(doc))); break;
                     }
                     return path;
                 },

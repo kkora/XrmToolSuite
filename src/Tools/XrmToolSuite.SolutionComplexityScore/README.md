@@ -66,5 +66,13 @@ or XrmToolBox silently drops the tool. See [`./DEPLOYMENT.md`](./DEPLOYMENT.md) 
   AI-settings dialog) that is never persisted, and a payload-preview consent dialog shows the anonymized
   JSON (no record data, credentials or environment names) before anything is sent. The chosen
   provider/model-id persist; the key does not.
+- **Local models (Ollama):** run the summary against a local model — no API key, nothing leaves the machine.
+  1. **Install:** `winget install Ollama.Ollama` (or [ollama.com/download](https://ollama.com/download)).
+     Ollama serves `http://localhost:11434` automatically; start it manually with `ollama serve` if needed.
+  2. **Pull a model:** `ollama pull qwen2.5:7b` (also `gemma3:4b`, `llama3.2:3b`, `qwen2.5-coder:7b`).
+     `ollama list` shows installed models, `ollama ps` shows loaded ones, `ollama run <model> "hi"` warms one up.
+  3. **AI settings ▸ Provider = `Ollama (local)`**, **Model = `qwen2.5:7b`**, leave **API key** blank.
+  The first request loads the model (waits up to 5 min); if Ollama isn't running it falls back to the
+  offline summary. `nomic-embed-text` is an embedding model — use a chat model (`qwen2.5`/`gemma3`/`llama3.2`).
 - Deferred quality signals (naming-prefix consistency, description coverage, managed/unmanaged layering)
   need a collector change and are a phase-2 item.

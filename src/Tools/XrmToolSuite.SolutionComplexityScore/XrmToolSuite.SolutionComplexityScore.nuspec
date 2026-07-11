@@ -8,7 +8,7 @@
          4) DLL goes under a "Plugins" folder
          5) iconUrl is required and must be your own icon -->
     <id>XrmToolSuite.SolutionComplexityScore</id>
-    <version>1.2026.7.10</version>
+    <version>1.2026.7.11</version>
     <title>Solution Complexity Score for XrmToolBox</title>
     <authors>Kanchan Kora</authors>
     <owners>Kanchan Kora</owners>
@@ -19,7 +19,7 @@
     <license type="expression">MIT</license>
     <description>Measures overall solution complexity, maintainability, and upgrade/migration/testing effort with an executive dashboard.</description>
     <summary>Measures overall solution complexity, maintainability, and upgrade/migration/testing effort with an executive dashboard.</summary>
-    <releaseNotes>1.2026.7.10: Package health - deterministic CI builds with SourceLink and embedded symbols (PDB inside the DLL), and the package now links its GitHub source repository. No functional change to any tool.</releaseNotes>
+    <releaseNotes>1.2026.7.11: Local models via Ollama (no API key). Shared AI settings dialog; Metrics/Hotspots start split one-third/two-thirds; Export moved to the end.</releaseNotes>
     <repository type="git" url="https://github.com/kkora/XrmToolSuite" />
     <tags>XrmToolBox Dataverse Dynamics365 PowerPlatform Complexity ALM</tags>
     <dependencies>

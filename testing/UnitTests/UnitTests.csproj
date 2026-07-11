@@ -32,6 +32,10 @@
     <!-- Shared analysis engine (BCL-only): Finding, Severity, ScoreCalculator, ReportModel, etc. -->
     <Compile Include="..\..\src\Shared\Core\Analysis\*.cs" />
 
+    <!-- Shared display formatters (BCL-only): JSON/HTML/XML pretty-printers for preview panes. -->
+    <Compile Include="..\..\src\Shared\Core\JsonFormat.cs" />
+    <Compile Include="..\..\src\Shared\Core\XmlFormat.cs" />
+
     <!-- Deployment Risk Analyzer domain + scoring facade + the ReportModel adapter (all SDK-free). -->
     <Compile Include="..\..\src\Tools\XrmToolSuite.DeploymentRiskAnalyzer\Models\RiskModels.cs" />
     <Compile Include="..\..\src\Tools\XrmToolSuite.DeploymentRiskAnalyzer\Scoring\RiskScoreCalculator.cs" />

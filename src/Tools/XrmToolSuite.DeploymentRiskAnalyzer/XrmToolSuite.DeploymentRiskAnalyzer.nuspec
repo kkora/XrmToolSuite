@@ -2,7 +2,7 @@
 <package>
   <metadata>
     <id>XrmToolSuite.DeploymentRiskAnalyzer</id>
-    <version>1.2026.7.10</version>
+    <version>1.2026.7.11</version>
     <title>Deployment Risk Analyzer for XrmToolBox</title>
     <authors>Kanchan Kora</authors>
     <owners>Kanchan Kora</owners>
@@ -13,7 +13,7 @@
     <license type="expression">MIT</license>
     <description>Pre-deployment risk analysis for Dataverse solutions: dependency, environment variable, flow/plugin, security, schema conflict and Power Pages readiness checks with an exportable risk report (native PDF, HTML dashboard, Excel, CI JSON, Markdown).</description>
     <summary>Analyze a solution before deployment and get a risk-scored readiness report.</summary>
-    <releaseNotes>1.2026.7.10: Package health - deterministic CI builds with SourceLink and embedded symbols (PDB inside the DLL), and the package now links its GitHub source repository. No functional change to any tool.</releaseNotes>
+    <releaseNotes>1.2026.7.11: Local models via Ollama (no API key). Shared AI settings dialog; Export moved to the end of the toolbar.</releaseNotes>
     <repository type="git" url="https://github.com/kkora/XrmToolSuite" />
     <tags>XrmToolBox Dataverse Deployment ALM RiskAnalysis PowerPages</tags>
     <dependencies>

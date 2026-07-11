@@ -1,4 +1,4 @@
-namespace XrmToolSuite.ArchitectureDiagramGenerator
+﻿namespace XrmToolSuite.ArchitectureDiagramGenerator
 {
     partial class ArchitectureDiagramGeneratorControl
     {
@@ -27,6 +27,7 @@ namespace XrmToolSuite.ArchitectureDiagramGenerator
             this.tsbExport = new System.Windows.Forms.ToolStripDropDownButton();
             this.tslPreview = new System.Windows.Forms.ToolStripLabel();
             this.tscPreview = new System.Windows.Forms.ToolStripComboBox();
+            this.tsbOpenBrowser = new System.Windows.Forms.ToolStripButton();
             this.txtPreview = new System.Windows.Forms.TextBox();
             this.toolStrip.SuspendLayout();
             this.SuspendLayout();
@@ -44,9 +45,10 @@ namespace XrmToolSuite.ArchitectureDiagramGenerator
                 this.tscDirection,
                 this.tsbHideOrphans,
                 this.tssSeparator2,
-                this.tsbExport,
                 this.tslPreview,
-                this.tscPreview});
+                this.tscPreview,
+                this.tsbOpenBrowser,
+                this.tsbExport});
             this.toolStrip.Location = new System.Drawing.Point(0, 0);
             this.toolStrip.Name = "toolStrip";
             this.toolStrip.Size = new System.Drawing.Size(1000, 25);
@@ -112,6 +114,13 @@ namespace XrmToolSuite.ArchitectureDiagramGenerator
             this.tscPreview.Name = "tscPreview";
             this.tscPreview.Size = new System.Drawing.Size(120, 25);
             //
+            // tsbOpenBrowser
+            //
+            this.tsbOpenBrowser.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.tsbOpenBrowser.Name = "tsbOpenBrowser";
+            this.tsbOpenBrowser.Text = "Open in browser";
+            this.tsbOpenBrowser.ToolTipText = "Render the HTML diagram in your default browser";
+            //
             // txtPreview
             //
             this.txtPreview.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -155,6 +164,7 @@ namespace XrmToolSuite.ArchitectureDiagramGenerator
         private System.Windows.Forms.ToolStripDropDownButton tsbExport;
         private System.Windows.Forms.ToolStripLabel tslPreview;
         private System.Windows.Forms.ToolStripComboBox tscPreview;
+        private System.Windows.Forms.ToolStripButton tsbOpenBrowser;
         private System.Windows.Forms.TextBox txtPreview;
     }
 }

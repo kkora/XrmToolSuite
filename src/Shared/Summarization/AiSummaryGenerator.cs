@@ -2,6 +2,7 @@ using System;
 using System.Net;
 using System.Net.Http;
 using System.Text;
+using System.Threading;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json.Serialization;
@@ -19,7 +20,8 @@ namespace XrmToolSuite.Core.Summarization
     /// </summary>
     public sealed class AiSummaryGenerator : ISummaryGenerator
     {
-        private static readonly HttpClient Http = new HttpClient { Timeout = TimeSpan.FromSeconds(60) };
+        // No client-wide timeout: it's applied per request (local models can be much slower than cloud).
+        private static readonly HttpClient Http = new HttpClient { Timeout = Timeout.InfiniteTimeSpan };
 
         /// <summary>Generic executive-summary prompt used when the tool does not supply its own.</summary>
         public const string DefaultSystemPrompt =
@@ -39,34 +41,52 @@ namespace XrmToolSuite.Core.Summarization
 
         public SummaryResult Generate(ReportModel r, SummaryOptions o, Action<string> progress)
         {
-            if (o == null || string.IsNullOrWhiteSpace(o.ApiKey))
+            if (o == null) return Fallback(r, "No AI options provided.");
+            var info = AiProviderCatalog.Get(o.Provider);
+            if (info.RequiresApiKey && string.IsNullOrWhiteSpace(o.ApiKey))
                 return Fallback(r, "No API key provided.");
 
             try
             {
-                progress?.Invoke("Contacting AI service…");
+                progress?.Invoke(info.RequiresApiKey ? "Contacting AI service…" : "Contacting local Ollama…");
                 ServicePointManager.SecurityProtocol |= SecurityProtocolType.Tls12; // net48 default may omit TLS1.2
 
                 var payloadJson = JsonConvert.SerializeObject(
                     SummaryPayloadBuilder.Build(r, o.IncludeComponents),
                     new JsonSerializerSettings { ContractResolver = new CamelCasePropertyNamesContractResolver() });
 
-                var model = string.IsNullOrWhiteSpace(o.ModelId) ? AiProviderCatalog.Get(o.Provider).Mid : o.ModelId;
+                var model = string.IsNullOrWhiteSpace(o.ModelId) ? info.Mid : o.ModelId;
                 var systemPrompt = string.IsNullOrWhiteSpace(o.SystemPrompt) ? DefaultSystemPrompt : o.SystemPrompt;
 
+                // Local models can be slow to load/generate on first call — give them a generous timeout.
+                var timeout = info.RequiresApiKey ? TimeSpan.FromSeconds(60) : TimeSpan.FromMinutes(5);
                 using (var req = BuildRequest(o.Provider, model, o.ApiKey, systemPrompt, payloadJson, o.MaxTokens))
+                using (var cts = new CancellationTokenSource(timeout))
                 {
-                    var resp = Http.SendAsync(req).GetAwaiter().GetResult();
-                    var json = resp.Content.ReadAsStringAsync().GetAwaiter().GetResult();
+                    HttpResponseMessage resp;
+                    try { resp = Http.SendAsync(req, cts.Token).GetAwaiter().GetResult(); }
+                    catch (OperationCanceledException)
+                    {
+                        return Fallback(r, info.RequiresApiKey
+                            ? "The AI request timed out."
+                            : "The local model timed out — is Ollama running and the model pulled? (ollama serve / ollama pull " + model + ")");
+                    }
+                    catch (HttpRequestException hex) when (!info.RequiresApiKey)
+                    {
+                        return Fallback(r, "Could not reach Ollama at http://localhost:11434 — start it with 'ollama serve'. (" + hex.Message + ")");
+                    }
+                    using (resp)
+                    {
+                        var json = resp.Content.ReadAsStringAsync().GetAwaiter().GetResult();
+                        if (!resp.IsSuccessStatusCode)
+                            return Fallback(r, $"{o.Provider} HTTP {(int)resp.StatusCode}: {ExtractError(json) ?? resp.ReasonPhrase}");
 
-                    if (!resp.IsSuccessStatusCode)
-                        return Fallback(r, $"{o.Provider} HTTP {(int)resp.StatusCode}: {ExtractError(json) ?? resp.ReasonPhrase}");
+                        var text = ExtractText(o.Provider, json);
+                        if (string.IsNullOrWhiteSpace(text))
+                            return Fallback(r, $"{o.Provider} returned no text.");
 
-                    var text = ExtractText(o.Provider, json);
-                    if (string.IsNullOrWhiteSpace(text))
-                        return Fallback(r, $"{o.Provider} returned no text.");
-
-                    return new SummaryResult { Text = text.Trim(), FromAi = true };
+                        return new SummaryResult { Text = text.Trim(), FromAi = true };
+                    }
                 }
             }
             catch (Exception ex)
@@ -107,6 +127,22 @@ namespace XrmToolSuite.Core.Summarization
                     };
                     break;
 
+                case AiProvider.Ollama:
+                    // Local Ollama chat API — plain HTTP, no auth. stream:false returns a single JSON object.
+                    url = "http://localhost:11434/api/chat";
+                    body = new
+                    {
+                        model,
+                        stream = false,
+                        messages = new[]
+                        {
+                            new { role = "system", content = systemPrompt },
+                            new { role = "user", content = payloadJson }
+                        },
+                        options = new { num_predict = maxTokens }
+                    };
+                    break;
+
                 default: // Anthropic
                     url = "https://api.anthropic.com/v1/messages";
                     body = new
@@ -143,6 +179,7 @@ namespace XrmToolSuite.Core.Summarization
             {
                 case AiProvider.OpenAI: return (string)o.SelectToken("choices[0].message.content");
                 case AiProvider.Google: return (string)o.SelectToken("candidates[0].content.parts[0].text");
+                case AiProvider.Ollama: return (string)o.SelectToken("message.content");
                 default: return (string)o.SelectToken("content[0].text");
             }
         }

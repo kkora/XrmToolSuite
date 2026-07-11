@@ -28,7 +28,7 @@ Eight formats, all run off the UI thread:
 - **PDF** (native, via the MigraDoc/PdfSharp-GDI chain)
 - **HTML** (self-contained; embeds the SVG)
 - **Markdown** (embeds a `mermaid` erDiagram block)
-- **JSON** (the structured ERD model)
+- **JSON** (the structured ERD model, written indented / pretty-printed)
 
 ## Help & Support
 

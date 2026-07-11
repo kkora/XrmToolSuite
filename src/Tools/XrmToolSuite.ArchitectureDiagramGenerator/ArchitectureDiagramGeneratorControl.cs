@@ -66,6 +66,7 @@ namespace XrmToolSuite.ArchitectureDiagramGenerator
             tscDirection.SelectedIndexChanged += (s, e) => RefreshPreview();
             tsbHideOrphans.CheckedChanged += (s, e) => RefreshPreview();
             tscPreview.SelectedIndexChanged += (s, e) => RefreshPreview();
+            tsbOpenBrowser.Click += (s, e) => OpenRenderedHtml();
 
             // Suite convention: right-aligned Help button (shared dialog).
             toolStrip.Items.Add(CreateHelpButton());
@@ -190,17 +191,25 @@ namespace XrmToolSuite.ArchitectureDiagramGenerator
 
         private void RefreshPreview()
         {
-            if (_diagram == null) { txtPreview.Clear(); return; }
+            if (_diagram == null) { txtPreview.Clear(); tsbOpenBrowser.Enabled = false; return; }
             var options = CurrentOptions();
             var mode = tscPreview.SelectedItem?.ToString() ?? PreviewMermaid;
             switch (mode)
             {
                 case PreviewPlantUml: txtPreview.Text = DiagramEmitters.PlantUml(_diagram, options); break;
                 case PreviewDot: txtPreview.Text = DiagramEmitters.Dot(_diagram, options); break;
-                case PreviewHtml: txtPreview.Text = DiagramEmitters.Html(_diagram, options); break;
+                case PreviewHtml: txtPreview.Text = HtmlFormat.Pretty(DiagramEmitters.Html(_diagram, options)); break;
                 default: txtPreview.Text = DiagramEmitters.Mermaid(_diagram, options); break;
             }
             txtPreview.SelectionStart = 0;
+            // "Open in browser" only renders the HTML diagram — enable it only in that preview mode.
+            tsbOpenBrowser.Enabled = _diagram != null && PreviewHtml.Equals(mode);
+        }
+
+        private void OpenRenderedHtml()
+        {
+            if (_diagram == null) return;
+            OpenHtmlInBrowser(DiagramEmitters.Html(_diagram, CurrentOptions()), "architecture-diagram");
         }
 
         #endregion
@@ -251,7 +260,7 @@ namespace XrmToolSuite.ArchitectureDiagramGenerator
                         case "dot": File.WriteAllText(path, DiagramEmitters.Dot(diagram, options)); break;
                         case "markdown": File.WriteAllText(path, DiagramEmitters.Markdown(diagram, options)); break;
                         case "html": File.WriteAllText(path, DiagramEmitters.Html(diagram, options)); break;
-                        default: File.WriteAllText(path, DiagramEmitters.Json(diagram, options)); break;
+                        default: File.WriteAllText(path, JsonFormat.Pretty(DiagramEmitters.Json(diagram, options))); break;
                     }
                     return path;
                 },

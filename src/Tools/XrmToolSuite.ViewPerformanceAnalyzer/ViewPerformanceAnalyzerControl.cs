@@ -32,11 +32,21 @@ namespace XrmToolSuite.ViewPerformanceAnalyzer
         public string UserName => "kkora";
         public string HelpUrl => ToolDocsUrl; // per-tool README (BaseToolControl.ToolDocsUrl)
 
+        // Placeholder shown in the table dropdown until tables are loaded / one is picked.
+        private const string SelectTablePlaceholder = "-- select table --";
+
         public ViewPerformanceAnalyzerControl()
         {
             InitializeComponent();
             // Suite convention: every tool carries a right-aligned Help button (shared dialog).
             toolStrip.Items.Add(CreateHelpButton("View Performance Analyzer"));
+            ShowTablePlaceholder();
+        }
+
+        private void ShowTablePlaceholder()
+        {
+            cboEntity.Items.Insert(0, SelectTablePlaceholder);
+            cboEntity.SelectedIndex = 0;
         }
 
         private void ViewPerformanceAnalyzerControl_Load(object sender, EventArgs e)
@@ -44,7 +54,7 @@ namespace XrmToolSuite.ViewPerformanceAnalyzer
             _settings = LoadSettings<ViewSettings>();
             tsbIncludePersonal.Checked = _settings.IncludePersonal;
             LogInfo("View Performance Analyzer loaded");
-            SetStatusMessage("Click 'Refresh tables', pick a table, then 'Analyze views'.");
+            SetStatusMessage("Click 'Load tables', pick a table, then 'Analyze views'.");
         }
 
         public override void ClosingPlugin(PluginCloseInfo info)
@@ -67,8 +77,9 @@ namespace XrmToolSuite.ViewPerformanceAnalyzer
             base.UpdateConnection(newService, detail, actionName, parameter);
             MetadataCache.Clear(); // metadata may differ between environments
             cboEntity.Items.Clear();
+            ShowTablePlaceholder();
             ClearResults();
-            SetStatusMessage($"Connected to {detail?.ConnectionName}. Click 'Refresh tables'.");
+            SetStatusMessage($"Connected to {detail?.ConnectionName}. Click 'Load tables'.");
         }
 
         // ----------------------------------------------------------------- Table picker (needs connection)
@@ -100,6 +111,7 @@ namespace XrmToolSuite.ViewPerformanceAnalyzer
                 items =>
                 {
                     cboEntity.Items.Clear();
+                    ShowTablePlaceholder(); // keep "-- select table --" at the top until a table is picked
                     foreach (var i in items)
                         cboEntity.Items.Add(i);
 
@@ -126,7 +138,7 @@ namespace XrmToolSuite.ViewPerformanceAnalyzer
             var entity = SelectedEntity();
             if (string.IsNullOrWhiteSpace(entity))
             {
-                MessageBox.Show("Pick a table first (click 'Refresh tables' if the list is empty).",
+                MessageBox.Show("Pick a table first (click 'Load tables' if the list is empty).",
                     "No table selected", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return;
             }
@@ -215,7 +227,7 @@ namespace XrmToolSuite.ViewPerformanceAnalyzer
             lblFindingsHeader.Text = $"Findings for: {view.Name}";
             PopulateFindings(view);
 
-            txtFetchXml.Text = view.FetchXml ?? "";
+            txtFetchXml.Text = XmlFormat.Pretty(view.FetchXml); // views store fetchxml as one line
 
             lstLayoutColumns.BeginUpdate();
             lstLayoutColumns.Items.Clear();

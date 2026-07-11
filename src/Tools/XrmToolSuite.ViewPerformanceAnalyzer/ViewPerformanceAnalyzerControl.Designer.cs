@@ -15,7 +15,6 @@ namespace XrmToolSuite.ViewPerformanceAnalyzer
         private void InitializeComponent()
         {
             this.toolStrip = new System.Windows.Forms.ToolStrip();
-            this.tslEntity = new System.Windows.Forms.ToolStripLabel();
             this.cboEntity = new System.Windows.Forms.ToolStripComboBox();
             this.tsbRefreshTables = new System.Windows.Forms.ToolStripButton();
             this.tssSeparator1 = new System.Windows.Forms.ToolStripSeparator();
@@ -83,9 +82,8 @@ namespace XrmToolSuite.ViewPerformanceAnalyzer
             //
             this.toolStrip.ImageScalingSize = new System.Drawing.Size(24, 24);
             this.toolStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-                this.tslEntity,
-                this.cboEntity,
                 this.tsbRefreshTables,
+                this.cboEntity,
                 this.tssSeparator1,
                 this.tsbIncludePersonal,
                 this.tsbAnalyze,
@@ -96,11 +94,6 @@ namespace XrmToolSuite.ViewPerformanceAnalyzer
             this.toolStrip.Name = "toolStrip";
             this.toolStrip.Size = new System.Drawing.Size(960, 25);
             this.toolStrip.TabIndex = 0;
-            //
-            // tslEntity
-            //
-            this.tslEntity.Name = "tslEntity";
-            this.tslEntity.Text = "Table:";
             //
             // cboEntity
             //
@@ -113,7 +106,7 @@ namespace XrmToolSuite.ViewPerformanceAnalyzer
             //
             this.tsbRefreshTables.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
             this.tsbRefreshTables.Name = "tsbRefreshTables";
-            this.tsbRefreshTables.Text = "Refresh tables";
+            this.tsbRefreshTables.Text = "Load tables";
             this.tsbRefreshTables.ToolTipText = "Load the list of tables from the connected environment";
             this.tsbRefreshTables.Click += new System.EventHandler(this.tsbRefreshTables_Click);
             //
@@ -480,7 +473,6 @@ namespace XrmToolSuite.ViewPerformanceAnalyzer
         #endregion
 
         private System.Windows.Forms.ToolStrip toolStrip;
-        private System.Windows.Forms.ToolStripLabel tslEntity;
         private System.Windows.Forms.ToolStripComboBox cboEntity;
         private System.Windows.Forms.ToolStripButton tsbRefreshTables;
         private System.Windows.Forms.ToolStripSeparator tssSeparator1;

@@ -71,6 +71,7 @@ All of this lives in the root **`testing/`** folder (see `testing/README.md`). `
 
 ## Coding conventions
 
+- **Every code/feature change must update the affected README files in the same change.** At minimum the tool's own `src/Tools/<Tool>/README.md` (Features + Usage sections must describe the new/changed behavior); also the root `README.md` tool table, `scripts/README.md`, and any guide (`Deployment_Guide…`/`Publishing_Guide…`) whose described behavior changed. A change that alters behavior without updating its README(s) is incomplete — treat stale docs as a build break.
 - Target `net48`, C# latest via `LangVersion`. No `Span<T>`/NET-Core-only APIs.
 - WinForms: keep generated layout in `*.Designer.cs`, logic in the main partial class. Control naming: `tsb*` (toolstrip buttons), `lv*` (list views), `txt*`, `cbo*`, `grd*`.
 - Namespaces: `XrmToolSuite.<ToolName>`; shared code stays in `XrmToolSuite.Core`.
@@ -98,6 +99,7 @@ Builds cannot run in non-Windows environments; when a build isn't possible, say 
 5. Settings round-trip: load in `*_Load`, save in `ClosingPlugin`.
 6. Nuspec id/version/description match the tool.
 7. Testing artifacts exist and are current under `testing/Tools/<Tool>/` (TEST_PLAN, TEST_CASES, TEST_SUMMARY, screenshots — **including the required `xrmtoolbox-tools-list.png` load screenshot**), the tool is listed in `testing/UiSmokeTests` `ExpectedTools`, user stories under `docs/user-stories/<TAG>N.<Tool>.md` (tagged naming — see the Tool lifecycle section), and `dotnet test testing/UnitTests/UnitTests.csproj` passes. State plainly which cases were executed vs. pending-manual — never report a manual GUI case as passed if it wasn't run.
+8. README files are current: the changed tool's `README.md` describes the new/changed behavior, and the root `README.md` / `scripts/README.md` / guides are updated where affected.
 
 ## Tool-specific notes
 

@@ -42,6 +42,7 @@ namespace XrmToolSuite.JavaScriptPerformanceAnalyzer
         {
             _settings = LoadSettings<ToolSettings>();
             txtSearch.Text = _settings.LastSearch ?? "";
+            tsbCustomOnly.Checked = _settings.CustomOnly;
             LogInfo("JavaScript Performance Analyzer loaded");
             SetStatusMessage("Click 'Analyze web resources' to statically scan every JScript web resource.");
         }
@@ -49,9 +50,46 @@ namespace XrmToolSuite.JavaScriptPerformanceAnalyzer
         public override void ClosingPlugin(PluginCloseInfo info)
         {
             if (_settings != null)
+            {
                 _settings.LastSearch = txtSearch.Text;
+                _settings.CustomOnly = tsbCustomOnly.Checked;
+            }
             SaveSettings(_settings);
             base.ClosingPlugin(info);
+        }
+
+        private void tsbExclusions_Click(object sender, EventArgs e)
+        {
+            using (var dlg = new ExclusionsForm(_settings.ExcludeNamePrefixes))
+            {
+                if (dlg.ShowDialog(this) != DialogResult.OK) return;
+                _settings.ExcludeNamePrefixes = dlg.Prefixes;
+                SetStatusMessage("Exclusions saved — re-run the analysis to apply.");
+            }
+        }
+
+        private static IEnumerable<string> SplitCsv(string csv) =>
+            string.IsNullOrWhiteSpace(csv)
+                ? Enumerable.Empty<string>()
+                : csv.Split(',').Select(s => s.Trim()).Where(s => s.Length > 0);
+
+        /// <summary>
+        /// Prefixes each source line with a right-aligned line number (1-based) so the read-only code pane
+        /// has a gutter that matches the findings' Line column. Normalizes any newline style to CRLF and
+        /// preserves the line count exactly (line N in → line N out).
+        /// </summary>
+        private static string WithLineNumbers(string text)
+        {
+            if (string.IsNullOrEmpty(text)) return text;
+            var lines = text.Replace("\r\n", "\n").Replace("\r", "\n").Split('\n');
+            int width = lines.Length.ToString().Length;
+            var sb = new System.Text.StringBuilder(text.Length + lines.Length * (width + 3));
+            for (int i = 0; i < lines.Length; i++)
+            {
+                sb.Append((i + 1).ToString().PadLeft(width)).Append("  ").Append(lines[i]);
+                if (i < lines.Length - 1) sb.Append("\r\n");
+            }
+            return sb.ToString();
         }
 
         public override void UpdateConnection(
@@ -74,13 +112,16 @@ namespace XrmToolSuite.JavaScriptPerformanceAnalyzer
         private void AnalyzeWebResources()
         {
             var options = OptionsFromSettings();
+            bool customOnly = tsbCustomOnly.Checked;
+            var excludePrefixes = SplitCsv(_settings.ExcludeNamePrefixes).ToList();
 
             RunAsync(
                 "Analyzing JavaScript web resources...",
                 worker =>
                 {
                     var collector = new JsCollector(options);
-                    var scripts = collector.Collect(Service, worker, msg => worker.ReportProgress(0, msg));
+                    var scripts = collector.Collect(Service, worker, msg => worker.ReportProgress(0, msg),
+                        customOnly, excludePrefixes);
                     worker.ReportProgress(0, "Mapping form event handlers...");
                     var usages = collector.CollectFormUsage(Service, worker);
                     return new AnalyzeResult
@@ -179,7 +220,10 @@ namespace XrmToolSuite.JavaScriptPerformanceAnalyzer
             lblFindingsHeader.Text = $"Findings for: {script.ScriptName}";
             PopulateFindings(script);
 
-            txtCode.Text = script.Code ?? "";
+            // Show the source with a line-number gutter so the findings' Line column can be matched by eye.
+            // (Also normalizes newlines — a WinForms TextBox only breaks on CRLF, and JS is usually saved
+            // with LF, which would otherwise collapse the file onto one line.)
+            txtCode.Text = WithLineNumbers(script.Code ?? "");
 
             var usages = _usages
                 .Where(u => string.Equals(u.ScriptLibrary, script.ScriptName, StringComparison.OrdinalIgnoreCase))
@@ -456,5 +500,56 @@ namespace XrmToolSuite.JavaScriptPerformanceAnalyzer
         public int SizeHighBytes { get; set; } = 204800;
         public int RepeatedRetrieveWarn { get; set; } = 3;
         public int OnLoadHandlerWarn { get; set; } = 5;
+
+        /// <summary>Scan only unmanaged (custom) web resources — skip Microsoft/managed system libraries.</summary>
+        public bool CustomOnly { get; set; } = true;
+
+        /// <summary>Comma-separated name prefixes; web resources whose name starts with any are skipped.</summary>
+        public string ExcludeNamePrefixes { get; set; } = "";
+    }
+
+    /// <summary>Small modal for the name-prefix exclusion list (comma-separated).</summary>
+    internal sealed class ExclusionsForm : Form
+    {
+        private readonly TextBox _txt;
+        public string Prefixes => _txt.Text.Trim();
+
+        public ExclusionsForm(string prefixes)
+        {
+            Text = "Exclusions";
+            FormBorderStyle = FormBorderStyle.FixedDialog;
+            StartPosition = FormStartPosition.CenterParent;
+            MinimizeBox = false; MaximizeBox = false; ShowInTaskbar = false;
+            ClientSize = new Size(520, 170);
+
+            // Rows: [label (wraps)] [textbox] [spacer] [buttons]. AutoSize=false + Dock=Top on the label so
+            // the long hint wraps inside the dialog instead of being clipped off the right edge.
+            var layout = new TableLayoutPanel { Dock = DockStyle.Fill, Padding = new Padding(12), ColumnCount = 1, RowCount = 4 };
+            layout.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100));
+            layout.RowStyles.Add(new RowStyle(SizeType.Absolute, 40)); // wrapped label
+            layout.RowStyles.Add(new RowStyle(SizeType.Absolute, 28)); // textbox
+            layout.RowStyles.Add(new RowStyle(SizeType.Percent, 100)); // spacer
+            layout.RowStyles.Add(new RowStyle(SizeType.AutoSize));      // buttons
+
+            layout.Controls.Add(new Label
+            {
+                Text = "Exclude web resources whose name starts with any of these (comma-separated, e.g. msdyn_, cc_, AppCommon/):",
+                AutoSize = false,
+                Dock = DockStyle.Fill,
+                Margin = new Padding(0, 2, 0, 2)
+            }, 0, 0);
+            _txt = new TextBox { Dock = DockStyle.Top, Text = prefixes ?? "" };
+            layout.Controls.Add(_txt, 0, 1);
+            layout.Controls.Add(new Label(), 0, 2); // spacer row
+
+            var buttons = new FlowLayoutPanel { Dock = DockStyle.Fill, FlowDirection = FlowDirection.RightToLeft, AutoSize = true };
+            var ok = new Button { Text = "OK", DialogResult = DialogResult.OK, AutoSize = true };
+            var cancel = new Button { Text = "Cancel", DialogResult = DialogResult.Cancel, AutoSize = true };
+            buttons.Controls.Add(ok); buttons.Controls.Add(cancel);
+            layout.Controls.Add(buttons, 0, 3);
+
+            Controls.Add(layout);
+            AcceptButton = ok; CancelButton = cancel;
+        }
     }
 }

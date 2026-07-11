@@ -134,6 +134,26 @@ namespace XrmToolSuite.Core
         }
 
         /// <summary>
+        /// Renders generated HTML in the user's default browser: writes it to a timestamped temp file and
+        /// shells it. This is the suite's "real preview" for HTML output — an embedded WinForms browser is
+        /// either ancient (WebBrowser/IE11 breaks the templates' CSS variables and dark mode) or a heavy
+        /// native dependency (WebView2), while the default browser renders exactly what the export produces.
+        /// </summary>
+        protected void OpenHtmlInBrowser(string html, string baseFileName)
+        {
+            if (string.IsNullOrWhiteSpace(html)) return;
+            try
+            {
+                var path = System.IO.Path.Combine(System.IO.Path.GetTempPath(),
+                    $"{baseFileName}_{DateTime.Now:yyyyMMdd_HHmmss}.html");
+                System.IO.File.WriteAllText(path, html, System.Text.Encoding.UTF8);
+                Process.Start(path);
+                SetStatusMessage("Opened preview in your browser.");
+            }
+            catch (Exception ex) { ShowError(ex, "Browser preview failed"); }
+        }
+
+        /// <summary>
         /// After a successful export, asks the user whether to open the produced file and, if so, opens it
         /// with its default application. Swallows shell failures so the tool never crashes.
         /// </summary>

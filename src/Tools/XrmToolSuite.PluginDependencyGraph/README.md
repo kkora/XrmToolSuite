@@ -25,7 +25,7 @@ The graph and findings export to seven formats:
 - **SVG**
 - **PDF**
 - **Excel workbook**
-- **JSON**
+- **JSON** (written indented / pretty-printed)
 - **GraphML** (round-trips node/edge types)
 - **HTML** (self-contained)
 

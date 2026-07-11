@@ -45,7 +45,7 @@ namespace XrmToolSuite.FetchXmlPerformanceAnalyzer
             _settings = LoadSettings<ToolSettings>();
             txtFetchXml.Text = string.IsNullOrWhiteSpace(_settings.LastFetchXml)
                 ? SampleFetchXml
-                : _settings.LastFetchXml;
+                : XmlFormat.Pretty(_settings.LastFetchXml); // older settings may hold one-line fetchxml
             LogInfo("FetchXML Performance Analyzer loaded");
         }
 
@@ -218,17 +218,10 @@ namespace XrmToolSuite.FetchXmlPerformanceAnalyzer
                     if (chosen != null)
                     {
                         // Views store their fetchxml as a single line — pretty-print it so it's editable.
-                        txtFetchXml.Text = FormatXml(chosen.FetchXml);
+                        txtFetchXml.Text = XmlFormat.Pretty(chosen.FetchXml);
                         SetStatusMessage($"Loaded FetchXML from view '{chosen.Name}'. Click Analyze.");
                     }
                 });
-        }
-
-        /// <summary>Indents XML for display; returns the input unchanged if it doesn't parse (fail-soft).</summary>
-        private static string FormatXml(string xml)
-        {
-            try { return System.Xml.Linq.XDocument.Parse(xml).ToString(); }
-            catch { return xml; }
         }
 
         private static ViewItem PromptSelectView(List<ViewItem> views)
