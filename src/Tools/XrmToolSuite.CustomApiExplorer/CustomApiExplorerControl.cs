@@ -247,7 +247,7 @@ namespace XrmToolSuite.CustomApiExplorer
             sb.AppendLine($"{api.UniqueName} — success");
             if (result.Results.Count == 0) sb.AppendLine("(no output properties)");
             foreach (var kv in result.Results)
-                sb.AppendLine($"  {kv.Key} = {kv.Value}");
+                sb.AppendLine($"  {kv.Key} = {TextBoxFormat.CrLf(kv.Value?.ToString())}");
             return sb.ToString();
         }
 

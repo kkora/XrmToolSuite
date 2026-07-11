@@ -233,7 +233,7 @@ namespace XrmToolSuite.EnvironmentInventory
                 sb.AppendLine();
                 sb.AppendLine("Details:");
                 foreach (var kv in item.Details)
-                    sb.AppendLine($"  {kv.Key}: {kv.Value}");
+                    sb.AppendLine($"  {kv.Key}: {TextBoxFormat.CrLf(kv.Value?.ToString())}");
             }
             txtDetail.Text = sb.ToString();
             txtDetail.SelectionStart = 0;

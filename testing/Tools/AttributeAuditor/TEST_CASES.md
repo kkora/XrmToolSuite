@@ -49,14 +49,14 @@ Executed in XrmToolBox against a live org; screenshot per case into `screenshots
 |---|---|---|---|---|---|
 | TC-ADMIN10-M-01 | Tool loads & connects | Open Attribute Auditor, connect | Loads, connects; toolbar shows Run/toggles/export/close | Manual | Pending |
 | TC-ADMIN10-M-02 | Run audit off-thread | Click Run audit | Spinner + progress messages; grid populates; status shows total/used/candidate counts | Manual | Pending |
-| TC-ADMIN10-M-03 | Custom-only scope | Toggle "Custom tables only", re-run | Custom columns on system tables appear/disappear accordingly | Manual | Pending |
+| TC-ADMIN10-M-03 | Custom-only scope | Toggle "Custom only", re-run | Custom columns on system tables appear/disappear accordingly | Manual | Pending |
 | TC-ADMIN10-M-04 | Candidates-only filter | Toggle "Candidates only" | Grid shows only unused custom columns; candidates shown in red | Manual | Pending |
 | TC-ADMIN10-M-05 | CSV export | Export CSV, open in Excel | All audited columns with Used/Usage columns; UTF-8, commas quoted | Manual | Pending |
 | TC-ADMIN10-M-06 | HTML report | Export report (HTML), open in browser | Dashboard: gauge, metric strip (audited/used/candidates), candidate findings; light/dark aware | Manual | Pending |
-| TC-ADMIN10-M-07 | Settings persist | Change toggles, close, reopen | "Custom tables only" / "Candidates only" / exclusion prefixes restored from settings | Manual | Pending |
+| TC-ADMIN10-M-07 | Settings persist | Change toggles, close, reopen | "Custom only" / "Candidates only" / exclusion prefixes restored from settings | Manual | Pending |
 | TC-ADMIN10-M-08 | Sortable grid | Click each column header, click again | Rows sort by that column ascending, then descending on second click (virtual mode) | Manual | Pending |
 | TC-ADMIN10-M-09 | Exclusion dialog (live) | Click "Exclusions…", enter table/column prefixes, OK | Matching tables/columns leave the grid immediately (no re-run) and are absent from exports | Manual | Pending |
-| TC-ADMIN10-M-12 | Large audit responsive | Run with "Custom tables only" off (thousands of columns) | Grid loads without "Not responding"; scrolling/sorting/exclusions stay responsive (virtual mode) | Manual | Pending |
+| TC-ADMIN10-M-12 | Large audit responsive | Run with "Custom only" off (thousands of columns) | Grid loads without "Not responding"; scrolling/sorting/exclusions stay responsive (virtual mode) | Manual | Pending |
 | TC-ADMIN10-M-13 | Status-bar counts | Run audit; then apply an exclusion | Status shows "Tables: N total, M non-custom, X excluded, S shown • Columns: …"; counts update on exclusion | Manual | Pending |
 | TC-ADMIN10-M-10 | Open after export | Export CSV/HTML, answer Yes on the prompt | Exported file opens in its default app | Manual | Pending |
 | TC-ADMIN10-M-11 | Help → Documentation | Click Help, click Documentation | Opens this tool's guide (ADMIN10.AttributeAuditor), not the suite readme | Manual | Pending |

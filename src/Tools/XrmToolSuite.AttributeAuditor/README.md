@@ -17,7 +17,7 @@ signal is a retirement candidate.
 | **Process** | Workflow, business-rule and cloud-flow definitions, matched by whole-token reference over `xaml` + `clientdata` (not substring) |
 | **Field security** | Secured attributes (`IsSecured`), read directly from metadata |
 
-- **Scope:** a "Custom tables only" toggle targets the audit; intersect (N:N) tables are always excluded.
+- **Scope:** a "Custom only" toggle limits the audit to custom tables; intersect (N:N) tables are always excluded.
 - **Results grid:** each column with its table, logical/display name, type, managed flag, used flag and a
   usage summary of which signals fired. Candidates are highlighted, and:
   - **Sortable** — click any column header to sort; click again to reverse.
@@ -69,7 +69,7 @@ output DLL into `%AppData%\MscrmTools\XrmToolBox\Plugins` (flat in the Plugins r
 ## Usage
 
 1. Connect to your Dataverse environment.
-2. Open **Attribute Auditor**; optionally enable "Custom tables only".
+2. Open **Attribute Auditor**; optionally enable "Custom only".
 3. Optionally open **Exclusions…** to drop noisy table/column prefixes (e.g. `adx_`, `msdyn_`).
 4. Run the audit — it runs on a background worker.
 5. Review the grid; sort by any column header, toggle "Candidates only" to focus on unused custom columns
