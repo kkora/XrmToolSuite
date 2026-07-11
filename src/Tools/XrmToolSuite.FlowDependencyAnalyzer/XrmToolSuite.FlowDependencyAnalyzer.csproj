@@ -5,7 +5,7 @@
     <RootNamespace>XrmToolSuite.FlowDependencyAnalyzer</RootNamespace>
     <AssemblyName>XrmToolSuite.FlowDependencyAnalyzer</AssemblyName>
     <!-- Per-tool version: bump when THIS tool changes (scripts/Bump-Tool.ps1). Must equal the nuspec <version>. -->
-    <Version>1.2026.7.8</Version>
+    <Version>1.2026.7.9</Version>
     <Description>Statically maps every Dataverse, connector, connection-reference, environment-variable, custom-API and child-flow dependency of each cloud flow from its clientdata, with reverse component-impact analysis. Secrets and URLs redacted. Exports Excel, PDF, JSON, HTML.</Description>
     <!-- Ships the ClosedXML (Excel) + PdfSharp/MigraDoc-GDI (native PDF) chains with its nupkg, so deps must land in the output. -->
     <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>

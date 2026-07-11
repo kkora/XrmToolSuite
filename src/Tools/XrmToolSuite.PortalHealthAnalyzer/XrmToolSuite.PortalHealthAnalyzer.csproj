@@ -5,7 +5,7 @@
     <RootNamespace>XrmToolSuite.PortalHealthAnalyzer</RootNamespace>
     <AssemblyName>XrmToolSuite.PortalHealthAnalyzer</AssemblyName>
     <!-- Per-tool version: bump when THIS tool changes (scripts/Bump-Tool.ps1). Must equal the nuspec <version>. -->
-    <Version>1.2026.7.8</Version>
+    <Version>1.2026.7.9</Version>
     <description>Inventories a Power Pages website (adx_/mspp_ schemas) and scores portal health across settings, roles, permissions, pages, templates, snippets, forms, lists, and web files with a categorized issue grid. Exports Excel, PDF, Word, JSON, HTML, CSV.</description>
     <!-- Ships the ClosedXML (Excel) + PdfSharp/MigraDoc-GDI (native PDF/Word) chains with its nupkg, so deps must land in the output. -->
     <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>

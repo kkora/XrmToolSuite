@@ -5,7 +5,7 @@
     <RootNamespace>XrmToolSuite.SolutionMergeAssistant</RootNamespace>
     <AssemblyName>XrmToolSuite.SolutionMergeAssistant</AssemblyName>
     <!-- Per-tool version: bump when THIS tool changes (scripts/Bump-Tool.ps1). Must equal the nuspec <version>. -->
-    <Version>1.2026.7.8</Version>
+    <Version>1.2026.7.9</Version>
     <description>Read-only comparison of two or more solutions from one environment: duplicate/overlapping components, publisher/version/managed-state conflicts, and env-var/connection-reference conflicts rolled into a pre-merge verdict, strategy, and checklist.</description>
     <!-- This tool ships ClosedXML + PdfSharp/MigraDoc with its nupkg, so deps must land in the output -->
     <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>

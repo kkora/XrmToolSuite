@@ -5,7 +5,7 @@
     <RootNamespace>XrmToolSuite.SharingAnalyzer</RootNamespace>
     <AssemblyName>XrmToolSuite.SharingAnalyzer</AssemblyName>
     <!-- Per-tool version: bump when THIS tool changes (scripts/Bump-Tool.ps1). Must equal the nuspec <version>. -->
-    <Version>1.2026.7.8</Version>
+    <Version>1.2026.7.9</Version>
     <description>Analyzes PrincipalObjectAccess (record-level sharing) by table and principal, flags excessive and stale shares, and recommends cleanup.</description>
     <!-- This tool ships ClosedXML + PdfSharp/MigraDoc with its nupkg, so deps must land in the output -->
     <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>

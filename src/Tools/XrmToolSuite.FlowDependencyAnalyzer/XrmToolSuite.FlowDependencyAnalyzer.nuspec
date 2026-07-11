@@ -8,7 +8,7 @@
          4) DLL goes under a "Plugins" folder
          5) iconUrl is required and must be your own icon -->
     <id>XrmToolSuite.FlowDependencyAnalyzer</id>
-    <version>1.2026.7.8</version>
+    <version>1.2026.7.9</version>
     <title>Flow Dependency Analyzer for XrmToolBox</title>
     <authors>Kanchan Kora</authors>
     <owners>Kanchan Kora</owners>
@@ -19,7 +19,7 @@
     <license type="expression">MIT</license>
     <description>Read-only static mapper of cloud-flow dependencies from clientdata: per-flow trigger, Dataverse tables/columns, connectors, connection references, environment variables, child flows, custom APIs and HTTP actions, plus a reverse "which flows break if I change this component?" impact view, missing-metadata and hardcoded-value risk findings, and a deployment-readiness checklist. Exports Excel, PDF, JSON and HTML. HTTP endpoint URLs, SAS/trigger URLs and secrets are always redacted.</description>
     <summary>Statically maps every cloud flow's Dataverse/connector/connection-reference/environment-variable/custom-API/child-flow dependency with reverse component-impact analysis. Secrets redacted.</summary>
-    <releaseNotes>1.2026.7.8: Technical Debt Analyzer - analyzers/dashboard panes now start split in half; Solution Complexity Score - Metrics/Hotspots panes now start at one-third/two-thirds; both splitters remain draggable. No other tool changed.</releaseNotes>
+    <releaseNotes>1.2026.7.9: Every export now offers to open the saved file. FetchXML Performance Analyzer: 'Load from view' pretty-prints the FetchXML. Internal: per-tool versioning - future releases update only the tools that changed.</releaseNotes>
     <tags>XrmToolBox Dataverse Dynamics365 PowerPlatform PowerAutomate Flow Dependencies ALM</tags>
     <dependencies>
       <dependency id="XrmToolBox" version="1.2025.10.74" />

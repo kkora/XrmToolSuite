@@ -8,7 +8,7 @@
          4) DLL goes under a "Plugins" folder
          5) iconUrl is required and must be your own icon -->
     <id>XrmToolSuite.SolutionKnowledgeGraph</id>
-    <version>1.2026.7.8</version>
+    <version>1.2026.7.9</version>
     <title>Solution Knowledge Graph for XrmToolBox</title>
     <authors>Kanchan Kora</authors>
     <owners>Kanchan Kora</owners>
@@ -19,7 +19,7 @@
     <license type="expression">MIT</license>
     <description>Builds an interactive dependency graph across a Dataverse solution with impact analysis, dependency tracing, circular-dependency detection, and PNG/SVG/GraphML export.</description>
     <summary>Builds an interactive dependency graph across a Dataverse solution with impact analysis, dependency tracing, circular-dependency detection, and PNG/SVG/GraphML export.</summary>
-    <releaseNotes>1.2026.7.8: Technical Debt Analyzer - analyzers/dashboard panes now start split in half; Solution Complexity Score - Metrics/Hotspots panes now start at one-third/two-thirds; both splitters remain draggable. No other tool changed.</releaseNotes>
+    <releaseNotes>1.2026.7.9: Every export now offers to open the saved file. FetchXML Performance Analyzer: 'Load from view' pretty-prints the FetchXML. Internal: per-tool versioning - future releases update only the tools that changed.</releaseNotes>
     <tags>XrmToolBox Dataverse Dynamics365 PowerPlatform DependencyGraph ALM Visualization</tags>
     <dependencies>
       <dependency id="XrmToolBox" version="1.2025.10.74" />
