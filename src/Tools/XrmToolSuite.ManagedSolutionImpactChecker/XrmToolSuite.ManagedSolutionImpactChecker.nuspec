@@ -8,7 +8,7 @@
          4) DLL goes under a "Plugins" folder
          5) iconUrl is required and must be your own icon -->
     <id>XrmToolSuite.ManagedSolutionImpactChecker</id>
-    <version>1.2026.7.9</version>
+    <version>1.2026.7.10</version>
     <title>Managed Solution Impact Checker for XrmToolBox</title>
     <authors>Kanchan Kora</authors>
     <owners>Kanchan Kora</owners>
@@ -19,7 +19,8 @@
     <license type="expression">MIT</license>
     <description>Read-only impact analysis for importing/upgrading/patching/deleting a managed solution. Analyzes solution layering (unmanaged customizations sitting above managed layers), overwrite and deletion risk with explicit Upgrade-vs-Update/Patch semantics (an Upgrade deletes components missing from the incoming solution — and their data — while Update/Patch do not), missing dependencies, publisher prefix mismatches, and restrictive managed properties. Produces a banded impact score, a per-path risk breakdown, a pre-upgrade checklist, rollback guidance, and a CAB-ready report (Excel/PDF/JSON/HTML). Never performs the import or upgrade.</description>
     <summary>Read-only managed-solution layering / upgrade / patch / delete impact analysis with an impact score, pre-upgrade checklist, rollback guidance, and CAB-ready Excel/PDF/JSON/HTML report.</summary>
-    <releaseNotes>1.2026.7.9: Every export now offers to open the saved file. FetchXML Performance Analyzer: 'Load from view' pretty-prints the FetchXML. Internal: per-tool versioning - future releases update only the tools that changed.</releaseNotes>
+    <releaseNotes>1.2026.7.10: Package health - deterministic CI builds with SourceLink and embedded symbols (PDB inside the DLL), and the package now links its GitHub source repository. No functional change to any tool.</releaseNotes>
+    <repository type="git" url="https://github.com/kkora/XrmToolSuite" />
     <tags>XrmToolBox Dataverse Dynamics365 PowerPlatform ALM Solutions ManagedSolution Upgrade</tags>
     <dependencies>
       <dependency id="XrmToolBox" version="1.2025.10.74" />

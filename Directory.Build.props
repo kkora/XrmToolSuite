@@ -10,7 +10,7 @@
          AssemblyVersion/FileVersion are deliberately NOT set here: the .NET SDK derives them from
          each project's final <Version> — setting them here would freeze this fallback value before
          the per-tool override applies (props evaluate before the csproj body). -->
-    <Version>1.2026.7.9</Version>
+    <Version>1.2026.7.10</Version>
     <Deterministic>true</Deterministic>
   </PropertyGroup>
 </Project>

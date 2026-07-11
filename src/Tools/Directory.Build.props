@@ -8,6 +8,12 @@
     <AppendTargetFrameworkToOutputPath>true</AppendTargetFrameworkToOutputPath>
     <!-- XrmToolBox ships all its own dependencies; keep tool output lean -->
     <CopyLocalLockFileAssemblies>false</CopyLocalLockFileAssemblies>
+    <!-- Package health (NuGet Package Explorer checks): embed the portable PDB in the DLL so
+         symbols + compiler flags ship inside the single plugin file (no .snupkg needed). The
+         .NET 8 SDK adds GitHub SourceLink automatically when building from this git repo, and
+         publish.yml builds with -p:ContinuousIntegrationBuild=true for deterministic paths. -->
+    <DebugType>embedded</DebugType>
+    <EmbedUntrackedSources>true</EmbedUntrackedSources>
   </PropertyGroup>
 
   <ItemGroup>

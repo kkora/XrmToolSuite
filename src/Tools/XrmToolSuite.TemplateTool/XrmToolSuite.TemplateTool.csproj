@@ -5,7 +5,7 @@
     <RootNamespace>XrmToolSuite.TemplateTool</RootNamespace>
     <AssemblyName>XrmToolSuite.TemplateTool</AssemblyName>
     <!-- Per-tool version: bump when THIS tool changes (scripts/Bump-Tool.ps1). Must equal the nuspec <version>. -->
-    <Version>1.2026.7.9</Version>
+    <Version>1.2026.7.10</Version>
     <Description>Starter tool for XrmToolBox — replace with your description.</Description>
   </PropertyGroup>
 </Project>

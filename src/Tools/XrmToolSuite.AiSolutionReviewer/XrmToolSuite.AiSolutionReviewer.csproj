@@ -5,7 +5,7 @@
     <RootNamespace>XrmToolSuite.AiSolutionReviewer</RootNamespace>
     <AssemblyName>XrmToolSuite.AiSolutionReviewer</AssemblyName>
     <!-- Per-tool version: bump when THIS tool changes (scripts/Bump-Tool.ps1). Must equal the nuspec <version>. -->
-    <Version>1.2026.7.9</Version>
+    <Version>1.2026.7.10</Version>
     <description>AI-assisted architecture review of a Dataverse solution with recommendations, a prioritized backlog, and Word/PDF/Markdown/HTML reports.</description>
     <!-- Ships ClosedXML/OpenXML + PdfSharp/MigraDoc with its nupkg, so deps must land in the output. -->
     <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
