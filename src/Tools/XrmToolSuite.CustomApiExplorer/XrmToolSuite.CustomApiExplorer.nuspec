@@ -8,7 +8,7 @@
          4) DLL goes under a "Plugins" folder
          5) iconUrl is required and must be your own icon -->
     <id>XrmToolSuite.CustomApiExplorer</id>
-    <version>1.2026.7.11</version>
+    <version>1.2026.7.13</version>
     <title>Custom API Explorer for XrmToolBox</title>
     <authors>Kanchan Kora</authors>
     <owners>Kanchan Kora</owners>
