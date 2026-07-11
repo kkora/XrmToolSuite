@@ -8,7 +8,7 @@
          4) DLL goes under a "Plugins" folder
          5) iconUrl is required and must be your own icon -->
     <id>XrmToolSuite.EnvironmentComparisonSuite</id>
-    <version>1.2026.7.6</version>
+    <version>1.2026.7.7</version>
     <title>Environment Comparison Suite for XrmToolBox</title>
     <authors>Kanchan Kora</authors>
     <owners>Kanchan Kora</owners>
@@ -19,7 +19,7 @@
     <license type="expression">MIT</license>
     <description>Read-only source-to-target Dataverse environment comparison across every component class (solutions/publishers, tables/columns/relationships/keys, forms/views/charts/dashboards, roles/teams/business units, plugin assemblies/steps/images, processes, custom APIs, environment variables, connection references, web resources). Classifies each component Missing/Extra/Changed/Managed-vs-Unmanaged, rolls a weighted difference score with severities, and exports Excel/PDF/JSON/HTML. Secret-typed values are masked. Uses the suite dual-connection pattern for the target environment. Never writes to either environment.</description>
     <summary>Read-only source-to-target environment comparison: classifies Missing/Extra/Changed/Managed-vs-Unmanaged per component, scores the difference, and exports Excel/PDF/JSON/HTML.</summary>
-    <releaseNotes>1.2026.7.6: Help > Documentation now opens each tool's own README (instead of the suite readme).</releaseNotes>
+    <releaseNotes>1.2026.7.7: Solution Knowledge Graph - interactive HTML graph now renders (fixed a script error that blanked the canvas) with zoom/pan/fit and labeled nodes; readable node names for columns, relationships, option sets, environment variables and custom component types; exports honor the node-type filter; color legend on SVG/PNG.</releaseNotes>
     <tags>XrmToolBox Dataverse Dynamics365 PowerPlatform ALM EnvironmentComparison Drift Migration</tags>
     <dependencies>
       <dependency id="XrmToolBox" version="1.2025.10.74" />
