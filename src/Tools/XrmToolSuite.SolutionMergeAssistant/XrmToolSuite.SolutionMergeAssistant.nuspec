@@ -8,7 +8,7 @@
          4) DLL goes under a "Plugins" folder
          5) iconUrl is required and must be your own icon -->
     <id>XrmToolSuite.SolutionMergeAssistant</id>
-    <version>1.2026.7.7</version>
+    <version>1.2026.7.8</version>
     <title>Solution Merge Assistant for XrmToolBox</title>
     <authors>Kanchan Kora</authors>
     <owners>Kanchan Kora</owners>
@@ -19,7 +19,7 @@
     <license type="expression">MIT</license>
     <description>Read-only comparison of two or more solutions from one environment: duplicate/overlapping components, publisher/version/managed-state conflicts, and environment-variable/connection-reference conflicts rolled into a pre-merge verdict (Safe / Merge-with-warnings / Manual-review / High-risk / Do-not-merge), a recommended merge strategy, and a merged-component checklist. Exportable to Excel, PDF, JSON, and HTML.</description>
     <summary>Compare two or more solutions before merging and get a pre-merge verdict, strategy, and conflict checklist.</summary>
-    <releaseNotes>1.2026.7.7: Solution Knowledge Graph - interactive HTML graph now renders (fixed a script error that blanked the canvas) with zoom/pan/fit and labeled nodes; readable node names for columns, relationships, option sets, environment variables and custom component types; exports honor the node-type filter; color legend on SVG/PNG.</releaseNotes>
+    <releaseNotes>1.2026.7.8: Technical Debt Analyzer - analyzers/dashboard panes now start split in half; Solution Complexity Score - Metrics/Hotspots panes now start at one-third/two-thirds; both splitters remain draggable. No other tool changed.</releaseNotes>
     <tags>XrmToolBox Dataverse Dynamics365 ALM SolutionMerge PowerPlatform</tags>
     <dependencies>
       <dependency id="XrmToolBox" version="1.2025.10.74" />

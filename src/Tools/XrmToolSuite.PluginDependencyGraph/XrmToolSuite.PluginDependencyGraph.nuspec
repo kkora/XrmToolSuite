@@ -8,7 +8,7 @@
          4) DLL goes under a "Plugins" folder
          5) iconUrl is required and must be your own icon -->
     <id>XrmToolSuite.PluginDependencyGraph</id>
-    <version>1.2026.7.7</version>
+    <version>1.2026.7.8</version>
     <title>Plugin Dependency Graph for XrmToolBox</title>
     <authors>Kanchan Kora</authors>
     <owners>Kanchan Kora</owners>
@@ -19,7 +19,7 @@
     <license type="expression">MIT</license>
     <description>Read-only dependency graph of Dataverse plugin registrations (assembly to type to step to image to message/table to custom API to solution/config) with high-impact, duplicate-step and unmanaged-registration detection, exportable as PNG/SVG/PDF/Excel/JSON/GraphML/HTML.</description>
     <summary>Visualize what every plugin assembly, type and step touches, with risk findings and PNG/SVG/PDF/Excel/JSON/GraphML/HTML export.</summary>
-    <releaseNotes>1.2026.7.7: Solution Knowledge Graph - interactive HTML graph now renders (fixed a script error that blanked the canvas) with zoom/pan/fit and labeled nodes; readable node names for columns, relationships, option sets, environment variables and custom component types; exports honor the node-type filter; color legend on SVG/PNG.</releaseNotes>
+    <releaseNotes>1.2026.7.8: Technical Debt Analyzer - analyzers/dashboard panes now start split in half; Solution Complexity Score - Metrics/Hotspots panes now start at one-third/two-thirds; both splitters remain draggable. No other tool changed.</releaseNotes>
     <tags>XrmToolBox Dataverse Dynamics365 PowerPlatform Plugins CustomAPI Graph Documentation</tags>
     <dependencies>
       <dependency id="XrmToolBox" version="1.2025.10.74" />

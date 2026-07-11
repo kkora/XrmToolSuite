@@ -55,3 +55,4 @@ Executed in XrmToolBox against a live org; screenshot per case into `screenshots
 | TC-SOLN08-M-05 | Effort labeling | Inspect the report metrics | Effort/cost shown as estimates with units (days / $/yr) | Manual | Pending |
 | TC-SOLN08-M-06 | Excel / JSON / MD export | Export each | Files open with the metrics and hotspots | Manual | Pending |
 | TC-SOLN08-M-07 | AI consent & offline | Executive summary with/without key | Offline by default; AI shows anonymized payload first; key never saved | Manual | Pending |
+| TC-SOLN08-M-08 | 1/3–2/3 split layout | Open the tool | Metrics pane starts at one-third width, Hotspots two-thirds; splitter draggable and drags stick | Manual | Pending |

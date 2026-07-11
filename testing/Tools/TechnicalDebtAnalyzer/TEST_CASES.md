@@ -65,3 +65,4 @@ Executed in XrmToolBox against a live org; capture a screenshot per case into `s
 | TC-SOLN10-M-10 | Trends tab records a run | Analyze, open Trends tab | A row + chart point appears; delta banner shows after a 2nd run | Manual | Pending |
 | TC-SOLN10-M-11 | Trends export | Export → Trend history CSV/JSON | File contains the snapshot series for the environment | Manual | Pending |
 | TC-SOLN10-M-12 | Clear history (gated) | Trends tab → Clear history… | Confirmation names the environment; on OK the history for that env is cleared; Dataverse untouched | Manual | Pending |
+| TC-SOLN10-M-13 | Half/half split layout | Open the Dashboard tab | Analyzers pane and dashboard start at equal halves; splitter draggable and drags stick | Manual | Pending |
