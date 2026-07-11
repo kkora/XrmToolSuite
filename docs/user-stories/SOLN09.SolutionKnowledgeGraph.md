@@ -40,14 +40,19 @@ circular-dependency detection, an interactive HTML view, and PNG/SVG/GraphML exp
   components relate.
   - **AC:** Solutions load off the UI thread via `Service.RetrieveAll` (visible, non-Default/Active/Basic);
     `GraphBuilder.Build` reads `solutioncomponent` rows and creates one node per component with a friendly
-    type (`Table`, `Form`, `View`, `Plugin Step`, `Web Resource`, `Workflow / Flow`, `Security Role`,
-    `Model-driven App`, …) and a resolved display name — tables from entity metadata, the rest by name
-    query — falling back to `type + short id` when a name is missing. **Automated (builder)** —
-    `TC-SOLN09-COL-01/02/03/09`; *(build off-thread + UI: manual `TC-SOLN09-M-02`).*
+    type (`Table`, `Column`, `Form`, `View`, `Relationship`, `Option Set`, `Plugin Step`, `Web Resource`,
+    `Workflow / Flow`, `Security Role`, `Model-driven App`, `Environment Variable`, `Site Map`, …) and a
+    resolved display name — tables/columns/relationships/option sets from one bulk metadata read (columns
+    as `table.Display Name`, relationships as schema name), the rest by name query, org-custom component
+    types (≥ 10000) labelled from `solutioncomponentdefinition` — falling back to `type + short id` when no
+    name source exists (Environment Variable *Values* deliberately stay short-id: the value can carry
+    secrets). **Automated (builder)** — `TC-SOLN09-COL-01/02/03/09/11`; *(build off-thread + UI: manual
+    `TC-SOLN09-M-02`).*
   - **AC:** Edges come from the platform `dependency` table (`dependentcomponentobjectid` →
-    `requiredcomponentobjectid`, kind `requires`), only when the dependent is in the solution; construction
-    is off-thread (`RunAsync`) and fail-soft — a failed query degrades the graph instead of aborting.
-    **Automated (builder)** — `TC-SOLN09-COL-04/05/06/07/08`.
+    `requiredcomponentobjectid`, kind `requires`), only when the dependent is in the solution; required
+    components *outside* the solution are typed + named from the row's `requiredcomponenttype` instead of
+    surfacing as `Unknown` GUIDs; construction is off-thread (`RunAsync`) and fail-soft — a failed query
+    degrades the graph instead of aborting. **Automated (builder)** — `TC-SOLN09-COL-04/05/06/07/08/10`.
 
 ## FEAT-SOLN09-2 — Analysis `[Implemented]`
 - **US-SOLN09-2** `[Implemented]` Trace a node's dependencies and the impact of deleting it, to assess change risk.
@@ -62,22 +67,27 @@ circular-dependency detection, an interactive HTML view, and PNG/SVG/GraphML exp
     *(UI list: manual `TC-SOLN09-M-05`).*
 - **US-SOLN09-4** `[Implemented]` Search and node-type filters to focus on the parts of the graph that matter.
   - **AC:** `ApplyFilter` filters the node grid by a case-insensitive label search term and by the
-    checked node types in the type list (populated from the graph's distinct types). *(Manual — WinForms
-    grid; `TC-SOLN09-M-06`.)*
+    checked node types in the type list (populated from the graph's distinct types). **Exports and the
+    interactive view honour the type filter** (`FilteredGraph()` — unchecked types dropped, edges kept only
+    when both endpoints survive). *(Manual — WinForms grid + filtered exports; `TC-SOLN09-M-06/M-08`.)*
 
 ## FEAT-SOLN09-3 — Visualization & export `[Implemented]`
 - **US-SOLN09-5** `[Implemented]` An interactive graph view plus PNG/SVG/GraphML export, to explore and share it.
   - **AC:** `HtmlGraphBuilder` emits a self-contained offline HTML page — node/edge data embedded as
     hand-built JSON (with `<`/`>` and control-char escaping so a label can't break the `<script>` block),
-    drawn by a vanilla-JS force-directed canvas with search, type filters, node drag and click-to-highlight
-    (green = depends-on, red = impacted); no external CSS/JS/fonts/CDN. Opens via `Process.Start`.
-    **Automated** — `TC-SOLN09-EXPORT-09`; *(browser interaction: manual `TC-SOLN09-M-04`).*
+    drawn by a vanilla-JS force-directed canvas (cooling layout with capped repulsion so large graphs
+    settle; interaction state declared before the render loop — a TDZ `ReferenceError` here previously
+    blanked the canvas) with search, type filters, always-on node labels, scroll-zoom, drag-to-pan, a Fit
+    button (double-click re-fits), node drag and click-to-highlight (green = depends-on, red = impacted);
+    no external CSS/JS/fonts/CDN. Opens via `Process.Start`. **Automated** — `TC-SOLN09-EXPORT-09` +
+    headless-Edge render check; *(browser interaction: manual `TC-SOLN09-M-04`).*
   - **AC:** `GraphMlExporter` writes standard directed GraphML (label/type/kind data keys, XML-safe
-    encoding) readable in yEd/Gephi/Cytoscape; `SvgExporter` writes a deterministic circular-layout SVG as
-    a pure string (invariant-culture coordinates, per-type node colours); export runs from a
-    `SaveFileDialog`. **Automated** — `TC-SOLN09-EXPORT-07` (GraphML), `TC-SOLN09-EXPORT-08` (SVG). **PNG
-    `[Implemented*]`** — `PngExporter` rasterises the same circular layout via GDI+ (System.Drawing),
-    manual-tested (`TC-SOLN09-M-07`).
+    encoding) readable in yEd/Gephi/Cytoscape (the tool README documents viewer options); `SvgExporter`
+    writes a deterministic circular-layout SVG as a pure string (invariant-culture coordinates, per-type
+    node colours, a **colour legend** top-left); export runs from a `SaveFileDialog`. **Automated** —
+    `TC-SOLN09-EXPORT-07` (GraphML), `TC-SOLN09-EXPORT-08` (SVG + legend). **PNG `[Implemented*]`** —
+    `PngExporter` rasterises the same circular layout via GDI+ with the same legend, manual-tested
+    (`TC-SOLN09-M-07`).
 
 ## Definition of Done
 - Follows suite conventions (BaseToolControl, RunAsync/RetrieveAll semantics, Load/SaveSettings, off-thread build with progress).

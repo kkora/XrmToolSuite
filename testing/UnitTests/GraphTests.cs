@@ -26,6 +26,33 @@ namespace XrmToolSuite.UnitTests
             return g;
         }
 
+        // Manual preview (no Dataverse): set PREVIEW_HTML=<path> to render a synthetic ~210-node interactive
+        // graph through the real HtmlGraphBuilder, to eyeball the layout/zoom/fit without a live connection.
+        // Skipped in normal runs (returns early when the env var is unset).
+        [Fact]
+        public void Preview_InteractiveHtml_WhenRequested()
+        {
+            var outPath = System.Environment.GetEnvironmentVariable("PREVIEW_HTML");
+            if (string.IsNullOrWhiteSpace(outPath)) return;
+
+            var g = new GraphModel();
+            var types = new[] { "Table", "Column", "Form", "View", "Plugin Step", "Web Resource",
+                "Workflow / Flow", "Security Role", "Model-driven App", "Option Set", "Site Map", "Unknown" };
+            var ids = new System.Collections.Generic.List<string>();
+            for (int i = 0; i < 210; i++)
+            {
+                var id = "n" + i;
+                ids.Add(id);
+                g.AddNode(id, types[i % types.Length], types[i % types.Length] + " " + i);
+            }
+            var rnd = new System.Random(42);
+            for (int i = 0; i < 600; i++)
+                g.AddEdge(ids[rnd.Next(ids.Count)], ids[rnd.Next(ids.Count)], "requires");
+
+            HtmlGraphBuilder.Export(g, "DECD TAX CREDIT APPLICATION (preview)", outPath);
+            Assert.True(g.NodeCount == 210 && g.EdgeCount > 300);
+        }
+
         // TC-SOLN09-MODEL-01: nodes/edges are counted and duplicate edges are ignored.
         [Fact]
         public void AddEdge_DedupsAndCounts()
@@ -104,13 +131,16 @@ namespace XrmToolSuite.UnitTests
             Assert.Contains("Account", xml);
         }
 
-        // TC-SOLN09-EXPORT-08: SVG renders a circle per node and is self-contained.
+        // TC-SOLN09-EXPORT-08: SVG renders a circle per node plus a legend swatch per distinct type.
         [Fact]
-        public void Svg_RendersNodes()
+        public void Svg_RendersNodes_AndLegend()
         {
             var svg = SvgExporter.Build(Sample());
             Assert.Contains("<svg", svg);
-            Assert.Equal(4, System.Text.RegularExpressions.Regex.Matches(svg, "<circle ").Count);
+            // 4 nodes + 4 legend swatches (Sample has 4 distinct types).
+            Assert.Equal(8, System.Text.RegularExpressions.Regex.Matches(svg, "<circle ").Count);
+            Assert.Contains(">Legend</text>", svg);
+            Assert.Contains(">Plugin Step</text>", svg); // legend row for a present type
         }
 
         // TC-SOLN09-EXPORT-09: the interactive HTML embeds the data and is self-contained (no external refs).

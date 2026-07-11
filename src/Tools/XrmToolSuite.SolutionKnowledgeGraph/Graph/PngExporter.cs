@@ -50,6 +50,19 @@ namespace XrmToolSuite.SolutionKnowledgeGraph.Graph
                     gfx.DrawString(label, labelFont, labelBrush, p.X + 8, p.Y - 6);
                 }
 
+                // Colour legend (top-left corner — the ring layout leaves the corners empty), one row per
+                // node type present, same colours as the nodes. Mirrors the SVG export's legend.
+                var types = nodes.Select(x => x.Type).Distinct().OrderBy(t => t).ToList();
+                using (var legendHeader = new Font("Segoe UI", 9f, FontStyle.Bold))
+                    gfx.DrawString("Legend", legendHeader, labelBrush, 18f, 14f);
+                for (int i = 0; i < types.Count; i++)
+                {
+                    float y = 38f + i * 18f;
+                    using (var brush = new SolidBrush(ColorTranslator.FromHtml(SvgExporter.ColorFor(types[i]))))
+                        gfx.FillEllipse(brush, 20f, y, 10f, 10f);
+                    gfx.DrawString(types[i], labelFont, labelBrush, 36f, y - 2f);
+                }
+
                 bmp.Save(path, ImageFormat.Png);
             }
         }

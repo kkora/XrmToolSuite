@@ -95,6 +95,17 @@ namespace XrmToolSuite.SolutionKnowledgeGraph.Graph
                 sb.AppendLine($"  <circle cx=\"{N(p.x)}\" cy=\"{N(p.y)}\" r=\"6\" fill=\"{ColorFor(node.Type)}\"/>");
                 sb.AppendLine($"  <text x=\"{N(p.x + 9)}\" y=\"{N(p.y + 4)}\" font-size=\"10\" fill=\"#333\">{X(Trim(node.Label))}</text>");
             }
+
+            // Colour legend (top-left corner — the ring layout leaves the corners empty): one row per
+            // node type present in the graph, in the same colours as the nodes.
+            var types = nodes.Select(x => x.Type).Distinct().OrderBy(t => t).ToList();
+            sb.AppendLine($"  <text x=\"20\" y=\"24\" font-size=\"11\" font-weight=\"bold\" fill=\"#333\">Legend</text>");
+            for (int i = 0; i < types.Count; i++)
+            {
+                double y = 42 + i * 16;
+                sb.AppendLine($"  <circle cx=\"26\" cy=\"{N(y - 4)}\" r=\"5\" fill=\"{ColorFor(types[i])}\"/>");
+                sb.AppendLine($"  <text x=\"36\" y=\"{N(y)}\" font-size=\"10\" fill=\"#333\">{X(types[i])}</text>");
+            }
             sb.AppendLine("</svg>");
             return sb.ToString();
         }
@@ -108,13 +119,23 @@ namespace XrmToolSuite.SolutionKnowledgeGraph.Graph
             switch (type)
             {
                 case "Table": return "#2563eb";
+                case "Column": return "#6aa9ff";
                 case "Form": return "#12a150";
                 case "View": return "#0891b2";
+                case "Chart": return "#65a30d";
+                case "Option Set": return "#eab308";
+                case "Relationship": return "#c084fc";
                 case "Plugin Step": return "#d13438";
+                case "Plugin Assembly": return "#fb7185";
+                case "Plugin Type": return "#f43f5e";
                 case "Web Resource": return "#f7871f";
                 case "Workflow / Flow": return "#7c3aed";
                 case "Security Role": return "#be185d";
                 case "Model-driven App": return "#0f766e";
+                case "Environment Variable": return "#38bdf8";
+                case "Environment Variable Value": return "#7dd3fc";
+                case "Site Map": return "#facc15";
+                case "Custom Control": return "#a16207";
                 default: return "#8b95ad";
             }
         }
