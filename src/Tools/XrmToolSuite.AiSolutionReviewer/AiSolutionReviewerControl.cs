@@ -421,7 +421,7 @@ namespace XrmToolSuite.AiSolutionReviewer
                 StartPosition = FormStartPosition.CenterParent, ClientSize = new Size(640, 520)
             })
             {
-                var box = new TextBox { Dock = DockStyle.Fill, Multiline = true, ReadOnly = true, ScrollBars = ScrollBars.Vertical, Text = s.Text, Font = new Font("Segoe UI", 9.5f) };
+                var box = new TextBox { Dock = DockStyle.Fill, Multiline = true, ReadOnly = true, ScrollBars = ScrollBars.Vertical, Text = SummaryFormatting.ForTextBox(s.Text), Font = new Font("Segoe UI", 9.5f) };
                 var bar = new Panel { Dock = DockStyle.Bottom, Height = 44 };
                 var copy = new Button { Text = "Copy", Location = new Point(400, 8), Width = 70 };
                 copy.Click += (o, e) => { if (!string.IsNullOrEmpty(s.Text)) Clipboard.SetText(s.Text); };

@@ -76,7 +76,7 @@ namespace XrmToolSuite.ApiDocumentationBuilder
             _clbApis = new CheckedListBox { Dock = DockStyle.Fill, CheckOnClick = true, IntegralHeight = false };
             _clbApis.ItemCheck += ClbApis_ItemCheck;
 
-            _chkSelectAll = new CheckBox { Dock = DockStyle.Top, Text = "Select all", Checked = true, Height = 24, Padding = new Padding(4, 2, 0, 2) };
+            _chkSelectAll = new CheckBox { Dock = DockStyle.Top, Text = "Select all", Checked = false, Height = 24, Padding = new Padding(4, 2, 0, 2) };
             _chkSelectAll.CheckedChanged += ChkSelectAll_CheckedChanged;
 
             _txtApiSearch = new TextBox { Dock = DockStyle.Top };
@@ -239,18 +239,26 @@ namespace XrmToolSuite.ApiDocumentationBuilder
                 {
                     _catalog = catalog;
                     _allApis = _catalog.OrderedApis.ToList();
+                    // Start with NOTHING selected so "check 5, export 5" is unambiguous (search only hides
+                    // rows — it never unselects them, so an all-checked default would silently export hidden APIs).
                     _checkedApis.Clear();
-                    foreach (var a in _allApis) _checkedApis.Add(Key(a)); // all checked by default
                     PopulateApiList();
                     RefreshFromSelection();
-                    SetStatusMessage($"Documented {catalog.Count} Custom API(s) — all selected.");
+                    SetStatusMessage($"Documented {catalog.Count} Custom API(s) — check the ones to include (or Select all).");
                 });
         }
 
         private void RefreshPreview()
         {
             var catalog = SelectedCatalog();
-            if (catalog == null || catalog.Count == 0) { txtPreview.Clear(); UpdateOpenBrowserState(); return; }
+            if (catalog == null || catalog.Count == 0)
+            {
+                txtPreview.Text = _catalog == null
+                    ? ""
+                    : "Check one or more Custom APIs in the left panel to preview and export them.";
+                UpdateOpenBrowserState();
+                return;
+            }
             var options = CurrentOptions();
             var mode = tscPreview.SelectedItem?.ToString() ?? PreviewMarkdown;
             switch (mode)
