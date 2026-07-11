@@ -1,9 +1,11 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <!-- TargetFramework, WinForms, XrmToolBoxPackage reference, and the shared core
        all come from src/Tools/Directory.Build.props. Keep tool csproj files minimal. -->
   <PropertyGroup>
     <RootNamespace>XrmToolSuite.AuditComplianceChecker</RootNamespace>
     <AssemblyName>XrmToolSuite.AuditComplianceChecker</AssemblyName>
+    <!-- Per-tool version: bump when THIS tool changes (scripts/Bump-Tool.ps1). Must equal the nuspec <version>. -->
+    <Version>1.2026.7.8</Version>
     <description>Checks org/table/column audit settings and audit activity, flags coverage gaps and risky changes, and scores audit compliance readiness.</description>
     <!-- This tool ships ClosedXML + PdfSharp/MigraDoc with its nupkg, so deps must land in the output -->
     <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>

@@ -315,7 +315,7 @@ namespace XrmToolSuite.FormPerformanceAnalyzer
                         System.IO.File.WriteAllText(path, contentFactory(), new UTF8Encoding(true));
                         return path;
                     },
-                    written => SetStatusMessage("Exported form analysis to " + written));
+                    written => { SetStatusMessage("Exported form analysis to " + written); PromptOpenExportedFile(written); });
             }
         }
 

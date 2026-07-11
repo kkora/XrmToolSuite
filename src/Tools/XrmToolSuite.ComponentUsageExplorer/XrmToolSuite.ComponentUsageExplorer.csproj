@@ -1,9 +1,11 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <!-- TargetFramework, WinForms, XrmToolBoxPackage reference, and the shared core
        all come from src/Tools/Directory.Build.props. Keep tool csproj files minimal. -->
   <PropertyGroup>
     <RootNamespace>XrmToolSuite.ComponentUsageExplorer</RootNamespace>
     <AssemblyName>XrmToolSuite.ComponentUsageExplorer</AssemblyName>
+    <!-- Per-tool version: bump when THIS tool changes (scripts/Bump-Tool.ps1). Must equal the nuspec <version>. -->
+    <Version>1.2026.7.8</Version>
     <description>Pick one Dataverse component and see its full where-used footprint (required/dependent components, per-type usage) plus a change-safety verdict; read-only, exportable to Excel, PDF, JSON, HTML.</description>
     <!-- Ships the ClosedXML (Excel) + PdfSharp/MigraDoc-GDI (native PDF) chains with its nupkg, so deps must land in the output. -->
     <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>

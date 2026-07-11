@@ -1,7 +1,9 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <RootNamespace>XrmToolSuite.ViewPerformanceAnalyzer</RootNamespace>
     <AssemblyName>XrmToolSuite.ViewPerformanceAnalyzer</AssemblyName>
+    <!-- Per-tool version: bump when THIS tool changes (scripts/Bump-Tool.ps1). Must equal the nuspec <version>. -->
+    <Version>1.2026.7.8</Version>
     <Description>Batch-analyzes every system and personal view's FetchXML and layout for performance risks, ranks the slowest/riskiest views, and exports the report. Exports Excel, PDF, JSON, HTML, Markdown, CSV.</Description>
     <!-- Ships the ClosedXML (Excel) + PdfSharp/MigraDoc-GDI (native PDF) chains with its nupkg, so deps must land in the output. -->
     <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>

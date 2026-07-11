@@ -263,7 +263,7 @@ namespace XrmToolSuite.ManagedSolutionImpactChecker
                 RunAsync(
                     "Exporting report…",
                     worker => { writer(target); return target; },
-                    saved => SetStatusMessage("Exported impact report to " + saved));
+                    saved => { SetStatusMessage("Exported impact report to " + saved); PromptOpenExportedFile(saved); });
             }
         }
 

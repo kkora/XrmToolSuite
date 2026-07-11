@@ -277,6 +277,7 @@ namespace XrmToolSuite.EnvironmentInventory
                 {
                     File.WriteAllText(dlg.FileName, render(_snapshot), new UTF8Encoding(useBom));
                     SetStatusMessage($"Exported {_snapshot.Total} component(s) to {Path.GetFileName(dlg.FileName)}");
+                    PromptOpenExportedFile(dlg.FileName);
                 }
                 catch (Exception ex) { ShowError(ex, "Export failed"); }
             }
@@ -294,6 +295,7 @@ namespace XrmToolSuite.EnvironmentInventory
                 {
                     write(dlg.FileName);
                     SetStatusMessage($"Exported {_snapshot.Total} component(s) to {Path.GetFileName(dlg.FileName)}");
+                    PromptOpenExportedFile(dlg.FileName);
                 }
                 catch (Exception ex) { ShowError(ex, "Export failed"); }
             }

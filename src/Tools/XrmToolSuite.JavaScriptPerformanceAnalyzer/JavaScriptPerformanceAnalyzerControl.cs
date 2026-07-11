@@ -255,6 +255,7 @@ namespace XrmToolSuite.JavaScriptPerformanceAnalyzer
                 {
                     writer(dlg.FileName);
                     SetStatusMessage("Exported JavaScript analysis to " + dlg.FileName);
+                    PromptOpenExportedFile(dlg.FileName);
                 }
                 catch (Exception ex)
                 {

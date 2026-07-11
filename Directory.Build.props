@@ -4,11 +4,13 @@
     <Authors>Kanchan Kora</Authors>
     <Company>Kanchan Kora</Company>
     <Product>XrmToolSuite</Product>
-    <!-- Bump this once per release; New-Tool.ps1 stamps it into every tool.
-         XrmToolBox Tool Library requires AssemblyVersion == nupkg version. -->
+    <!-- FALLBACK version only. Every tool declares its own <Version> in its csproj (per-tool
+         versioning: bump a tool only when it changes; scripts/Bump-Tool.ps1 keeps csproj + nuspec
+         in sync). The XrmToolBox Tool Library requires AssemblyVersion == nupkg version per tool.
+         AssemblyVersion/FileVersion are deliberately NOT set here: the .NET SDK derives them from
+         each project's final <Version> — setting them here would freeze this fallback value before
+         the per-tool override applies (props evaluate before the csproj body). -->
     <Version>1.2026.7.8</Version>
-    <AssemblyVersion>$(Version)</AssemblyVersion>
-    <FileVersion>$(Version)</FileVersion>
     <Deterministic>true</Deterministic>
   </PropertyGroup>
 </Project>

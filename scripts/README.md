@@ -6,6 +6,7 @@ repo root (Windows PowerShell). Every script has full comment-based help — `Ge
 | Script | Purpose |
 |---|---|
 | [`New-Tool.ps1`](New-Tool.ps1) | Stamp out a new tool project from the template (renames everything, adds it to the solution, stamps docs + testing skeleton). |
+| [`Bump-Tool.ps1`](Bump-Tool.ps1) | Bump **one** tool's version (per-tool versioning): updates its csproj `<Version>` and nuspec `<version>` together, optionally the release notes. |
 | [`Deploy-Tool.ps1`](Deploy-Tool.ps1) | Build + deploy **one (or a few)** tools to the local XrmToolBox, leaving the rest untouched. |
 | [`Pack-All.ps1`](Pack-All.ps1) | Build Release + pack **every** non-template `.nuspec` into `artifacts\`, and verify the per-tool subfolder layout. |
 | [`Setup-TestConnection.ps1`](Setup-TestConnection.ps1) | Pre-flight for the Tier-3b/3c connected UI walkthroughs — validates the XrmToolBox connection and prints the env vars to set. |
@@ -19,6 +20,18 @@ Clones `XrmToolSuite.TemplateTool`, renames it, and wires it into the solution. 
 ./scripts/New-Tool.ps1 -Name "SolutionCompare" `
     -DisplayName "Solution Compare" `
     -Description "Compares components between two solutions"
+```
+
+## Bump-Tool.ps1
+
+The suite uses **per-tool versioning**: each tool's csproj declares its own `<Version>`, which must
+equal its nuspec `<version>` (Tool Library rule). Bump a tool **only when that tool changes** — the
+publish workflow pushes with `--skip-duplicate`, so unchanged tools (whose version already exists on
+nuget.org) are skipped and **only changed tools republish**.
+
+```powershell
+./scripts/Bump-Tool.ps1 -Name AttributeAuditor                         # 1.2026.7.8 -> 1.2026.7.9
+./scripts/Bump-Tool.ps1 -Name SolutionKnowledgeGraph -Version 1.2026.8.1 -ReleaseNotes "1.2026.8.1: ..."
 ```
 
 ## Deploy-Tool.ps1

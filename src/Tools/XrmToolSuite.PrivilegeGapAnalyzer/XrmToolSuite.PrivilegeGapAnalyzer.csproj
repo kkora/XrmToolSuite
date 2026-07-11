@@ -1,7 +1,9 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <RootNamespace>XrmToolSuite.PrivilegeGapAnalyzer</RootNamespace>
     <AssemblyName>XrmToolSuite.PrivilegeGapAnalyzer</AssemblyName>
+    <!-- Per-tool version: bump when THIS tool changes (scripts/Bump-Tool.ps1). Must equal the nuspec <version>. -->
+    <Version>1.2026.7.8</Version>
     <description>Diagnoses missing Dataverse privileges (why a user/team/role cannot perform an operation) and recommends role changes. Exports Excel, PDF, JSON, CSV, HTML.</description>
     <!-- Ships the ClosedXML (Excel) + PdfSharp/MigraDoc-GDI (native PDF) chains with its nupkg. -->
     <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>

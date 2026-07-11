@@ -272,6 +272,7 @@ namespace XrmToolSuite.CustomApiExplorer
                 {
                     File.WriteAllText(dlg.FileName, render(_catalog), new UTF8Encoding(useBom));
                     SetStatusMessage($"Exported {_catalog.Count} API(s) to {Path.GetFileName(dlg.FileName)}");
+                    PromptOpenExportedFile(dlg.FileName);
                 }
                 catch (Exception ex) { ShowError(ex, "Export failed"); }
             }

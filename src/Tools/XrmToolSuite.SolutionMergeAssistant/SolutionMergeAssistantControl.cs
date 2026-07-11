@@ -225,7 +225,11 @@ namespace XrmToolSuite.SolutionMergeAssistant
                 RunAsync(
                     "Exporting merge report...",
                     worker => { writer(path); return path; },
-                    saved => SetStatusMessage("Exported merge report to " + saved));
+                    saved =>
+                    {
+                        SetStatusMessage("Exported merge report to " + saved);
+                        PromptOpenExportedFile(saved);
+                    });
             }
         }
 

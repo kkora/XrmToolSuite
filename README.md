@@ -6,7 +6,7 @@ A multi-tool solution for building XrmToolBox tools fast. One shared core, one t
 
 ```
 XrmToolSuite.sln
-Directory.Build.props            # global version/author metadata (bump Version per release)
+Directory.Build.props            # author metadata + FALLBACK version (each tool csproj sets its own <Version>)
 src/
   Shared/Core/                   # shared source, compiled INTO every tool (no extra DLL)
     BaseToolControl.cs           # PluginControlBase wrapper: RunAsync, status bar, settings, errors
@@ -56,7 +56,7 @@ XrmToolBox loads every tool's DLLs into one process. If two of your tools shippe
 ## Publish to the Tool Library
 
 Each tool has a `.nuspec`. Rules enforced by the Tool Library (see xrmtoolbox.com developer docs):
-- nupkg `version` must equal your DLL's assembly version (both flow from `Version` in the root `Directory.Build.props`)
+- nupkg `version` must equal your DLL's assembly version. **Versioning is per-tool**: each tool's csproj declares its own `<Version>`, which must match its nuspec `<version>` — bump a tool only when it changes, via `./scripts/Bump-Tool.ps1 -Name <Tool>` (keeps both in sync). The publish workflow verifies every nuspec against its built DLL and pushes with `--skip-duplicate`, so unchanged tools are not republished. (Root `Directory.Build.props` holds only a fallback `Version`.)
 - `tags` must start with `XrmToolBox` plus extra words
 - dependency must be on **`XrmToolBox`** (not `XrmToolBoxPackage`)
 - your tool DLL must sit in the `Plugins` folder root of the package; ship only this suite's files. Most tools are a single DLL. Export tools (Excel/PDF/Word) additionally ship their dependency chain — the 17-DLL ClosedXML/PdfSharp-MigraDoc-GDI chain, or ERD Generator's 5-DLL PDF-only subset — in a **per-tool subfolder** `lib\net48\Plugins\<AssemblyName>\` (the XrmToolBox store convention; isolates each tool's dep versions). The tool DLL itself stays in the root.
@@ -74,9 +74,10 @@ Or pack one: `nuget pack src/Tools/XrmToolSuite.MyTool/XrmToolSuite.MyTool.nuspe
 
 **Full publishing flow (package → push to nuget.org → Tool Library), manual and CI:** see
 [`Publishing_Guide_XrmToolBox.md`](Publishing_Guide_XrmToolBox.md). Automated releases run via
-[`.github/workflows/publish.yml`](.github/workflows/publish.yml) — tag `v<version>` (or a manual
-dry run) builds, packs every tool except the template, and pushes via **NuGet Trusted Publishing**
-(OIDC — no API-key secret).
+[`.github/workflows/publish.yml`](.github/workflows/publish.yml) — push any `v*` tag (or a manual
+dry run) to build, verify each tool's nuspec version against its built DLL, pack every tool except
+the template, and push via **NuGet Trusted Publishing** (OIDC — no API-key secret). Pushes use
+`--skip-duplicate`, so only tools whose version was bumped actually republish.
 For **local** install (build → copy DLL → unblock → launch), see
 [`Deployment_Guide_XrmToolBox.md`](Deployment_Guide_XrmToolBox.md).
 
