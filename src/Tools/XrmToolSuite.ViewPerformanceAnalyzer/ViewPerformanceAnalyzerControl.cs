@@ -306,6 +306,7 @@ namespace XrmToolSuite.ViewPerformanceAnalyzer
                 {
                     writer(dlg.FileName);
                     SetStatusMessage("Exported view analysis to " + dlg.FileName);
+                    PromptOpenExportedFile(dlg.FileName);
                 }
                 catch (Exception ex)
                 {

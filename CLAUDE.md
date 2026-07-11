@@ -7,7 +7,7 @@ Guidance for Claude Code when working in this repository. This repo produces **X
 - `src/Shared/Core/` — shared source compiled **into every tool assembly** (deliberate: XrmToolBox loads all tools into one process, so a shared DLL would cause version conflicts). Never turn this into a separate class library project.
 - `src/Tools/XrmToolSuite.<Name>/` — one project per tool. Keep each csproj minimal (~8 lines); all build config belongs in `src/Tools/Directory.Build.props`.
 - `src/Tools/XrmToolSuite.TemplateTool/` — the canonical template. Never add feature-specific code here; improvements to the template must stay generic.
-- Root `Directory.Build.props` — single `Version` for every tool. Bump it per release; the Tool Library requires assembly version == nupkg version.
+- **Per-tool versioning**: each tool csproj declares its own `<Version>`, which must equal its nuspec `<version>` (Tool Library rule). Bump a tool only when it changes (`./scripts/Bump-Tool.ps1 -Name <Tool>` keeps csproj + nuspec in sync); the publish workflow pushes with `--skip-duplicate`, so unchanged tools are not republished. Root `Directory.Build.props` holds only a fallback `Version` — never set `AssemblyVersion`/`FileVersion` there (props evaluate before the csproj, freezing the fallback).
 
 ## Commands
 
@@ -81,7 +81,7 @@ All of this lives in the root **`testing/`** folder (see `testing/README.md`). `
 
 ## Packaging rules (Tool Library will reject violations)
 
-- nupkg `version` == assembly version (both derive from root `Directory.Build.props`)
+- nupkg `version` == assembly version (per tool: the csproj `<Version>` and nuspec `<version>` must match; CI verifies each built DLL against its nuspec)
 - `tags` starts with `XrmToolBox` plus additional words
 - dependency is on **`XrmToolBox`** — never `XrmToolBoxPackage`
 - tool DLL sits under `lib\net48\Plugins`; package contains only this suite's files

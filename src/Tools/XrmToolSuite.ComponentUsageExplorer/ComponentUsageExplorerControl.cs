@@ -294,7 +294,7 @@ namespace XrmToolSuite.ComponentUsageExplorer
                 RunAsync(
                     "Exporting usage report...",
                     worker => { writer(path); return path; },
-                    written => SetStatusMessage("Exported component usage report to " + written));
+                    written => { SetStatusMessage("Exported component usage report to " + written); PromptOpenExportedFile(written); });
             }
         }
 

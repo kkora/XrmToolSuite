@@ -202,6 +202,7 @@ namespace XrmToolSuite.DuplicateMetadataFinder
                 {
                     write(dlg.FileName);
                     SetStatusMessage($"Exported {_result.GroupCount} group(s) to {Path.GetFileName(dlg.FileName)}");
+                    PromptOpenExportedFile(dlg.FileName);
                 }
                 catch (Exception ex) { ShowError(ex, "Export failed"); }
             }

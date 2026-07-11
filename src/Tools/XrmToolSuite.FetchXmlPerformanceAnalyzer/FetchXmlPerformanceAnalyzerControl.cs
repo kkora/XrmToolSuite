@@ -217,10 +217,18 @@ namespace XrmToolSuite.FetchXmlPerformanceAnalyzer
                     var chosen = PromptSelectView(views);
                     if (chosen != null)
                     {
-                        txtFetchXml.Text = chosen.FetchXml;
+                        // Views store their fetchxml as a single line — pretty-print it so it's editable.
+                        txtFetchXml.Text = FormatXml(chosen.FetchXml);
                         SetStatusMessage($"Loaded FetchXML from view '{chosen.Name}'. Click Analyze.");
                     }
                 });
+        }
+
+        /// <summary>Indents XML for display; returns the input unchanged if it doesn't parse (fail-soft).</summary>
+        private static string FormatXml(string xml)
+        {
+            try { return System.Xml.Linq.XDocument.Parse(xml).ToString(); }
+            catch { return xml; }
         }
 
         private static ViewItem PromptSelectView(List<ViewItem> views)
@@ -357,6 +365,7 @@ namespace XrmToolSuite.FetchXmlPerformanceAnalyzer
                 {
                     writer(dlg.FileName);
                     SetStatusMessage("Exported analysis to " + dlg.FileName);
+                    PromptOpenExportedFile(dlg.FileName);
                 }
                 catch (Exception ex)
                 {

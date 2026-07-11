@@ -234,6 +234,7 @@ namespace XrmToolSuite.PortalHealthAnalyzer
                 {
                     write(dlg.FileName);
                     SetStatusMessage("Exported portal health report to " + Path.GetFileName(dlg.FileName));
+                    PromptOpenExportedFile(dlg.FileName);
                 }
                 catch (Exception ex) { ShowError(ex, "Export failed"); }
             }

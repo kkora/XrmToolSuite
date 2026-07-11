@@ -421,6 +421,7 @@ namespace XrmToolSuite.TechnicalDebtAnalyzer
                         File.WriteAllText(dlg.FileName, JsonConvert.SerializeObject(ordered, Formatting.Indented));
                     }
                     SetStatusMessage($"Exported {ordered.Count} trend snapshot(s) to {System.IO.Path.GetFileName(dlg.FileName)}.");
+                    PromptOpenExportedFile(dlg.FileName);
                 }
                 catch (Exception ex) { ShowError(ex, "Export failed"); }
             }

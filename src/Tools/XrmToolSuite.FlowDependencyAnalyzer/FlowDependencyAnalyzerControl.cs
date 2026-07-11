@@ -426,7 +426,7 @@ namespace XrmToolSuite.FlowDependencyAnalyzer
                 RunAsync(
                     "Exporting report...",
                     worker => { writer(path); return path; },
-                    saved => Status("Exported flow dependency report to " + saved));
+                    saved => { Status("Exported flow dependency report to " + saved); PromptOpenExportedFile(saved); });
             }
         }
 

@@ -45,29 +45,28 @@ jobs:
       - name: Setup NuGet
         uses: NuGet/setup-nuget@v2
 
-      - name: Read suite version
-        id: ver
-        shell: pwsh
-        run: |
-          [xml]$p = Get-Content Directory.Build.props
-          $v = ([string]$p.Project.PropertyGroup.Version).Trim()
-          if (-not $v) { throw "Could not read <Version> from Directory.Build.props" }
-          Write-Output "version=$v" >> $env:GITHUB_OUTPUT
-          Write-Output "Suite version: $v"
-
-      # For a tag build, fail fast if the tag (v1.2.3.4) doesn't match Directory.Build.props.
-      - name: Verify tag matches version
-        if: startsWith(github.ref, 'refs/tags/v')
-        shell: pwsh
-        run: |
-          $tag = "${{ github.ref_name }}" -replace '^v',''
-          if ($tag -ne "${{ steps.ver.outputs.version }}") {
-            throw "Tag '$tag' != Directory.Build.props version '${{ steps.ver.outputs.version }}'. Bump one to match."
-          }
-          Write-Output "Tag matches suite version ${{ steps.ver.outputs.version }}."
-
       - name: Build (Release)
         run: dotnet build XrmToolSuite.sln -c Release --nologo
+
+      # PER-TOOL VERSIONING: each tool's csproj <Version> must equal its nuspec <version>
+      # (Tool Library rule: nupkg version == assembly version). Verify every pair; the tag
+      # (v-date or v-counter) is only a release marker and is not compared to any version.
+      - name: Verify per-tool versions (csproj == nuspec == built DLL)
+        shell: pwsh
+        run: |
+          $bad = @()
+          $specs = Get-ChildItem src/Tools -Recurse -Filter *.nuspec | Where-Object { $_.Name -notlike '*TemplateTool*' }
+          foreach ($s in $specs) {
+            [xml]$nuspec = Get-Content $s.FullName
+            $nuVer = ([string]$nuspec.package.metadata.version).Trim()
+            $id = ([string]$nuspec.package.metadata.id).Trim()
+            $dll = Join-Path $s.DirectoryName "bin\Release\net48\$id.dll"
+            if (-not (Test-Path $dll)) { $bad += "${id}: built DLL not found at $dll"; continue }
+            $fileVer = (Get-Item $dll).VersionInfo.FileVersion
+            if ($fileVer -ne $nuVer) { $bad += "${id}: nuspec $nuVer != DLL $fileVer (bump csproj <Version> and nuspec together)" }
+          }
+          if ($bad) { $bad | ForEach-Object { Write-Error $_ }; throw "Per-tool version mismatch — see errors above." }
+          Write-Output "All $($specs.Count) tools: nuspec version == built DLL version."
 
       - name: Test (SDK-free unit tests)
         run: dotnet test testing/UnitTests/UnitTests.csproj -c Release --nologo
