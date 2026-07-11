@@ -8,7 +8,7 @@
          4) DLL goes under a "Plugins" folder
          5) iconUrl is required and must be your own icon -->
     <id>XrmToolSuite.SharingAnalyzer</id>
-    <version>1.2026.7.8</version>
+    <version>1.2026.7.9</version>
     <title>Sharing Analyzer for XrmToolBox</title>
     <authors>Kanchan Kora</authors>
     <owners>Kanchan Kora</owners>
@@ -19,7 +19,7 @@
     <license type="expression">MIT</license>
     <description>Analyzes PrincipalObjectAccess (record-level sharing) by table and principal: decodes access rights, flags excessive and stale shares (inactive users, disabled/empty teams, outlier records, inbound access sprawl), shows a table x principal intensity view, and previews cleanup recommendations. Read-only, with an exportable sharing report (Excel, PDF, JSON, HTML, CSV).</description>
     <summary>Find and clean up excessive and stale record-level sharing (PrincipalObjectAccess) by table and principal.</summary>
-    <releaseNotes>1.2026.7.8: Technical Debt Analyzer - analyzers/dashboard panes now start split in half; Solution Complexity Score - Metrics/Hotspots panes now start at one-third/two-thirds; both splitters remain draggable. No other tool changed.</releaseNotes>
+    <releaseNotes>1.2026.7.9: Every export now offers to open the saved file. FetchXML Performance Analyzer: 'Load from view' pretty-prints the FetchXML. Internal: per-tool versioning - future releases update only the tools that changed.</releaseNotes>
     <tags>XrmToolBox Dataverse Dynamics365 PowerPlatform Security Sharing PrincipalObjectAccess Governance</tags>
     <dependencies>
       <dependency id="XrmToolBox" version="1.2025.10.74" />
