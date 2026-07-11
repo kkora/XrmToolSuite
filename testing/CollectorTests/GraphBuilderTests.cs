@@ -35,6 +35,13 @@ namespace XrmToolSuite.CollectorTests
             ["requiredcomponentobjectid"] = required
         };
 
+        private static Entity Dep(Guid dependent, Guid required, int requiredType)
+        {
+            var e = Dep(dependent, required);
+            e["requiredcomponenttype"] = new OptionSetValue(requiredType);
+            return e;
+        }
+
         private static GraphModel Build(FakeOrganizationService fake) => GraphBuilder.Build(fake, SolId, _ => { });
 
         // TC-SOLN09-COL-01: a typed component resolves its friendly type + display name from the source table.
@@ -122,6 +129,40 @@ namespace XrmToolSuite.CollectorTests
             var ext = g.Node(external.ToString());
             Assert.NotNull(ext);
             Assert.Equal("Unknown", ext.Type);
+        }
+
+        // TC-SOLN09-COL-10: an external required component is typed + named from its requiredcomponenttype
+        // (a Table resolves via entity metadata) instead of showing as an "Unknown" GUID.
+        [Fact]
+        public void Dependency_ExternalRequired_TypedFromRequiredComponentType()
+        {
+            Guid a = Guid.NewGuid(), extTable = Guid.NewGuid();
+            var fake = new FakeOrganizationService()
+                .Seed("solutioncomponent", Comp(29, a))
+                .Seed("dependency", Dep(a, extTable, 1)) // required is a Table (type 1) outside the solution
+                .SeedAllEntities(MetaBuilder.Entity("contact", metadataId: extTable, displayName: "Contact"));
+
+            var ext = Build(fake).Node(extTable.ToString());
+            Assert.NotNull(ext);
+            Assert.Equal("Table", ext.Type);
+            Assert.Equal("Contact", ext.Label);
+        }
+
+        // TC-SOLN09-COL-11: a Column (type 2) component is named from attribute metadata as
+        // "table.Column Display Name" instead of the type + short-guid fallback.
+        [Fact]
+        public void ColumnComponent_NamedFromAttributeMetadata()
+        {
+            var colId = Guid.NewGuid();
+            var attr = MetaBuilder.Attribute("new_amount", displayName: "Amount");
+            attr.MetadataId = colId;
+            var fake = new FakeOrganizationService()
+                .Seed("solutioncomponent", Comp(2, colId))
+                .SeedAllEntities(MetaBuilder.Entity("new_widget", isCustom: true, attributes: new[] { attr }));
+
+            var n = Build(fake).Node(colId.ToString());
+            Assert.Equal("Column", n.Type);
+            Assert.Equal("new_widget.Amount", n.Label);
         }
 
         // TC-SOLN09-COL-06: a dependency whose dependent is not in the solution produces no edge.

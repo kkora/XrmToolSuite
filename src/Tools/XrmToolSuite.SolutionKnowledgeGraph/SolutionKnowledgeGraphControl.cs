@@ -104,13 +104,26 @@ namespace XrmToolSuite.SolutionKnowledgeGraph
             _grid.SelectionChanged += (s, e) => ShowNodeDetail();
 
             _txtDetail = new TextBox { Dock = DockStyle.Fill, Multiline = true, ReadOnly = true, ScrollBars = ScrollBars.Vertical };
-            var midRight = new SplitContainer { Dock = DockStyle.Fill, SplitterDistance = 520 };
+
+            // Three columns — filters | grid | detail — with DRAGGABLE splitters. Start at equal thirds:
+            // the distances are set on the first real layout (sizes are bogus at construction time),
+            // then left alone so the user's own drags stick.
+            var midRight = new SplitContainer { Dock = DockStyle.Fill };
             midRight.Panel1.Controls.Add(_grid);
             midRight.Panel2.Controls.Add(_txtDetail);
 
-            var mainSplit = new SplitContainer { Dock = DockStyle.Fill, SplitterDistance = 220 };
+            var mainSplit = new SplitContainer { Dock = DockStyle.Fill };
             mainSplit.Panel1.Controls.Add(leftPanel);
             mainSplit.Panel2.Controls.Add(midRight);
+
+            bool sized = false;
+            mainSplit.SizeChanged += (s, e) =>
+            {
+                if (sized || mainSplit.Width < 60) return;
+                sized = true;
+                mainSplit.SplitterDistance = mainSplit.Width / 3;          // left third
+                midRight.SplitterDistance = Math.Max(30, midRight.Width / 2); // remaining split in half
+            };
 
             var body = new Panel { Dock = DockStyle.Fill };
             body.Controls.Add(mainSplit);
@@ -275,15 +288,37 @@ namespace XrmToolSuite.SolutionKnowledgeGraph
 
         #region Export / interactive
 
+        /// <summary>
+        /// The graph reduced to the node types currently checked in the filter list, so exports and the
+        /// interactive view match the on-screen "show these types" selection. Edges are kept only when both
+        /// endpoints survive. Returns the full graph unchanged when every type is checked.
+        /// </summary>
+        private GraphModel FilteredGraph()
+        {
+            if (_graph == null) return new GraphModel();
+            var allowed = new HashSet<string>(_lstTypes.CheckedItems.Cast<string>());
+            if (allowed.Count >= _lstTypes.Items.Count) return _graph; // nothing hidden
+
+            var g = new GraphModel();
+            var keep = new HashSet<string>();
+            foreach (var n in _graph.Nodes)
+                if (allowed.Contains(n.Type)) { g.AddNode(n.Id, n.Type, n.Label); keep.Add(n.Id); }
+            foreach (var e in _graph.Edges)
+                if (keep.Contains(e.From) && keep.Contains(e.To)) g.AddEdge(e.From, e.To, e.Kind);
+            return g;
+        }
+
         private void OpenInteractive()
         {
             if (_graph == null) return;
             try
             {
+                var g = FilteredGraph();
+                if (g.NodeCount == 0) { SetStatusMessage("Nothing to show — all node types are unchecked."); return; }
                 var path = Path.Combine(Path.GetTempPath(), $"KnowledgeGraph_{DateTime.Now:yyyyMMdd_HHmmss}.html");
-                HtmlGraphBuilder.Export(_graph, _solutionName, path);
+                HtmlGraphBuilder.Export(g, _solutionName, path);
                 System.Diagnostics.Process.Start(path);
-                SetStatusMessage("Opened interactive graph in your browser.");
+                SetStatusMessage($"Opened interactive graph ({g.NodeCount} nodes) in your browser.");
             }
             catch (Exception ex) { ShowError(ex); }
         }
@@ -305,12 +340,13 @@ namespace XrmToolSuite.SolutionKnowledgeGraph
                 if (dlg.ShowDialog(this) != DialogResult.OK) return;
                 try
                 {
+                    var g = FilteredGraph(); // export what the filter shows (checked node types only)
                     switch (kind)
                     {
-                        case "graphml": GraphMlExporter.Export(_graph, dlg.FileName); break;
-                        case "svg": SvgExporter.Export(_graph, dlg.FileName); break;
-                        case "png": PngExporter.Export(_graph, dlg.FileName); break;
-                        default: HtmlGraphBuilder.Export(_graph, _solutionName, dlg.FileName); break;
+                        case "graphml": GraphMlExporter.Export(g, dlg.FileName); break;
+                        case "svg": SvgExporter.Export(g, dlg.FileName); break;
+                        case "png": PngExporter.Export(g, dlg.FileName); break;
+                        default: HtmlGraphBuilder.Export(g, _solutionName, dlg.FileName); break;
                     }
                     if (MessageBox.Show(this, "Graph exported. Open it now?", "Solution Knowledge Graph",
                             MessageBoxButtons.YesNo, MessageBoxIcon.Information) == DialogResult.Yes)
