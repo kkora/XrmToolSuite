@@ -8,7 +8,7 @@
          4) DLL goes under a "Plugins" folder
          5) iconUrl is required and must be your own icon -->
     <id>XrmToolSuite.ApiDocumentationBuilder</id>
-    <version>1.2026.7.11</version>
+    <version>1.2026.7.12</version>
     <title>API Documentation Builder for XrmToolBox</title>
     <authors>Kanchan Kora</authors>
     <owners>Kanchan Kora</owners>
@@ -19,7 +19,7 @@
     <license type="expression">MIT</license>
     <description>Documents Dataverse Custom APIs (parameters, responses, binding, plugin) as a redaction-safe reference and an OpenAPI-style JSON spec; exports Markdown, self-contained HTML, JSON, and OpenAPI JSON. Read-only; never invokes APIs; masks secrets.</description>
     <summary>Documents Dataverse Custom APIs (parameters, responses, binding, plugin) as a redaction-safe reference and an OpenAPI-style JSON spec; exports Markdown, self-contained HTML, JSON, and OpenAPI JSON. Read-only; never invokes APIs; masks secrets.</summary>
-    <releaseNotes>1.2026.7.11: Left panel to search and select which Custom APIs to document (preview and export include only the checked APIs); Open in browser renders the HTML; JSON/HTML previews pretty-printed; Export moved to the end.</releaseNotes>
+    <releaseNotes>1.2026.7.12: The API list now starts unchecked so preview/export include only the APIs you check (search no longer leaves hidden APIs selected).</releaseNotes>
     <repository type="git" url="https://github.com/kkora/XrmToolSuite" />
     <tags>XrmToolBox Dataverse Dynamics365 PowerPlatform</tags>
     <dependencies>

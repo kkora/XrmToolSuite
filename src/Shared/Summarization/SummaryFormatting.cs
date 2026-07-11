@@ -22,5 +22,16 @@ namespace XrmToolSuite.Core.Summarization
             text = Regex.Replace(text, @"\n{3,}", "\n\n");                      // collapse blank runs
             return text.Trim();
         }
+
+        /// <summary>
+        /// Plain text with Windows (CRLF) newlines — for display in a WinForms TextBox, which only breaks
+        /// lines on CRLF (LF-only text would otherwise render as one run-on paragraph). The model/report
+        /// copy keeps LF; this is display-only.
+        /// </summary>
+        public static string ForTextBox(string s)
+        {
+            if (string.IsNullOrEmpty(s)) return s;
+            return s.Replace("\r\n", "\n").Replace("\r", "\n").Replace("\n", "\r\n");
+        }
     }
 }

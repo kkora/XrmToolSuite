@@ -660,7 +660,7 @@ namespace XrmToolSuite.TechnicalDebtAnalyzer
                 StartPosition = FormStartPosition.CenterParent, ClientSize = new Size(560, 420)
             })
             {
-                var box = new TextBox { Dock = DockStyle.Fill, Multiline = true, ReadOnly = true, ScrollBars = ScrollBars.Vertical, Text = s.Text };
+                var box = new TextBox { Dock = DockStyle.Fill, Multiline = true, ReadOnly = true, ScrollBars = ScrollBars.Vertical, Text = SummaryFormatting.ForTextBox(s.Text) };
                 var bar = new Panel { Dock = DockStyle.Bottom, Height = 44 };
                 var copy = new Button { Text = "Copy", Location = new Point(400, 8), Width = 70 };
                 copy.Click += (o, e) => { if (!string.IsNullOrEmpty(s.Text)) Clipboard.SetText(s.Text); };
