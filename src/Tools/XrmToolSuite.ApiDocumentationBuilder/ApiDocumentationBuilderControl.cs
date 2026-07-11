@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
@@ -34,9 +36,21 @@ namespace XrmToolSuite.ApiDocumentationBuilder
         private ApiCatalog _catalog;
         private string _environmentName;
 
+        // Left-panel API picker: the full list, and the set of unique names currently checked.
+        private CheckedListBox _clbApis;
+        private TextBox _txtApiSearch;
+        private CheckBox _chkSelectAll;
+        private readonly HashSet<string> _checkedApis = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+        private List<ApiDoc> _allApis = new List<ApiDoc>();
+        private readonly List<ApiDoc> _visible = new List<ApiDoc>(); // APIs currently shown (after the search filter)
+        private bool _suppressCheck;
+
+        private static string Key(ApiDoc a) => a?.UniqueName ?? a?.DisplayName ?? "";
+
         public ApiDocumentationBuilderControl()
         {
             InitializeComponent();
+            BuildApiPanel();
 
             tscPreview.Items.AddRange(new object[] { PreviewMarkdown, PreviewHtml, PreviewOpenApi });
             tscPreview.SelectedIndex = 0;
@@ -53,6 +67,119 @@ namespace XrmToolSuite.ApiDocumentationBuilder
 
             // Suite convention: right-aligned Help button (shared dialog).
             toolStrip.Items.Add(CreateHelpButton());
+        }
+
+        // ------------------------------------------------------------- Left panel: select which APIs to document
+
+        private void BuildApiPanel()
+        {
+            _clbApis = new CheckedListBox { Dock = DockStyle.Fill, CheckOnClick = true, IntegralHeight = false };
+            _clbApis.ItemCheck += ClbApis_ItemCheck;
+
+            _chkSelectAll = new CheckBox { Dock = DockStyle.Top, Text = "Select all", Checked = true, Height = 24, Padding = new Padding(4, 2, 0, 2) };
+            _chkSelectAll.CheckedChanged += ChkSelectAll_CheckedChanged;
+
+            _txtApiSearch = new TextBox { Dock = DockStyle.Top };
+            _txtApiSearch.TextChanged += (s, e) => PopulateApiList();
+
+            var header = new System.Windows.Forms.Label { Dock = DockStyle.Top, Text = "Custom APIs — search & select", Height = 22, Font = new Font(Font, FontStyle.Bold), Padding = new Padding(4, 4, 0, 0) };
+
+            var panel = new Panel { Dock = DockStyle.Left, Width = 300 };
+            panel.Controls.Add(_clbApis);      // fill
+            panel.Controls.Add(_chkSelectAll); // top
+            panel.Controls.Add(_txtApiSearch); // top
+            panel.Controls.Add(header);        // top (rendered topmost)
+
+            var splitter = new Splitter { Dock = DockStyle.Left, Width = 4, MinSize = 180 };
+
+            Controls.Add(panel);
+            Controls.Add(splitter);
+            // Dock resolves highest child index first: keep toolStrip top-full-width, then panel|splitter left,
+            // then txtPreview fills the rest.
+            Controls.SetChildIndex(toolStrip, 3);
+            Controls.SetChildIndex(panel, 2);
+            Controls.SetChildIndex(splitter, 1);
+            Controls.SetChildIndex(txtPreview, 0);
+        }
+
+        private sealed class ApiListItem
+        {
+            public ApiDoc Api;
+            public override string ToString() => Api?.DisplayName ?? Api?.UniqueName ?? "(unnamed)";
+        }
+
+        /// <summary>Rebuilds the visible list from the current search term, restoring each item's checked state.</summary>
+        private void PopulateApiList()
+        {
+            if (_clbApis == null) return;
+            var term = (_txtApiSearch.Text ?? "").Trim();
+            _visible.Clear();
+            _suppressCheck = true;
+            _clbApis.BeginUpdate();
+            _clbApis.Items.Clear();
+            foreach (var api in _allApis)
+            {
+                var label = api.DisplayName ?? "";
+                var uname = api.UniqueName ?? "";
+                if (term.Length > 0
+                    && label.IndexOf(term, StringComparison.OrdinalIgnoreCase) < 0
+                    && uname.IndexOf(term, StringComparison.OrdinalIgnoreCase) < 0) continue;
+                _visible.Add(api);
+                int i = _clbApis.Items.Add(new ApiListItem { Api = api });
+                _clbApis.SetItemChecked(i, _checkedApis.Contains(Key(api)));
+            }
+            _clbApis.EndUpdate();
+            _suppressCheck = false;
+            SyncSelectAllLabel();
+        }
+
+        private void ClbApis_ItemCheck(object sender, ItemCheckEventArgs e)
+        {
+            if (_suppressCheck) return;
+            if (!(_clbApis.Items[e.Index] is ApiListItem item) || item.Api == null) return;
+            var key = Key(item.Api);
+            if (e.NewValue == CheckState.Checked) _checkedApis.Add(key); else _checkedApis.Remove(key);
+            // ItemCheck fires BEFORE the state is applied; refresh after it settles.
+            BeginInvoke((Action)(() => { SyncSelectAllLabel(); RefreshFromSelection(); }));
+        }
+
+        // Select-all is scoped to the currently FILTERED list: it checks/unchecks only the visible APIs and
+        // leaves anything filtered out as-is.
+        private void ChkSelectAll_CheckedChanged(object sender, EventArgs e)
+        {
+            if (_suppressCheck) return;
+            foreach (var a in _visible)
+                if (_chkSelectAll.Checked) _checkedApis.Add(Key(a)); else _checkedApis.Remove(Key(a));
+            PopulateApiList();
+            RefreshFromSelection();
+        }
+
+        private void SyncSelectAllLabel()
+        {
+            int visibleChecked = _visible.Count(a => _checkedApis.Contains(Key(a)));
+            _suppressCheck = true;
+            _chkSelectAll.Checked = _visible.Count > 0 && visibleChecked == _visible.Count;
+            _chkSelectAll.Text = _visible.Count == _allApis.Count
+                ? $"Select all ({_checkedApis.Count}/{_allApis.Count})"
+                : $"Select all filtered ({visibleChecked}/{_visible.Count})"; // count reflects the search
+            _suppressCheck = false;
+        }
+
+        private void RefreshFromSelection()
+        {
+            tsbExport.Enabled = _checkedApis.Count > 0;
+            RefreshPreview();
+        }
+
+        /// <summary>A catalog containing only the checked APIs — what preview and export operate on.</summary>
+        private ApiCatalog SelectedCatalog()
+        {
+            if (_catalog == null) return null;
+            var c = new ApiCatalog { EnvironmentName = _catalog.EnvironmentName, GeneratedUtc = _catalog.GeneratedUtc };
+            c.Notes.AddRange(_catalog.Notes);
+            foreach (var a in _catalog.OrderedApis)
+                if (_checkedApis.Contains(Key(a))) c.Apis.Add(a);
+            return c;
         }
 
         private void ApiDocumentationBuilderControl_Load(object sender, EventArgs e)
@@ -80,8 +207,12 @@ namespace XrmToolSuite.ApiDocumentationBuilder
             base.UpdateConnection(newService, detail, actionName, parameter);
             MetadataCache.Clear();
             _catalog = null;
+            _allApis = new List<ApiDoc>();
+            _checkedApis.Clear();
+            PopulateApiList();
             _environmentName = detail?.ConnectionName;
             tsbExport.Enabled = false;
+            tsbOpenBrowser.Enabled = false;
             txtPreview.Clear();
             SetStatusMessage($"Connected to {detail?.ConnectionName}");
         }
@@ -107,24 +238,41 @@ namespace XrmToolSuite.ApiDocumentationBuilder
                 catalog =>
                 {
                     _catalog = catalog;
-                    tsbExport.Enabled = _catalog != null && _catalog.Count > 0;
-                    RefreshPreview();
-                    SetStatusMessage($"Documented {catalog.Count} Custom API(s).");
+                    _allApis = _catalog.OrderedApis.ToList();
+                    _checkedApis.Clear();
+                    foreach (var a in _allApis) _checkedApis.Add(Key(a)); // all checked by default
+                    PopulateApiList();
+                    RefreshFromSelection();
+                    SetStatusMessage($"Documented {catalog.Count} Custom API(s) — all selected.");
                 });
         }
 
         private void RefreshPreview()
         {
-            if (_catalog == null) { txtPreview.Clear(); return; }
+            var catalog = SelectedCatalog();
+            if (catalog == null || catalog.Count == 0) { txtPreview.Clear(); UpdateOpenBrowserState(); return; }
             var options = CurrentOptions();
             var mode = tscPreview.SelectedItem?.ToString() ?? PreviewMarkdown;
             switch (mode)
             {
-                case PreviewHtml: txtPreview.Text = ApiDocEmitters.Html(_catalog, options); break;
-                case PreviewOpenApi: txtPreview.Text = OpenApiEmitter.Generate(_catalog, options); break;
-                default: txtPreview.Text = ApiDocEmitters.Markdown(_catalog, options); break;
+                // Preview panes pretty-print for readability; exports write the original emitter output.
+                case PreviewHtml: txtPreview.Text = HtmlFormat.Pretty(ApiDocEmitters.Html(catalog, options)); break;
+                case PreviewOpenApi: txtPreview.Text = JsonFormat.Pretty(OpenApiEmitter.Generate(catalog, options)); break;
+                default: txtPreview.Text = ApiDocEmitters.Markdown(catalog, options); break;
             }
             txtPreview.SelectionStart = 0;
+            UpdateOpenBrowserState();
+        }
+
+        // "Open in browser" renders the real HTML — only meaningful in the HTML source preview mode with a selection.
+        private void UpdateOpenBrowserState() =>
+            tsbOpenBrowser.Enabled = _checkedApis.Count > 0 && PreviewHtml.Equals(tscPreview.SelectedItem?.ToString());
+
+        private void tsbOpenBrowser_Click(object sender, EventArgs e)
+        {
+            var catalog = SelectedCatalog();
+            if (catalog == null || catalog.Count == 0) return;
+            OpenHtmlInBrowser(ApiDocEmitters.Html(catalog, CurrentOptions()), "custom-api-reference");
         }
 
         #endregion
@@ -136,6 +284,13 @@ namespace XrmToolSuite.ApiDocumentationBuilder
             if (_catalog == null)
             {
                 MessageBox.Show(this, "Load Custom APIs first.", "API Documentation Builder",
+                    MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+            var selected = SelectedCatalog();
+            if (selected == null || selected.Count == 0)
+            {
+                MessageBox.Show(this, "Select at least one Custom API to export.", "API Documentation Builder",
                     MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return;
             }
@@ -161,7 +316,7 @@ namespace XrmToolSuite.ApiDocumentationBuilder
                 path = dlg.FileName;
             }
 
-            var catalog = _catalog;
+            var catalog = selected; // export only the checked APIs
             var options = CurrentOptions();
             RunAsync($"Exporting {ext.ToUpperInvariant()}…",
                 worker =>

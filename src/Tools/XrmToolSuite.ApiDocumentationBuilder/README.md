@@ -13,6 +13,8 @@ operator can add their own redaction terms.
 | Area | What it does |
 |---|---|
 | **Discovery** | Loads and documents the Custom APIs in the connected environment off the UI thread; the status shows the documented count, and the catalog carries a documented note when the tables can't be read or none are present. |
+| **Select which APIs** | A left panel lists every Custom API with a checkbox (all checked by default), a **Select all (n/total)** toggle, and a search box that filters by unique/display name (checked state is preserved while filtering). **Preview and every export include only the checked APIs** — the count in the output reflects the selection. |
+| **Real HTML preview** | An **Open in browser** button (enabled in the HTML source preview) renders the actual themed HTML page in your default browser; the source pane also pretty-prints HTML and OpenAPI JSON for readability (exports write the original bytes). |
 | **API detail** | For each API, documents unique/display name, operation kind (Action/Function), private flag, binding type, bound table, and backing plugin type (sourced from `customapi` + `plugintype`); missing fields degrade gracefully. |
 | **Parameters & responses** | Renders a request-parameter and response-property grid with name, type, and requirement; field types map to friendly labels and OpenAPI schema fragments. |
 | **Safe examples & spec** | Generates template request/response payloads (labelled as templates) and an OpenAPI 3.0-style spec — one POST path per API with request-body + 200-response schemas built from parameter/response metadata (best-effort, not a guaranteed live contract; the spec description says so). |
@@ -63,11 +65,14 @@ Full steps and troubleshooting: [`./DEPLOYMENT.md`](./DEPLOYMENT.md) and the sui
 ## Usage
 
 1. Connect to the environment whose Custom APIs you want to document.
-2. *(Optional)* Add any extra **redaction terms** for parameters your org treats as secret.
-3. **Load / Document** — the Custom APIs are read and documented off the UI thread; the status shows
-   the documented count.
-4. Review the API detail and parameter/response grids and the generated template examples.
-5. **Export** to Markdown, HTML, raw JSON, or OpenAPI JSON — redaction is applied to every output.
+2. *(Optional)* Add any extra **redaction terms** — comma/semicolon-separated name fragments for parameters
+   your org treats as secret (added to the built-in `secret`/`token`/`apikey`/… heuristics); matching
+   parameter values are masked as `***REDACTED***` in every output.
+3. **Load Custom APIs** — read and documented off the UI thread; they appear in the left list, all checked.
+4. In the left panel, **search** and **check/uncheck** the APIs you want (or use **Select all**). The
+   preview and exports include only the checked APIs.
+5. Preview the Markdown / HTML source / OpenAPI JSON; click **Open in browser** to see the rendered HTML.
+6. **Export** to Markdown, HTML, raw JSON, or OpenAPI JSON — redaction is applied to every output.
 
 ## Notes & limitations
 

@@ -24,6 +24,7 @@ namespace XrmToolSuite.ApiDocumentationBuilder
             this.tsbExport = new System.Windows.Forms.ToolStripDropDownButton();
             this.tslPreview = new System.Windows.Forms.ToolStripLabel();
             this.tscPreview = new System.Windows.Forms.ToolStripComboBox();
+            this.tsbOpenBrowser = new System.Windows.Forms.ToolStripButton();
             this.txtPreview = new System.Windows.Forms.TextBox();
             this.toolStrip.SuspendLayout();
             this.SuspendLayout();
@@ -38,9 +39,10 @@ namespace XrmToolSuite.ApiDocumentationBuilder
                 this.tslRedact,
                 this.tstRedact,
                 this.tssSeparator2,
-                this.tsbExport,
                 this.tslPreview,
-                this.tscPreview});
+                this.tscPreview,
+                this.tsbOpenBrowser,
+                this.tsbExport});
             this.toolStrip.Location = new System.Drawing.Point(0, 0);
             this.toolStrip.Name = "toolStrip";
             this.toolStrip.Size = new System.Drawing.Size(1000, 25);
@@ -90,6 +92,15 @@ namespace XrmToolSuite.ApiDocumentationBuilder
             this.tscPreview.Name = "tscPreview";
             this.tscPreview.Size = new System.Drawing.Size(150, 25);
             //
+            // tsbOpenBrowser
+            //
+            this.tsbOpenBrowser.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.tsbOpenBrowser.Enabled = false;
+            this.tsbOpenBrowser.Name = "tsbOpenBrowser";
+            this.tsbOpenBrowser.Text = "Open in browser";
+            this.tsbOpenBrowser.ToolTipText = "Render the HTML preview in your default browser";
+            this.tsbOpenBrowser.Click += new System.EventHandler(this.tsbOpenBrowser_Click);
+            //
             // txtPreview
             //
             this.txtPreview.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -130,6 +141,7 @@ namespace XrmToolSuite.ApiDocumentationBuilder
         private System.Windows.Forms.ToolStripDropDownButton tsbExport;
         private System.Windows.Forms.ToolStripLabel tslPreview;
         private System.Windows.Forms.ToolStripComboBox tscPreview;
+        private System.Windows.Forms.ToolStripButton tsbOpenBrowser;
         private System.Windows.Forms.TextBox txtPreview;
     }
 }

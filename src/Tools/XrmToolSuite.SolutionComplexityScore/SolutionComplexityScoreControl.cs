@@ -88,7 +88,7 @@ namespace XrmToolSuite.SolutionComplexityScore
             {
                 btnLoad, new ToolStripLabel("Solution:"),
                 new ToolStripControlHost(_cboSolution), _btnAnalyze, new ToolStripSeparator(),
-                _btnExport, new ToolStripSeparator(), _btnAiSummary, btnAiOptions,
+                _btnAiSummary, btnAiOptions, new ToolStripSeparator(), _btnExport,
                 CreateHelpButton("Solution Complexity Score")
             });
 
@@ -352,14 +352,16 @@ namespace XrmToolSuite.SolutionComplexityScore
         private SummaryOptions TryBuildAiOptions(bool interactive, ReportModel model)
         {
             var provider = AiProviderCatalog.Parse(_settings.AiProvider);
+            bool needsKey = AiProviderCatalog.Get(provider).RequiresApiKey; // Ollama (local) needs none
             var key = ResolveKey(provider);
-            if (string.IsNullOrWhiteSpace(key))
+            if (needsKey && string.IsNullOrWhiteSpace(key))
             {
                 if (!interactive) return null;
                 ShowAiSettingsDialog();
                 provider = AiProviderCatalog.Parse(_settings.AiProvider);
+                needsKey = AiProviderCatalog.Get(provider).RequiresApiKey;
                 key = ResolveKey(provider);
-                if (string.IsNullOrWhiteSpace(key)) return null;
+                if (needsKey && string.IsNullOrWhiteSpace(key)) return null;
             }
 
             bool includeComponents = _miAiIncludeComponents.Checked;
@@ -395,36 +397,11 @@ namespace XrmToolSuite.SolutionComplexityScore
 
         private void ShowAiSettingsDialog()
         {
-            var providers = AiProviderCatalog.All;
-            using (var f = new Form
-            {
-                Text = "AI settings", FormBorderStyle = FormBorderStyle.FixedDialog, StartPosition = FormStartPosition.CenterParent,
-                MinimizeBox = false, MaximizeBox = false, ClientSize = new Size(430, 210)
-            })
-            {
-                var cmb = new ComboBox { Location = new Point(150, 16), Width = 250, DropDownStyle = ComboBoxStyle.DropDownList };
-                foreach (var p in providers) cmb.Items.Add(p.DisplayName);
-                cmb.SelectedIndex = Math.Max(0, Array.FindIndex(providers, x => x.Provider == AiProviderCatalog.Parse(_settings.AiProvider)));
-                var txtModel = new TextBox { Location = new Point(150, 52), Width = 250, Text = _settings.AiModelId };
-                var txtKey = new TextBox { Location = new Point(150, 88), Width = 250, UseSystemPasswordChar = true, Text = _sessionApiKey };
-                var lblHint = new Label { Location = new Point(150, 118), Width = 260, Height = 40, ForeColor = Color.Gray, Font = new Font(Font.FontFamily, 7.5f), Text = "The API key is used this session only and is never saved. Only anonymized metrics/findings are sent." };
-                cmb.SelectedIndexChanged += (s, e) => { if (string.IsNullOrWhiteSpace(txtModel.Text)) txtModel.Text = providers[cmb.SelectedIndex].Mid; };
-                var ok = new Button { Text = "OK", DialogResult = DialogResult.OK, Location = new Point(244, 168), Width = 75 };
-                var cancel = new Button { Text = "Cancel", DialogResult = DialogResult.Cancel, Location = new Point(325, 168), Width = 75 };
-                f.Controls.AddRange(new Control[]
-                {
-                    new Label { Text = "Provider", Location = new Point(16, 19), AutoSize = true }, cmb,
-                    new Label { Text = "Model id", Location = new Point(16, 55), AutoSize = true }, txtModel,
-                    new Label { Text = "API key", Location = new Point(16, 91), AutoSize = true }, txtKey, lblHint, ok, cancel
-                });
-                f.AcceptButton = ok; f.CancelButton = cancel;
-                if (f.ShowDialog(this) == DialogResult.OK)
-                {
-                    _settings.AiProvider = providers[cmb.SelectedIndex].Provider.ToString();
-                    _settings.AiModelId = txtModel.Text?.Trim();
-                    _sessionApiKey = txtKey.Text?.Trim();
-                }
-            }
+            var r = AiSettingsDialog.Show(this, _settings.AiProvider, _settings.AiModelId, _sessionApiKey);
+            if (!r.Ok) return;
+            _settings.AiProvider = r.Provider.ToString();
+            _settings.AiModelId = r.ModelId;
+            if (!string.IsNullOrWhiteSpace(r.ApiKey)) _sessionApiKey = r.ApiKey;
         }
 
         private bool ShowConsentDialog(string payloadJson, AiProviderCatalog.Info provider, string model)

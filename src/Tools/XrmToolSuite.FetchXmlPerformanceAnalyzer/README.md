@@ -61,7 +61,8 @@ the suite guide [`Deployment_Guide_XrmToolBox.md`](../../../Deployment_Guide_Xrm
 
 1. Connect to your environment (System Customizer or higher recommended).
 2. Paste FetchXML into the editor, **or** load it from a system (`savedquery`) / personal (`userquery`) view
-   via the view picker. Invalid FetchXML shows a clear parse error and blocks analysis/export.
+   via the view picker — view fetchxml is stored as a single line and is **pretty-printed on load** so it's
+   readable and editable. Invalid FetchXML shows a clear parse error and blocks analysis/export.
 3. Review the query summary, severity-ranked findings, estimated cost + band, and suggestions.
 4. *(Optional)* Opt into **live timing** to execute the query read-only and see elapsed ms + row count.
 5. **Export** the analysis in any of the supported formats.

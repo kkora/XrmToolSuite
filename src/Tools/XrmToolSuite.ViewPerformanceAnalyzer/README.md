@@ -13,7 +13,8 @@ per-view execution timing is opt-in only.
 - **FetchXML analysis per view** — each view's FetchXML is run through the **shared PERF03 rule engine**
   (all-attributes, missing/broad filters, joins, sorts, aggregations), so results are consistent with the
   standalone FetchXML Performance Analyzer. A view whose FetchXML can't be parsed degrades to a single Info
-  finding (score 0), never an exception. A detail panel shows a view's FetchXML and its findings.
+  finding (score 0), never an exception. A detail panel shows a view's FetchXML (pretty-printed — views
+  store it as a single line) and its findings.
 - **Layout & column analysis** — displayed-column count (from LayoutXML) and selected-attribute count show
   per view; a layout over `MaxLayoutColumns` (default 15) → Medium ("Over-wide view layout"). A panel lists
   the layout columns driving the width.
@@ -58,10 +59,11 @@ XrmToolBox silently drops the tool. Full details in [`./DEPLOYMENT.md`](./DEPLOY
 ## Usage
 
 1. Connect to your environment (System Customizer or higher recommended).
-2. Pick a table; optionally toggle **include personal views**, then run the batch analysis (paged via
-   `RetrieveAll` with progress/cancellation).
-3. Review the ranked slow/risky-views grid and the environment score cards; select a view for its FetchXML,
-   findings, and layout-column detail.
+2. Click **Load tables**, pick a table in the dropdown (it shows `-- select table --` until you do);
+   optionally toggle **include personal views**, then run the batch analysis (paged via `RetrieveAll`
+   with progress/cancellation).
+3. Review the ranked slow/risky-views grid and the environment score cards; select a view for its FetchXML
+   (pretty-printed for readability), findings, and layout-column detail.
 4. *(Optional)* Opt into **timing** to execute a view read-only and see elapsed time + row count.
 5. **Export** in any of the supported formats.
 

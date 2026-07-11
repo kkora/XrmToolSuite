@@ -297,7 +297,7 @@ namespace XrmToolSuite.PluginDependencyGraph.Graph
         public static void ExportMermaid(PluginGraph g, string path) => File.WriteAllText(path, Mermaid(g), Encoding.UTF8);
         public static void ExportGraphML(PluginGraph g, string path) => File.WriteAllText(path, GraphML(g), Encoding.UTF8);
         public static void ExportSvg(PluginGraph g, string path) => File.WriteAllText(path, Svg(g), Encoding.UTF8);
-        public static void ExportJson(PluginGraph g, string path) => File.WriteAllText(path, Json(g), Encoding.UTF8);
+        public static void ExportJson(PluginGraph g, string path) => File.WriteAllText(path, XrmToolSuite.Core.JsonFormat.Pretty(Json(g)), Encoding.UTF8);
         public static void ExportHtml(PluginGraph g, string path) => File.WriteAllText(path, Html(g), Encoding.UTF8);
 
         // Strip characters illegal in XML 1.0 (C0 controls other than tab/CR/LF, plus 0xFFFE/0xFFFF)

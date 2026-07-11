@@ -31,41 +31,114 @@ namespace XrmToolSuite.JavaScriptPerformanceAnalyzer.Analysis
             _options = options ?? JsAnalysisOptions.Default;
         }
 
+        // How many script bodies to download per request. Content is base64 (bundled libraries can be
+        // megabytes each); pulling it for thousands of rows in one paged query produces responses large
+        // enough for the Dataverse gateway to kill with "502 Bad Gateway" — so list light, then download
+        // bodies in small bounded chunks with progress and cancellation.
+        private const int ContentChunkSize = 10;
+
         public List<JsScriptAnalysis> Collect(IOrganizationService svc, BackgroundWorker worker, Action<string> progress)
+            => Collect(svc, worker, progress, customOnly: false, excludeNamePrefixes: null);
+
+        /// <summary>
+        /// Collects and analyzes JScript web resources. <paramref name="customOnly"/> limits the scan to
+        /// unmanaged (custom) web resources server-side — skipping the thousands of Microsoft system
+        /// libraries (AppCommon/…, Activities/…) most orgs carry. <paramref name="excludeNamePrefixes"/>
+        /// drops any web resource whose name starts with one of the prefixes (case-insensitive) BEFORE its
+        /// content is downloaded, so excluded scripts cost nothing.
+        /// </summary>
+        public List<JsScriptAnalysis> Collect(IOrganizationService svc, BackgroundWorker worker, Action<string> progress,
+            bool customOnly, IEnumerable<string> excludeNamePrefixes)
         {
             if (svc == null) throw new ArgumentNullException(nameof(svc));
 
-            progress?.Invoke("Retrieving JavaScript web resources...");
-            var query = new QueryExpression("webresource")
+            // Phase 1: lightweight listing — names only, never the content payload.
+            progress?.Invoke("Listing JavaScript web resources...");
+            var listQuery = new QueryExpression("webresource")
             {
-                ColumnSet = new ColumnSet("name", "displayname", "content")
+                ColumnSet = new ColumnSet("name", "displayname")
             };
-            query.Criteria.AddCondition("webresourcetype", ConditionOperator.Equal, WebResourceTypeJScript);
+            listQuery.Criteria.AddCondition("webresourcetype", ConditionOperator.Equal, WebResourceTypeJScript);
+            if (customOnly)
+                listQuery.Criteria.AddCondition("ismanaged", ConditionOperator.Equal, false);
+            var rows = svc.RetrieveAll(listQuery, worker: worker);
 
-            var rows = svc.RetrieveAll(query, worker: worker);
+            var prefixes = (excludeNamePrefixes ?? Enumerable.Empty<string>())
+                .Where(p => !string.IsNullOrWhiteSpace(p)).Select(p => p.Trim()).ToList();
+            if (prefixes.Count > 0)
+            {
+                int before = rows.Count;
+                rows = rows.Where(r =>
+                {
+                    var name = r.GetAttributeValue<string>("name") ?? "";
+                    return !prefixes.Any(p => name.StartsWith(p, StringComparison.OrdinalIgnoreCase));
+                }).ToList();
+                progress?.Invoke($"Excluded {before - rows.Count} script(s) by name prefix; {rows.Count} remain.");
+            }
 
+            // Phase 2: download + analyze content in small chunks.
             var results = new List<JsScriptAnalysis>();
             int done = 0;
-            foreach (var row in rows)
+            for (int i = 0; i < rows.Count; i += ContentChunkSize)
             {
                 if (worker?.CancellationPending == true) break;
-                results.Add(ScoreRow(row));
-                if ((++done % 25) == 0)
-                    progress?.Invoke($"Analyzed {done} of {rows.Count} script(s)...");
+                var chunk = rows.Skip(i).Take(ContentChunkSize).ToList();
+                var content = FetchContent(svc, chunk);
+                foreach (var row in chunk)
+                {
+                    if (worker?.CancellationPending == true) break;
+                    content.TryGetValue(row.Id, out var base64);
+                    results.Add(ScoreRow(row, base64));
+                    done++;
+                }
+                progress?.Invoke($"Analyzed {done} of {rows.Count} script(s)...");
             }
 
             progress?.Invoke($"Analyzed {results.Count} script(s).");
             return JsRules.Rank(results);
         }
 
-        private JsScriptAnalysis ScoreRow(Entity row)
+        /// <summary>
+        /// Downloads the <c>content</c> column for one chunk of web resources. Tries a single In-filtered
+        /// query first; if that fails (e.g. the chunk's combined payload still trips the gateway), falls
+        /// back to per-record retrieves so one oversized script can't sink the batch. A record whose
+        /// content can't be fetched is simply absent from the map (analyzed as empty, surfaced as Info).
+        /// </summary>
+        private static Dictionary<Guid, string> FetchContent(IOrganizationService svc, List<Entity> chunk)
+        {
+            var map = new Dictionary<Guid, string>();
+            try
+            {
+                var q = new QueryExpression("webresource") { ColumnSet = new ColumnSet("content") };
+                q.Criteria.AddCondition("webresourceid", ConditionOperator.In,
+                    chunk.Select(r => (object)r.Id).ToArray());
+                foreach (var e in svc.RetrieveMultiple(q).Entities)
+                    map[e.Id] = e.GetAttributeValue<string>("content");
+                return map;
+            }
+            catch
+            {
+                foreach (var r in chunk)
+                {
+                    try
+                    {
+                        var e = svc.Retrieve("webresource", r.Id, new ColumnSet("content"));
+                        map[r.Id] = e.GetAttributeValue<string>("content");
+                    }
+                    catch { /* skip this record; ScoreRow degrades it to an Info finding */ }
+                }
+                return map;
+            }
+        }
+
+        private JsScriptAnalysis ScoreRow(Entity row, string base64Content)
         {
             var name = row.GetAttributeValue<string>("name")
                        ?? row.GetAttributeValue<string>("displayname")
                        ?? "(unnamed)";
             try
             {
-                var code = DecodeContent(row.GetAttributeValue<string>("content"));
+                var code = DecodeContent(base64Content);
                 return JsRules.Analyze(name, code, _options);
             }
             catch (Exception ex)

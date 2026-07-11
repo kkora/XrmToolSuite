@@ -1,4 +1,4 @@
-namespace XrmToolSuite.SolutionDocumentationGenerator
+﻿namespace XrmToolSuite.SolutionDocumentationGenerator
 {
     partial class SolutionDocumentationGeneratorControl
     {
@@ -22,6 +22,7 @@ namespace XrmToolSuite.SolutionDocumentationGenerator
             this.tssSep2 = new System.Windows.Forms.ToolStripSeparator();
             this.tslPreview = new System.Windows.Forms.ToolStripLabel();
             this.tscPreview = new System.Windows.Forms.ToolStripComboBox();
+            this.tsbOpenBrowser = new System.Windows.Forms.ToolStripButton();
             this.split = new System.Windows.Forms.SplitContainer();
             this.pnlConfig = new System.Windows.Forms.Panel();
             this.grpBranding = new System.Windows.Forms.GroupBox();
@@ -57,10 +58,11 @@ namespace XrmToolSuite.SolutionDocumentationGenerator
                 this.tsbLoadSolutions,
                 this.tssSep1,
                 this.tsbGenerate,
-                this.tsbExport,
                 this.tssSep2,
                 this.tslPreview,
-                this.tscPreview});
+                this.tscPreview,
+                this.tsbOpenBrowser,
+                this.tsbExport});
             this.toolStrip.Location = new System.Drawing.Point(0, 0);
             this.toolStrip.Name = "toolStrip";
             this.toolStrip.Size = new System.Drawing.Size(960, 25);
@@ -99,6 +101,13 @@ namespace XrmToolSuite.SolutionDocumentationGenerator
             this.tscPreview.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.tscPreview.Name = "tscPreview";
             this.tscPreview.Size = new System.Drawing.Size(140, 25);
+            //
+            // tsbOpenBrowser
+            //
+            this.tsbOpenBrowser.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.tsbOpenBrowser.Name = "tsbOpenBrowser";
+            this.tsbOpenBrowser.Text = "Open in browser";
+            this.tsbOpenBrowser.ToolTipText = "Render the HTML document in your default browser";
             //
             // split
             //
@@ -307,6 +316,7 @@ namespace XrmToolSuite.SolutionDocumentationGenerator
         private System.Windows.Forms.ToolStripSeparator tssSep2;
         private System.Windows.Forms.ToolStripLabel tslPreview;
         private System.Windows.Forms.ToolStripComboBox tscPreview;
+        private System.Windows.Forms.ToolStripButton tsbOpenBrowser;
         private System.Windows.Forms.SplitContainer split;
         private System.Windows.Forms.Panel pnlConfig;
         private System.Windows.Forms.GroupBox grpBranding;

@@ -16,6 +16,8 @@ namespace XrmToolSuite.JavaScriptPerformanceAnalyzer
         {
             this.toolStrip = new System.Windows.Forms.ToolStrip();
             this.tsbAnalyze = new System.Windows.Forms.ToolStripButton();
+            this.tsbCustomOnly = new System.Windows.Forms.ToolStripButton();
+            this.tsbExclusions = new System.Windows.Forms.ToolStripButton();
             this.tssSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.tslSearch = new System.Windows.Forms.ToolStripLabel();
             this.txtSearch = new System.Windows.Forms.ToolStripTextBox();
@@ -80,6 +82,8 @@ namespace XrmToolSuite.JavaScriptPerformanceAnalyzer
             this.toolStrip.ImageScalingSize = new System.Drawing.Size(24, 24);
             this.toolStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
                 this.tsbAnalyze,
+                this.tsbCustomOnly,
+                this.tsbExclusions,
                 this.tssSeparator1,
                 this.tslSearch,
                 this.txtSearch,
@@ -97,6 +101,23 @@ namespace XrmToolSuite.JavaScriptPerformanceAnalyzer
             this.tsbAnalyze.Text = "Analyze web resources";
             this.tsbAnalyze.ToolTipText = "Retrieve and statically analyze every JScript web resource in the connected environment";
             this.tsbAnalyze.Click += new System.EventHandler(this.tsbAnalyze_Click);
+            //
+            // tsbCustomOnly
+            //
+            this.tsbCustomOnly.CheckOnClick = true;
+            this.tsbCustomOnly.Checked = true;
+            this.tsbCustomOnly.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.tsbCustomOnly.Name = "tsbCustomOnly";
+            this.tsbCustomOnly.Text = "Custom only";
+            this.tsbCustomOnly.ToolTipText = "Scan only unmanaged (custom) web resources — skip Microsoft/managed system libraries. Re-run the analysis to apply.";
+            //
+            // tsbExclusions
+            //
+            this.tsbExclusions.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.tsbExclusions.Name = "tsbExclusions";
+            this.tsbExclusions.Text = "Exclusions…";
+            this.tsbExclusions.ToolTipText = "Exclude web resources whose name starts with the given prefixes (comma-separated)";
+            this.tsbExclusions.Click += new System.EventHandler(this.tsbExclusions_Click);
             //
             // tssSeparator1
             //
@@ -443,6 +464,8 @@ namespace XrmToolSuite.JavaScriptPerformanceAnalyzer
 
         private System.Windows.Forms.ToolStrip toolStrip;
         private System.Windows.Forms.ToolStripButton tsbAnalyze;
+        private System.Windows.Forms.ToolStripButton tsbCustomOnly;
+        private System.Windows.Forms.ToolStripButton tsbExclusions;
         private System.Windows.Forms.ToolStripSeparator tssSeparator1;
         private System.Windows.Forms.ToolStripLabel tslSearch;
         private System.Windows.Forms.ToolStripTextBox txtSearch;
