@@ -2,7 +2,7 @@
 <package>
   <metadata>
     <id>XrmToolSuite.DeploymentRiskAnalyzer</id>
-    <version>1.2026.7.7</version>
+    <version>1.2026.7.8</version>
     <title>Deployment Risk Analyzer for XrmToolBox</title>
     <authors>Kanchan Kora</authors>
     <owners>Kanchan Kora</owners>
@@ -13,7 +13,7 @@
     <license type="expression">MIT</license>
     <description>Pre-deployment risk analysis for Dataverse solutions: dependency, environment variable, flow/plugin, security, schema conflict and Power Pages readiness checks with an exportable risk report (native PDF, HTML dashboard, Excel, CI JSON, Markdown).</description>
     <summary>Analyze a solution before deployment and get a risk-scored readiness report.</summary>
-    <releaseNotes>1.2026.7.7: Solution Knowledge Graph - interactive HTML graph now renders (fixed a script error that blanked the canvas) with zoom/pan/fit and labeled nodes; readable node names for columns, relationships, option sets, environment variables and custom component types; exports honor the node-type filter; color legend on SVG/PNG.</releaseNotes>
+    <releaseNotes>1.2026.7.8: Technical Debt Analyzer - analyzers/dashboard panes now start split in half; Solution Complexity Score - Metrics/Hotspots panes now start at one-third/two-thirds; both splitters remain draggable. No other tool changed.</releaseNotes>
     <tags>XrmToolBox Dataverse Deployment ALM RiskAnalysis PowerPages</tags>
     <dependencies>
       <dependency id="XrmToolBox" version="1.2025.10.74" />

@@ -152,9 +152,18 @@ namespace XrmToolSuite.TechnicalDebtAnalyzer
             rightPanel.Controls.Add(gridDetailSplit);
             rightPanel.Controls.Add(summaryPanel);
 
-            var mainSplit = new SplitContainer { Dock = DockStyle.Fill, SplitterDistance = 220 };
+            var mainSplit = new SplitContainer { Dock = DockStyle.Fill };
             mainSplit.Panel1.Controls.Add(leftPanel);
             mainSplit.Panel2.Controls.Add(rightPanel);
+            // Start split in half. Sizes are bogus at construction time, so set the distance on the first
+            // real layout only, then leave the user's own splitter drags alone.
+            bool mainSized = false;
+            mainSplit.SizeChanged += (s, e) =>
+            {
+                if (mainSized || mainSplit.Width < 60) return;
+                mainSized = true;
+                mainSplit.SplitterDistance = mainSplit.Width / 2;
+            };
 
             // Dashboard tab (the existing view) + a Trends tab (RPT4).
             var tabDashboard = new TabPage("Dashboard");

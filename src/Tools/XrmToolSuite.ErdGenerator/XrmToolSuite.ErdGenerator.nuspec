@@ -8,7 +8,7 @@
          4) DLL goes under a "Plugins" folder
          5) iconUrl is required and must be your own icon -->
     <id>XrmToolSuite.ErdGenerator</id>
-    <version>1.2026.7.7</version>
+    <version>1.2026.7.8</version>
     <title>ERD Generator for XrmToolBox</title>
     <authors>Kanchan Kora</authors>
     <owners>Kanchan Kora</owners>
@@ -19,7 +19,7 @@
     <license type="expression">MIT</license>
     <description>Generates Dataverse entity-relationship diagrams (Mermaid, PlantUML, SVG, PNG, PDF, HTML, Markdown, JSON) from live metadata.</description>
     <summary>Generates Dataverse entity-relationship diagrams (Mermaid, PlantUML, SVG, PNG, PDF, HTML, Markdown, JSON) from live metadata.</summary>
-    <releaseNotes>1.2026.7.7: Solution Knowledge Graph - interactive HTML graph now renders (fixed a script error that blanked the canvas) with zoom/pan/fit and labeled nodes; readable node names for columns, relationships, option sets, environment variables and custom component types; exports honor the node-type filter; color legend on SVG/PNG.</releaseNotes>
+    <releaseNotes>1.2026.7.8: Technical Debt Analyzer - analyzers/dashboard panes now start split in half; Solution Complexity Score - Metrics/Hotspots panes now start at one-third/two-thirds; both splitters remain draggable. No other tool changed.</releaseNotes>
     <tags>XrmToolBox Dataverse Dynamics365 PowerPlatform ERD Metadata Documentation</tags>
     <dependencies>
       <dependency id="XrmToolBox" version="1.2025.10.74" />

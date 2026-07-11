@@ -8,7 +8,7 @@
          4) DLL goes under a "Plugins" folder
          5) iconUrl is required and must be your own icon -->
     <id>XrmToolSuite.PortalHealthAnalyzer</id>
-    <version>1.2026.7.7</version>
+    <version>1.2026.7.8</version>
     <title>Portal Health Analyzer for XrmToolBox</title>
     <authors>Kanchan Kora</authors>
     <owners>Kanchan Kora</owners>
@@ -19,7 +19,7 @@
     <license type="expression">MIT</license>
     <description>Read-only health scoring of a Power Pages website across the dual adx_/mspp_ schemas. Detects the provisioned schema, inventories the site (pages, templates, page templates, snippets, site settings, web roles, table permissions, forms, lists, web files, redirects), and runs structural-integrity, site-settings, and security-surface rules to produce a 0–100 health score, configuration summary cards, and a categorized issue grid with recommendations. Exports Excel/PDF/Word/JSON/HTML/CSV.</description>
     <summary>Inventories a Power Pages website (adx_/mspp_ schemas) and scores portal health with a categorized issue grid and Excel/PDF/Word/JSON/HTML/CSV export.</summary>
-    <releaseNotes>1.2026.7.7: Solution Knowledge Graph - interactive HTML graph now renders (fixed a script error that blanked the canvas) with zoom/pan/fit and labeled nodes; readable node names for columns, relationships, option sets, environment variables and custom component types; exports honor the node-type filter; color legend on SVG/PNG.</releaseNotes>
+    <releaseNotes>1.2026.7.8: Technical Debt Analyzer - analyzers/dashboard panes now start split in half; Solution Complexity Score - Metrics/Hotspots panes now start at one-third/two-thirds; both splitters remain draggable. No other tool changed.</releaseNotes>
     <tags>XrmToolBox Dataverse Dynamics365 PowerPlatform PowerPages Portal Health</tags>
     <dependencies>
       <dependency id="XrmToolBox" version="1.2025.10.74" />

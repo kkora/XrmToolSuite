@@ -119,9 +119,19 @@ namespace XrmToolSuite.SolutionComplexityScore
             rightPanel.Controls.Add(_gridFindings);
             rightPanel.Controls.Add(new Label { Text = "Hotspots", Dock = DockStyle.Top, Height = 22, Font = new Font(Font, FontStyle.Bold), Padding = new Padding(4, 4, 0, 0) });
 
-            var split = new SplitContainer { Dock = DockStyle.Fill, SplitterDistance = 320 };
+            var split = new SplitContainer { Dock = DockStyle.Fill };
             split.Panel1.Controls.Add(leftPanel);
             split.Panel2.Controls.Add(rightPanel);
+            // Start at one-third Metrics / two-thirds Hotspots (the findings' Detail column is the widest
+            // content). Sizes are bogus at construction time, so set the distance on the first real layout
+            // only, then leave the user's own splitter drags alone.
+            bool splitSized = false;
+            split.SizeChanged += (s, e) =>
+            {
+                if (splitSized || split.Width < 60) return;
+                splitSized = true;
+                split.SplitterDistance = split.Width / 3;
+            };
 
             var body = new Panel { Dock = DockStyle.Fill };
             body.Controls.Add(split);
