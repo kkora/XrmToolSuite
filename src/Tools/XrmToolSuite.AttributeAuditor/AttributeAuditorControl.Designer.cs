@@ -65,7 +65,7 @@ namespace XrmToolSuite.AttributeAuditor
             this.tsbCustomOnly.Checked = true;
             this.tsbCustomOnly.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
             this.tsbCustomOnly.Name = "tsbCustomOnly";
-            this.tsbCustomOnly.Text = "Custom tables only";
+            this.tsbCustomOnly.Text = "Custom only";
             this.tsbCustomOnly.ToolTipText = "Limit the scan to custom tables (custom columns on system tables are excluded)";
             //
             // tsbCandidatesOnly

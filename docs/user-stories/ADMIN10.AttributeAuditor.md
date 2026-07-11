@@ -46,7 +46,7 @@ delete plan/solution) remains planned.
     GUI, `TC-ADMIN10-M-11`.)*
 
 ## FEAT-ADMIN10-1 — Select audit scope `[Implemented*]`
-- **US-ADMIN10-1.1** `[Implemented*]` A "Custom tables only" toggle targets the audit; intersect (N:N) tables
+- **US-ADMIN10-1.1** `[Implemented*]` A "Custom only" toggle limits the audit to custom tables; intersect (N:N) tables
   are always excluded.
   - **AC:** `AttributeUsageCollector.Collect(..., customEntitiesOnly, ...)` filters entities by
     `IsCustomEntity` when set and always drops `IsIntersect`; the toggle round-trips via `AuditSettings`.
@@ -115,7 +115,7 @@ Each signal marks a column "used" with human-readable evidence; a column with no
   - **AC:** `ColumnClick` toggles `_sortColumn`/`_sortAscending` and re-sorts the virtual-mode backing list
     (`SortView`) with a table+column tie-break. *(Manual — GUI, `TC-ADMIN10-M-08`.)*
 - **US-ADMIN10-3.5** `[Implemented*]` The grid stays responsive on large environments (thousands of custom
-  columns, e.g. "Custom tables only" off) instead of freezing / "Not responding".
+  columns, e.g. "Custom only" off) instead of freezing / "Not responding".
   - **AC:** `lvResults` runs in **virtual mode** (`VirtualMode = true`, `RetrieveVirtualItem`); `PopulateGrid`
     filters/sorts a backing `List<ColumnAudit>` and sets `VirtualListSize` rather than creating a
     `ListViewItem` per row, so filtering/sorting/exclusions are O(visible-rows). *(Manual — GUI,
