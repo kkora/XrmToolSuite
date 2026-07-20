@@ -188,7 +188,7 @@ only — they never invoke an API or apply a merge.
 | `CustomApiExplorerE2ETest` | Custom API Explorer | Load Custom APIs → view detail (read-only; no invoke) → export HTML/Markdown/CSV |
 | `DuplicateMetadataFinderE2ETest` | Duplicate Metadata Finder | Scan for duplicates → detail → export Excel/PDF/JSON/HTML |
 | `EnvironmentComparisonSuiteE2ETest` | Environment Comparison Suite | Connect TEST target → Compare → export Excel/PDF/JSON/HTML |
-| `EnvironmentInventoryE2ETest` | Environment Inventory | Collect inventory → export Excel/CSV/JSON/Markdown/HTML/Word/PDF |
+| `EnvironmentInventoryE2ETest` | Environment Inventory | Load inventory → export Excel/CSV/JSON/Markdown/HTML/Word/PDF |
 | `ErdGeneratorE2ETest` | ERD Generator | Load tables → check table → Generate → export Mermaid/PlantUML/SVG/PNG/PDF/HTML/Markdown/JSON |
 | `FetchXmlPerformanceAnalyzerE2ETest` | FetchXML Performance Analyzer | Supply FetchXML → Analyze → export Excel/PDF/JSON/HTML/Markdown/CSV |
 | `FlowDependencyAnalyzerE2ETest` | Flow Dependency Analyzer | Analyze flows → detail tree → export Excel/PDF/JSON/HTML |

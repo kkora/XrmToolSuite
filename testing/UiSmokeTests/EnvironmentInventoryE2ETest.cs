@@ -91,26 +91,26 @@ namespace XrmToolSuite.UiSmokeTests
             for (var i = 0; i < 3 && !toolOpen; i++)
             {
                 if (i > 0) _host.HardReset();
-                if (!_host.WaitForClickable("Collect inventory", TimeSpan.FromSeconds(2)))
+                if (!_host.WaitForClickable("Load inventory", TimeSpan.FromSeconds(2)))
                     _host.OpenTool(Tool);
-                toolOpen = _host.WaitForClickable("Collect inventory", TimeSpan.FromSeconds(25));
+                toolOpen = _host.WaitForClickable("Load inventory", TimeSpan.FromSeconds(25));
             }
             Shot("03-tool-open");
-            Check(toolOpen, $"'{Tool}' did not open (no 'Collect inventory' toolbar after retries).");
+            Check(toolOpen, $"'{Tool}' did not open (no 'Load inventory' toolbar after retries).");
 
-            // 4) Collect inventory of the connected org — retry: the click or the async collect can transiently
+            // 4) Load inventory of the connected org — retry: the click or the async collect can transiently
             //    no-op on this flaky host. Wait for the results grid to fill with component rows.
             var hasRows = false;
             for (var i = 0; i < 3 && !hasRows; i++)
             {
                 if (i > 0) { _host.HardReset(); Thread.Sleep(2000); }
-                _host.ClickByPartialName("Collect inventory");
+                _host.ClickByPartialName("Load inventory");
                 Thread.Sleep(6000);   // let the async collect run
                 _host.HardReset();    // it mutates the tree heavily
                 hasRows = _host.WaitForGridRows(TimeSpan.FromSeconds(120));
             }
             Shot("04-collected");
-            Check(hasRows, "Collect inventory produced no component rows (after retries).");
+            Check(hasRows, "Load inventory produced no component rows (after retries).");
             _host.HardReset();
 
             // 5) Select the first inventoried component and confirm the detail pane fills.

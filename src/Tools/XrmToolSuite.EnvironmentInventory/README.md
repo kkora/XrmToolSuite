@@ -18,7 +18,13 @@ note rather than a hard error.
 | **Configuration** | Environment-variable **definitions** (schema name, display name, declared type) and connection references (logical name, connector id) — never any value/secret column |
 
 - **Search & filter** — a search box plus category and managed-state dropdowns drive the grid; filtering is
-  client-side over the cached snapshot (`InventorySnapshot.Filter`), fast on large environments.
+  client-side over the cached snapshot (`InventorySnapshot.Filter`), fast on large environments. Search is
+  **debounced** (re-filters once typing pauses, not on every keystroke), and a **"Filtering…" badge** with a
+  wait cursor appears over the grid while a filter/sort/re-bind runs so a large environment never looks hung.
+- **Column sorting** — click any column header to sort ascending, click again for descending (a sort glyph
+  marks the active column). Sorting re-orders the cached model and re-binds the grid, so it stays responsive
+  on 100k+ component environments — it deliberately does **not** use `DataGridView`'s built-in unbound sort,
+  which blocks the UI thread at that scale.
 - **Detail panel** — selecting a row shows its normalized fields plus the source-specific `Details`
   dictionary.
 
@@ -28,11 +34,18 @@ UI-free and SDK-free (unit-tested); the Dataverse collector is a separate file. 
 
 ## Exports
 
+**Exports reflect the current view** — every format writes only the rows left by the active
+category/managed/search filter and in the current sort order, matching the grid (the status bar confirms
+the exported count, e.g. "Exported 163 component(s)"). Clear the filters to export the full inventory.
+
 Excel, CSV, JSON, Markdown, HTML, Word, and PDF. CSV is RFC-4180 quoted; HTML is self-contained (inline
-CSS); the text formats carry a summary counts table; **Excel** produces the full inventory grid (Summary +
-Items worksheets, no secret column) via ClosedXML; **Word** and **PDF** produce a summary-level report from
-the shared `ReportModel` exporters (Word reuses DocumentFormat.OpenXml from the ClosedXML chain; PDF uses
-PdfSharp/MigraDoc-GDI). Export scope (selected sources) round-trips via settings.
+CSS); the text formats carry a summary counts table; **Excel** produces the inventory grid (Summary +
+Items worksheets, no secret column) via ClosedXML. **Word** and **PDF** produce an inventory **catalog** —
+a title block, key-metric counts, and the records themselves grouped by category (Type / Name / Schema /
+Managed / Modified) — via the tool-local `InventoryWordExporter` (DocumentFormat.OpenXml from the ClosedXML
+chain) and `InventoryPdfExporter` (PdfSharp/MigraDoc-GDI). These deliberately do **not** use the suite's
+score/severity analyzer report template (an inventory is a catalog, not an assessment), so there is no risk
+gauge or severity grid. Export scope (selected sources) round-trips via settings.
 
 ## Help & Support
 
@@ -60,7 +73,8 @@ XrmToolBox silently drops the tool. Full details in [`./DEPLOYMENT.md`](./DEPLOY
 1. Connect to your environment (System Customizer or higher recommended).
 2. Load the inventory — sources are collected via `RetrieveAll` off the UI thread with progress and
    cancellation.
-3. Search and filter by category, name, and managed state; select a row for its detail panel.
+3. Search and filter by category, name, and managed state; click a column header to sort (click again to
+   reverse); select a row for its detail panel.
 4. **Export** in any of the supported formats.
 
 ## Notes & limitations
