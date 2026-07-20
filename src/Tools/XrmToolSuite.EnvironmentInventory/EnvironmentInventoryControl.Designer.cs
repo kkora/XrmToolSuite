@@ -72,7 +72,7 @@ namespace XrmToolSuite.EnvironmentInventory
             //
             this.tsbCollect.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
             this.tsbCollect.Name = "tsbCollect";
-            this.tsbCollect.Text = "Collect inventory";
+            this.tsbCollect.Text = "Load inventory";
             this.tsbCollect.Click += new System.EventHandler(this.tsbCollect_Click);
             //
             // tsdSources
